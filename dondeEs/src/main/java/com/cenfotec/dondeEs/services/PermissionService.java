@@ -14,7 +14,8 @@ import com.cenfotec.dondeEs.repositories.PermissionRepository;
 
 @Service
 public class PermissionService implements PermissionServiceInterface {
-@Autowired private PermissionRepository permissionRepository;
+	
+	@Autowired private PermissionRepository permissionRepository;
 	
 	@Override
 	public List<Permission> getAll(){

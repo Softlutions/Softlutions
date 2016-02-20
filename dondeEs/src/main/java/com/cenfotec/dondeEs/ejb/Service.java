@@ -26,18 +26,14 @@ public class Service implements Serializable {
 
 	private byte state;
 
-	//bi-directional many-to-one association to ServiceType
+	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="type")
-	private ServiceType serviceType;
+	@JoinColumn(name="user_id")
+	private User user;
 
-	//bi-directional many-to-one association to ServiceContract
+	//bi-directional many-to-one association to ServiceContact
 	@OneToMany(mappedBy="service")
-	private List<ServiceContract> serviceContracts;
-
-	//bi-directional many-to-many association to User
-	@ManyToMany(mappedBy="services")
-	private List<User> users;
+	private List<ServiceContact> serviceContacts;
 
 	public Service() {
 	}
@@ -74,42 +70,34 @@ public class Service implements Serializable {
 		this.state = state;
 	}
 
-	public ServiceType getServiceType() {
-		return this.serviceType;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setServiceType(ServiceType serviceType) {
-		this.serviceType = serviceType;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public List<ServiceContract> getServiceContracts() {
-		return this.serviceContracts;
+	public List<ServiceContact> getServiceContacts() {
+		return this.serviceContacts;
 	}
 
-	public void setServiceContracts(List<ServiceContract> serviceContracts) {
-		this.serviceContracts = serviceContracts;
+	public void setServiceContacts(List<ServiceContact> serviceContacts) {
+		this.serviceContacts = serviceContacts;
 	}
 
-	public ServiceContract addServiceContract(ServiceContract serviceContract) {
-		getServiceContracts().add(serviceContract);
-		serviceContract.setService(this);
+	public ServiceContact addServiceContact(ServiceContact serviceContact) {
+		getServiceContacts().add(serviceContact);
+		serviceContact.setService(this);
 
-		return serviceContract;
+		return serviceContact;
 	}
 
-	public ServiceContract removeServiceContract(ServiceContract serviceContract) {
-		getServiceContracts().remove(serviceContract);
-		serviceContract.setService(null);
+	public ServiceContact removeServiceContact(ServiceContact serviceContact) {
+		getServiceContacts().remove(serviceContact);
+		serviceContact.setService(null);
 
-		return serviceContract;
-	}
-
-	public List<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
+		return serviceContact;
 	}
 
 }

@@ -2,28 +2,24 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
 
 
 /**
- * The persistent class for the service_contract database table.
+ * The persistent class for the service_contact database table.
  * 
  */
 @Entity
-@Table(name="service_contract")
-@NamedQuery(name="ServiceContract.findAll", query="SELECT s FROM ServiceContract s")
-public class ServiceContract implements Serializable {
+@Table(name="service_contact")
+@NamedQuery(name="ServiceContact.findAll", query="SELECT s FROM ServiceContact s")
+public class ServiceContact implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="id_service")
-	private int idService;
+	@Column(name="service_contract_id")
+	private int serviceContractId;
 
 	private String comment;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
 
 	private byte state;
 
@@ -37,15 +33,15 @@ public class ServiceContract implements Serializable {
 	@JoinColumn(name="service_id")
 	private Service service;
 
-	public ServiceContract() {
+	public ServiceContact() {
 	}
 
-	public int getIdService() {
-		return this.idService;
+	public int getServiceContractId() {
+		return this.serviceContractId;
 	}
 
-	public void setIdService(int idService) {
-		this.idService = idService;
+	public void setServiceContractId(int serviceContractId) {
+		this.serviceContractId = serviceContractId;
 	}
 
 	public String getComment() {
@@ -54,14 +50,6 @@ public class ServiceContract implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public Date getDate() {
-		return this.date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public byte getState() {

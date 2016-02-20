@@ -1,7 +1,6 @@
-package com.cenfotec.dondeEs.ejb;
+package com.cenfotec.dondeEs.pojo;
 
-import java.io.Serializable;
-import javax.persistence.*;
+ 
 import java.util.Date;
 import java.util.List;
 
@@ -10,66 +9,43 @@ import java.util.List;
  * The persistent class for the event database table.
  * 
  */
-@Entity
-@Table(name="event")
-@NamedQuery(name="Event.findAll", query="SELECT e FROM Event e")
-public class Event implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="event_id")
+public class EventPOJO {
 	private int eventId;
 
 	private String description;
 
 	private String image;
 
-	@Column(name="large_description")
 	private String largeDescription;
 
 	private String name;
 
-	@Column(name="private")
 	private byte private_;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="publish_date")
 	private Date publishDate;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="register_date")
 	private Date registerDate;
 
 	private byte state;
 
-	//bi-directional many-to-one association to Chat
-	@OneToMany(mappedBy="event")
-	private List<Chat> chats;
+	private List<ChatPOJO> chats;
 
 	//bi-directional many-to-one association to Place
-	@ManyToOne
-	@JoinColumn(name="place_id")
-	private Place place;
+	private PlacePOJO place;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User user;
+	private UserPOJO user;
 
 	//bi-directional many-to-one association to EventParticipant
-	@OneToMany(mappedBy="event")
-	private List<EventParticipant> eventParticipants;
+	private List<EventParticipantPOJO> eventParticipants;
 
-	//bi-directional many-to-one association to Note
-	@OneToMany(mappedBy="event")
-	private List<Note> notes;
+	private List<NotePOJO> notes;
 
 	//bi-directional many-to-one association to ServiceContact
-	@OneToMany(mappedBy="event")
 	private List<ServiceContact> serviceContacts;
 
-	public Event() {
+	public EventPOJO() {
 	}
 
 	public int getEventId() {
@@ -144,82 +120,82 @@ public class Event implements Serializable {
 		this.state = state;
 	}
 
-	public List<Chat> getChats() {
+	public List<ChatPOJO> getChats() {
 		return this.chats;
 	}
 
-	public void setChats(List<Chat> chats) {
+	public void setChats(List<ChatPOJO> chats) {
 		this.chats = chats;
 	}
 
-	public Chat addChat(Chat chat) {
+	public ChatPOJO addChat(ChatPOJO chat) {
 		getChats().add(chat);
 		chat.setEvent(this);
 
 		return chat;
 	}
 
-	public Chat removeChat(Chat chat) {
+	public ChatPOJO removeChat(ChatPOJO chat) {
 		getChats().remove(chat);
 		chat.setEvent(null);
 
 		return chat;
 	}
 
-	public Place getPlace() {
+	public PlacePOJO getPlace() {
 		return this.place;
 	}
 
-	public void setPlace(Place place) {
+	public void setPlace(PlacePOJO place) {
 		this.place = place;
 	}
 
-	public User getUser() {
+	public UserPOJO getUser() {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserPOJO user) {
 		this.user = user;
 	}
 
-	public List<EventParticipant> getEventParticipants() {
+	public List<EventParticipantPOJO> getEventParticipants() {
 		return this.eventParticipants;
 	}
 
-	public void setEventParticipants(List<EventParticipant> eventParticipants) {
+	public void setEventParticipants(List<EventParticipantPOJO> eventParticipants) {
 		this.eventParticipants = eventParticipants;
 	}
 
-	public EventParticipant addEventParticipant(EventParticipant eventParticipant) {
+	public EventParticipantPOJO addEventParticipant(EventParticipantPOJO eventParticipant) {
 		getEventParticipants().add(eventParticipant);
 		eventParticipant.setEvent(this);
 
 		return eventParticipant;
 	}
 
-	public EventParticipant removeEventParticipant(EventParticipant eventParticipant) {
+	public EventParticipantPOJO removeEventParticipant(EventParticipantPOJO eventParticipant) {
 		getEventParticipants().remove(eventParticipant);
 		eventParticipant.setEvent(null);
 
 		return eventParticipant;
 	}
 
-	public List<Note> getNotes() {
+	public List<NotePOJO> getNotes() {
 		return this.notes;
 	}
 
-	public void setNotes(List<Note> notes) {
+	public void setNotes(List<NotePOJO> notes) {
 		this.notes = notes;
 	}
 
-	public Note addNote(Note note) {
+	public NotePOJO addNote(NotePOJO note) {
 		getNotes().add(note);
 		note.setEvent(this);
 
 		return note;
 	}
 
-	public Note removeNote(Note note) {
+	public NotePOJO removeNote(NotePOJO note) {
 		getNotes().remove(note);
 		note.setEvent(null);
 

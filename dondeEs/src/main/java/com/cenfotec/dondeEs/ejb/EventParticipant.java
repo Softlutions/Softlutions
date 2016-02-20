@@ -2,6 +2,7 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 
@@ -11,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="event_participant")
-@NamedQuery(name="EventParticipant.findAll", query="SELECT ep FROM EventParticipant ep")
+@NamedQuery(name="EventParticipant.findAll", query="SELECT e FROM EventParticipant e")
 public class EventParticipant implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -19,6 +20,12 @@ public class EventParticipant implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="event_participant_id")
 	private int eventParticipantId;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="invitation_date")
+	private Date invitationDate;
+
+	private byte state;
 
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="eventParticipant")
@@ -43,6 +50,22 @@ public class EventParticipant implements Serializable {
 
 	public void setEventParticipantId(int eventParticipantId) {
 		this.eventParticipantId = eventParticipantId;
+	}
+
+	public Date getInvitationDate() {
+		return this.invitationDate;
+	}
+
+	public void setInvitationDate(Date invitationDate) {
+		this.invitationDate = invitationDate;
+	}
+
+	public byte getState() {
+		return this.state;
+	}
+
+	public void setState(byte state) {
+		this.state = state;
 	}
 
 	public List<Comment> getComments() {

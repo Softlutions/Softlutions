@@ -24,8 +24,10 @@ public class User implements Serializable {
 
 	private String image;
 
+	@Column(name="last_name1")
 	private String lastName1;
 
+	@Column(name="last_name2")
 	private String lastName2;
 
 	private String name;
@@ -44,10 +46,6 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<EventParticipant> eventParticipants;
 
-	//bi-directional many-to-one association to Log
-	@OneToMany(mappedBy="user")
-	private List<Log> logs;
-
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user")
 	private List<Message> messages;
@@ -55,6 +53,10 @@ public class User implements Serializable {
 	//bi-directional many-to-one association to PasswordHistory
 	@OneToMany(mappedBy="user")
 	private List<PasswordHistory> passwordHistories;
+
+	//bi-directional many-to-one association to Service
+	@OneToMany(mappedBy="user")
+	private List<Service> services;
 
 	//bi-directional many-to-many association to Chat
 	@ManyToMany
@@ -73,19 +75,6 @@ public class User implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="role_id")
 	private Role role;
-
-	//bi-directional many-to-many association to Service
-	@ManyToMany
-	@JoinTable(
-		name="service_provider"
-		, joinColumns={
-			@JoinColumn(name="service_provider_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="service_id")
-			}
-		)
-	private List<Service> services;
 
 	//bi-directional many-to-many association to User
 	@ManyToMany
@@ -223,28 +212,6 @@ public class User implements Serializable {
 		return eventParticipant;
 	}
 
-	public List<Log> getLogs() {
-		return this.logs;
-	}
-
-	public void setLogs(List<Log> logs) {
-		this.logs = logs;
-	}
-
-	public Log addLog(Log log) {
-		getLogs().add(log);
-		log.setUser(this);
-
-		return log;
-	}
-
-	public Log removeLog(Log log) {
-		getLogs().remove(log);
-		log.setUser(null);
-
-		return log;
-	}
-
 	public List<Message> getMessages() {
 		return this.messages;
 	}
@@ -289,6 +256,28 @@ public class User implements Serializable {
 		return passwordHistory;
 	}
 
+	public List<Service> getServices() {
+		return this.services;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
+	}
+
+	public Service addService(Service service) {
+		getServices().add(service);
+		service.setUser(this);
+
+		return service;
+	}
+
+	public Service removeService(Service service) {
+		getServices().remove(service);
+		service.setUser(null);
+
+		return service;
+	}
+
 	public List<Chat> getChats() {
 		return this.chats;
 	}
@@ -303,14 +292,6 @@ public class User implements Serializable {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
-
-	public List<Service> getServices() {
-		return this.services;
-	}
-
-	public void setServices(List<Service> services) {
-		this.services = services;
 	}
 
 	public List<User> getUsers1() {
