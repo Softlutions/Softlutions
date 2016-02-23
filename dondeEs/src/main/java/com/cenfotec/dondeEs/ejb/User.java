@@ -38,26 +38,6 @@ public class User implements Serializable {
 
 	private byte state;
 
-	//bi-directional many-to-one association to Event
-	@OneToMany(mappedBy="user")
-	private List<Event> events;
-
-	//bi-directional many-to-one association to EventParticipant
-	@OneToMany(mappedBy="user")
-	private List<EventParticipant> eventParticipants;
-
-	//bi-directional many-to-one association to Message
-	@OneToMany(mappedBy="user")
-	private List<Message> messages;
-
-	//bi-directional many-to-one association to PasswordHistory
-	@OneToMany(mappedBy="user")
-	private List<PasswordHistory> passwordHistories;
-
-	//bi-directional many-to-one association to Service
-	@OneToMany(mappedBy="user")
-	private List<Service> services;
-
 	//bi-directional many-to-many association to Chat
 	@ManyToMany
 	@JoinTable(
@@ -71,10 +51,13 @@ public class User implements Serializable {
 		)
 	private List<Chat> chats;
 
-	//bi-directional many-to-one association to Role
-	@ManyToOne
-	@JoinColumn(name="role_id")
-	private Role role;
+	//bi-directional many-to-one association to Event
+	@OneToMany(mappedBy="user")
+	private List<Event> events;
+
+	//bi-directional many-to-one association to EventParticipant
+	@OneToMany(mappedBy="user")
+	private List<EventParticipant> eventParticipants;
 
 	//bi-directional many-to-many association to User
 	@ManyToMany
@@ -92,6 +75,32 @@ public class User implements Serializable {
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="users1")
 	private List<User> users2;
+
+	//bi-directional many-to-one association to Message
+	@OneToMany(mappedBy="user")
+	private List<Message> messages;
+
+	//bi-directional many-to-one association to PasswordHistory
+	@OneToMany(mappedBy="user")
+	private List<PasswordHistory> passwordHistories;
+
+	//bi-directional many-to-one association to Service
+	@OneToMany(mappedBy="user")
+	private List<Service> services;
+
+	//bi-directional many-to-one association to TermCondition
+	@OneToMany(mappedBy="user")
+	private List<TermCondition> termConditions;
+
+	//bi-directional many-to-one association to Role
+	@ManyToOne
+	@JoinColumn(name="role_id")
+	private Role role;
+
+	//bi-directional many-to-one association to UserType
+	@ManyToOne
+	@JoinColumn(name="type_id")
+	private UserType userType;
 
 	public User() {
 	}
@@ -168,6 +177,14 @@ public class User implements Serializable {
 		this.state = state;
 	}
 
+	public List<Chat> getChats() {
+		return this.chats;
+	}
+
+	public void setChats(List<Chat> chats) {
+		this.chats = chats;
+	}
+
 	public List<Event> getEvents() {
 		return this.events;
 	}
@@ -210,6 +227,22 @@ public class User implements Serializable {
 		eventParticipant.setUser(null);
 
 		return eventParticipant;
+	}
+
+	public List<User> getUsers1() {
+		return this.users1;
+	}
+
+	public void setUsers1(List<User> users1) {
+		this.users1 = users1;
+	}
+
+	public List<User> getUsers2() {
+		return this.users2;
+	}
+
+	public void setUsers2(List<User> users2) {
+		this.users2 = users2;
 	}
 
 	public List<Message> getMessages() {
@@ -278,12 +311,26 @@ public class User implements Serializable {
 		return service;
 	}
 
-	public List<Chat> getChats() {
-		return this.chats;
+	public List<TermCondition> getTermConditions() {
+		return this.termConditions;
 	}
 
-	public void setChats(List<Chat> chats) {
-		this.chats = chats;
+	public void setTermConditions(List<TermCondition> termConditions) {
+		this.termConditions = termConditions;
+	}
+
+	public TermCondition addTermCondition(TermCondition termCondition) {
+		getTermConditions().add(termCondition);
+		termCondition.setUser(this);
+
+		return termCondition;
+	}
+
+	public TermCondition removeTermCondition(TermCondition termCondition) {
+		getTermConditions().remove(termCondition);
+		termCondition.setUser(null);
+
+		return termCondition;
 	}
 
 	public Role getRole() {
@@ -294,20 +341,12 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
-	public List<User> getUsers1() {
-		return this.users1;
+	public UserType getUserType() {
+		return this.userType;
 	}
 
-	public void setUsers1(List<User> users1) {
-		this.users1 = users1;
-	}
-
-	public List<User> getUsers2() {
-		return this.users2;
-	}
-
-	public void setUsers2(List<User> users2) {
-		this.users2 = users2;
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 
 }

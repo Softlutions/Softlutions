@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.PermissionResponse;
 import com.cenfotec.dondeEs.ejb.Permission;
-import com.cenfotec.dondeEs.services.LoginServiceInterface;
 import com.cenfotec.dondeEs.services.PermissionServiceInterface;
 
 
@@ -37,7 +36,7 @@ public class PermissionController {
 		Permission permission2 = new Permission();
 		permission2.setName(permission.getName());
 		
-		Boolean state= permissionServiceInterface.saveTypeUser(permission2);
+		Boolean state= permissionServiceInterface.savePermission(permission2);
 		
 		if(state){
 			pr.setCode(200);
@@ -58,7 +57,7 @@ public class PermissionController {
 		npermission.setName(permission.getName());
 		
 		
-		Boolean state= permissionServiceInterface.saveTypeUser(npermission);
+		Boolean state= permissionServiceInterface.savePermission(npermission);
 		
 		if(state){
 			pr.setCode(200);

@@ -26,6 +26,15 @@ public class Service implements Serializable {
 
 	private byte state;
 
+	//bi-directional many-to-one association to AuctionService
+	@OneToMany(mappedBy="service")
+	private List<AuctionService> auctionServices;
+
+	//bi-directional many-to-one association to ServiceCatalog
+	@ManyToOne
+	@JoinColumn(name="service_catalog_id")
+	private ServiceCatalog serviceCatalog;
+
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="user_id")
@@ -68,6 +77,36 @@ public class Service implements Serializable {
 
 	public void setState(byte state) {
 		this.state = state;
+	}
+
+	public List<AuctionService> getAuctionServices() {
+		return this.auctionServices;
+	}
+
+	public void setAuctionServices(List<AuctionService> auctionServices) {
+		this.auctionServices = auctionServices;
+	}
+
+	public AuctionService addAuctionService(AuctionService auctionService) {
+		getAuctionServices().add(auctionService);
+		auctionService.setService(this);
+
+		return auctionService;
+	}
+
+	public AuctionService removeAuctionService(AuctionService auctionService) {
+		getAuctionServices().remove(auctionService);
+		auctionService.setService(null);
+
+		return auctionService;
+	}
+
+	public ServiceCatalog getServiceCatalog() {
+		return this.serviceCatalog;
+	}
+
+	public void setServiceCatalog(ServiceCatalog serviceCatalog) {
+		this.serviceCatalog = serviceCatalog;
 	}
 
 	public User getUser() {
