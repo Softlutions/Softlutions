@@ -24,7 +24,7 @@ public class PermissionService implements PermissionServiceInterface {
 	}
 
 	@Override
-	public Boolean saveTypeUser(Permission ptipoUsuario) {
+	public Boolean savePermission(Permission ptipoUsuario) {
 		Permission tipoUsuario= permissionRepository.save(ptipoUsuario);
 		return (tipoUsuario == null) ? false : true;
 	}

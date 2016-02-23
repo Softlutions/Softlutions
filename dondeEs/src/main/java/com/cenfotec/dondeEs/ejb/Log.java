@@ -22,8 +22,8 @@ public class Log implements Serializable {
 
 	private String event;
 
-	@Column(name="id_user")
-	private int idUser;
+	@Column(name="user_id")
+	private int userId;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date currentTime;
@@ -47,12 +47,12 @@ public class Log implements Serializable {
 		this.event = event;
 	}
 
-	public int getIdUser() {
-		return this.idUser;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public Date getWhen() {

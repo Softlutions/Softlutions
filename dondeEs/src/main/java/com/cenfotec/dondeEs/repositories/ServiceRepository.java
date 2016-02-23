@@ -8,5 +8,5 @@ import com.cenfotec.dondeEs.ejb.*;
 
 public interface ServiceRepository extends CrudRepository<Service, Integer> {
 
-	List<Service> findAll();
+	List<Service> findAll();	
 }

@@ -8,7 +8,7 @@ public interface PermissionServiceInterface {
 	
 	List<Permission> getAll();
 	
-	Boolean saveTypeUser(Permission permission);
+	Boolean savePermission(Permission permission);
 	
 	void delete(Permission permission);
 
