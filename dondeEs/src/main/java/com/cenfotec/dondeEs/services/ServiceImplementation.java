@@ -37,6 +37,7 @@ public class ServiceImplementation implements ServiceInterface {
 	public List<com.cenfotec.dondeEs.ejb.Service> getAll(int user){
 		List<com.cenfotec.dondeEs.ejb.Service> listService = serviceRepository.findAll(user);
 		return listService;
+		
 	}
 	
 }

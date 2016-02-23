@@ -2,6 +2,9 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -86,6 +89,7 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Service
 	@OneToMany(mappedBy="user")
+	@JsonManagedReference
 	private List<Service> services;
 
 	//bi-directional many-to-one association to TermCondition
