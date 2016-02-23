@@ -13,5 +13,7 @@ public interface ServiceInterface {
 	Boolean saveService(Service service);
 	
 	List<Service> getAll();
+	
+	List<Service> getAll(int user);
 
 }
