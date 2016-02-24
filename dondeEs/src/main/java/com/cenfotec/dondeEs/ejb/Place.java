@@ -1,7 +1,12 @@
 package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -30,6 +35,7 @@ public class Place implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="place")
+	@JsonBackReference
 	private List<Event> events;
 
 	public Place() {
@@ -87,6 +93,6 @@ public class Place implements Serializable {
 		event.setPlace(null);
 
 		return event;
-	}
+	} 
 
 }

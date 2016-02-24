@@ -1,7 +1,13 @@
 package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -53,13 +59,15 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="user")
-	private List<Event> events;
+	@JsonBackReference
+	private List<Event> events; 
 
 	//bi-directional many-to-one association to EventParticipant
 	@OneToMany(mappedBy="user")
 	private List<EventParticipant> eventParticipants;
 
 	//bi-directional many-to-many association to User
+
 	@ManyToMany
 	@JoinTable(
 		name="favorite"
@@ -70,11 +78,13 @@ public class User implements Serializable {
 			@JoinColumn(name="user1_id")
 			}
 		)
-	private List<User> users1;
+	@JsonBackReference
+	private List<User> users1; 
 
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="users1")
-	private List<User> users2;
+	@JsonBackReference
+	private List<User> users2; 
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user")
@@ -95,6 +105,7 @@ public class User implements Serializable {
 	//bi-directional many-to-one association to Role
 	@ManyToOne
 	@JoinColumn(name="role_id")
+	@JsonManagedReference 
 	private Role role;
 
 	//bi-directional many-to-one association to UserType
@@ -191,7 +202,7 @@ public class User implements Serializable {
 
 	public void setEvents(List<Event> events) {
 		this.events = events;
-	}
+	} 
 
 	public Event addEvent(Event event) {
 		getEvents().add(event);
@@ -205,7 +216,7 @@ public class User implements Serializable {
 		event.setUser(null);
 
 		return event;
-	}
+	} 
 
 	public List<EventParticipant> getEventParticipants() {
 		return this.eventParticipants;
@@ -247,7 +258,7 @@ public class User implements Serializable {
 
 	public List<Message> getMessages() {
 		return this.messages;
-	}
+	} 
 
 	public void setMessages(List<Message> messages) {
 		this.messages = messages;

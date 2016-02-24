@@ -1,5 +1,11 @@
 package com.cenfotec.dondeEs.services;
 
-public interface EventServiceInterface {
+import java.util.List;
 
+import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.EventPublish;
+
+public interface EventServiceInterface {
+	List<Event> getAll();
+	List<EventPublish> getAllEventPublish();
 }

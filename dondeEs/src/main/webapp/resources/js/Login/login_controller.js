@@ -15,8 +15,8 @@ angular
 						function($scope, $http) {
 							//Usuario que se llena en el login
 							$scope.user = {
-								email : "abermudezv@ucenfotec.ac.cr",
-								password : "ernest"
+								email : "egarciag@ucenfotec.ac.cr",
+								password : "egarciag123"
 							};
 							//Request
 							$scope.checkLogin = function() {

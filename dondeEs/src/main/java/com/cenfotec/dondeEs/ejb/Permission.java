@@ -1,7 +1,12 @@
 package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -33,6 +38,7 @@ public class Permission implements Serializable {
 			@JoinColumn(name="role_id")
 			}
 		)
+	@JsonBackReference
 	private List<Role> roles;
 
 	public Permission() {

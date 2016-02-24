@@ -1,7 +1,12 @@
 package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -26,10 +31,12 @@ public class Role implements Serializable {
 
 	//bi-directional many-to-many association to Permission
 	@ManyToMany(mappedBy="roles")
+	@JsonManagedReference 
 	private List<Permission> permissions;
 
 	//bi-directional many-to-one association to User
 	@OneToMany(mappedBy="role")
+	@JsonBackReference
 	private List<User> users;
 
 	public Role() {

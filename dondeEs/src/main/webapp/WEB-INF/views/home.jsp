@@ -20,6 +20,7 @@
   <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
   <script src="resources/bower_components/angular/angular.js"></script>
   <script src="resources/bower_components/angular-route/angular-route.js"></script>
-  <!--<script src="resources/app.js"></script>-->
+  <script src="resources/app.js"></script>
+  <script src="resources/events/eventsPublish.js"></script>
   <!--<script src="resources/view1/view1.js"></script>--></body>
 </html>
