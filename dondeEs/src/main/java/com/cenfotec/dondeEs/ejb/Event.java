@@ -2,6 +2,10 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +59,7 @@ public class Event implements Serializable {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="user_id")
+	@JsonIgnore
 	private User user;
 
 	//bi-directional many-to-one association to EventParticipant
@@ -67,6 +72,7 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to ServiceContact
 	@OneToMany(mappedBy="event")
+	@JsonIgnore
 	private List<ServiceContact> serviceContacts;
 
 	public Event() {

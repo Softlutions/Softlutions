@@ -8,17 +8,10 @@ angular
 			});
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
-			
-			$scope.listContracts = function() {
-				$http.post("rest/login/checkuser/",$scope.user).success(function(response){
-					if(response.code == 200){
-						
-					}else{
-						
-					}
-				});
-			}
+			$scope.serviceContacts = [];
 		
-			
-			
-		}]);
+		$http.get("rest/protected/serviceContact/getAllServiceContact").success(function(response){
+		$scope.serviceContacts = response.listContracts;
+
+		});
+}]);
