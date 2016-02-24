@@ -2,6 +2,10 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -24,6 +28,7 @@ public class ServiceCatalog implements Serializable {
 
 	//bi-directional many-to-one association to Service
 	@OneToMany(mappedBy="serviceCatalog")
+	@JsonIgnore
 	private List<Service> services;
 
 	public ServiceCatalog() {

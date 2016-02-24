@@ -2,10 +2,13 @@ package com.cenfotec.dondeEs.controller;
 
 import javax.websocket.server.PathParam;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
@@ -15,10 +18,16 @@ import com.cenfotec.dondeEs.services.UserServiceInterface;
 public class UserController {
 	@Autowired private UserServiceInterface userServiceInterface;
 
-	@RequestMapping(value ="/getAllService", method = RequestMethod.GET)
-	public UserResponse getAllService(@PathParam("idUser") int idUser){
+	@RequestMapping(value ="/getAllService/{idUser}", method = RequestMethod.GET)
+	public UserResponse getAllService(@PathVariable("idUser") int idUser){
 		UserResponse response = new UserResponse();
 		response.setListService(userServiceInterface.getAllService(idUser));
+		return response;
+	}
+	@RequestMapping(value ="/getAll", method = RequestMethod.GET)
+	public UserResponse getAll(@PathParam("idUser") int idUser){
+		UserResponse response = new UserResponse();
+		response.setListUser(userServiceInterface.getAll());
 		return response;
 	}
 }

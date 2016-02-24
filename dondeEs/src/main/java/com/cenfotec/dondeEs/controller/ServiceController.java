@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.ServiceResponse;
 import com.cenfotec.dondeEs.ejb.Service;
-
+import com.cenfotec.dondeEs.services.ServiceCatalogInterface;
 import com.cenfotec.dondeEs.services.ServiceInterface;
 
 @RestController
@@ -20,6 +20,7 @@ import com.cenfotec.dondeEs.services.ServiceInterface;
 public class ServiceController {
 
 	@Autowired private ServiceInterface serviceInterface;
+	@Autowired private ServiceCatalogInterface serviceCatalogInterface;
 	
 	@RequestMapping(value ="/getAllService", method = RequestMethod.GET)
 	public ServiceResponse getAllService(){
@@ -38,6 +39,7 @@ public class ServiceController {
 	@RequestMapping(value ="/createService", method = RequestMethod.POST)
 	public ServiceResponse createService(@RequestBody Service service){
 		ServiceResponse response = new ServiceResponse();
+
 		
 		Boolean state = serviceInterface.saveService(service);
 		
