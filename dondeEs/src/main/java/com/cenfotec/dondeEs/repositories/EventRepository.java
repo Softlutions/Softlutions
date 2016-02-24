@@ -17,4 +17,7 @@ public interface EventRepository extends CrudRepository<Event, Integer>{
 	"from event e inner join place p on e.place_id = p.place_id " +
 	"inner join user u on e.user_id = u.user_id;", nativeQuery = true)
 	List<EventPublish> findAllEventPublish();  
+	
+	@Query(value = "UPDATE event SET state = ?1, publish_date = ?2 WHERE event_id = ?3;", nativeQuery = true)
+	boolean publishEvent(int state, String publishDate, int idEvent);
 }

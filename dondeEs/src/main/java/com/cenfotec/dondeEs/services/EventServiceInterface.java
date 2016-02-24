@@ -8,4 +8,5 @@ import com.cenfotec.dondeEs.ejb.EventPublish;
 public interface EventServiceInterface {
 	List<Event> getAll();
 	List<EventPublish> getAllEventPublish();
+	boolean publishEvent(int state, String publishDate, int idEvent);
 }

@@ -24,4 +24,10 @@ public class EventService implements EventServiceInterface{
 		List<EventPublish> listEventPublish = eventRepository.findAllEventPublish();
 		return listEventPublish;
 	}
+
+	@Override
+	public boolean publishEvent(int state, String publishDate, int idEvent) {
+		boolean result = eventRepository.publishEvent(state, publishDate, idEvent); 
+		return result;
+	}
 }
