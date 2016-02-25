@@ -7,7 +7,7 @@
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="serviceModule" class="no-js">
+<html lang="en" ng-app="userModule" class="no-js">
 <!--<![endif]-->
 <head>
 <meta charset="utf-8">
