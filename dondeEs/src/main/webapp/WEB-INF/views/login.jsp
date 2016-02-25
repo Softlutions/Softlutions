@@ -18,7 +18,7 @@
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
 <link href="resources/font-awesome/css/font-awesome.css"
 	rel="stylesheet">
-
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 </head>

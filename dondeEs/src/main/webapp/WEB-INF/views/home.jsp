@@ -13,6 +13,10 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="resources/css/style.css">
+<link href="resources/font-awesome/css/font-awesome.css"rel="stylesheet">
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="resources/css/animate.css" rel="stylesheet">
+<link href="resources/css/style.css" rel="stylesheet">
 </head>
 <body>
   <div ng-view></div>

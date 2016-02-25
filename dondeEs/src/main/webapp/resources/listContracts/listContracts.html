@@ -1,20 +1,72 @@
 <div class="container">
+	<div class="table-responsive">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+					<table class="table table-hover">
+						<thead>
+						<tr>
+							<th class="hidden">ID</th>
+							<th>Estado</th>
+							<th>Comentario</th>
+						</tr>
+						</thead>
+						<tbody ng-repeat="serviceContact in serviceContacts">
+							<tr>
+								<td class="hidden">{{serviceContact.serviceContactId}}</td>
+								<td>{{serviceContact.state}}</td> 
+								<td>{{serviceContact.comment}}</td> 	
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		</div>
+	</div>
+	
+	<div class="wrapper wrapper-content animated fadeInRight">+
+	.
+<div class="row">
+    <div class="col-lg-6">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Hover Table </h5>
 
-	<table class="table">
-		<thead>
-		<tr>
-			<th class="hidden">ID</th>
-			<th>Estado</th>
-			<th>Comentario</th>
-		</tr>
-		</thead>
-		<tbody ng-repeat="serviceContact in serviceContacts">
-			<tr>
-				<td class="hidden">{{serviceContact.serviceContactId}}</td>
-				<td>{{serviceContact.state}}</td> 
-				<td>{{serviceContact.comment}}</td> 	
-			</tr>
-		</tbody>
-	</table>
+                <div ibox-tools></div>
+            </div>
+            <div class="ibox-content">
 
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Data</th>
+                        <th>User</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><pie-chart data="main.PieChart4.data" options="main.PieChart4.options"></pie-chart></td>
+                        <td>Samantha</td>
+                        <td class="text-navy"><i class="fa fa-level-up"></i> 40%</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><pie-chart data="main.PieChart3.data" options="main.PieChart3.options"></pie-chart></td>
+                        <td>Jacob</td>
+                        <td class="text-warning"><i class="fa fa-level-down"></i> -20%</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><pie-chart data="main.PieChart2.data" options="main.PieChart2.options"></pie-chart></td>
+                        <td>Damien</td>
+                        <td class="text-navy"><i class="fa fa-level-up"></i> 26%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<d</div>
 </div>
