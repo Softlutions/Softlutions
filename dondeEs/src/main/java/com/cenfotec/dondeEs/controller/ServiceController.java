@@ -2,7 +2,6 @@ package com.cenfotec.dondeEs.controller;
 
 
 
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +25,6 @@ public class ServiceController {
 	public ServiceResponse getAllService(){
 		ServiceResponse response = new ServiceResponse();
 		response.setServiceList(serviceInterface.getAll());
-		return response;
-	}
-	
-	@RequestMapping(value ="/getAllServiceByUser", method = RequestMethod.GET)
-	public ServiceResponse getAllServiceByUser(@PathParam("user") int user){
-		ServiceResponse response = new ServiceResponse();
-		response.setServiceList(serviceInterface.getAll(user));
 		return response;
 	}
 	

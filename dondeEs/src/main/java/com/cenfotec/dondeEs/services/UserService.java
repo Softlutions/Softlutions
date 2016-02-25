@@ -12,11 +12,13 @@ import com.cenfotec.dondeEs.repositories.UserRepository;
 public class UserService implements UserServiceInterface {
 	@Autowired private UserRepository userRepository;
 	
+	@Override
 	public List<User> getAll(){
 		List<User> user = userRepository.findAll();
 		return user;
 	}
 	
+	@Override
 	public List<com.cenfotec.dondeEs.ejb.Service> getAllService(int idUser){
 		List<com.cenfotec.dondeEs.ejb.Service> listService = userRepository.getServicesByUser(idUser);
 		

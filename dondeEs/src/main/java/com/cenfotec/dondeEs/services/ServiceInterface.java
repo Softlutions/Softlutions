@@ -14,6 +14,6 @@ public interface ServiceInterface {
 	
 	List<Service> getAll();
 	
-	List<Service> getAll(int user);
+	
 
 }

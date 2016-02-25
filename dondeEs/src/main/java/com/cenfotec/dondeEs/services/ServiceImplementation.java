@@ -33,11 +33,6 @@ public class ServiceImplementation implements ServiceInterface {
 		return listService;
 	}
 	
-	@Override
-	public List<com.cenfotec.dondeEs.ejb.Service> getAll(int user){
-		List<com.cenfotec.dondeEs.ejb.Service> listService = serviceRepository.findAll(user);
-		return listService;
-		
-	}
+	
 	
 }
