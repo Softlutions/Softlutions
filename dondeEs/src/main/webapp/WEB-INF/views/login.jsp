@@ -13,12 +13,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Login | Donde es</title>
 <meta name="description" content="">
-<link rel="stylesheet" href="resources/login.css">
-
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/font-awesome/css/font-awesome.css"
-	rel="stylesheet">
-<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+<link href="resources/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="resources/css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 </head>
@@ -102,7 +100,12 @@
 	<script src="resources/js/inspinia.js"></script>
 	<script src="resources/js/plugins/pace/pace.min.js"></script>
 
+
+	<!-- JQueryUI -->
+	<script src="resources/bower_components/jquery-ui/jquery-ui.min.js"></script>
+
 	<script src="resources/bower_components/angular/angular.js"></script>
+	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/js/Login/login_controller.js"></script>
 </body>
