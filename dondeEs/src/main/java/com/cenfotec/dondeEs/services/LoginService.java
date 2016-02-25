@@ -20,9 +20,13 @@ public class LoginService implements LoginServiceInterface{
 	@Transactional
 	public void checkUser(LoginRequest lr, LoginResponse response, HttpSession currentSession) {
 		User loggedUser = loginRepository.findByEmailAndPassword(lr.getEmail(), lr.getPassword());
+		
 		if(loggedUser == null){
 			response.setCode(401);
-			response.setErrorMessage("Unauthorized User");
+			response.setErrorMessage("Unauthorized user");
+			response.setIdUsuario(-1);
+			
+			currentSession.setAttribute("idUser", -1);
 		}else{
 			response.setCode(200);
 			response.setCodeMessage("User authorized");
@@ -31,7 +35,7 @@ public class LoginService implements LoginServiceInterface{
 			response.setIdUsuario(loggedUser.getUserId());
 			response.setFirstName(loggedUser.getName());
 			response.setLastName(loggedUser.getLastName1());
-			//
+			
 			currentSession.setAttribute("idUser", loggedUser.getUserId());
 		}
 	}		
