@@ -4,18 +4,19 @@ import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.Service;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public class UserResponse extends BaseResponse {
 	private List<User> listUser;
 
-	private List<Service> listService;
+	private List<ServicePOJO> listService;
 	
-	public List<Service> getListService() {
+	public List<ServicePOJO> getListService() {
 		return listService;
 	}
 
-	public void setListService(List<Service> listService) {
-		this.listService = listService;
+	public void setListService(List<ServicePOJO> list) {
+		this.listService = list;
 	}
 
 	public List<User> getListUser() {

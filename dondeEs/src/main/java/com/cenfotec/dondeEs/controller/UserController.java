@@ -24,10 +24,5 @@ public class UserController {
 		response.setListService(userServiceInterface.getAllService(idUser));
 		return response;
 	}
-	@RequestMapping(value ="/getAll", method = RequestMethod.GET)
-	public UserResponse getAll(@PathParam("idUser") int idUser){
-		UserResponse response = new UserResponse();
-		response.setListUser(userServiceInterface.getAll());
-		return response;
-	}
+
 }

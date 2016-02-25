@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.Service;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public interface UserServiceInterface {
 	
 	List<User> getAll();
 	
-	List<Service> getAllService(int idUser);
+	List<ServicePOJO> getAllService(int idUser);
 
 }
