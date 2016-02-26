@@ -1,26 +1,34 @@
 <div class="container">
 	<div class = "col-sm-7">
 	  <div class="form-group">
-		    <label class="font-noraml"><strong>Crear mi servicio</strong></label>
+		    <label class="font-noraml" style="color:white"><strong>Crear mi servicio</strong></label>
 		    <div class="input-group">
 		    	<select class="chosen-select" style="width:518px; height: 34px; background: white" tabindex="6"   name="serviceCatalog" id="serviceCatalog" class="form-control"
 					ng-model="requestObject.serviceCatalogId" ng-options="ta.serviceCatalogId as ta.name for ta in serviceCatalogList">
+				 
 				</select> 
 			</div>
 	  </div>
 	</div>
 	<div class="col-sm-7">
 		<div class="form-group">
-				<input type="text" id="nombre" class="form-control" placeholder="Nombre" ng-model="user.name"/> 
+				<input type="text" id="nombre" class="form-control" placeholder="Nombre" ng-model="objService.name"/> 
 				<span ng-show="onError && createRentForm.name.$error.required" class="help-inline">Required </span>
 		 </div>
 	</div>
 	<div class="col-sm-7">
 		<div class="form-group">
-			<input type="text" id="descripcion" class="form-control" placeholder="Descripcion" ng-model="user.description"/> 
+			<input type="text" id="descripcion" class="form-control" placeholder="Descripcion" ng-model="objService.description"/> 
 			<span ng-show="onError && createRentForm.name.$error.required" class="help-inline">Required </span>
 		</div>
 	</div>
+	<div class="col-sm-8">
+		<div class="form-group">
+	 		<label class="checkbox-inline" style="color:white">
+               <input type="checkbox" value="option1" id="inlineCheckbox1"> <strong>Estado</strong> 
+               </label>
+        </div>
+    </div>
 	<div class="col-sm-8">
 		<div class="form-group">
 			<button id="createButton" class="btn btn-primary" ng-click="saveService($event)">Create</button>

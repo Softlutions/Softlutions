@@ -31,13 +31,15 @@ public class ServiceController {
 	@RequestMapping(value ="/createService", method = RequestMethod.POST)
 	public ServiceResponse createService(@RequestBody Service service){
 		ServiceResponse response = new ServiceResponse();
-
 		
 		Boolean state = serviceInterface.saveService(service);
-		
+	
 		if(state){
 			response.setCode(200);
 			response.setCodeMessage("Succesfull");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("Internal error");
 		}
 		return response;
 	}

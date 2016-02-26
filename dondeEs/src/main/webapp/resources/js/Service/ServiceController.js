@@ -16,6 +16,12 @@ angular
 								
 								$scope.services = [];
 								$scope.requestObject = {};
+								$scope.objService={};
+								
+//								  $scope.objService.state = {
+//									       value1 : true
+//									     };
+								
 								  $scope.init = function() {
 								    	
 								    	$http.get('rest/protected/serviceCatalog/getAllCatalogService')
@@ -28,24 +34,28 @@ angular
 								    	
 								    };
 								    
-								
+								    var dataCreate = {
+
+											//falta pasarle el usuario pero eso se hace con el usuario que esta sesion
+										};
 								    $scope.init();
 								    $scope.saveService = function(event){
 									$scope.onError = false;
-									var dataCreate = {
-										serviceCatalog :$scope.requestObject,
-										name : $scope.user.name,
-										description: $scope.user.description,
-										//falta pasarle el usuario pero eso se hace con el usuario que esta sesion
-									};
-//									if($scope.service.idService !=null){
-									$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-										console.log("response",response)
-										
-									});
-//									}else{
-//										alert('Mal')
-//									}
+									dataCreate={
+											serviceCatalog :$scope.requestObject,
+											name : $scope.objService.name,
+											description: $scope.objService.description,
+											state: $scope.objService.state
+									}
+									if($scope.objService.name != null && $scope.objService.description != null){
+										$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+											console.log("response",response);
+											console.log("response service", $scope.user);
+											
+										});
+									}else{
+										alert('Mal')
+									}
 								};
 							}
 						

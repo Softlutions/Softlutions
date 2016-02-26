@@ -15,6 +15,7 @@
 						        <th>Nombre</th>
 						        <th>Descripcion</th>
 						        <th>Categoria</th>
+						        <th>Estado</th>
 						      </tr>
 						    </thead>
 			                <tbody ng-repeat="service in services">
@@ -22,7 +23,9 @@
 							        <td class="hidden">{{service.serviceId}}</td>
 							        <td>{{service.name}}</td> 
 							        <td>{{service.description}}</td>
-							        <td>{{service.serviceCatalog.name}}</td> 	
+							        <td>{{service.serviceCatalog.name}}</td>
+							        <td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
+							        
 							     </tr>
 							</tbody>
 		                </table>
