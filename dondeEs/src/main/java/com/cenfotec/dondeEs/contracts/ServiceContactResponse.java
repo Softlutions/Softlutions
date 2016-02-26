@@ -3,16 +3,17 @@ package com.cenfotec.dondeEs.contracts;
 import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
 
 public class ServiceContactResponse extends BaseResponse {
 	
-	List<ServiceContact> listContracts;
+	List<ServiceContactPOJO> listContracts;
 
-	public List<ServiceContact> getListContracts() {
+	public List<ServiceContactPOJO> getListContracts() {
 		return listContracts;
 	}
 
-	public void setListContracts(List<ServiceContact> listContracts) {
+	public void setListContracts(List<ServiceContactPOJO> listContracts) {
 		this.listContracts = listContracts;
 	}
 	

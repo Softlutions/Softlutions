@@ -19,7 +19,7 @@ public class ServicePOJO {
 
 	private UserPOJO user;
 
-	private List<ServiceContact> serviceContacts;
+	private List<ServiceContactPOJO> serviceContacts;
 
 	public ServicePOJO() {
 	}
@@ -64,7 +64,7 @@ public class ServicePOJO {
 		this.user = user;
 	}
 
-	public List<ServiceContact> getServiceContacts() {
+	public List<ServiceContactPOJO> getServiceContacts() {
 		return this.serviceContacts;
 	}
 

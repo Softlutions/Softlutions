@@ -43,7 +43,7 @@ public class EventPOJO {
 	private List<NotePOJO> notes;
 
 	//bi-directional many-to-one association to ServiceContact
-	private List<ServiceContact> serviceContacts;
+	private List<ServiceContactPOJO> serviceContacts;
 
 	public EventPOJO() {
 	}
@@ -202,22 +202,22 @@ public class EventPOJO {
 		return note;
 	}
 
-	public List<ServiceContact> getServiceContacts() {
+	public List<ServiceContactPOJO> getServiceContacts() {
 		return this.serviceContacts;
 	}
 
-	public void setServiceContacts(List<ServiceContact> serviceContacts) {
+	public void setServiceContacts(List<ServiceContactPOJO> serviceContacts) {
 		this.serviceContacts = serviceContacts;
 	}
 
-	public ServiceContact addServiceContact(ServiceContact serviceContact) {
+	public ServiceContactPOJO addServiceContact(ServiceContactPOJO serviceContact) {
 		getServiceContacts().add(serviceContact);
 		serviceContact.setEvent(this);
 
 		return serviceContact;
 	}
 
-	public ServiceContact removeServiceContact(ServiceContact serviceContact) {
+	public ServiceContactPOJO removeServiceContact(ServiceContactPOJO serviceContact) {
 		getServiceContacts().remove(serviceContact);
 		serviceContact.setEvent(null);
 

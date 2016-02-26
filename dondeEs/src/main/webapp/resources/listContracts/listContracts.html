@@ -1,19 +1,24 @@
 <div class="container">
 	<div class="table-responsive">
 		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+               <h5>Mis contratos</h5>
+           	</div>
 			<div class="ibox-content">
 				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th class="hidden">ID</th>
+							<th>Contrato</th>
 							<th>Estado</th>
 							<th>Comentario</th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="serviceContact in serviceContacts">
+					<tbody ng-repeat = "serviceContact in serviceContacts">
 						<tr>
 							<td class="hidden">{{serviceContact.serviceContactId}}</td>
-							<td>{{serviceContact.state}}</td>
+							<td>{{serviceContact.service.name}}</td>
+							<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
 							<td>{{serviceContact.comment}}</td>
 						</tr>
 					</tbody>
@@ -22,4 +27,3 @@
 		</div>
 	</div>
 </div>
-

@@ -24,12 +24,12 @@ public class ServiceContact implements Serializable {
 	private byte state;
 
 	//bi-directional many-to-one association to Event
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="event_id")
 	private Event event;
 
 	//bi-directional many-to-one association to Service
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="service_id")
 	private Service service;
 
