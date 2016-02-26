@@ -1,7 +1,9 @@
 'use stric'
-
-angular.module('myModule', [
-	"ngRoute"
+console.log("config...");
+angular.module('dondeEs', [
+	"ngRoute",
+	"dondeEs.index",
+	"dondeEs.users"
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/login'});
   
@@ -33,5 +35,5 @@ angular.module('myModule', [
 			}
 	    }
 	});
-  
 }]);
+console.log("config OK");

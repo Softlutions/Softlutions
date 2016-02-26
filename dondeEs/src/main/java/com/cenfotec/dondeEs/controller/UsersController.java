@@ -17,9 +17,6 @@ public class UsersController {
 	//	get all
 	@RequestMapping(value ="/getAll", method = RequestMethod.GET)
 	public UserResponse getAll(){	
-		
-		System.out.print("recibed!");
-		
 		UserResponse response = new UserResponse();
 		response.setCode(200);
 		response.setCodeMessage("users fetch success");

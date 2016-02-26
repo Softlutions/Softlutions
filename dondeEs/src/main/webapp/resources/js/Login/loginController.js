@@ -24,7 +24,7 @@ angular.module('loginModule', ['ngRoute'])
 							"email" : response.email
 						};
 						$scope.loggedUser = responseUser;
-						window.location.href = "/dondeEs/app#/view1";
+						window.location.href = "/dondeEs/app#/index";
 					}else{
 						$("#errorMsj").css("visibility", "visible");
 					}
