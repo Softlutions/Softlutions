@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.ejb.Event;
-import com.cenfotec.dondeEs.ejb.EventPublish;
 import com.cenfotec.dondeEs.repositories.EventRepository;
 
 @Service
@@ -14,20 +13,12 @@ public class EventService implements EventServiceInterface{
 	@Autowired private EventRepository eventRepository;
 
 	@Override
-	public List<Event> getAll() {
-		List<Event> listEvent = eventRepository.findAll();
-		return listEvent;
+	public List<Event> getAllEventPublish() {
+		return eventRepository.findAllByState(1);
 	}
 
-	@Override
-	public List<EventPublish> getAllEventPublish() {
-		List<EventPublish> listEventPublish = eventRepository.findAllEventPublish();
-		return listEventPublish;
-	}
-
-	@Override
-	public boolean publishEvent(int state, String publishDate, int idEvent) {
-		boolean result = eventRepository.publishEvent(state, publishDate, idEvent); 
-		return result;
-	}
+/*	@Override
+	public Event getEventById(int idEvent) {
+		return eventRepository.publishEvent(idEvent); 
+	} */
 }

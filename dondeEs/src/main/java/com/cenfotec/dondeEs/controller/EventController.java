@@ -3,10 +3,9 @@ package com.cenfotec.dondeEs.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cenfotec.dondeEs.contracts.EventPublishResponse;
+import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 
 @RestController
@@ -15,17 +14,17 @@ public class EventController {
 	
 	@Autowired private EventServiceInterface eventServiceInterface;
 	
-//	get all
-	@RequestMapping(value ="/getAll", method = RequestMethod.GET)
-	public EventPublishResponse getAll(){				
-		EventPublishResponse response = new EventPublishResponse();
+//	get all event publish
+	@RequestMapping(value ="/getAllEventPublish", method = RequestMethod.GET)
+	public EventResponse getAll(){				
+		EventResponse response = new EventResponse();
 		response.setCode(200);
 		response.setCodeMessage("eventsPublish fetch success");
-		response.setEventPublishList(eventServiceInterface.getAllEventPublish());
+		response.setEventList(eventServiceInterface.getAllEventPublish());
 		return response;
 	}
 	
-	@RequestMapping(value ="/publishEvent", method = RequestMethod.POST)
+/*	@RequestMapping(value ="/publishEvent", method = RequestMethod.POST)
 	public EventPublishResponse publishEvent(
 				@RequestParam("idEvent") int idEvent) {
 		EventPublishResponse response = new EventPublishResponse();	
@@ -39,5 +38,5 @@ public class EventController {
 		}
 		
 		return response;
-	}
+	} */
 }

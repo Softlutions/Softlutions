@@ -4,10 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.List;
 
 
@@ -59,7 +55,6 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="user")
-	@JsonBackReference
 	private List<Event> events; 
 
 	//bi-directional many-to-one association to EventParticipant
@@ -78,12 +73,10 @@ public class User implements Serializable {
 			@JoinColumn(name="user1_id")
 			}
 		)
-	@JsonBackReference
 	private List<User> users1; 
 
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="users1")
-	@JsonBackReference
 	private List<User> users2; 
 
 	//bi-directional many-to-one association to Message
@@ -105,7 +98,6 @@ public class User implements Serializable {
 	//bi-directional many-to-one association to Role
 	@ManyToOne
 	@JoinColumn(name="role_id")
-	@JsonManagedReference 
 	private Role role;
 
 	//bi-directional many-to-one association to UserType

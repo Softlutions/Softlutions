@@ -4,10 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.Date;
 import java.util.List;
 
@@ -56,13 +52,11 @@ public class Event implements Serializable {
 	//bi-directional many-to-one association to Place
 	@ManyToOne
 	@JoinColumn(name="place_id")
-	@JsonManagedReference 
 	private Place place;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="user_id")
-	@JsonManagedReference 
 	private User user;
 
 	//bi-directional many-to-one association to EventParticipant
