@@ -10,9 +10,18 @@ angular
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 			$scope.serviceContacts = [];
 		
-		$http.get("rest/protected/serviceContact/getAllServiceContact/2").success(function(response){
-		$scope.serviceContacts = response.listContracts;
-		console.log($scope.serviceContacts);
-
-		});
+		$scope.listContracts = function(){
+			var eventId = $('#eventSelect').val();
+			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
+			$scope.serviceContacts = response.listContracts;
+			if($scope.serviceContacts.length == 0){
+				$('#errorMessage').removeClass('hidden');
+				$('#contractTable').addClass('hidden');
+			}else{
+				$('#contractTable').removeClass('hidden');
+				$('#errorMessage').addClass('hidden');
+			}
+			
+			});
+		}
 }]);
