@@ -14,11 +14,19 @@ public class EventService implements EventServiceInterface{
 
 	@Override
 	public List<Event> getAllEventPublish() {
-		return eventRepository.findAllByState(1);
+		List<Event> events = eventRepository.findAllByState((byte) 1);
+		events.forEach(event -> event.getUser().setRole(null));
+		return events;
 	}
 
-/*	@Override
+	@Override
 	public Event getEventById(int idEvent) {
-		return eventRepository.publishEvent(idEvent); 
-	} */
+		return eventRepository.findByEventId(idEvent); 
+	}
+
+	@Override
+	public Boolean saveEvent(Event _event) {
+		Event event = eventRepository.save(_event);
+		return (event == null) ? false : true;
+	} 
 }

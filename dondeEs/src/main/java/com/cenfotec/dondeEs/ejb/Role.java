@@ -27,11 +27,11 @@ public class Role implements Serializable {
 	private byte state;
 
 	//bi-directional many-to-many association to Permission
-	@ManyToMany(mappedBy="roles")
+	@ManyToMany(fetch=FetchType.LAZY)
 	private List<Permission> permissions;
 
 	//bi-directional many-to-one association to User
-	@OneToMany(mappedBy="role")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<User> users;
 
 	public Role() {

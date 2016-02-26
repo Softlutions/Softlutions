@@ -28,7 +28,7 @@ public class Note implements Serializable {
 	private byte state;
 
 	//bi-directional many-to-one association to Event
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="event_id")
 	private Event event;
 

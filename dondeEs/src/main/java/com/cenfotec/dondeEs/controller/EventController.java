@@ -1,11 +1,20 @@
 package com.cenfotec.dondeEs.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cenfotec.dondeEs.contracts.EventRequest;
 import com.cenfotec.dondeEs.contracts.EventResponse;
+import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 
 @RestController
@@ -24,19 +33,31 @@ public class EventController {
 		return response;
 	}
 	
-/*	@RequestMapping(value ="/publishEvent", method = RequestMethod.POST)
-	public EventPublishResponse publishEvent(
-				@RequestParam("idEvent") int idEvent) {
-		EventPublishResponse response = new EventPublishResponse();	
-		if(idEvent != 0){
-		//	eventServiceInterface.publishEvent(1, , idEvent);
-			response.setCode(200);
-			response.setErrorMessage("success");
+// publish a event	
+	@RequestMapping(value ="/publishEvent", method = RequestMethod.PUT)
+	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
+		EventResponse response = new EventResponse();	
+		
+		if(eventRequest.getEventId() != 0){
+			Event event =  eventServiceInterface.getEventById(eventRequest.getEventId());
+			event.setState((byte) 1);
+			event.setPublishDate(new Date());
+	 		
+			boolean state = eventServiceInterface.saveEvent(event);
+			
+			if (state) {
+				response.setCode(200);
+				response.setErrorMessage("success");
+			} else {
+				response.setCode(500);
+				response.setErrorMessage("publish event error, on method: eventServiceInterface.saveEvent(event)");
+			}
+
 		} else {
 			response.setCode(409);
 			response.setErrorMessage("idEvent is zero");
 		}
 		
 		return response;
-	} */
+	} 
 }

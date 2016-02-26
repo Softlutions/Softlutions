@@ -6,5 +6,6 @@ import com.cenfotec.dondeEs.ejb.Event;
 
 public interface EventServiceInterface {
 	List<Event> getAllEventPublish();
-//	Event getEventById(int idEvent);
+	Event getEventById(int idEvent);
+	Boolean saveEvent(Event e);
 }

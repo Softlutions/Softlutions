@@ -40,44 +40,13 @@ public class User implements Serializable {
 
 	private byte state;
 
-	//bi-directional many-to-many association to Chat
-	@ManyToMany
-	@JoinTable(
-		name="chat_member"
-		, joinColumns={
-			@JoinColumn(name="user_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="chat_id")
-			}
-		)
-	private List<Chat> chats;
-
 	//bi-directional many-to-one association to Event
-	@OneToMany(mappedBy="user")
-	private List<Event> events; 
+	@OneToMany(fetch=FetchType.LAZY)
+	private List<Event> events;
 
 	//bi-directional many-to-one association to EventParticipant
 	@OneToMany(mappedBy="user")
 	private List<EventParticipant> eventParticipants;
-
-	//bi-directional many-to-many association to User
-
-	@ManyToMany
-	@JoinTable(
-		name="favorite"
-		, joinColumns={
-			@JoinColumn(name="user2_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="user1_id")
-			}
-		)
-	private List<User> users1; 
-
-	//bi-directional many-to-many association to User
-	@ManyToMany(mappedBy="users1")
-	private List<User> users2; 
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user")
@@ -95,13 +64,43 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<TermCondition> termConditions;
 
+	//bi-directional many-to-many association to Chat
+	@ManyToMany
+	@JoinTable(
+		name="chat_member"
+		, joinColumns={
+			@JoinColumn(name="user_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="chat_id")
+			}
+		)
+	private List<Chat> chats;
+
 	//bi-directional many-to-one association to Role
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="role_id")
 	private Role role;
 
+	//bi-directional many-to-many association to User
+	@ManyToMany
+	@JoinTable(
+		name="favorite"
+		, joinColumns={
+			@JoinColumn(name="user2_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="user1_id")
+			}
+		)
+	private List<User> users1;
+
+	//bi-directional many-to-many association to User
+	@ManyToMany(mappedBy="users1")
+	private List<User> users2;
+
 	//bi-directional many-to-one association to UserType
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="type_id")
 	private UserType userType;
 
@@ -180,21 +179,13 @@ public class User implements Serializable {
 		this.state = state;
 	}
 
-	public List<Chat> getChats() {
-		return this.chats;
-	}
-
-	public void setChats(List<Chat> chats) {
-		this.chats = chats;
-	}
-
 	public List<Event> getEvents() {
 		return this.events;
 	}
 
 	public void setEvents(List<Event> events) {
 		this.events = events;
-	} 
+	}
 
 	public Event addEvent(Event event) {
 		getEvents().add(event);
@@ -208,7 +199,7 @@ public class User implements Serializable {
 		event.setUser(null);
 
 		return event;
-	} 
+	}
 
 	public List<EventParticipant> getEventParticipants() {
 		return this.eventParticipants;
@@ -232,25 +223,9 @@ public class User implements Serializable {
 		return eventParticipant;
 	}
 
-	public List<User> getUsers1() {
-		return this.users1;
-	}
-
-	public void setUsers1(List<User> users1) {
-		this.users1 = users1;
-	}
-
-	public List<User> getUsers2() {
-		return this.users2;
-	}
-
-	public void setUsers2(List<User> users2) {
-		this.users2 = users2;
-	}
-
 	public List<Message> getMessages() {
 		return this.messages;
-	} 
+	}
 
 	public void setMessages(List<Message> messages) {
 		this.messages = messages;
@@ -336,12 +311,36 @@ public class User implements Serializable {
 		return termCondition;
 	}
 
+	public List<Chat> getChats() {
+		return this.chats;
+	}
+
+	public void setChats(List<Chat> chats) {
+		this.chats = chats;
+	}
+
 	public Role getRole() {
 		return this.role;
 	}
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public List<User> getUsers1() {
+		return this.users1;
+	}
+
+	public void setUsers1(List<User> users1) {
+		this.users1 = users1;
+	}
+
+	public List<User> getUsers2() {
+		return this.users2;
+	}
+
+	public void setUsers2(List<User> users2) {
+		this.users2 = users2;
 	}
 
 	public UserType getUserType() {

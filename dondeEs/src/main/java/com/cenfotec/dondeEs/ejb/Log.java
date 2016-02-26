@@ -26,7 +26,7 @@ public class Log implements Serializable {
 	private int userId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date currentTime;
+	private Date when;
 
 	public Log() {
 	}
@@ -56,11 +56,11 @@ public class Log implements Serializable {
 	}
 
 	public Date getWhen() {
-		return this.currentTime;
+		return this.when;
 	}
 
 	public void setWhen(Date when) {
-		this.currentTime = when;
+		this.when = when;
 	}
 
 }
