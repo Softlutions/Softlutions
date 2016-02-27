@@ -8,7 +8,24 @@ angular.module('dondeEs.users', ['ngRoute'])
 		});
 	}])
 	.controller('UsersCtrl', ['$scope', '$http', function($scope, $http){
-		$scope.test = "working test";
+		$scope.users = [];
 		console.log("executing users");
+		
+		$http.get("rest/protected/users/getAll")
+		.success(function(response){
+			if(response.code == 200){
+				$scope.users = response.listUser;
+				console.log($scope.users);
+			}else{
+				console.log("no data");
+				//$("#errorMsj").css("visibility", "visible");
+			}
+		})
+		.error(function(response){
+			//$("#errorMsj").css("visibility", "visible");
+			console.log("error" + response.message);
+		});
+		
+		//console.log($scope.users);
 	}]);
 console.log("users loaded!");

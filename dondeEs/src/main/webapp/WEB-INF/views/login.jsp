@@ -27,7 +27,6 @@
 </head>
 <body>
 	<div id="wrapper">
-
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
@@ -50,10 +49,8 @@
 							class="fa fa-th-large"></i> <span class="nav-label">Página
 								principal</span></a></li>
 				</ul>
-
 			</div>
 		</nav>
-
 		<div id="page-wrapper" class="gray-bg">
 			<div class="row border-bottom">
 				<nav class="navbar navbar-static-top white-bg" role="navigation"
@@ -70,10 +67,8 @@
 					<strong>Copyright</strong> Softlutions &copy; 2016
 				</div>
 			</div>
-
 		</div>
 	</div>
-
 	<!-- Mainly scripts -->
 	<script src="resources/js/jquery-2.1.1.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
