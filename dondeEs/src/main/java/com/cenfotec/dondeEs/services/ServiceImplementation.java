@@ -13,6 +13,7 @@ import com.cenfotec.*;
 
 import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.repositories.ServiceRepository;
 
@@ -32,5 +33,15 @@ public class ServiceImplementation implements ServiceInterface {
 		List<com.cenfotec.dondeEs.ejb.Service> listService = serviceRepository.findAll();
 		return listService;
 	}
+	
+	@Override
+	@Transactional
+	public ServicePOJO getService(int idEvent){
+		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idEvent);
+		ServicePOJO servicePOJO = new ServicePOJO();
+		BeanUtils.copyProperties(nservice, servicePOJO);
+		return servicePOJO;
+	}
+
 	
 }

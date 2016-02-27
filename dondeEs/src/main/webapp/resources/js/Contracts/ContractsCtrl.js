@@ -24,4 +24,11 @@ angular
 			
 			});
 		}
+		
+		$scope.contractService = function(){
+			var eventId = $('#eventSelect').val();
+			$http.get("rest/protected/service/getService/"+eventId).success(function(response){
+				$scope.service = response.service;
+			})
+		}
 }]);

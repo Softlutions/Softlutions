@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
 import com.cenfotec.dondeEs.contracts.ServiceResponse;
 import com.cenfotec.dondeEs.ejb.Service;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.ServiceInterface;
 
@@ -25,6 +26,20 @@ public class ServiceContactController {
 	public ServiceContactResponse getAllServiceContact(@PathVariable("idEvent") int idEvent){
 		ServiceContactResponse response = new ServiceContactResponse();
 		response.setListContracts(serviceContactInterface.getAllServiceContacts(idEvent));
+		return response;
+	}
+	
+	@RequestMapping(value ="/createServiceContact", method = RequestMethod.POST)
+	public ServiceContactResponse createServiceContact(@RequestBody ServiceContact serviceContact){
+		ServiceContactResponse response = new ServiceContactResponse();
+		Boolean state = serviceContactInterface.saveServiceContact(serviceContact);
+		if(state){
+			response.setCode(200);
+			response.setCodeMessage("Succesfull");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("Internal error");
+		}
 		return response;
 	}
 	

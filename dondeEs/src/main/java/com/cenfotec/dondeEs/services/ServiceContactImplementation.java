@@ -48,5 +48,11 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		});
 		return listPojo;
 	}
+	
+	@Override
+	public Boolean saveServiceContact(ServiceContact service) {
+		ServiceContact serviceContact =  contactRepository.save(service);
+	 	return (serviceContact == null) ? false : true;
+	}
 
 }

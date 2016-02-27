@@ -14,4 +14,6 @@ public interface ServiceInterface {
 	
 	List<Service> getAll();
 
+	ServicePOJO getService(int idEvent);
+
 }
