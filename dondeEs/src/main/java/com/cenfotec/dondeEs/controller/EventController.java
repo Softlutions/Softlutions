@@ -1,17 +1,13 @@
 package com.cenfotec.dondeEs.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cenfotec.dondeEs.contracts.EventRequest;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
