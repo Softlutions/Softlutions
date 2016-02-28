@@ -48,12 +48,12 @@ public class Event implements Serializable {
 	private List<Chat> chats;
 
 	//bi-directional many-to-one association to Place
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="place_id")
 	private Place place;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 

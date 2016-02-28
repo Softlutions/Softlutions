@@ -31,12 +31,12 @@ public class Service implements Serializable {
 	private List<AuctionService> auctionServices;
 
 	//bi-directional many-to-one association to ServiceCatalog
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="service_catalog_id")
 	private ServiceCatalog serviceCatalog;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 

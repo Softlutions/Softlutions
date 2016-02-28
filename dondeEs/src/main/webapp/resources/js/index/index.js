@@ -1,5 +1,5 @@
 'use strict';
-console.log("loading index...");
+
 angular.module('dondeEs.index', ['ngRoute'])
 	.config(['$routeProvider', function($routeProvider) {
 	  $routeProvider.when('/index', {
@@ -8,6 +8,6 @@ angular.module('dondeEs.index', ['ngRoute'])
 	  });
 	}])
 	.controller('IndexCtrl', ['$scope','$http',function($scope,$http,$upload) {
-		console.log("executing index");
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		//console.log($scope.loggedUser);
 	}]);
-console.log("index loaded!");

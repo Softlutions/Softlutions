@@ -18,12 +18,13 @@ angular.module('loginModule', ['ngRoute'])
 				.success(function(response){
 					if(response.code == 200){
 						var responseUser = {
-							"userId" : response.idUsuario,
-							"name" : response.name,
-							"lastName1" : response.lastName1,
-							"email" : response.email
+							"userId" : response.idUser,
+							"name" : response.firstName,
+							"lastName" : response.lastName,
+							"email" : response.email,
+							"role" : response.role
 						};
-						$scope.loggedUser = responseUser;
+						localStorage.setItem("loggedUser", JSON.stringify(responseUser));
 						window.location.href = "/dondeEs/app#/index";
 					}else{
 						$("#errorMsj").css("visibility", "visible");

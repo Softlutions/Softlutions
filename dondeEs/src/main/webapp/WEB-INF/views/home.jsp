@@ -25,7 +25,6 @@
 <link href="resources/css/style.css" rel="stylesheet">
 </head>
 <body>
-	
 	<div id="wrapper">
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
@@ -33,9 +32,8 @@
 					<li class="nav-header">
 						<div class="dropdown profile-element">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
-								class="clear"> <span class="block m-t-xs"> <strong
-										class="font-bold">{{loggedUser.name+'
-											'+loggedUser.lastName1}}</strong>
+								class="clear"> <span class="block m-t-xs"> 
+									<strong class="font-bold" ng-controller="IndexCtrl">{{loggedUser.name}} {{loggedUser.lastName}}</strong>
 								</span> <span class="text-muted text-xs block"><b class="caret"></b></span>
 							</span>
 							</a>

@@ -27,15 +27,16 @@ public class UserService implements UserServiceInterface {
 			
 			if(u.getRole() != null){
 				RolePOJO rolePOJO = new RolePOJO();
-				u.getRole().setUsers(null);
 				BeanUtils.copyProperties(u.getRole(), rolePOJO);
+				rolePOJO.setUsers(null);
+				rolePOJO.setPermissions(null);
 				user.setRole(rolePOJO);
 			}
 			
 			if(u.getUserType() != null){
 				UserTypePOJO userTypePOJO = new UserTypePOJO();
-				u.getUserType().setUsers(null);
 				BeanUtils.copyProperties(u.getUserType(), userTypePOJO);
+				userTypePOJO.setUsers(null);
 				user.setUserType(userTypePOJO);
 			}
 			

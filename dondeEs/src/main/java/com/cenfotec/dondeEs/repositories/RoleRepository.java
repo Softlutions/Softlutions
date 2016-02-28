@@ -8,5 +8,4 @@ import com.cenfotec.dondeEs.ejb.Role;
 
 public interface RoleRepository extends CrudRepository<Role,Integer>{
 	List<Role> findAll();
-
 }

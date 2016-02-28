@@ -1,5 +1,5 @@
 'use stric'
-console.log("config...");
+
 angular.module('dondeEs', [
 	"ngRoute",
 	"dondeEs.index",
@@ -35,5 +35,23 @@ angular.module('dondeEs', [
 			}
 	    }
 	});
-}]);
-console.log("config OK");
+}])
+.constant('CONFIG', {
+	TEMPLATE_DIR:"templates/",
+	ROL_CURRENT_USER: 1
+})
+ 
+.constant('ROLES', {
+	ADMIN: {
+		ROL:1,
+		PATH:"/admin"
+	},
+	REGISTERED: {
+		ROL:2,
+		PATH:"/user"
+	},
+	GUEST: {
+		ROL:3,
+		PATH:"/guest"
+	}
+})
