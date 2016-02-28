@@ -28,7 +28,7 @@ angular
 													"firstName" : response.firstName,
 													"lastName" : response.lastName
 												};
-												window.location.href = "/dondeEs/app#/view1";
+												window.location.href = "/dondeEs/app#/eventsPublish";
 											}else{
 												//NO inicio sesion
 											}

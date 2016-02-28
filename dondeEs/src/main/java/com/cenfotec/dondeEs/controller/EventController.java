@@ -46,7 +46,7 @@ public class EventController {
 				response.setErrorMessage("success");
 			} else {
 				response.setCode(500);
-				response.setErrorMessage("publish event error, on method: eventServiceInterface.saveEvent(event)");
+				response.setErrorMessage("publish event error");
 			}
 
 		} else {
