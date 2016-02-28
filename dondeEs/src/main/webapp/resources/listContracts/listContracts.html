@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	
-	<button type="button" class="btn btn-info" data-toggle="modal" ng-click="contractService()" data-target="#myModal">Open Modal</button>
+	<button type="button" class="btn btn-info" data-toggle="modal" ng-click="serviceInfo()" data-target="#myModal">Open Modal</button>
 	
 	<div id="myModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
@@ -50,9 +50,11 @@
 				</div>
 				<div class="modal-body">
 					<p>{{service.description}}</p>
+					<label>Comentario</label>
+					<textarea class="form-control" rows="5" id="comment"></textarea>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Contratar</button>
+					<button type="button" class="btn btn-primary" ng-click="contractService()">Contratar</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 				</div>
 			</div>

@@ -1,7 +1,5 @@
 package com.cenfotec.dondeEs.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +40,4 @@ public class ServiceContactController {
 		}
 		return response;
 	}
-	
-	
 }

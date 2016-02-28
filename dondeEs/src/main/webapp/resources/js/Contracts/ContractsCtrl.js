@@ -25,10 +25,43 @@ angular
 			});
 		}
 		
-		$scope.contractService = function(){
+		$scope.serviceInfo = function(){
 			var eventId = $('#eventSelect').val();
 			$http.get("rest/protected/service/getService/"+eventId).success(function(response){
 				$scope.service = response.service;
 			})
+		}
+		
+		$scope.eventInfo = function(){
+			var eventId = $('#eventSelect').val();
+			$http.get("rest/protected/service/getService/"+eventId).success(function(response){
+				$scope.service = response.service;
+			})
+		}
+		
+		$scope.contractService = function(){
+			var service = {
+					service:$scope.service,
+					comment:$('#comment').val(),
+					state:0,
+					event:{
+						eventId:$('#eventSelect').val(),
+						description:"despelote",
+						name:"fiesta cenfotec",
+						user:{
+							userId:2,
+							email:"def@ghi.com",
+							password:"def"
+						}
+					}
+			};
+			
+			$http({method: 'POST',url:'rest/protected/serviceContact/createServiceContact', data:service, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				console.log("response:",response);
+				$('#myModal').modal('toggle');
+				
+			})
+			
+			
 		}
 }]);
