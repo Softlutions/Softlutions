@@ -26,12 +26,12 @@ public class Message implements Serializable {
 	private Date time;
 
 	//bi-directional many-to-one association to Chat
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="chat_id")
 	private Chat chat;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 

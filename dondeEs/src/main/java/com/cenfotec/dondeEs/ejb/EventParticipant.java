@@ -32,12 +32,12 @@ public class EventParticipant implements Serializable {
 	private List<Comment> comments;
 
 	//bi-directional many-to-one association to Event
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="event_id")
 	private Event event;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 
