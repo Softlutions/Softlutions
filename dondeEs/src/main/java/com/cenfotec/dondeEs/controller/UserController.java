@@ -1,7 +1,5 @@
 package com.cenfotec.dondeEs.controller;
 
-import javax.websocket.server.PathParam;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +14,7 @@ import com.cenfotec.dondeEs.services.UserServiceInterface;
 @RestController
 @RequestMapping(value = "rest/protected/user")
 public class UserController {
+	
 	@Autowired private UserServiceInterface userServiceInterface;
 
 	@RequestMapping(value ="/getAllService/{idUser}", method = RequestMethod.GET)

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
-import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.UserRepository;
 
 @org.springframework.stereotype.Service
@@ -31,11 +30,11 @@ public class UserService implements UserServiceInterface {
 		listService.stream().forEach(ta-> {
 			ServicePOJO servicePOJO = new ServicePOJO();
 			BeanUtils.copyProperties(ta, servicePOJO);
-			if(ta.getUser()!=null){
-				UserPOJO userPOJO = new UserPOJO();
-				BeanUtils.copyProperties(ta.getUser(), userPOJO);
-				servicePOJO.setUser(userPOJO);
-			}
+//			if(ta.getUser()!=null){
+//				UserPOJO userPOJO = new UserPOJO();
+//				BeanUtils.copyProperties(ta.getUser(), userPOJO);
+//				servicePOJO.setUser(userPOJO);
+//			}
 			if(ta.getServiceCatalog() != null){
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
