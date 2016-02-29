@@ -35,15 +35,27 @@ angular
 
 											$scope.serviceCatalogList = response.serviceCatalogList;
 											$scope.requestObject.serviceCatalogId = $scope.serviceCatalogList[0].serviceCatalogId;
+											$scope.requestObject.name = $scope.serviceCatalogList[0].name;
+											
 											
 										});
 								    	
 								    };
 								    var dataCreate = {
 									};
+								    
 								    $scope.init();
 								    $scope.saveService = function(event){
+								    	console.log($scope.requestObject);
+								    	$("#modal-form").modal('hide');	
 									$scope.onError = false;
+								    if(document.getElementById('inlineCheckbox1').checked){
+								    	$scope.objService.state = 1
+								    }
+								    else{
+								    	$scope.objService.state = 0
+								    }
+								    
 									dataCreate={
 											serviceCatalog :$scope.requestObject,
 											name : $scope.objService.name,
@@ -52,13 +64,12 @@ angular
 											user:$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"))
 									}		
 									if($scope.objService.name != null && $scope.objService.description != null){
+									
 										$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-											console.log("response",response);
-											console.log("response service", $scope.user);
-											
+											$scope.services = $scope.services.concat(dataCreate);
 										});
 									}else{
-										alert('Mal')
+										
 									}
 								};
 						
