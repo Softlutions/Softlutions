@@ -4,6 +4,7 @@ package com.cenfotec.dondeEs.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +40,13 @@ public class ServiceController {
 			response.setCode(500);
 			response.setCodeMessage("Internal error");
 		}
+		return response;
+	}
+	
+	@RequestMapping(value ="/getService/{serviceId}", method = RequestMethod.GET)
+	public ServiceResponse getService(@PathVariable("serviceId") int serviceId){
+		ServiceResponse response = new ServiceResponse();
+		response.setService(serviceInterface.getService(serviceId));
 		return response;
 	}
 }

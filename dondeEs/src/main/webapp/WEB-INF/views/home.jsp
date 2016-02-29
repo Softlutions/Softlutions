@@ -94,7 +94,7 @@
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
-	
+	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
 	<script src="resources/js/myEvents/myEventsController.js"></script>
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 	<script src="resources/js/Events/eventsPublishController.js"></script>
