@@ -49,8 +49,6 @@ public class UserPOJO {
 
 	private byte state;
 
-	private List<EventPOJO> events;
-
 	private List<EventParticipantPOJO> eventParticipants;
 
 	private List<MessagePOJO> messages;
@@ -144,28 +142,6 @@ public class UserPOJO {
 
 	public void setState(boolean state) {
 		this.state = (byte) (state ? 1 : 0);
-	}
-
-	public List<EventPOJO> getEvents() {
-		return this.events;
-	}
-
-	public void setEvents(List<EventPOJO> events) {
-		this.events = events;
-	}
-
-	public EventPOJO addEvent(EventPOJO event) {
-		getEvents().add(event);
-		event.setUser(this);
-
-		return event;
-	}
-
-	public EventPOJO removeEvent(EventPOJO event) {
-		getEvents().remove(event);
-		event.setUser(null);
-
-		return event;
 	}
 
 	public List<EventParticipantPOJO> getEventParticipants() {

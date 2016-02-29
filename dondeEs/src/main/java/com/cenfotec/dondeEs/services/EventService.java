@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.ejb.Event;
-<<<<<<< HEAD
 import com.cenfotec.dondeEs.ejb.Place;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.EventRepository;
 
 @Service
@@ -31,12 +31,26 @@ public class EventService implements EventServiceInterface {
 			eventsPOJO.add(eventPOJO);
 		});
 		return eventsPOJO;
-
+	}
+	
 	@Override
-	public List<Event> getAllEventPublish() {
-		List<Event> events = eventRepository.findAllByState((byte) 1);
-		events.forEach(event -> event.getUser().setRole(null));
-		return events;
+	public List<EventPOJO> getAllEventPublish() {	
+//		List<EventPOJO> events = eventRepository.findAllByState((byte) 1);
+		
+		List<EventPOJO> eventsPOJO = new ArrayList<>();
+		eventRepository.findAllByState((byte) 1).stream().forEach(e -> {
+			EventPOJO eventPOJO = new EventPOJO();
+			PlacePOJO placePOJO = new PlacePOJO();
+			UserPOJO userPOJO = new UserPOJO();
+			BeanUtils.copyProperties(e, eventPOJO);
+			BeanUtils.copyProperties(e.getPlace(), placePOJO);
+			BeanUtils.copyProperties(e.getUser(), userPOJO);
+			eventPOJO.setPlace(placePOJO);
+			eventPOJO.setUser(userPOJO);
+			eventsPOJO.add(eventPOJO);
+		});
+		
+		return eventsPOJO;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('eventsPublishModule.eventsPublish', ['ngRoute'])
+angular.module('dondeEs.eventsPublish', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/eventsPublish', {
