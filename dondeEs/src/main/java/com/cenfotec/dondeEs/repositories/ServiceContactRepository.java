@@ -12,6 +12,6 @@ public interface ServiceContactRepository extends CrudRepository<ServiceContact,
 	List<ServiceContact> findAll();
 	
 	@Query("SELECT sc FROM ServiceContact sc JOIN sc.event e WHERE e.eventId = ?1")
-	List<ServiceContact> findByEventId(int eventId);
+	List<ServiceContact> findServiceContactByEventId(int eventId);
 	
 }

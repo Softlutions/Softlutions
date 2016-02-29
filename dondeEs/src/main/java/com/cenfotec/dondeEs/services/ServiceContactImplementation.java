@@ -29,7 +29,7 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 	@Override
 	@Transactional
 	public List<ServiceContactPOJO> getAllServiceContacts(int idEvent){
-		List<ServiceContact> listServiceContact = contactRepository.findByEventId(idEvent);
+		List<ServiceContact> listServiceContact = contactRepository.findServiceContactByEventId(idEvent);
 		List<ServiceContactPOJO> listPojo = new ArrayList<ServiceContactPOJO>();
 		listServiceContact.stream().forEach(ta -> {
 			ServiceContactPOJO serviceContactPOJO = new ServiceContactPOJO();
@@ -37,11 +37,18 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 			if(ta.getEvent()!=null){
 				EventPOJO eventPojo = new EventPOJO();
 				BeanUtils.copyProperties(ta.getEvent(),eventPojo );
+				eventPojo.setPlace(null);
+				eventPojo.setUser(null);
+				eventPojo.setServiceContacts(null);
+				eventPojo.setChats(null);
+				eventPojo.setEventParticipants(null);
+				eventPojo.setNotes(null);
 				serviceContactPOJO.setEvent(eventPojo);
 			}
 			if(ta.getService()!=null){
 				ServicePOJO servicePojo = new ServicePOJO();
 				BeanUtils.copyProperties(ta.getService(),servicePojo );
+				servicePojo.setUser(null);
 				serviceContactPOJO.setService(servicePojo);
 			}
 			listPojo.add(serviceContactPOJO);

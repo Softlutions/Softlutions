@@ -8,20 +8,18 @@ angular
 			});
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
-			$scope.serviceContacts = [];
 		
 		$scope.listContracts = function(){
 			var eventId = $('#eventSelect').val();
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
-			$scope.serviceContacts = response.listContracts;
-			if($scope.serviceContacts.length == 0){
-				$('#errorMessage').removeClass('hidden');
-				$('#contractTable').addClass('hidden');
-			}else{
-				$('#contractTable').removeClass('hidden');
-				$('#errorMessage').addClass('hidden');
-			}
-			
+				$scope.serviceContacts = response.listContracts;
+				if($scope.serviceContacts.length == 0){
+					$('#errorMessage').removeClass('hidden');
+					$('#contractTable').addClass('hidden');
+				}else{
+					$('#contractTable').removeClass('hidden');
+					$('#errorMessage').addClass('hidden');
+				}
 			});
 		}
 		
@@ -57,11 +55,8 @@ angular
 			};
 			
 			$http({method: 'POST',url:'rest/protected/serviceContact/createServiceContact', data:service, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-				console.log("response:",response);
 				$('#myModal').modal('toggle');
 				
-			})
-			
-			
+			})	
 		}
 }]);

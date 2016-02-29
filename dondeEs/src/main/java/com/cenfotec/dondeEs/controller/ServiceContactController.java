@@ -6,13 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
-import com.cenfotec.dondeEs.contracts.ServiceResponse;
-import com.cenfotec.dondeEs.ejb.Service;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.services.ServiceContactInterface;
-import com.cenfotec.dondeEs.services.ServiceInterface;
 
 @RestController
 @RequestMapping(value = "rest/protected/serviceContact")
