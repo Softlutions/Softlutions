@@ -9,4 +9,5 @@ public interface EventServiceInterface {
 	List<EventPOJO> getAllEventByUser(int pidUsuario);
 	Event getEventById(int idEvent);
 	Boolean saveEvent(Event e);
+	List<EventPOJO> getAllEventPublish();
 }

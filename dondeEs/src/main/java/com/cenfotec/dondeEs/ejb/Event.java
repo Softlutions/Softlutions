@@ -6,67 +6,68 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
 
+
 /**
  * The persistent class for the event database table.
  * 
  */
 @Entity
-@Table(name = "event")
-@NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e")
+@Table(name="event")
+@NamedQuery(name="Event.findAll", query="SELECT e FROM Event e")
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "event_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="event_id")
 	private int eventId;
 
 	private String description;
 
 	private String image;
 
-	@Column(name = "large_description")
+	@Column(name="large_description")
 	private String largeDescription;
 
 	private String name;
 
-	@Column(name = "private")
+	@Column(name="private")
 	private byte private_;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "publish_date")
+	@Column(name="publish_date")
 	private Date publishDate;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "register_date")
+	@Column(name="register_date")
 	private Date registerDate;
 
 	private byte state;
 
-	// bi-directional many-to-one association to Chat
-	@OneToMany(mappedBy = "event",fetch=FetchType.LAZY)
+	//bi-directional many-to-one association to Chat
+	@OneToMany(mappedBy="event")
 	private List<Chat> chats;
 
-	// bi-directional many-to-one association to Place
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "place_id")
+	//bi-directional many-to-one association to Place
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="place_id")
 	private Place place;
 
-	// bi-directional many-to-one association to User
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	//bi-directional many-to-one association to User
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="user_id")
 	private User user;
 
-	// bi-directional many-to-one association to EventParticipant
-	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+	//bi-directional many-to-one association to EventParticipant
+	@OneToMany(mappedBy="event")
 	private List<EventParticipant> eventParticipants;
 
-	// bi-directional many-to-one association to Note
-	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+	//bi-directional many-to-one association to Note
+	@OneToMany(mappedBy="event")
 	private List<Note> notes;
 
-	// bi-directional many-to-one association to ServiceContact
-	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+	//bi-directional many-to-one association to ServiceContact
+	@OneToMany(mappedBy="event")
 	private List<ServiceContact> serviceContacts;
 
 	public Event() {

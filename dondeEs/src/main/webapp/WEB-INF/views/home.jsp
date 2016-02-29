@@ -23,6 +23,7 @@
 <link href="resources/css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
+<link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -38,7 +39,7 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="#">Cerrar sesiï¿½n</a></li>
+								<li><a href="#">Cerrar sesión</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
@@ -96,5 +97,6 @@
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
 	<script src="resources/js/myEvents/myEventsController.js"></script>
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
+	<script src="resources/js/Events/eventsPublishController.js"></script>
 </body>
 </html>
