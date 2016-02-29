@@ -3,7 +3,8 @@
 angular.module('dondeEs', [
 	"ngRoute",
 	"dondeEs.index",
-	"dondeEs.users"
+	"dondeEs.users",
+	"dondeEs.myEvents"
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/login'});
   
@@ -16,7 +17,7 @@ angular.module('dondeEs', [
 		    responseError: function(response) {
 		      // do something on error
 		    	if(response.status === 401){
-					window.location.href = "/dondeEs/login";
+					window.location.href = "/dondeEs/#/login";
 				}
 		      return $q.reject(response);
 		    }
