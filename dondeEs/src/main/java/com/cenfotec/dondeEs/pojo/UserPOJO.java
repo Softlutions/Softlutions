@@ -1,5 +1,5 @@
 package com.cenfotec.dondeEs.pojo;
- 
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,13 +25,12 @@ import com.cenfotec.dondeEs.ejb.TermCondition;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.ejb.UserType;
 
-
 /**
  * The persistent class for the user database table.
  * 
  */
 public class UserPOJO {
-	
+
 	private int userId;
 
 	private String email;
@@ -54,12 +53,11 @@ public class UserPOJO {
 
 	private List<EventParticipantPOJO> eventParticipants;
 
-	
 	private List<MessagePOJO> messages;
 
 	private List<PasswordHistoryPOJO> passwordHistories;
 
-//	private List<ServicePOJO> services;
+	// private List<ServicePOJO> services;
 
 	private List<TermConditionPOJO> termConditions;
 
@@ -67,7 +65,7 @@ public class UserPOJO {
 
 	private RolePOJO role;
 
-		private List<UserPOJO> users1;
+	private List<UserPOJO> users1;
 
 	private List<UserPOJO> users2;
 
@@ -144,8 +142,8 @@ public class UserPOJO {
 		return this.state;
 	}
 
-	public void setState(byte state) {
-		this.state = state;
+	public void setState(boolean state) {
+		this.state = (byte) (state ? 1 : 0);
 	}
 
 	public List<EventPOJO> getEvents() {
@@ -236,27 +234,27 @@ public class UserPOJO {
 		return passwordHistory;
 	}
 
-//	public List<ServicePOJO> getServices() {
-//		return this.services;
-//	}
-//
-//	public void setServices(List<ServicePOJO> services) {
-//		this.services = services;
-//	}
+	// public List<ServicePOJO> getServices() {
+	// return this.services;
+	// }
+	//
+	// public void setServices(List<ServicePOJO> services) {
+	// this.services = services;
+	// }
 
-//	public ServicePOJO addService(ServicePOJO service) {
-//		getServices().add(service);
-//		service.setUser(this);
-//
-//		return service;
-//	}
-//
-//	public ServicePOJO removeService(ServicePOJO service) {
-//		getServices().remove(service);
-//		service.setUser(null);
-//
-//		return service;
-//	}
+	// public ServicePOJO addService(ServicePOJO service) {
+	// getServices().add(service);
+	// service.setUser(this);
+	//
+	// return service;
+	// }
+	//
+	// public ServicePOJO removeService(ServicePOJO service) {
+	// getServices().remove(service);
+	// service.setUser(null);
+	//
+	// return service;
+	// }
 
 	public List<TermConditionPOJO> getTermConditions() {
 		return this.termConditions;
