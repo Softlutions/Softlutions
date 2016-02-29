@@ -13,16 +13,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Login | Donde es</title>
 <meta name="description" content="">
+
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
-<link href="resources/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link
+	href="resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css"
+	rel="stylesheet">
+<link href="resources/font-awesome/css/font-awesome.css"
+	rel="stylesheet">
 <link href="resources/css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
+<link href="resources/css/custom-style.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
-
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
@@ -30,66 +34,41 @@
 						<div class="dropdown profile-element">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
 								class="clear"> <span class="block m-t-xs"> <strong
-										class="font-bold">David Williams</strong>
-								</span> <span class="text-muted text-xs block">Art Director <b
-										class="caret"></b></span>
+										class="font-bold">{{loggedUser.name+'
+											'+loggedUser.lastName1}}</strong>
+								</span> <span class="text-muted text-xs block"><b class="caret"></b></span>
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="#">Logout</a></li>
+								<li><a href="#">Cerrar sesi�n</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
 					</li>
 					<li class="active"><a href="index.html"><i
-							class="fa fa-th-large"></i> <span class="nav-label">Main
-								view</span></a></li>
+							class="fa fa-th-large"></i> <span class="nav-label">P�gina
+								principal</span></a></li>
 				</ul>
-
 			</div>
 		</nav>
-
 		<div id="page-wrapper" class="gray-bg">
 			<div class="row border-bottom">
 				<nav class="navbar navbar-static-top white-bg" role="navigation"
-					style="margin-bottom: 0">
-					<div class="navbar-header">
-						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
-							href="#"><i class="fa fa-bars"></i> </a>
-						<form role="search" class="navbar-form-custom" method="post"
-							action="#">
-							<div class="form-group">
-								<input type="text" placeholder="Search for something..."
-									class="form-control" name="top-search" id="top-search">
-							</div>
-						</form>
-					</div>
-					<ul class="nav navbar-top-links navbar-right">
-						<li><a href="#"> <i class="fa fa-sign-out"></i> Log out
-						</a></li>
-					</ul>
-
-				</nav>
+					style="margin-bottom: 0"></nav>
 			</div>
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row">
-					<div ng-view>
-						
-					</div>
+					<div ng-view></div>
 				</div>
 			</div>
 			<div class="footer">
-				<div class="pull-right">
-					10GB of <strong>250GB</strong> Free.
-				</div>
+				<div class="pull-right"></div>
 				<div>
-					<strong>Copyright</strong> Example Company &copy; 2014-2015
+					<strong>Copyright</strong> Softlutions &copy; 2016
 				</div>
 			</div>
-
 		</div>
 	</div>
-	
 	<!-- Mainly scripts -->
 	<script src="resources/js/jquery-2.1.1.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -106,7 +85,6 @@
 
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-	<script src="resources/js/Login/login_controller.js"></script>
+	<script src="resources/js/Login/loginController.js"></script>
 </body>
 </html>

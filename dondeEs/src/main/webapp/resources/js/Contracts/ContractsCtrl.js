@@ -1,6 +1,6 @@
 'use strict';
 angular
-		.module('ContractModule', ['ngRoute'])
+		.module('dondeEs.ContractModule', ['ngRoute'])
 		.config([ '$routeProvider', function($routeProvider) {
 			$routeProvider.when('/Contracts', {
 				templateUrl : 'resources/listContracts/listContracts.html',

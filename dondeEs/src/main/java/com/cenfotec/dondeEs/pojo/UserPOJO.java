@@ -1,13 +1,35 @@
 package com.cenfotec.dondeEs.pojo;
- 
+
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.cenfotec.dondeEs.ejb.Chat;
+import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.EventParticipant;
+import com.cenfotec.dondeEs.ejb.Message;
+import com.cenfotec.dondeEs.ejb.PasswordHistory;
+import com.cenfotec.dondeEs.ejb.Role;
+import com.cenfotec.dondeEs.ejb.Service;
+import com.cenfotec.dondeEs.ejb.TermCondition;
+import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.ejb.UserType;
 
 /**
  * The persistent class for the user database table.
  * 
  */
-public class UserPOJO  {
+public class UserPOJO {
 
 	private int userId;
 
@@ -35,7 +57,9 @@ public class UserPOJO  {
 
 	private List<PasswordHistoryPOJO> passwordHistories;
 
-	private List<ServicePOJO> services;
+	// private List<ServicePOJO> services;
+
+	private List<TermConditionPOJO> termConditions;
 
 	private List<ChatPOJO> chats;
 
@@ -44,6 +68,8 @@ public class UserPOJO  {
 	private List<UserPOJO> users1;
 
 	private List<UserPOJO> users2;
+
+	private UserTypePOJO userType;
 
 	public UserPOJO() {
 	}
@@ -116,8 +142,8 @@ public class UserPOJO  {
 		return this.state;
 	}
 
-	public void setState(byte state) {
-		this.state = state;
+	public void setState(boolean state) {
+		this.state = (byte) (state ? 1 : 0);
 	}
 
 	public List<EventPOJO> getEvents() {
@@ -128,7 +154,19 @@ public class UserPOJO  {
 		this.events = events;
 	}
 
+	public EventPOJO addEvent(EventPOJO event) {
+		getEvents().add(event);
+		event.setUser(this);
 
+		return event;
+	}
+
+	public EventPOJO removeEvent(EventPOJO event) {
+		getEvents().remove(event);
+		event.setUser(null);
+
+		return event;
+	}
 
 	public List<EventParticipantPOJO> getEventParticipants() {
 		return this.eventParticipants;
@@ -136,6 +174,20 @@ public class UserPOJO  {
 
 	public void setEventParticipants(List<EventParticipantPOJO> eventParticipants) {
 		this.eventParticipants = eventParticipants;
+	}
+
+	public EventParticipantPOJO addEventParticipant(EventParticipantPOJO eventParticipant) {
+		getEventParticipants().add(eventParticipant);
+		eventParticipant.setUser(this);
+
+		return eventParticipant;
+	}
+
+	public EventParticipant removeEventParticipant(EventParticipant eventParticipant) {
+		getEventParticipants().remove(eventParticipant);
+		eventParticipant.setUser(null);
+
+		return eventParticipant;
 	}
 
 	public List<MessagePOJO> getMessages() {
@@ -146,6 +198,20 @@ public class UserPOJO  {
 		this.messages = messages;
 	}
 
+	public MessagePOJO addMessage(MessagePOJO message) {
+		getMessages().add(message);
+		message.setUser(this);
+
+		return message;
+	}
+
+	public MessagePOJO removeMessage(MessagePOJO message) {
+		getMessages().remove(message);
+		message.setUser(null);
+
+		return message;
+	}
+
 	public List<PasswordHistoryPOJO> getPasswordHistories() {
 		return this.passwordHistories;
 	}
@@ -154,15 +220,63 @@ public class UserPOJO  {
 		this.passwordHistories = passwordHistories;
 	}
 
+	public PasswordHistoryPOJO addPasswordHistory(PasswordHistoryPOJO passwordHistory) {
+		getPasswordHistories().add(passwordHistory);
+		passwordHistory.setUser(this);
 
-	public List<ServicePOJO> getServices() {
-		return this.services;
+		return passwordHistory;
 	}
 
-	public void setServices(List<ServicePOJO> services) {
-		this.services = services;
+	public PasswordHistoryPOJO removePasswordHistory(PasswordHistoryPOJO passwordHistory) {
+		getPasswordHistories().remove(passwordHistory);
+		passwordHistory.setUser(null);
+
+		return passwordHistory;
 	}
 
+	// public List<ServicePOJO> getServices() {
+	// return this.services;
+	// }
+	//
+	// public void setServices(List<ServicePOJO> services) {
+	// this.services = services;
+	// }
+
+	// public ServicePOJO addService(ServicePOJO service) {
+	// getServices().add(service);
+	// service.setUser(this);
+	//
+	// return service;
+	// }
+	//
+	// public ServicePOJO removeService(ServicePOJO service) {
+	// getServices().remove(service);
+	// service.setUser(null);
+	//
+	// return service;
+	// }
+
+	public List<TermConditionPOJO> getTermConditions() {
+		return this.termConditions;
+	}
+
+	public void setTermConditions(List<TermConditionPOJO> termConditions) {
+		this.termConditions = termConditions;
+	}
+
+	public TermConditionPOJO addTermCondition(TermConditionPOJO termCondition) {
+		getTermConditions().add(termCondition);
+		termCondition.setUser(this);
+
+		return termCondition;
+	}
+
+	public TermConditionPOJO removeTermCondition(TermConditionPOJO termCondition) {
+		getTermConditions().remove(termCondition);
+		termCondition.setUser(null);
+
+		return termCondition;
+	}
 
 	public List<ChatPOJO> getChats() {
 		return this.chats;
@@ -194,6 +308,14 @@ public class UserPOJO  {
 
 	public void setUsers2(List<UserPOJO> users2) {
 		this.users2 = users2;
+	}
+
+	public UserTypePOJO getUserType() {
+		return this.userType;
+	}
+
+	public void setUserType(UserTypePOJO userType) {
+		this.userType = userType;
 	}
 
 }

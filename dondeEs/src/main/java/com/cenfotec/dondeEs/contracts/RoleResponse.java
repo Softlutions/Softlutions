@@ -3,16 +3,17 @@ package com.cenfotec.dondeEs.contracts;
 import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.Role;
+import com.cenfotec.dondeEs.pojo.RolePOJO;
 
 public class RoleResponse extends BaseResponse {
 	
-	private List<Role> listRole;
+	private List<RolePOJO> listRole;
 
-	public List<Role> getListRole() {
+	public List<RolePOJO> getListRole() {
 		return listRole;
 	}
 
-	public void setListRole(List<Role> listRole) {
+	public void setListRole(List<RolePOJO> listRole) {
 		this.listRole = listRole;
 	}
 }

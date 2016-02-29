@@ -2,6 +2,7 @@ package com.cenfotec.dondeEs.controller;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.ServiceResponse;
 import com.cenfotec.dondeEs.ejb.Service;
-
 import com.cenfotec.dondeEs.services.ServiceInterface;
 
 @RestController
@@ -32,10 +32,13 @@ public class ServiceController {
 		ServiceResponse response = new ServiceResponse();
 		
 		Boolean state = serviceInterface.saveService(service);
-		
+	
 		if(state){
 			response.setCode(200);
 			response.setCodeMessage("Succesfull");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("Internal error");
 		}
 		return response;
 	}

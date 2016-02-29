@@ -3,6 +3,8 @@ package com.cenfotec.dondeEs.pojo;
  
 import java.util.List;
 
+import com.cenfotec.dondeEs.ejb.ServiceCatalog;
+
 
 /**
  * The persistent class for the service database table.
@@ -20,6 +22,8 @@ public class ServicePOJO {
 	private UserPOJO user;
 
 	private List<ServiceContactPOJO> serviceContacts;
+
+	private ServiceCatalogPOJO serviceCatalog;
 
 	public ServicePOJO() {
 	}

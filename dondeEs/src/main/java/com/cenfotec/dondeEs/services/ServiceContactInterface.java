@@ -14,4 +14,5 @@ public interface ServiceContactInterface {
 	
 	Boolean saveServiceContact(ServiceContact service);
 
+	
 }
