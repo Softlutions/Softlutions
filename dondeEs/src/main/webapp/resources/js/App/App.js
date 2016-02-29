@@ -3,6 +3,7 @@
 angular.module('dondeEs', [
 	"ngRoute",
 	"dondeEs.index",
+	"dondeEs.serviceByUser",
 	"dondeEs.users"
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/login'});

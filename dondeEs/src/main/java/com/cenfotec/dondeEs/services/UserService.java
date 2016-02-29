@@ -5,18 +5,21 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
+import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.UserTypePOJO;
 import com.cenfotec.dondeEs.repositories.UserRepository;
 
-@Service
+@org.springframework.stereotype.Service
 public class UserService implements UserServiceInterface {
 	@Autowired private UserRepository userRepository;
 	
+
 	public List<UserPOJO> getAll(){
 		List<User> usersList = userRepository.findAll();
 		List<UserPOJO> usersListPOJO = new ArrayList<>();
@@ -44,5 +47,34 @@ public class UserService implements UserServiceInterface {
 		});
 		
 		return usersListPOJO;
+
 	}
+	
+	@Override
+	@Transactional
+	public List<ServicePOJO> getAllService(int idUser){
+		List<com.cenfotec.dondeEs.ejb.Service> listService = userRepository.getServicesByUser(idUser);
+		List<ServicePOJO> listPojo = new ArrayList<ServicePOJO>();
+		listService.stream().forEach(ta-> {
+			ServicePOJO servicePOJO = new ServicePOJO();
+			BeanUtils.copyProperties(ta, servicePOJO);
+//			if(ta.getUser()!=null){
+//				UserPOJO userPOJO = new UserPOJO();
+//				BeanUtils.copyProperties(ta.getUser(), userPOJO);
+//				servicePOJO.setUser(userPOJO);
+//			}
+			if(ta.getServiceCatalog() != null){
+				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
+				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
+				servicePOJO.setServiceCatalog(catalogPOJO);
+			}
+				listPojo.add(servicePOJO);
+				
+				
+			});
+		
+		
+		return listPojo;
+	}
+	
 }
