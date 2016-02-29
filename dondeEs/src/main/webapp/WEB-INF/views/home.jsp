@@ -1,4 +1,3 @@
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false"%>
 
@@ -7,7 +6,7 @@
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="serviceModule" class="no-js">
+<html lang="en" ng-app="dondeEs" class="no-js">
 <!--<![endif]-->
 <head>
 <meta charset="utf-8">
@@ -26,12 +25,55 @@
 <link href="resources/css/style.css" rel="stylesheet">
 </head>
 <body>
-	<div ng-view></div>
+	<div id="wrapper">
+		<nav class="navbar-default navbar-static-side" role="navigation">
+			<div class="sidebar-collapse">
+				<ul class="nav metismenu" id="side-menu">
+					<li class="nav-header">
+						<div class="dropdown profile-element">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
+								class="clear"> <span class="block m-t-xs"> 
+									<strong class="font-bold" ng-controller="IndexCtrl">{{loggedUser.name}} {{loggedUser.lastName}}</strong>
+								</span> <span class="text-muted text-xs block"><b class="caret"></b></span>
+							</span>
+							</a>
+							<ul class="dropdown-menu animated fadeInRight m-t-xs">
+								<li><a href="#">Cerrar sesi�n</a></li>
+							</ul>
+						</div>
+						<div class="logo-element">IN+</div>
+					</li>
+					<li class="active"><a href="index.html"><i
+							class="fa fa-th-large"></i> <span class="nav-label">P�gina
+								principal</span></a></li>
+				</ul>
+			</div>
+		</nav>
+		<div id="page-wrapper" class="gray-bg">
+			<div class="row border-bottom">
+				<nav class="navbar navbar-static-top white-bg" role="navigation"
+					style="margin-bottom: 0"></nav>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div ng-view></div>
+				</div>
+			</div>
+			<div class="footer">
+				<div class="pull-right"></div>
+				<div>
+					<strong>Copyright</strong> Softlutions &copy; 2016
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--div ng-view></div>
 	<div class="container">
 		<div>
 			version <strong><span app-version></span></strong>
 		</div>
-	</div>
+	</div--!>
 	<!-- Mainly scripts -->
 	<script src="resources/js/jquery-2.1.1.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -42,14 +84,16 @@
 	<script src="resources/js/inspinia.js"></script>
 	<script src="resources/js/plugins/pace/pace.min.js"></script>
 
-
 	<!-- JQueryUI -->
 	<script src="resources/bower_components/jquery-ui/jquery-ui.min.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-	<!--<script src="resources/app.js"></script>-->
-	<script src="resources/js/Service/ServiceController.js"></script>
-	<script src="resources/js/Users/users_controller.js"></script>
+
+	<script src="resources/js/App/App.js"></script>
+	<script src="resources/js/index/index.js"></script>
+	<script src="resources/js/users/usersController.js"></script>
+	
+	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 </body>
 </html>

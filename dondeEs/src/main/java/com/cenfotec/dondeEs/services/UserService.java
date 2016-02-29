@@ -10,16 +10,44 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
+import com.cenfotec.dondeEs.pojo.RolePOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
+import com.cenfotec.dondeEs.pojo.UserTypePOJO;
 import com.cenfotec.dondeEs.repositories.UserRepository;
 
 @org.springframework.stereotype.Service
 public class UserService implements UserServiceInterface {
 	@Autowired private UserRepository userRepository;
 	
-	@Override
-	public List<User> getAll(){
-		List<User> user = userRepository.findAll();
-		return user;
+
+	public List<UserPOJO> getAll(){
+		List<User> usersList = userRepository.findAll();
+		List<UserPOJO> usersListPOJO = new ArrayList<>();
+		
+		usersList.stream().forEach(u -> {
+			UserPOJO user = new UserPOJO();
+			BeanUtils.copyProperties(u, user);
+			
+			if(u.getRole() != null){
+				RolePOJO rolePOJO = new RolePOJO();
+				BeanUtils.copyProperties(u.getRole(), rolePOJO);
+				rolePOJO.setUsers(null);
+				rolePOJO.setPermissions(null);
+				user.setRole(rolePOJO);
+			}
+			
+			if(u.getUserType() != null){
+				UserTypePOJO userTypePOJO = new UserTypePOJO();
+				BeanUtils.copyProperties(u.getUserType(), userTypePOJO);
+				userTypePOJO.setUsers(null);
+				user.setUserType(userTypePOJO);
+			}
+			
+			usersListPOJO.add(user);
+		});
+		
+		return usersListPOJO;
+
 	}
 	
 	@Override

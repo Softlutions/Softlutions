@@ -3,11 +3,11 @@ package com.cenfotec.dondeEs.contracts;
 import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.Service;
-import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public class UserResponse extends BaseResponse {
-	private List<User> listUser;
+	private List<UserPOJO> listUser;
 
 	private List<ServicePOJO> listService;
 	
@@ -19,11 +19,11 @@ public class UserResponse extends BaseResponse {
 		this.listService = list;
 	}
 
-	public List<User> getListUser() {
+	public List<UserPOJO> getListUser() {
 		return listUser;
 	}
 
-	public void setListUser(List<User> listUser) {
+	public void setListUser(List<UserPOJO> listUser) {
 		this.listUser = listUser;
 	}
 }
