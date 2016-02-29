@@ -40,13 +40,13 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="#">Cerrar sesión</a></li>
+								<li><a href="#">Cerrar sesiï¿½n</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
 					</li>
 					<li class="active"><a href="index.html"><i
-							class="fa fa-th-large"></i> <span class="nav-label">Página
+							class="fa fa-th-large"></i> <span class="nav-label">Pï¿½gina
 								principal</span></a></li>
 				</ul>
 			</div>

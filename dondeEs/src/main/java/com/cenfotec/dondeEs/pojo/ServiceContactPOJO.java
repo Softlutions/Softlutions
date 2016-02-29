@@ -7,7 +7,7 @@ package com.cenfotec.dondeEs.pojo;
  * The persistent class for the service_contact database table.
  * 
  */
-public class ServiceContact {
+public class ServiceContactPOJO {
 
 	private int serviceContractId;
 
@@ -20,7 +20,7 @@ public class ServiceContact {
 	//bi-directional many-to-one association to Service
 	private ServicePOJO service;
 
-	public ServiceContact() {
+	public ServiceContactPOJO() {
 	}
 
 	public int getServiceContractId() {
