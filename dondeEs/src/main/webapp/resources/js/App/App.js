@@ -5,6 +5,7 @@ angular.module('dondeEs', [
 	"dondeEs.index",
 	"dondeEs.serviceByUser",
 	"dondeEs.users",
+	"dondeEs.ContractModule",
 	"dondeEs.myEvents"
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/login'});

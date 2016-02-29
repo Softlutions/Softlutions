@@ -325,22 +325,6 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
-	public List<User> getUsers1() {
-		return this.users1;
-	}
-
-	public void setUsers1(List<User> users1) {
-		this.users1 = users1;
-	}
-
-	public List<User> getUsers2() {
-		return this.users2;
-	}
-
-	public void setUsers2(List<User> users2) {
-		this.users2 = users2;
-	}
-
 	public UserType getUserType() {
 		return this.userType;
 	}
