@@ -3,21 +3,26 @@ package com.cenfotec.dondeEs.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
+import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.UserTypePOJO;
+import com.cenfotec.dondeEs.repositories.RoleRepository;
 import com.cenfotec.dondeEs.repositories.UserRepository;
 
 @org.springframework.stereotype.Service
 public class UserService implements UserServiceInterface {
 	@Autowired private UserRepository userRepository;
+	@Autowired private RoleRepository roleRepository;
 	
 
 	public List<UserPOJO> getAll(){
@@ -77,4 +82,11 @@ public class UserService implements UserServiceInterface {
 		return listPojo;
 	}
 	
+	public Boolean saveUser(UserRequest ur) {
+		User user = new User();
+		BeanUtils.copyProperties(ur.getUser(), user);
+		user.setRole(roleRepository.findOne(ur.getUser().getRole().getRoleId()));
+		User nuser = userRepository.save(user);
+		return (nuser == null) ? false : true;
+	}
 }
