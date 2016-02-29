@@ -1,7 +1,9 @@
 package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -39,7 +41,11 @@ public class User implements Serializable {
 	private byte state;
 
 	//bi-directional many-to-one association to Event
+<<<<<<< HEAD
 	@OneToMany(mappedBy="user")
+=======
+	@OneToMany(fetch=FetchType.LAZY)
+>>>>>>> Enmanuel
 	private List<Event> events;
 
 	//bi-directional many-to-one association to EventParticipant

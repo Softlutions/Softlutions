@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.ejb.Event;
+<<<<<<< HEAD
 import com.cenfotec.dondeEs.ejb.Place;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
@@ -30,6 +31,12 @@ public class EventService implements EventServiceInterface {
 			eventsPOJO.add(eventPOJO);
 		});
 		return eventsPOJO;
+
+	@Override
+	public List<Event> getAllEventPublish() {
+		List<Event> events = eventRepository.findAllByState((byte) 1);
+		events.forEach(event -> event.getUser().setRole(null));
+		return events;
 	}
 
 	@Override

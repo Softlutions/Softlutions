@@ -15,8 +15,8 @@ angular
 						function($scope, $http) {
 							//Usuario que se llena en el login
 							$scope.user = {
-								email : "antoni@ramirez",
-								password : "antoni"
+								email : "egarciag@ucenfotec.ac.cr",
+								password : "egarciag123"
 							};
 							//Request
 							$scope.checkLogin = function() {
@@ -28,7 +28,7 @@ angular
 													"firstName" : response.firstName,
 													"lastName" : response.lastName
 												};
-												window.location.href = "/dondeEs/app#/view1";
+												window.location.href = "/dondeEs/app#/eventsPublish";
 											}else{
 												//NO inicio sesion
 											}

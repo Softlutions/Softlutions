@@ -14,4 +14,3 @@ public class EventResponse extends BaseResponse {
 	public void setEventList(List<EventPOJO> eventList) {
 		this.eventList = eventList;
 	}
-}
