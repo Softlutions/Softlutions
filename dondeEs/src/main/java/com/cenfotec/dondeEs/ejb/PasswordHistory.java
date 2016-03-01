@@ -26,7 +26,7 @@ public class PasswordHistory implements Serializable {
 	private String password;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 

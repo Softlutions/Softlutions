@@ -4,20 +4,19 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the place database table.
  * 
  */
 @Entity
-@Table(name="place")
-@NamedQuery(name="Place.findAll", query="SELECT p FROM Place p")
+@Table(name = "place")
+@NamedQuery(name = "Place.findAll", query = "SELECT p FROM Place p")
 public class Place implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="place_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "place_id")
 	private int placeId;
 
 	@Lob
@@ -28,8 +27,8 @@ public class Place implements Serializable {
 
 	private String name;
 
-	//bi-directional many-to-one association to Event
-	@OneToMany(mappedBy="place")
+	// bi-directional many-to-one association to Event
+	@OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
 	private List<Event> events;
 
 	public Place() {

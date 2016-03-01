@@ -1,0 +1,104 @@
+<div class="container">
+	
+			<div class="ibox float-e-margins col-md-8">
+				<div class="ibox-title">
+					<h5>Mis servicios</h5>
+					<a data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
+					data-target="#modal-form">Registrar servicio</a>
+					<div class="ibox-content ">
+
+						<table class="table table-hover " >
+							<thead>
+								<tr>
+									<th class="hidden">ID</th>
+									<th>Nombre</th>
+									<th>Descripcion</th>
+									<th>Categoria</th>
+									<th>Estado</th>
+								</tr>
+							</thead>
+							<tbody ng-repeat="service in services">
+								<tr>
+									<td class="hidden">{{service.serviceId}}</td>
+									<td>{{service.name}}</td>
+									<td>{{service.description}}</td>
+									<td>{{service.serviceCatalog.name}}</td>
+									<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		
+	<div class="text-center">
+		
+	</div>
+	<div id="modal-form" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Registrar servicio</h3>
+							<form role="form" ng-init="service">
+								<div class="form-group">
+									<div class="input-group">
+										<label class="font-noraml"><strong>Categoría</strong></label>
+										
+										<select class="form-control m-b"
+											style="width: 525px; height: 34px; background: white"
+											tabindex="6" name="serviceCatalog" id="serviceCatalog"
+											class="form-control"
+											ng-model="requestObject.serviceCatalogId"
+											ng-options="ta.serviceCatalogId as ta.name for ta in serviceCatalogList">
+
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"><strong>Nombre</strong></label> <input
+										type="text" id="nombre" class="form-control"
+										placeholder="Nombre" ng-model="objService.name" /> <span
+										ng-show="onError && createRentForm.name.$error.required"
+										class="help-inline">Required </span>
+								</div>
+
+								<div class="form-group">
+									<label class="font-noraml"><strong>Descripción</strong></label>
+									<input type="text" id="descripcion" class="form-control"
+										placeholder="Descripcion" ng-model="objService.description" />
+									<span ng-show="onError && createRentForm.name.$error.required"
+										class="help-inline">Required </span>
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"><strong>Estado</strong></label> <label
+										class="checkbox-inline"> <input type="checkbox"
+										value="option1" id="inlineCheckbox1"> <strong>Activar</strong>
+									</label>
+								</div>
+
+								<div class="form-group">
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit" ng-click="saveService($event)">
+										<strong>Guardar</strong>
+									</button>
+							
+								</div>
+								
+								<div class="form-group">
+										<button type="button"
+										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+										
+									
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
