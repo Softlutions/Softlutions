@@ -1,10 +1,6 @@
 package com.cenfotec.dondeEs.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
@@ -32,6 +29,16 @@ public class EventController {
 		return response;
 	}
 	
+//	get all event publish
+	@RequestMapping(value ="/getAllEventPublish", method = RequestMethod.GET)
+	public EventResponse getAll(){				
+		EventResponse response = new EventResponse();
+		response.setCode(200);
+		response.setCodeMessage("eventsPublish fetch success");
+		response.setEventList(eventServiceInterface.getAllEventPublish());
+		return response;
+	}
+	
 // publish a event	
 	@RequestMapping(value ="/publishEvent", method = RequestMethod.PUT)
 	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
@@ -49,7 +56,7 @@ public class EventController {
 				response.setErrorMessage("success");
 			} else {
 				response.setCode(500);
-				response.setErrorMessage("publish event error, on method: eventServiceInterface.saveEvent(event)");
+				response.setErrorMessage("publish event error");
 			}
 
 		} else {

@@ -1,0 +1,35 @@
+<div id="" class="col-lg-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h1>Eventos publicados</h1>
+        </div>
+        <div class="ibox-content">
+        	<ul class="event-list collapseDiv" ng-repeat="event in eventsPublish" data-toggle="collapse" data-target="#demo{{$index}}">
+				<li>
+					<time datetime="event.publishDate">
+						<span class="day">{{event.day}}</span>
+						<span class="month">{{event.month}}</span>
+					</time>
+			  	<img alt="No se pudo cargar la imagen del evento" src="http://blogs-images.forbes.com/steveolenski/files/2015/07/Messe_Luzern_Corporate_Event.jpg" />  
+					<div class="info">
+						<h2 class="title">{{ event.name }}</h2>
+						<p class="desc">{{ event.description }}</p>
+						<ul>
+							<li style="width:34%;">5 comentarios  <span class="fa fa-envelope"></span></li>
+							<li style="width:33%;"><a href="#">Promotor {{ event.user.name }} {{ event.user.lastName1 }} <span class="fa fa-male"></span></a></li>
+						</ul>
+					</div>
+					<div class="social">
+						<ul>
+							<li><span class="fa fa-chevron-down pull-right"></span></li>
+						</ul>
+					</div>
+				</li>
+				<div id="demo{{$index}}" class="collapse">
+					<img src="..." alt="..." class="img-thumbnail">
+					<p>Aquí estará el detalle del evento</p>
+				</div> 
+			</ul>
+        </div>
+    </div>
+</div> 

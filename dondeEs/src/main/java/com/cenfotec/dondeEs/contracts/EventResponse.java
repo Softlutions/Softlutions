@@ -6,11 +6,11 @@ import com.cenfotec.dondeEs.pojo.EventPOJO;
 
 public class EventResponse extends BaseResponse {
 	private List<EventPOJO> eventList;
-	
-	public List<EventPOJO> getEventList(){
+
+	public List<EventPOJO> getEventList() {
 		return eventList;
 	}
-	
+
 	public void setEventList(List<EventPOJO> eventList) {
 		this.eventList = eventList;
 	}

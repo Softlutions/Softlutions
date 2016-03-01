@@ -32,6 +32,11 @@ public class UserService implements UserServiceInterface {
 		usersList.stream().forEach(u -> {
 			UserPOJO user = new UserPOJO();
 			BeanUtils.copyProperties(u, user);
+			user.setChats(null);
+			user.setEventParticipants(null);
+			user.setMessages(null);
+			user.setPasswordHistories(null);
+			user.setTermConditions(null);
 			
 			if(u.getRole() != null){
 				RolePOJO rolePOJO = new RolePOJO();
