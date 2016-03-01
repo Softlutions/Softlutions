@@ -1,0 +1,8 @@
+#loginDiv input, button{
+	margin: 10px 0px 10px;
+}
+
+#errorMsj{
+	visibility: hidden;
+	padding: 12px;
+}

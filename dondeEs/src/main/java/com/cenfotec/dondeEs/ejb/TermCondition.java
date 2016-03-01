@@ -29,7 +29,7 @@ public class TermCondition implements Serializable {
 	private Date date;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
 
