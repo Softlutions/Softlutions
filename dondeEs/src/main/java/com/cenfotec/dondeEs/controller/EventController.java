@@ -66,4 +66,20 @@ public class EventController {
 		
 		return response;
 	} 
+	// get event by id
+			@RequestMapping(value="/getEventById/{id}", method= RequestMethod.GET)
+			public EventResponse getEventById(@PathVariable("id") int id){
+				EventResponse response = new EventResponse();
+				if(id != 0){
+					response.setEventPOJO(eventServiceInterface.eventById(id));
+					response.getEventPOJO().setPrivate_((byte)1);
+					response.getEventPOJO().setState((byte)1);
+					response.getEventPOJO().setPublishDate(new Date());
+					response.setCode(200);
+				}else{
+					response.setCode(400);
+					response.setCodeMessage("Something is wrong");
+				}
+				return response;
+			}
 }
