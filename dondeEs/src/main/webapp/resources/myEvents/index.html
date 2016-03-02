@@ -34,9 +34,9 @@
 							<td>{{ event.place.name }}</td>
 							<td><span class="label label-danger pull-right">{{
 									event.state || eventState }}</span></td>
-									<td>
-									
-									<td/>
+							<td><button type="button" ng-click="listContracts()" class="btn btn-info">Listar contratos</button>
+								<button type="button" ng-click="listParticipants({{event.eventId}})" class="btn btn-success">Listar participantes</button>
+							<td/>
 						</tr>
 					</tbody>
 

@@ -8,7 +8,7 @@ angular
 			});
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
-		
+		console.log($scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser")))
 		$scope.listContracts = function(){
 			var eventId = $('#eventSelect').val();
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){

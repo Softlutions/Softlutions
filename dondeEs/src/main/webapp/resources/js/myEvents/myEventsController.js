@@ -8,13 +8,14 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	  });
 	}])
 	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-		
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-		console.log($scope.loggedUser);
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			$scope.events = response.eventList;
 		});
 		//console.log($scope.loggedUser);
+		
+		$scope.listParticipants = function(){
+			
+		}
 	}]);

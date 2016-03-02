@@ -28,6 +28,8 @@ public class EventService implements EventServiceInterface {
 			BeanUtils.copyProperties(e, eventPOJO);
 			BeanUtils.copyProperties(e.getPlace(), placePOJO);
 			eventPOJO.setPlace(placePOJO);
+			eventPOJO.setEventParticipants(null);
+			eventPOJO.setServiceContacts(null);
 			eventsPOJO.add(eventPOJO);
 		});
 		return eventsPOJO;
