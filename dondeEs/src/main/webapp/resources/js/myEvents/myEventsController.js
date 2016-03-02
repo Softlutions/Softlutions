@@ -17,7 +17,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			$scope.events = response.eventList;
 			console.log("Events" + $scope.events);
 		});
-		 $scope.eventId = function(){
+		 $scope.geteventById = function(){
 		$http.get('rest/protected/event/getEventById/1').success(function(response) {
 			$scope.event = response.eventPOJO;
 			console.log("event"+ $scope.event);

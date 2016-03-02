@@ -73,14 +73,13 @@ public class EventParticipantController {
 				message.addRecipient(Message.RecipientType.TO, toAddress[i]);
 			}
 
-			message.setSubject("Test");
-			message.setText("Hola");
+			message.setSubject("Invitacion a un evento");
+			message.setText("http://localhost:8080/dondeEs/app#/answerInvitation?eventId="+ eventId);
 
 			Transport transport = session.getTransport("smtp");
 
 			transport.connect(host, from, pass);
 			transport.sendMessage(message, message.getAllRecipients());
-			System.out.println("Sirve");
 			transport.close();
 
 			
@@ -93,7 +92,7 @@ public class EventParticipantController {
 	}
 
 	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.POST)
-	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, byte state, User user)
+	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("user") Integer userId)
 			throws ParseException {
 
 		EventParticipantResponse response = new EventParticipantResponse();
@@ -102,7 +101,9 @@ public class EventParticipantController {
 		eventParticipant.setEvent(new Event());
 		eventParticipant.getEvent().setEventId(id);
 		eventParticipant.setState(state);
-		if (user != null) {
+		if (userId != null) {
+			User user = new User();
+			user.setUserId(userId);
 			eventParticipant.setUser(user);
 		}
 

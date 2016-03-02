@@ -66,10 +66,21 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public EventPOJO eventById(int idEvent) {
 
-		Event event = eventRepository.findByid(idEvent);
+		Event event = eventRepository.findOne(idEvent);
 		EventPOJO eventPOJO = new EventPOJO();
 		BeanUtils.copyProperties(event, eventPOJO);	
 		eventPOJO.setEventParticipants(null);
+		if(event.getPlace() != null){
+			PlacePOJO placePOJO = new PlacePOJO();
+			BeanUtils.copyProperties(event.getPlace(), placePOJO);
+			eventPOJO.setPlace(placePOJO);
+		}
+		if(event.getUser() != null){
+			UserPOJO userPOJO = new UserPOJO();
+			BeanUtils.copyProperties(event, userPOJO);
+			eventPOJO.setUser(userPOJO);
+		}
+		
 		return eventPOJO;
 	}
 }
