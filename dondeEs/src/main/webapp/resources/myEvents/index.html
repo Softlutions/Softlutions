@@ -25,6 +25,9 @@
 							<th>Lugar</th>
 							<th>Estado</th>
 							<th>Acción</th>
+							<th>as</th>
+							<a data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
+					data-target="#modal-form" ng-click="eventId()">Enviar invitacion</a>
 						</tr>
 					</thead>
 					<tbody ng-repeat="event in events">
@@ -33,14 +36,62 @@
 							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
 							<td><span class="label label-danger pull-right">{{
-									event.state || eventState }}</span></td>
-									<td>
-									
-									<td/>
+									event.state || eventState }}</span>
+							</td>
+							<td>
+         						<button class="btn btn-info btn-xs col-md-4" ng-class="" >Enviar</button>
+								
+				         	</td>
 						</tr>
 					</tbody>
 
 				</table>
+
+		</div>
+	</div>
+	<div id="modal-form" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Enviar correo</h3>
+							<form role="form" ng-init="service">
+								<div class="form-group">
+									<div class="input-group">
+										<label class="font-noraml"><strong>Para</strong></label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"><strong>De</strong></label> 
+								</div>
+
+								<div class="form-group">
+									<label class="font-noraml"><strong>Asunto</strong></label>
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"  ><strong>{{event.description}}</strong></label> 
+								</div>
+
+								<div class="form-group">
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit" ng-click="sendEmail($event)" >
+										<strong>Enviar</strong>
+									</button>
+							
+								</div>
+								
+								<div class="form-group">
+										<button type="button"
+										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+										
+									
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -1,8 +1,6 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -12,6 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +41,7 @@ public class EventParticipantController {
 	}
 
 	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
-	public void sendEmailInvitation(@RequestBody ListSimplePOJO listSimple) {
+	public void sendEmailInvitation(@RequestBody ListSimplePOJO listSimple, @QueryParam("eventId") int eventId) {
 		Properties props = System.getProperties();
 		String host = "smtp.gmail.com";
 
@@ -84,6 +83,7 @@ public class EventParticipantController {
 			System.out.println("Sirve");
 			transport.close();
 
+			
 		} catch (AddressException ae) {
 			ae.printStackTrace();
 		} catch (MessagingException me) {
