@@ -25,9 +25,8 @@
 							<th>Lugar</th>
 							<th>Estado</th>
 							<th>Acción</th>
-							<th>as</th>
-							<a data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
-					data-target="#modal-form" ng-click="eventId()">Enviar invitacion</a>
+					
+				
 						</tr>
 					</thead>
 					<tbody ng-repeat="event in events">
@@ -39,7 +38,10 @@
 									event.state || eventState }}</span>
 							</td>
 							<td>
-         						<button class="btn btn-info btn-xs col-md-4" ng-class="" >Enviar</button>
+							</td>
+							<td>
+         						<a data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
+								data-target="#modal-form" ng-click="geteventById(event.eventId)">Enviar invitacion</a>
 								
 				         	</td>
 						</tr>
@@ -60,14 +62,9 @@
 								<div class="form-group">
 									<div class="input-group">
 										<label class="font-noraml"><strong>Para</strong></label>
+										<input type="text" id="to" class="form-control"
+										placeholder="Lista de Correos a invitar" ng-model="$scope.to"/>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="font-noraml"><strong>De</strong></label> 
-								</div>
-
-								<div class="form-group">
-									<label class="font-noraml"><strong>Asunto</strong></label>
 								</div>
 								<div class="form-group">
 									<label class="font-noraml"  ><strong>{{event.description}}</strong></label> 

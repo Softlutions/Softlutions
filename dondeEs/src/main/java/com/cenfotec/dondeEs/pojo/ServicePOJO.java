@@ -72,5 +72,14 @@ public class ServicePOJO {
 		return this.serviceContacts;
 	}
 
+	public ServiceCatalogPOJO getServiceCatalog() {
+		return serviceCatalog;
+	}
+
+	public void setServiceCatalog(ServiceCatalogPOJO serviceCatalog) {
+		this.serviceCatalog = serviceCatalog;
+	}
+	
+	
 
 }

@@ -27,6 +27,8 @@ public class EventService implements EventServiceInterface {
 			BeanUtils.copyProperties(e, eventPOJO);
 			BeanUtils.copyProperties(e.getPlace(), placePOJO);
 			eventPOJO.setPlace(placePOJO);
+			eventPOJO.setEventParticipants(null);
+			eventPOJO.setServiceContacts(null);
 			eventsPOJO.add(eventPOJO);
 		});
 		return eventsPOJO;
@@ -77,7 +79,8 @@ public class EventService implements EventServiceInterface {
 		}
 		if(event.getUser() != null){
 			UserPOJO userPOJO = new UserPOJO();
-			BeanUtils.copyProperties(event, userPOJO);
+			BeanUtils.copyProperties(event.getUser(), userPOJO);
+			userPOJO.setEventParticipants(null);
 			eventPOJO.setUser(userPOJO);
 		}
 		
