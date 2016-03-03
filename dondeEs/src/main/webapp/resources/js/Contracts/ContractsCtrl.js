@@ -8,17 +8,21 @@ angular
 			});
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
+		$scope.chartValues = null;
 		
 		$scope.listContracts = function(){
 			var eventId = $('#eventSelect').val();
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
+				
 				if($scope.serviceContacts.length == 0){
 					$('#errorMessage').removeClass('hidden');
 					$('#contractTable').addClass('hidden');
+					$('#contracts-state-chart').addClass('hidden');
 				}else{
 					$('#contractTable').removeClass('hidden');
 					$('#errorMessage').addClass('hidden');
+					$scope.refreshChart();
 				}
 			});
 		}
@@ -60,12 +64,44 @@ angular
 			})	
 		}
 		
-		Morris.Donut({
-		    element: 'morris-donut-chart',
-		    data: [{ label: "Download Sales", value: 12 },
-		        { label: "In-Store Sales", value: 30 },
-		        { label: "Mail-Order Sales", value: 20 } ],
-		    resize: true,
-		    colors: ['#87d6c6', '#54cdb4','#1ab394'],
-		}); 
+		$scope.refreshChart = function(){
+			var contractsLeft = 0;
+			var contractsOk = 0;
+			var contractsCanceled = 0;
+			
+			$('#contracts-state-chart').removeClass('hidden');
+			
+			angular.forEach($scope.serviceContacts, function(value){
+				console.log(value);
+				
+				if(value.state == 0)
+					contractsLeft++;
+					
+				if(value.state == 1)
+					contractsOk++;
+				
+				if(value.state == 2)
+					contractsCanceled++;
+				
+			});
+			
+			if($scope.chartValues != null){
+				$scope.chartValues.setData([
+					{ label: "Pendientes", value: contractsLeft },
+					{ label: "Concretados", value: contractsOk },
+					{ label: "Cancelados", value: contractsCanceled }
+				]);
+			}else{
+				$scope.chartValues = Morris.Donut({
+				    element: 'contracts-state-chart',
+				    data: [
+				           { label: "Pendientes", value: contractsLeft },
+				           { label: "Concretados", value: contractsOk },
+				           { label: "Cancelados", value: contractsCanceled }
+		            ],
+				    resize: true,
+				    colors: ['#87d6c6', '#54cdb4','#1ab394'],
+				});
+			}
+		}
 }]);
