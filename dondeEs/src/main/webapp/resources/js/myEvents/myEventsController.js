@@ -9,6 +9,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	}])
 	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.listOfEmails = [];
 		
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -18,15 +19,24 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		});
 		 $scope.geteventById = function(eventId){
 			$scope.eventId = eventId;
-			console.log($scope.eventId);
+
 		};
+
+		$scope.addEmail = function(pemail){
+			$scope.listOfEmails.push(pemail.to);
+			pemail.to = "";
+		}
 		
+		$scope.deleteEvent = function(event){
+			$scope.listOfEmails.splice($scope.listOfEmails.indexOf(event), 1);
+		}
 		$scope.sendEmail = function(event){
 			var dataCreate = {
-					listSimple:["tonyxrm@gmail.com"]
+					listSimple:$scope.listOfEmails
 			};
 			
 			$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				
 			});
 		}
 	

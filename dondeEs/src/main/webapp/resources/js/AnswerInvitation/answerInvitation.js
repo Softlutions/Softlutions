@@ -23,7 +23,8 @@ angular
 								});
 								
 							}
-								
+							$scope.userEmail = $location.search().email;
+							console.log("Email "+$scope.userEmail);
 							$scope.createParticipant = function($event){
 								 if(document.getElementById('inlineCheckbox1').checked){
 								    	$scope.event.state = 1
@@ -32,9 +33,10 @@ angular
 								    	$scope.event.state = 0
 								    }
 						
-								
+								 
 								var dataCreate={
-										state: $scope.event.state
+										state: $scope.event.state,
+										email: $scope.userEmail
 								}
 								$http({method: 'POST',url:'rest/protected/eventParticipant/createEventParticipant/'+$location.search().eventId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 	//								$scope.services = $scope.services.concat(dataCreate);

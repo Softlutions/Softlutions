@@ -22,7 +22,7 @@ import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 public class SendEmailController {
 
 	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
-	public void sendEmailInvitation(@RequestBody ListSimplePOJO listSimple, @QueryParam("eventId") int eventId) {
+	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
 		Properties props = System.getProperties();
 		String host = "smtp.gmail.com";
 
@@ -38,29 +38,26 @@ public class SendEmailController {
 		props.put("mail.smtp.auth", "true");
 
 		Session session = Session.getDefaultInstance(props);
-		MimeMessage message = new MimeMessage(session);
+		
 
 		try {
 
-			message.setFrom(new InternetAddress(from));
-			InternetAddress[] toAddress = new InternetAddress[listSimple.getListSimple().size()];
-
-			// To get the array of addresses
-			for (int i = 0; i < listSimple.getListSimple().size(); i++) {
-				toAddress[i] = new InternetAddress(listSimple.getListSimple().get(i));
-			}
-
-			for (int i = 0; i < toAddress.length; i++) {
-				message.addRecipient(Message.RecipientType.TO, toAddress[i]);
-			}
-
-			message.setSubject("Invitacion a un evento");
-			message.setText("http://localhost:8080/dondeEs/app#/answerInvitation?eventId="+ eventId);
-
+			
 			Transport transport = session.getTransport("smtp");
 
-			transport.connect(host, from, pass);
-			transport.sendMessage(message, message.getAllRecipients());
+			// To get the array of addresses
+			for (String email : to.getListSimple()) {
+				MimeMessage message = new MimeMessage(session);
+				message.setFrom(new InternetAddress(from));
+				
+				InternetAddress internetAddress = new InternetAddress(email);
+				message.addRecipient(Message.RecipientType.TO, internetAddress);
+				message.setSubject("Invitacion a un evento");
+				message.setText("http://localhost:8080/dondeEs/app#/answerInvitation?eventId="+ eventId+"&email="+email);
+				transport.connect(host, from, pass);
+				transport.sendMessage(message, message.getAllRecipients());
+
+			}
 			transport.close();
 
 			

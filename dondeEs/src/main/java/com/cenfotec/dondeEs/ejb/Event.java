@@ -2,7 +2,6 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +42,10 @@ public class Event implements Serializable {
 	private Date registerDate;
 
 	private byte state;
+
+	//bi-directional many-to-one association to Auction
+	@OneToMany(mappedBy="event")
+	private List<Auction> auctions;
 
 	//bi-directional many-to-one association to Chat
 	@OneToMany(mappedBy="event")
@@ -143,6 +146,28 @@ public class Event implements Serializable {
 
 	public void setState(byte state) {
 		this.state = state;
+	}
+
+	public List<Auction> getAuctions() {
+		return this.auctions;
+	}
+
+	public void setAuctions(List<Auction> auctions) {
+		this.auctions = auctions;
+	}
+
+	public Auction addAuction(Auction auction) {
+		getAuctions().add(auction);
+		auction.setEvent(this);
+
+		return auction;
+	}
+
+	public Auction removeAuction(Auction auction) {
+		getAuctions().remove(auction);
+		auction.setEvent(null);
+
+		return auction;
 	}
 
 	public List<Chat> getChats() {

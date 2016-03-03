@@ -11,7 +11,5 @@ public class ListSimplePOJO {
 
 	public void setListSimple(List<String> listSimple) {
 		this.listSimple = listSimple;
-	}
-	
-	
+	}	
 }

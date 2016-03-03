@@ -87,11 +87,21 @@ public class UserService implements UserServiceInterface {
 		return listPojo;
 	}
 	
+	
+	
 	public Boolean saveUser(UserRequest ur) {
 		User user = new User();
 		BeanUtils.copyProperties(ur.getUser(), user);
 		user.setRole(roleRepository.findOne(ur.getUser().getRole().getRoleId()));
 		User nuser = userRepository.save(user);
 		return (nuser == null) ? false : true;
+	}
+
+	@Override
+	@Transactional
+	public User findByEmail(String email) {
+		User user = userRepository.findByEmail(email);
+		
+		return user;
 	}
 }
