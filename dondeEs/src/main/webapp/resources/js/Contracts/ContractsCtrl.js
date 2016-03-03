@@ -64,6 +64,19 @@ angular
 			})	
 		}
 		
+		$scope.cancel = function(serviceContact){
+			$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
+				serviceContact.state = 2;
+
+				$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
+				$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
+				$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
+				$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
+				
+				$scope.refreshChart();
+			});
+		}
+		
 		$scope.refreshChart = function(){
 			var contractsLeft = 0;
 			var contractsOk = 0;
@@ -72,8 +85,6 @@ angular
 			$('#contracts-state-chart').removeClass('hidden');
 			
 			angular.forEach($scope.serviceContacts, function(value){
-				console.log(value);
-				
 				if(value.state == 0)
 					contractsLeft++;
 					
@@ -82,7 +93,6 @@ angular
 				
 				if(value.state == 2)
 					contractsCanceled++;
-				
 			});
 			
 			if($scope.chartValues != null){

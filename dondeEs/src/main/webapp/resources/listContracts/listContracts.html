@@ -27,10 +27,17 @@
 				</thead>
 				<tbody ng-repeat = "serviceContact in serviceContacts">
 					<tr>
-						<td class="hidden">{{serviceContact.serviceContactId}}</td>
+						<td class="hidden">{{serviceContact.serviceContractId}}</td>
 						<td>{{serviceContact.service.name}}</td>
 						<td>{{(serviceContact.state == 0? "Pendiente":(serviceContact.state == 1? "Concretado":"Cancelado"))}}</td>
 						<td>{{serviceContact.comment}}</td>
+						
+						<td ng-if="serviceContact.state != 2">
+							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
+						</td>
+						<td ng-if="serviceContact.state == 2">
+							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
