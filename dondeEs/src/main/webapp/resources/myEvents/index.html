@@ -1,5 +1,5 @@
-<div class="container" ng-controller="MyEventsCtrl">
-	<div class="col-lg-6">
+<div class="container">
+	<div class="table-responsive col-lg-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h5>Mis eventos</h5>
@@ -34,13 +34,47 @@
 							<td>{{ event.place.name }}</td>
 							<td><span class="label label-danger pull-right">{{
 									event.state || eventState }}</span></td>
-							<td><button type="button" ng-click="listContracts()" class="btn btn-info">Listar contratos</button>
-								<button type="button" ng-click="listParticipants({{event.eventId}})" class="btn btn-success">Listar participantes</button>
+							<td><button type="button" ng-click="listContracts(event.eventId)" class="btn btn-info col-md-9">Listar contratos</button>
+								<button type="button" ng-click="listParticipants(event.eventId)" data-toggle="modal" data-target="#modalParticipants" class="btn btn-success col-md-9">Listar participantes</button>
 							<td/>
 						</tr>
 					</tbody>
 
 				</table>
+			</div>
+			
+		</div>
+	</div>
+	<div id="modalParticipants" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Estado de invitados</h4>
+				</div>
+				<div class="modal-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Estado</th>
+								<th>Fecha de envio de la invitación</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="participant in participants">
+							<tr>
+								<td>{{ participant.user.name }} {{ participant.user.lastName1 }} {{ participant.user.lastName2 }}</td>
+								<td>{{ ((participant.state ==0) ? "No asistirá" : ( participant.state ==1) ? "Pendiente" : "Asistirá")}}</td>
+								<td>{{ participant.invitationDate  | date:'medium' }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+				</div>
 			</div>
 		</div>
 	</div>

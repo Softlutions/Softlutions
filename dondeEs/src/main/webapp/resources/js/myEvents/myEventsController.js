@@ -13,9 +13,10 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			$scope.events = response.eventList;
 		});
-		//console.log($scope.loggedUser);
 		
-		$scope.listParticipants = function(){
-			
+		$scope.listParticipants = function(eventId){
+			$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+eventId).success(function(response) {
+				$scope.participants = response.eventParticipantsList;
+			});
 		}
 	}]);
