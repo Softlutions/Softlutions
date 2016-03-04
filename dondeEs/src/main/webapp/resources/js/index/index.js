@@ -9,5 +9,5 @@ angular.module('dondeEs.index', ['ngRoute'])
 	}])
 	.controller('IndexCtrl', ['$scope','$http',function($scope,$http,$upload) {
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-		//console.log($scope.loggedUser);
+		console.log($scope.loggedUser);
 	}]);

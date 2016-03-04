@@ -23,6 +23,7 @@
 <link href="resources/css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
+<link href="css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
 </head>
 <body>
@@ -31,23 +32,51 @@
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
-						<div class="dropdown profile-element">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
-								class="clear"> <span class="block m-t-xs"> 
-									<strong class="font-bold" ng-controller="IndexCtrl">{{loggedUser.name}} {{loggedUser.lastName}}</strong>
-								</span> <span class="text-muted text-xs block"><b class="caret"></b></span>
+						<div class="dropdown profile-element" ng-controller="IndexCtrl">
+							<span> <img alt="image" class="img-circle"
+								src="img/profile_small.jpg" />
+							</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<span class="clear"> <span class="block m-t-xs"> <strong
+										class="font-bold">{{loggedUser.name}}
+											{{loggedUser.lastName}}</strong>
+								</span> <span class="text-muted text-xs block">{{loggedUser.role.name}}<b
+										class="caret"></b></span>
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="#">Cerrar sesión</a></li>
+								<li><a href="profile.html">Profile</a></li>
+								<li><a href="contacts.html">Contacts</a></li>
+								<li><a href="mailbox.html">Mailbox</a></li>
+								<li class="divider"></li>
+								<li><a href="login.html">Logout</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
 					</li>
-					<li class="active"><a href="index.html"><i
-							class="fa fa-th-large"></i> <span class="nav-label">Pï¿½gina
-								principal</span></a></li>
+					<li><a href="index.html"><i class="fa fa-th-large"></i> <span
+							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="/dondeEs/app#/myEvents">Mis eventos</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-bar-chart-o"></i> <span
+							class="nav-label">Reportes</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="graph_flot.html">Reporte x</a></li>
+							<li><a href="graph_flot.html">Reporte x</a></li>
+						</ul></li>
+					<li><a href="mailbox.html"><i class="fa fa-envelope"></i>
+							<span class="nav-label">Notificaciones </span><span
+							class="label label-warning pull-right">n/x</span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="mailbox.html">Inbox</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
+							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="ecommerce_products_grid.html">Mis servicios</a></li>
+						</ul></li>
 				</ul>
+
 			</div>
 		</nav>
 		<div id="page-wrapper" class="gray-bg">
