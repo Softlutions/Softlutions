@@ -47,7 +47,6 @@ angular
 								    $scope.init();
 								    $scope.saveService = function(event){
 								    	console.log($scope.requestObject);
-								    	$("#modal-form").modal('hide');	
 									$scope.onError = false;
 								    if(document.getElementById('inlineCheckbox1').checked){
 								    	$scope.objService.state = 1
@@ -64,7 +63,7 @@ angular
 											user:$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"))
 									}		
 									if($scope.objService.name != null && $scope.objService.description != null){
-									
+										$("#modal-form").modal('hide');
 										$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 											$scope.services = $scope.services.concat(dataCreate);
 										});

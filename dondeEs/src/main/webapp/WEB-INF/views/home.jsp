@@ -23,7 +23,6 @@
 <link href="resources/css/plugins/iCheck/custom.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
-<link href="css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
 </head>
 <body>
@@ -34,7 +33,7 @@
 					<li class="nav-header">
 						<div class="dropdown profile-element" ng-controller="IndexCtrl">
 							<span> <img alt="image" class="img-circle"
-								src="img/profile_small.jpg" />
+								src="http://lorempixel.com/32/32" />
 							</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
@@ -115,7 +114,7 @@
 	<script src="resources/js/plugins/pace/pace.min.js"></script>
 
 	<!-- JQueryUI -->
-	<script src="resources/bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
@@ -127,5 +126,7 @@
 	<script src="resources/js/myEvents/myEventsController.js"></script>
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 	<script src="resources/js/Events/eventsPublishController.js"></script>
+	<script src="resources/js/AnswerInvitation/answerInvitation.js"></script>
+	<script src="resources/js/Commons/Filters.js"></script>
 </body>
 </html>

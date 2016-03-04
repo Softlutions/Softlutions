@@ -1,0 +1,72 @@
+<div class="Container">
+	<a data-toggle="modal" class="btn btn-primary btn-xs pull-center" data-toggle="modal"
+					data-target="#modal-form" ng-click="geteventById()" >Responder invitacion</a>
+					<div id="modal-form" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Evento</h3>
+							<form role="form" ng-init="service">
+								<div class="form-group">
+
+										<label class="font-noraml"><strong>Nombre</strong></label>
+										<input type="text" id="name" class="form-control"
+										placeholder="Nombre" ng-model="event.name" readonly />
+
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"><strong>Descripción</strong></label>
+										<input type="text" id="desciption" class="form-control"
+										placeholder="Descripcion" ng-model="event.description" readonly/>
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"  ><strong>Lugar</strong></label> 
+									<input type="text" id="desciption" class="form-control"
+										placeholder="Lugar" ng-model="event.place.name" readonly/>
+								</div>
+								
+								<div class="form-group">
+									<label class="font-noraml"  ><strong>Estado</strong></label> 
+									<input type="text" id="desciption" class="form-control"
+										placeholder="Estado" ng-model="event.private_" readonly/>
+								</div>
+								<div class="form-group">
+								<label class="font-noraml"  ><strong>Proveedor</strong></label> 
+									<input type="text" id="desciption" class="form-control"
+										placeholder="Proveedor" ng-model="nameProvaider" readonly/>
+								</div>
+								<div class="form-group">
+									<label class="font-noraml"><strong>Asistir</strong></label> <label
+										class="checkbox-inline"> <input type="checkbox"
+										value="option1" id="inlineCheckbox1"> <strong>Si</strong>
+									</label>
+									<label
+										class="checkbox-inline"> <input type="checkbox"
+										value="option2" id="inlineCheckbox2"> <strong>No</strong>
+									</label>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit" ng-click="createParticipant($event)">
+										<strong>Aceptar</strong>
+									</button>
+							
+								</div>
+								
+								<div class="form-group">
+										<button type="button"
+										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+										
+									
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

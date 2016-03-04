@@ -1,130 +1,44 @@
 'use strict';
+angular.module('dondeEs.myEvents', ['ngRoute'])
+	.config(['$routeProvider', function($routeProvider) {
+	  $routeProvider.when('/index', {
+	    templateUrl: 'resources/myEvents/index.html',
+	    controller: 'MyEventsCtrl'
+	  });
+	}])
+	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.listOfEmails = [];
+		
+		
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		console.log($scope.loggedUser);
+		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+			$scope.events = response.eventList;
+		});
+		 $scope.geteventById = function(eventId){
+			$scope.eventId = eventId;
 
-angular.module('dondeEs.myEvents', [ 'ngRoute' ]).config(
-		[ '$routeProvider', function($routeProvider) {
-			$routeProvider.when('/myEvents', {
-				templateUrl : 'resources/myEvents/index.html',
-				controller : 'MyEventsCtrl'
-			});
-		} ]).controller(
-		'MyEventsCtrl',
-		[
-				'$scope',
-				'$http',
-				function($scope, $http, $upload) {
-					$scope.loggedUser = JSON.parse(localStorage
-							.getItem("loggedUser"));
+		};
 
-					$scope.loggedUser = JSON.parse(localStorage
-							.getItem("loggedUser"));
-					console.log($scope.loggedUser);
-					$http.get(
-							'rest/protected/event/getAllEventByUser/'
-									+ $scope.loggedUser.userId).success(
-							function(response) {
-								$scope.events = response.eventList;
-							});
-					// console.log($scope.loggedUser);
-
-				} ]);
-
-$(document)
-		.ready(
-				function() {
-					$("#wizard").steps();
-					$("#form")
-							.steps(
-									{
-										bodyTag : "fieldset",
-										onStepChanging : function(event,
-												currentIndex, newIndex) {
-											// Always allow going backward even
-											// if the current step contains
-											// invalid fields!
-											if (currentIndex > newIndex) {
-												return true;
-											}
-
-											// Forbid suppressing "Warning" step
-											// if the user is to young
-											if (newIndex === 3
-													&& Number($("#age").val()) < 18) {
-												return false;
-											}
-
-											var form = $(this);
-
-											// Clean up if user went backward
-											// before
-											if (currentIndex < newIndex) {
-												// To remove error styles
-												$(
-														".body:eq("
-																+ newIndex
-																+ ") label.error",
-														form).remove();
-												$(
-														".body:eq(" + newIndex
-																+ ") .error",
-														form).removeClass(
-														"error");
-											}
-
-											// Disable validation on fields that
-											// are disabled or hidden.
-											form.validate().settings.ignore = ":disabled,:hidden";
-
-											// Start validation; Prevent going
-											// forward if false
-											return form.valid();
-										},
-										onStepChanged : function(event,
-												currentIndex, priorIndex) {
-											// Suppress (skip) "Warning" step if
-											// the user is old enough.
-											if (currentIndex === 2
-													&& Number($("#age").val()) >= 18) {
-												$(this).steps("next");
-											}
-
-											// Suppress (skip) "Warning" step if
-											// the user is old enough and wants
-											// to the previous step.
-											if (currentIndex === 2
-													&& priorIndex === 3) {
-												$(this).steps("previous");
-											}
-										},
-										onFinishing : function(event,
-												currentIndex) {
-											var form = $(this);
-
-											// Disable validation on fields that
-											// are disabled.
-											// At this point it's recommended to
-											// do an overall check (mean
-											// ignoring only disabled fields)
-											form.validate().settings.ignore = ":disabled";
-
-											// Start validation; Prevent form
-											// submission if false
-											return form.valid();
-										},
-										onFinished : function(event,
-												currentIndex) {
-											var form = $(this);
-
-											// Submit form input
-											form.submit();
-										}
-									}).validate({
-								errorPlacement : function(error, element) {
-									element.before(error);
-								},
-								rules : {
-									confirm : {
-										equalTo : "#password"
-									}
-								}
-							});
+		$scope.addEmail = function(pemail){
+			$scope.listOfEmails.push(pemail.to);
+			pemail.to = "";
+		}
+		
+		$scope.deleteEvent = function(event){
+			$scope.listOfEmails.splice($scope.listOfEmails.indexOf(event), 1);
+		}
+		$scope.sendEmail = function(event){
+			var dataCreate = {
+					listSimple:$scope.listOfEmails
+			};
+			if($scope.listOfEmails.length != 0){
+				$("#modal-formSendInvitation").modal('hide');
+				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+					
 				});
+			}
+		}
+	
+	}]);
