@@ -21,13 +21,15 @@ import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 @RequestMapping(value = "rest/protected/sendEmail")
 public class SendEmailController {
 
-	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
-	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
-		Properties props = System.getProperties();
-		String host = "smtp.gmail.com";
-
-		String from = "evaluacionescenfotec@gmail.com";
-		String pass = "evaluacionescenfotec2015";
+	private static final String from = "evaluacionescenfotec@gmail.com";
+	private static final String host = "smtp.gmail.com";
+	private static final String pass = "evaluacionescenfotec2015";
+	private static String subject;
+	private static String text;
+	private static Properties props;
+	
+	public static void generalEmail(){
+		 props = System.getProperties();
 
 		props.put("mail.smtp.starttls.enable", "true");
 
@@ -37,9 +39,14 @@ public class SendEmailController {
 		props.put("mail.smtp.port", "587");
 		props.put("mail.smtp.auth", "true");
 
+	}
+	
+	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
+	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
+				
+		generalEmail();
 		Session session = Session.getDefaultInstance(props);
-		
-
+		subject = "Invitacion a un evento";
 		try {
 
 			
@@ -50,10 +57,12 @@ public class SendEmailController {
 				MimeMessage message = new MimeMessage(session);
 				message.setFrom(new InternetAddress(from));
 				
+				text = "http://localhost:8080/dondeEs/app#/answerInvitation?eventId="+ eventId+"&email="+email;
+				
 				InternetAddress internetAddress = new InternetAddress(email);
 				message.addRecipient(Message.RecipientType.TO, internetAddress);
-				message.setSubject("Invitacion a un evento");
-				message.setText("http://localhost:8080/dondeEs/app#/answerInvitation?eventId="+ eventId+"&email="+email);
+				message.setSubject(subject);
+				message.setText(text);
 				transport.connect(host, from, pass);
 				transport.sendMessage(message, message.getAllRecipients());
 

@@ -34,10 +34,12 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			var dataCreate = {
 					listSimple:$scope.listOfEmails
 			};
-			
-			$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-				
-			});
+			if($scope.listOfEmails.length != 0){
+				$("#modal-formSendInvitation").modal('hide');
+				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+					
+				});
+			}
 		}
 	
 	}]);

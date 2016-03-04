@@ -17,7 +17,6 @@ angular
 							$scope.geteventById = function(){
 								$http.get('rest/protected/event/getEventById/'+ $location.search().eventId).success(function(response) {
 									$scope.event = response.eventPOJO;
-//									console.log($scope.event.user);
 									$scope.nameProvaider = $scope.event.user.name + " "+ $scope.event.user.lastName1 + " "+ $scope.event.user.lastName2;
 									console.log("Provaider" + $scope.nameProvaider);
 								});
@@ -38,8 +37,13 @@ angular
 										state: $scope.event.state,
 										email: $scope.userEmail
 								}
-								$http({method: 'POST',url:'rest/protected/eventParticipant/createEventParticipant/'+$location.search().eventId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-	//								$scope.services = $scope.services.concat(dataCreate);
-								});
+								if(document.getElementById('inlineCheckbox1').checked){
+									console.log("entro");
+									$("#modal-form").modal('hide');
+									$http({method: 'POST',url:'rest/protected/eventParticipant/createEventParticipant/'+$location.search().eventId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+									});
+								}else{
+									console.log("NO entro");
+								}
 							}
 	}])
