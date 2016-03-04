@@ -15,6 +15,7 @@ import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.ServiceRepository;
 
 @org.springframework.stereotype.Service
@@ -40,6 +41,17 @@ public class ServiceImplementation implements ServiceInterface {
 		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idEvent);
 		ServicePOJO servicePOJO = new ServicePOJO();
 		BeanUtils.copyProperties(nservice, servicePOJO);
+		return servicePOJO;
+	}
+	
+	@Transactional
+	public ServicePOJO getServiceById(int idService){
+		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idService);
+		ServicePOJO servicePOJO = new ServicePOJO();
+		BeanUtils.copyProperties(nservice, servicePOJO);
+		UserPOJO userPOJO = new UserPOJO();
+		BeanUtils.copyProperties(nservice.getUser(), userPOJO);
+		servicePOJO.setUser(userPOJO);
 		return servicePOJO;
 	}
 

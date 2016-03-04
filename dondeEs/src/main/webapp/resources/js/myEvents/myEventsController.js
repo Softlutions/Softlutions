@@ -26,6 +26,13 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			pemail.to = "";
 		}
 		
+		/*Al que ocupe notificar al que contrata
+		 * $http.get({url:'rest/protected/sendEmail/sendEmailContractNotification/idAEnviar='}).success(function(response) {
+		 * 	Lo que quieran hacer xD
+		 * });
+		 * 
+		 * */
+		
 		$scope.deleteEvent = function(event){
 			$scope.listOfEmails.splice($scope.listOfEmails.indexOf(event), 1);
 		}
