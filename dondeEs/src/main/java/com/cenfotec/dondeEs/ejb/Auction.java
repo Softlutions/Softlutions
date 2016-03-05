@@ -21,7 +21,7 @@ public class Auction implements Serializable {
 	@Column(name="auction_id")
 	private int auctionId;
 
-	@Temporal(TemporalType.TIMESTAMP) 
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 
 	private String description;
@@ -32,7 +32,7 @@ public class Auction implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="event_id")
 	private Event event;
-	
+
 	//bi-directional many-to-one association to AuctionService
 	@OneToMany(mappedBy="auction")
 	private List<AuctionService> auctionServices;
@@ -79,7 +79,7 @@ public class Auction implements Serializable {
 	public void setEvent(Event event) {
 		this.event = event;
 	}
-	
+
 	public List<AuctionService> getAuctionServices() {
 		return this.auctionServices;
 	}

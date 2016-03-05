@@ -66,4 +66,36 @@ public class EventController {
 		
 		return response;
 	} 
+	
+	// cancel a event	
+		@RequestMapping(value ="/cancelEvent", method = RequestMethod.PUT)
+		public EventResponse cancelEvent(@RequestBody EventPOJO eventRequest) {
+			EventResponse response = new EventResponse();	
+			
+			if(eventRequest.getEventId() != 0){
+				// envolver las operaciones que esten aquí en una transacción o algo similar
+				
+				Event event =  eventServiceInterface.getEventById(eventRequest.getEventId());
+				event.setState((byte) 0);
+				event.setPublishDate(new Date());
+		 		
+				// faltan operaciones !
+				
+				boolean state = eventServiceInterface.saveEvent(event);
+				
+				if (state) {
+					response.setCode(200);
+					response.setErrorMessage("success");
+				} else {
+					response.setCode(500);
+					response.setErrorMessage("cancel event error");
+				}
+
+			} else {
+				response.setCode(409);
+				response.setErrorMessage("eventId is zero");
+			}
+			
+			return response;
+		} 
 }
