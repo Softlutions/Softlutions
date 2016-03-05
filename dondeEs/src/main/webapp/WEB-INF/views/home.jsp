@@ -128,5 +128,6 @@
 	<script src="resources/js/Events/eventsPublishController.js"></script>
 	<script src="resources/js/AnswerInvitation/answerInvitation.js"></script>
 	<script src="resources/js/Commons/filters.js"></script>
+	<script src="resources/js/Auction/auctionController.js"></script>
 </body>
 </html>

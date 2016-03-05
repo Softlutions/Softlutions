@@ -21,7 +21,7 @@ public class Auction implements Serializable {
 	@Column(name="auction_id")
 	private int auctionId;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
 
 	private String description;

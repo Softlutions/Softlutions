@@ -3,9 +3,6 @@ package com.cenfotec.dondeEs.pojo;
  
 import java.util.List;
 
-import com.cenfotec.dondeEs.ejb.ServiceCatalog;
-
-
 /**
  * The persistent class for the service database table.
  * 
