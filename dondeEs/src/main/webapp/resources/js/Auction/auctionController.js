@@ -9,21 +9,21 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
   });
 }])
 
-.controller('auctionsEventCtrl', ['$scope','$http',function($scope,$http) {	
+.controller('auctionsEventCtrl', ['$scope','$http','$location', function($scope,$http,$location) {	
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
 
-	var eventId = 1; // prueba
+	var eventId = 1; // dato quedamado de prueba
 		
 	$http.get('rest/protected/auction/getAllAuctionByEvent/'+eventId).success(function(response) {
 		$scope.auctionsEvent = response.auctionList;
-			
-		console.log("$scope.auctionsEvent: ",$scope.auctionsEvent);		
 	});
 	
 	$scope.loadAuctionServices = function (index) {
 		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;
-		
-		console.log("service: ",$scope.auctionServices + " - index: " + index);	
+	}
+	
+	$scope.goToServiceProviderProfile = function () {
+	//	$location.url('/login');  colocar ruta del perfil del prestatario de servicio. 
 	}
 }]);

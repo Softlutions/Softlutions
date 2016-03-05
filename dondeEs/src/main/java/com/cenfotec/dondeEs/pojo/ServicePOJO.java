@@ -69,6 +69,10 @@ public class ServicePOJO {
 		return this.serviceContacts;
 	}
 
+	public void setServiceContacts(List<ServiceContactPOJO> serviceContact) {
+		this.serviceContacts = serviceContact;
+	}
+	
 	public ServiceCatalogPOJO getServiceCatalog() {
 		return serviceCatalog;
 	}
