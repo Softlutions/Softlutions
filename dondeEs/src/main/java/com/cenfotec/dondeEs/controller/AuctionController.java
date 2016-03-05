@@ -20,7 +20,7 @@ public class AuctionController {
 		AuctionResponse response = new AuctionResponse();
 		response.setCode(200);
 		response.setCodeMessage("Auctions by event");
-		response.setListAuction(auctionServiceInterface.getAllAuctionByEvent(id));
+		response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
 		return response;
 	}
 }

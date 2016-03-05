@@ -5,13 +5,13 @@ import java.util.List;
 import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 
 public class AuctionResponse extends BaseResponse {
-	private List<AuctionPOJO> listAuction;
+	private List<AuctionPOJO> auctionList;
 
-	public List<AuctionPOJO> getListAuction() {
-		return listAuction;
+	public List<AuctionPOJO> getAuctionList() {
+		return auctionList;
 	}
 
-	public void setListAuction(List<AuctionPOJO> listAuction) {
-		this.listAuction = listAuction;
+	public void setAuctionList(List<AuctionPOJO> auctionList) {
+		this.auctionList = auctionList;
 	}
 }

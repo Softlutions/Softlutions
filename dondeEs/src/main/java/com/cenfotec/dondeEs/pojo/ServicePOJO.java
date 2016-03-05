@@ -3,9 +3,6 @@ package com.cenfotec.dondeEs.pojo;
  
 import java.util.List;
 
-import com.cenfotec.dondeEs.ejb.ServiceCatalog;
-
-
 /**
  * The persistent class for the service database table.
  * 
@@ -70,6 +67,14 @@ public class ServicePOJO {
 
 	public List<ServiceContactPOJO> getServiceContacts() {
 		return this.serviceContacts;
+	}
+
+	public ServiceCatalogPOJO getServiceCatalog() {
+		return serviceCatalog;
+	}
+
+	public void setServiceCatalog(ServiceCatalogPOJO serviceCatalog) {
+		this.serviceCatalog = serviceCatalog;
 	}
 
 

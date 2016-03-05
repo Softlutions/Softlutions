@@ -1,29 +1,7 @@
 package com.cenfotec.dondeEs.pojo;
 
-import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.cenfotec.dondeEs.ejb.Chat;
-import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
-import com.cenfotec.dondeEs.ejb.Message;
-import com.cenfotec.dondeEs.ejb.PasswordHistory;
-import com.cenfotec.dondeEs.ejb.Role;
-import com.cenfotec.dondeEs.ejb.Service;
-import com.cenfotec.dondeEs.ejb.TermCondition;
-import com.cenfotec.dondeEs.ejb.User;
-import com.cenfotec.dondeEs.ejb.UserType;
 
 /**
  * The persistent class for the user database table.

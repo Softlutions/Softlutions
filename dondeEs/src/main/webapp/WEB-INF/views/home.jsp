@@ -98,5 +98,6 @@
 	<script src="resources/js/myEvents/myEventsController.js"></script>
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 	<script src="resources/js/Events/eventsPublishController.js"></script>
+	<script src="resources/js/Auction/auctionController.js"></script>
 </body>
 </html>
