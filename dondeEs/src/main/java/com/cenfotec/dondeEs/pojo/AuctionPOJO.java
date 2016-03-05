@@ -1,44 +1,24 @@
-package com.cenfotec.dondeEs.ejb;
+package com.cenfotec.dondeEs.pojo;
 
-import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import com.cenfotec.dondeEs.ejb.Event;
 
-/**
- * The persistent class for the auction database table.
- * 
- */
-@Entity
-@Table(name="auction")
-@NamedQuery(name="Auction.findAll", query="SELECT a FROM Auction a")
-public class Auction implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="auction_id")
+public class AuctionPOJO {
 	private int auctionId;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 
 	private String description;
 
 	private String name;
 
-	//bi-directional many-to-one association to Event
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="event_id")
 	private Event event;
-	
-	//bi-directional many-to-one association to AuctionService
-	@OneToMany(mappedBy="auction")
-	private List<AuctionService> auctionServices;
 
-	public Auction() {
-	}
+	private List<AuctionServicePOJO> auctionServices;
+
+	public AuctionPOJO() {}
 
 	public int getAuctionId() {
 		return this.auctionId;
@@ -80,26 +60,25 @@ public class Auction implements Serializable {
 		this.event = event;
 	}
 	
-	public List<AuctionService> getAuctionServices() {
+	public List<AuctionServicePOJO> getAuctionServices() {
 		return this.auctionServices;
 	}
 
-	public void setAuctionServices(List<AuctionService> auctionServices) {
+	public void setAuctionServices(List<AuctionServicePOJO> auctionServices) {
 		this.auctionServices = auctionServices;
 	}
 
-	public AuctionService addAuctionService(AuctionService auctionService) {
+	public AuctionServicePOJO addAuctionService(AuctionServicePOJO auctionService) {
 		getAuctionServices().add(auctionService);
 		auctionService.setAuction(this);
-
+		
 		return auctionService;
 	}
 
-	public AuctionService removeAuctionService(AuctionService auctionService) {
+	public AuctionServicePOJO removeAuctionService(AuctionServicePOJO auctionService) {
 		getAuctionServices().remove(auctionService);
 		auctionService.setAuction(null);
 
 		return auctionService;
 	}
-
 }
