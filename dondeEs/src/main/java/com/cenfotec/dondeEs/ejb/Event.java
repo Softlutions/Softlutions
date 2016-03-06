@@ -5,7 +5,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the event database table.
  * 
@@ -42,6 +41,10 @@ public class Event implements Serializable {
 	private Date registerDate;
 
 	private byte state;
+	
+	//bi-directional many-to-one association to Auction
+	@OneToMany(fetch=FetchType.LAZY)
+	private List<Auction> auctions;
 
 	//bi-directional many-to-one association to Auction
 	@OneToMany(mappedBy="event")

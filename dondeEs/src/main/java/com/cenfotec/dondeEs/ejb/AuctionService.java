@@ -30,12 +30,12 @@ public class AuctionService implements Serializable {
 	private int price;
 
 	//bi-directional many-to-one association to Auction
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne //(fetch=FetchType.LAZY)
 	@JoinColumn(name="auction_id")
 	private Auction auction;
 
 	//bi-directional many-to-one association to Service
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne //(fetch=FetchType.LAZY)
 	@JoinColumn(name="service_id")
 	private Service service;
 
