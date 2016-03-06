@@ -10,20 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.contracts.UserRequest;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.UserTypePOJO;
+import com.cenfotec.dondeEs.repositories.AuctionRepository;
 import com.cenfotec.dondeEs.repositories.RoleRepository;
 import com.cenfotec.dondeEs.repositories.UserRepository;
 
-@org.springframework.stereotype.Service
+@Service
 public class UserService implements UserServiceInterface {
 	@Autowired private UserRepository userRepository;
 	@Autowired private RoleRepository roleRepository;
-	
+	@Autowired private AuctionRepository auctionRepository;
 
 	public List<UserPOJO> getAll(){
 		List<User> usersList = userRepository.findAll();
@@ -104,4 +106,69 @@ public class UserService implements UserServiceInterface {
 		
 		return user;
 	}
+	
+	/***
+	 * @author Enmanuel García González
+	 */
+	@Override
+	@Transactional
+	public List<UserPOJO> getAllServicesProviderAuction(int idEvent) {
+		List<UserPOJO> usersPOJO = new ArrayList<UserPOJO>();
+		int event_id = 1;
+		System.out.println(auctionRepository);
+		List<Auction> auctions = auctionRepository.findAllByEventEventId(event_id);	
+		
+		auctions.stream().forEach(e -> {		
+			if (e.getAuctionServices() != null) {				
+				e.getAuctionServices().stream().forEach(as -> {				
+					UserPOJO userPOJO = new UserPOJO();
+					BeanUtils.copyProperties(as.getService().getUser(), userPOJO);
+					usersPOJO.add(userPOJO);					
+				});
+			} 			
+		});
+		
+		return usersPOJO;
+	}	
 }
+
+/*
+public List<UserPOJO> getAllServicesProviderAuction(int idEvent) {
+	List<UserPOJO> usersPOJO = new ArrayList<UserPOJO>();
+	List<AuctionPOJO> auctionsPOJO = new ArrayList<AuctionPOJO>();			
+	List<Auction> auction =  auctionRepository.findAllByEventEventId(idEvent);
+	
+	auction.stream().forEach(e -> {
+		AuctionPOJO auctionPOJO = new AuctionPOJO();
+		BeanUtils.copyProperties(e, auctionPOJO);
+		
+		if (e.getAuctionServices() != null) {
+		//	List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
+			
+			e.getAuctionServices().stream().forEach(as -> {
+				AuctionServicePOJO asp = new AuctionServicePOJO();
+				BeanUtils.copyProperties(as, asp);
+				
+		//		asp.setService(new ServicePOJO()); 
+		//		BeanUtils.copyProperties(as.getService(), asp.getService());
+		//		asp.getService().setServiceContacts(null);
+		//		asp.getService().setServiceCatalog(null);
+				
+		//		asp.getService().setUser(new UserPOJO()); 
+		//		asp.getService().getUser().setUserId(as.getService().getUser().getUserId());
+				
+				UserPOJO userPOJO = new UserPOJO();
+				BeanUtils.copyProperties(as.getService().getUser(), userPOJO);
+				usersPOJO.add(userPOJO);
+				
+			//	auctionServicesPOJO.add(asp);
+			});
+			
+		//	auctionPOJO.setAuctionServices(auctionServicesPOJO);
+		} 			
+		auctionPOJO.setEvent(null);
+		auctionsPOJO.add(auctionPOJO); 
+	});
+	
+	return null;
+} */

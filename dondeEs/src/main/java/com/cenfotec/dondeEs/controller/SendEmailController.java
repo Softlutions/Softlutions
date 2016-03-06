@@ -18,12 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cenfotec.dondeEs.ejb.Service;
-import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
-import com.cenfotec.dondeEs.repositories.ServiceRepository;
-import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
-import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.ServiceInterface;
 
 @RestController
@@ -31,7 +26,6 @@ import com.cenfotec.dondeEs.services.ServiceInterface;
 public class SendEmailController {
 	@Autowired
 	private ServiceInterface serviceInterface;
-	private ServiceContactInterface serviceContact;
 
 	private static final String from = "evaluacionescenfotec@gmail.com";
 	private static final String host = "smtp.gmail.com";
@@ -100,7 +94,35 @@ public class SendEmailController {
 		try {
 			Transport transport = session.getTransport("smtp");
 			String email = serviceInterface.getServiceById(id).getUser().getEmail();
-			ServiceContact serviceContact = new ServiceContact();
+			MimeMessage message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(from));
+			text = "Link x" + id + "&email=" + email;
+			InternetAddress internetAddress = new InternetAddress(email);
+			message.addRecipient(Message.RecipientType.TO, internetAddress);
+			message.setSubject(subject);
+			message.setText(text);
+			transport.connect(host, from, pass);
+			transport.sendMessage(message, message.getAllRecipients());
+			transport.close();
+		} catch (AddressException ae) {
+			ae.printStackTrace();
+		} catch (MessagingException me) {
+			me.printStackTrace();
+		}
+	}
+	
+	/***
+	 * @author Enmanuel García González
+	 * @param id
+	 */
+	@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
+	public void sendEmailCancelEventNotification(@PathVariable("serviceId") int id) {
+		generalEmail();
+		Session session = Session.getDefaultInstance(props);
+		subject = "Solicitud de contratación!";
+		try {
+			Transport transport = session.getTransport("smtp");
+			String email = serviceInterface.getServiceById(id).getUser().getEmail();
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			text = "Link x" + id + "&email=" + email;

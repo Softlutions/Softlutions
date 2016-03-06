@@ -1,8 +1,10 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
+import com.cenfotec.dondeEs.services.UserService;
 
 @RestController
 @RequestMapping(value = "rest/protected/event")
@@ -29,7 +33,10 @@ public class EventController {
 		return response;
 	}
 	
-//	get all event publish
+	/***
+	 * @author Enmanuel García González
+	 * @return
+	 */
 	@RequestMapping(value ="/getAllEventPublish", method = RequestMethod.GET)
 	public EventResponse getAll(){				
 		EventResponse response = new EventResponse();
@@ -39,7 +46,11 @@ public class EventController {
 		return response;
 	}
 	
-// publish a event	
+	/***
+	 * @author Enmanuel García González
+	 * @param eventRequest
+	 * @return
+	 */
 	@RequestMapping(value ="/publishEvent", method = RequestMethod.PUT)
 	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
 		EventResponse response = new EventResponse();	
@@ -83,21 +94,28 @@ public class EventController {
 		return response;
 	}
 	
-	// cancel a event	
-		@RequestMapping(value ="/cancelEvent", method = RequestMethod.PUT)
-		public EventResponse cancelEvent(@RequestBody EventPOJO eventRequest) {
-			EventResponse response = new EventResponse();	
-			
-			if(eventRequest.getEventId() != 0){
-				// envolver las operaciones que esten aquí en una transacción o algo similar
-				
+	/***
+	 * @author Enmanuel García González	
+	 * @param eventRequest
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value ="/cancelEvent", method = RequestMethod.GET)
+	public EventResponse cancelEvent() { // @RequestBody EventPOJO eventRequest
+		EventResponse response = new EventResponse();	
+		boolean state;
+		
+		UserService us = new UserService();
+		
+		List<UserPOJO> servicesProviders = us.getAllServicesProviderAuction(1);
+		
+	/*	if(eventRequest.getEventId() != 0){		
+			try{
 				Event event =  eventServiceInterface.getEventById(eventRequest.getEventId());
 				event.setState((byte) 0);
 				event.setPublishDate(new Date());
-		 		
-				// faltan operaciones !
-				
-				boolean state = eventServiceInterface.saveEvent(event);
+		 						
+				state = eventServiceInterface.saveEvent(event);
 				
 				if (state) {
 					response.setCode(200);
@@ -106,12 +124,14 @@ public class EventController {
 					response.setCode(500);
 					response.setErrorMessage("cancel event error");
 				}
-
-			} else {
-				response.setCode(409);
-				response.setErrorMessage("eventId is zero");
-			}
-			
-			return response;
-		} 
+			} catch (Exception e) {
+				response.setCode(500);
+				response.setErrorMessage("internal error. " + e);
+			}	
+		} else {
+			response.setCode(409);
+			response.setErrorMessage("eventId is zero");
+		} */
+		return response;
+	} 
 }

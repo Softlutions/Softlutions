@@ -16,4 +16,5 @@ public interface UserServiceInterface {
 	User findByEmail(String email);
 	List<UserPOJO> getAll();
 	
+	List<UserPOJO> getAllServicesProviderAuction(int idEvent);
 }

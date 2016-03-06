@@ -34,6 +34,9 @@ public class EventService implements EventServiceInterface {
 		return eventsPOJO;
 	}
 	
+	/***
+	 * @author Enmanuel García González
+	 */
 	@Override
 	public List<EventPOJO> getAllEventPublish() {			
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -68,7 +71,10 @@ public class EventService implements EventServiceInterface {
 	public Event getEventById(int idEvent) {
 		return eventRepository.findByEventId(idEvent);
 	}
-
+	
+	/***
+	 * @author Enmanuel García González
+	 */
 	@Override
 	public Boolean saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);

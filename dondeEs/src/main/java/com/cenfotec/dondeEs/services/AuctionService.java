@@ -21,6 +21,9 @@ public class AuctionService implements AuctionServiceInterface{
 	@Autowired
 	private AuctionRepository auctionRepository;
 	
+	/***
+	 * @author Enmanuel García González
+	 */
 	@Override
 	@Transactional
 	public List<AuctionPOJO> getAllAuctionByEvent(int event_id) {

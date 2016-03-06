@@ -74,15 +74,7 @@ public class User implements Serializable {
 			}
 		)
 	private List<Chat> chats;
-
-	//bi-directional many-to-one association to Event
-	@OneToMany(mappedBy="user")
-	private List<Event> events;
-
-	//bi-directional many-to-one association to EventParticipant
-	@OneToMany(mappedBy="user")
-	private List<EventParticipant> eventParticipants;
-
+	
 	//bi-directional many-to-many association to User
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(
@@ -99,22 +91,6 @@ public class User implements Serializable {
 	//bi-directional many-to-many association to User
 	@ManyToMany(fetch=FetchType.LAZY)
 	private List<User> users2;
-
-	//bi-directional many-to-one association to Message
-	@OneToMany(mappedBy="user")
-	private List<Message> messages;
-
-	//bi-directional many-to-one association to PasswordHistory
-	@OneToMany(mappedBy="user")
-	private List<PasswordHistory> passwordHistories;
-
-	//bi-directional many-to-one association to Service
-	@OneToMany(mappedBy="user")
-	private List<Service> services;
-
-	//bi-directional many-to-one association to TermCondition
-	@OneToMany(mappedBy="user")
-	private List<TermCondition> termConditions;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne(fetch=FetchType.LAZY)
