@@ -25,13 +25,13 @@ public class Chat implements Serializable {
 	@JoinColumn(name="event_id")
 	private Event event;
 
-	//bi-directional many-to-one association to Message
-	@OneToMany(mappedBy="chat")
-	private List<Message> messages;
-
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="chats")
 	private List<User> users;
+
+	//bi-directional many-to-one association to Message
+	@OneToMany(mappedBy="chat")
+	private List<Message> messages;
 
 	public Chat() {
 	}
@@ -50,6 +50,14 @@ public class Chat implements Serializable {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	public List<User> getUsers() {
+		return this.users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public List<Message> getMessages() {
@@ -72,14 +80,6 @@ public class Chat implements Serializable {
 		message.setChat(null);
 
 		return message;
-	}
-
-	public List<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
 	}
 
 }

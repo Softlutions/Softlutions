@@ -27,10 +27,17 @@
 				</thead>
 				<tbody ng-repeat = "serviceContact in serviceContacts">
 					<tr>
-						<td class="hidden">{{serviceContact.serviceContactId}}</td>
+						<td class="hidden">{{serviceContact.serviceContractId}}</td>
 						<td>{{serviceContact.service.name}}</td>
-						<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+						<td>{{(serviceContact.state == 0? "Pendiente":(serviceContact.state == 1? "Concretado":"Cancelado"))}}</td>
 						<td>{{serviceContact.comment}}</td>
+						
+						<td ng-if="serviceContact.state != 2">
+							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
+						</td>
+						<td ng-if="serviceContact.state == 2">
+							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -60,4 +67,20 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Graph morris donut chart -->
+	<div class="col-lg-6">
+	    <div class="ibox float-e-margins">
+	        <div class="ibox-title">
+	            <h5>Resumen</h5>
+	        </div>
+	        <div class="ibox-content">
+	            <div id="contracts-state-chart" class="hidden"></div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Morris -->
+    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="resources/js/plugins/morris/morris.js"></script>
 </div>
