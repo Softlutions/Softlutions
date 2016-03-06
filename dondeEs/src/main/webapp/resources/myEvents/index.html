@@ -1,5 +1,5 @@
 <div class="container" ng-controller="MyEventsCtrl">
-	<div class="col-lg-6">
+	<div class="col-lg-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h5>Mis eventos</h5>
@@ -25,6 +25,8 @@
 							<th>Lugar</th>
 							<th>Estado</th>
 							<th>Acción</th>
+
+
 						</tr>
 					</thead>
 					<tbody ng-repeat="event in events">
@@ -34,14 +36,70 @@
 							<td>{{ event.place.name }}</td>
 							<td><span class="label label-danger pull-right">{{
 									event.state || eventState }}</span></td>
-									<td>
-									
-									<td/>
+							<td><button data-toggle="modal"
+								class="btn btn-primary btn-xs pull-right" data-toggle="modal"
+								data-target="#modal-formSendInvitation" ng-click="geteventById(event.eventId)">Enviar
+									invitacion</button></td>
 						</tr>
 					</tbody>
 
 				</table>
+
+			</div>
+		</div>
+		<div id="modal-formSendInvitation" class="modal fade" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-12 b-r">
+								<h3 class="m-t-none m-b">Enviar correo</h3>
+								<form role="form" ng-init="service">
+									<div class="form-group">
+										<div class="input-group">
+											<input type="text" class="form-control"
+												placeholder="Ingresar correo para enviar invitacion"
+												ng-model="email.to"> <span class="input-group-btn"
+												placeholder="Lista de Correos a invitar">
+												<button type="button" ng-click="addEmail(email)"
+													class="btn btn-primary">+</button>
+											</span>
+										</div>
+										<div id="emailLabels">
+
+											<span class="tag label label-prmmary"
+												ng-repeat="item in listOfEmails"> <span>{{item}}</span>
+												<a ng-click="deleteEvent(item)"><i
+													class="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a>
+											</span>
+
+
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="font-noraml"><strong>{{event.description}}</strong></label>
+									</div>
+
+									<div class="form-group">
+										<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+											type="submit" ng-click="sendEmail($event)">
+											<strong>Enviar</strong>
+										</button>
+
+									</div>
+
+									<div class="form-group">
+										<button type="button"
+											class="btn btn-sm btn-danger pull-right m-t-n-xs"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>

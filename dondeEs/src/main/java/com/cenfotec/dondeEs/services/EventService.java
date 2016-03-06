@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.ejb.Event;
-import com.cenfotec.dondeEs.ejb.Place;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
@@ -28,6 +27,8 @@ public class EventService implements EventServiceInterface {
 			BeanUtils.copyProperties(e, eventPOJO);
 			BeanUtils.copyProperties(e.getPlace(), placePOJO);
 			eventPOJO.setPlace(placePOJO);
+			eventPOJO.setEventParticipants(null);
+			eventPOJO.setServiceContacts(null);
 			eventsPOJO.add(eventPOJO);
 		});
 		return eventsPOJO;
@@ -62,5 +63,27 @@ public class EventService implements EventServiceInterface {
 	public Boolean saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
 		return (event == null) ? false : true;
+	}
+
+	@Override
+	public EventPOJO eventById(int idEvent) {
+
+		Event event = eventRepository.findOne(idEvent);
+		EventPOJO eventPOJO = new EventPOJO();
+		BeanUtils.copyProperties(event, eventPOJO);	
+		eventPOJO.setEventParticipants(null);
+		if(event.getPlace() != null){
+			PlacePOJO placePOJO = new PlacePOJO();
+			BeanUtils.copyProperties(event.getPlace(), placePOJO);
+			eventPOJO.setPlace(placePOJO);
+		}
+		if(event.getUser() != null){
+			UserPOJO userPOJO = new UserPOJO();
+			BeanUtils.copyProperties(event.getUser(), userPOJO);
+			userPOJO.setEventParticipants(null);
+			eventPOJO.setUser(userPOJO);
+		}
+		
+		return eventPOJO;
 	}
 }

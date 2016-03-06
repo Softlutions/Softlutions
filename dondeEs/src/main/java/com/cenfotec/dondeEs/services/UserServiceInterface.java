@@ -18,6 +18,8 @@ public interface UserServiceInterface {
 	
 	public Boolean saveUser(UserRequest	 ur);
 	
+	User findByEmail(String email);
+
 	/**
 	 * @author Ernesto Méndez A.
 	 * @return Lista de todos los usuarios registrados

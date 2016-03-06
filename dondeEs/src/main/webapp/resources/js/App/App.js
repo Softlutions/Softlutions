@@ -7,7 +7,8 @@ angular.module('dondeEs', [
 	"dondeEs.users",
 	"dondeEs.myEvents",
 	"dondeEs.eventsPublish",
-	"dondeEs.ContractModule"
+	"dondeEs.ContractModule",
+	"dondeEs.answerInvitation"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/login'});

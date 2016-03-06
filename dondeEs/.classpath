@@ -33,5 +33,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/antoni/Dev/javamail/javamail-1.4.7/mail.jar"/>
+	<classpathentry kind="lib" path="/home/antoni/Dev/javamail/spring-context-support-4.2.5.RELEASE.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
