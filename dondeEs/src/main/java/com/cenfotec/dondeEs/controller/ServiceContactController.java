@@ -8,45 +8,50 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
 import com.cenfotec.dondeEs.services.ServiceContactInterface;
 
 @RestController
 @RequestMapping(value = "rest/protected/serviceContact")
 public class ServiceContactController {
 
-	@Autowired private ServiceContactInterface serviceContactInterface;
-	
-	@RequestMapping(value ="/getAllServiceContact/{idEvent}", method = RequestMethod.GET)
-	public ServiceContactResponse getAllServiceContact(@PathVariable("idEvent") int idEvent){
+	@Autowired
+	private ServiceContactInterface serviceContactInterface;
+
+	@RequestMapping(value = "/getAllServiceContact/{idEvent}", method = RequestMethod.GET)
+	public ServiceContactResponse getAllServiceContact(@PathVariable("idEvent") int idEvent) {
 		ServiceContactResponse response = new ServiceContactResponse();
 		response.setListContracts(serviceContactInterface.getAllServiceContacts(idEvent));
 		return response;
 	}
-	
-	@RequestMapping(value ="/createServiceContact", method = RequestMethod.POST)
-	public ServiceContactResponse createServiceContact(@RequestBody ServiceContact serviceContact){
+
+	@RequestMapping(value = "/createServiceContact", method = RequestMethod.POST)
+	public ServiceContactResponse createServiceContact(@RequestBody ServiceContact serviceContact) {
 		ServiceContactResponse response = new ServiceContactResponse();
 		Boolean state = serviceContactInterface.saveServiceContact(serviceContact);
-		if(state){
+		if (state) {
 			response.setCode(200);
 			response.setCodeMessage("Succesfull");
-		}else{
+		} else {
 			response.setCode(500);
 			response.setCodeMessage("Internal error");
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(value ="/answerContract", method = RequestMethod.POST)
-	public ServiceContactResponse answerContract(@RequestBody ServiceContact serviceContact){
+	public ServiceContactResponse answerContract(@RequestBody ServiceContactPOJO serviceContactPOJO){
 		ServiceContactResponse response = new ServiceContactResponse();
-		Boolean state = serviceContactInterface.saveServiceContact(serviceContact);
-		if(state){
+		ServiceContact serviceContact = serviceContactInterface.getByServiceServiceIdAndEventEventId(
+				serviceContactPOJO.getEvent().getEventId(),
+				serviceContactPOJO.getService().getServiceId());
+		if(serviceContact.getState()==1){
+			serviceContact.setState(serviceContact.getState());
 			response.setCode(200);
-			response.setCodeMessage("Succesfull");
+			response.setCodeMessage("Asistiras!");
 		}else{
 			response.setCode(500);
-			response.setCodeMessage("Internal error");
+			response.setCodeMessage("Ya confirmaste");
 		}
 		return response;
 	}

@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cenfotec.dondeEs.ejb.Service;
+import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
-import com.cenfotec.dondeEs.repositories.ServiceRepository;
-import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.ServiceInterface;
 
@@ -31,7 +30,9 @@ import com.cenfotec.dondeEs.services.ServiceInterface;
 public class SendEmailController {
 	@Autowired
 	private ServiceInterface serviceInterface;
-	private ServiceContactInterface serviceContact;
+
+	@Autowired
+	private ServiceContactInterface serviceContactService;
 
 	private static final String from = "evaluacionescenfotec@gmail.com";
 	private static final String host = "smtp.gmail.com";
@@ -65,8 +66,9 @@ public class SendEmailController {
 			for (String email : to.getListSimple()) {
 				MimeMessage message = new MimeMessage(session);
 				message.setFrom(new InternetAddress(from));
-				
-				text = "http://localhost:8080/dondeEs/app#/answerInvitation?eventId=" + eventId + "&email=" + email;
+
+				text = "http://localhost:8080/dondeEs/app#/answerInvitation?eventId=" + AES.base64encode(String.valueOf(eventId))
+						+"&email=" + AES.base64encode(String.valueOf(email));
 
 				InternetAddress internetAddress = new InternetAddress(email);
 				message.addRecipient(Message.RecipientType.TO, internetAddress);
@@ -87,23 +89,36 @@ public class SendEmailController {
 
 	/**
 	 * @author Alejandro Bermúdez Vargas
-	 * @exception AddressException no se encuentra la direccion de correo
-	 * @exception MessagingException No encuentra el server.
-	 * @param id, el id del servicio que se contrato
+	 * @exception AddressException
+	 *                no se encuentra la direccion de correo
+	 * @exception MessagingException
+	 *                No encuentra el server.
+	 * @param id,
+	 *            el id del servicio que se contrato
 	 * @version 1.0
 	 */
-	@RequestMapping(value = "/sendEmailContractNotification/{serviceId}", method = RequestMethod.GET)
-	public void sendEmailContractNotification(@PathVariable("serviceId") int id) {
+	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
+	public void sendEmailContractNotification(@RequestBody ContractNotification contractNotification) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);
 		subject = "Solicitud de contratación!";
 		try {
+			int eventId = contractNotification.getEvent().getEventId();
+			int serviceId = contractNotification.getService().getServiceId();
+
 			Transport transport = session.getTransport("smtp");
-			String email = serviceInterface.getServiceById(id).getUser().getEmail();
-			ServiceContact serviceContact = new ServiceContact();
+			// Contact service
+
+			ServiceContact serviceContact = serviceContactService.getByServiceServiceIdAndEventEventId(
+					contractNotification.getEvent().getEventId(), contractNotification.getService().getServiceId());
+			// Email del usuario
+			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
+					.getEmail();
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
-			text = "Link x" + id + "&email=" + email;
+			text = "http://localhost:8080/dondeEs/app#/answerInvitation/" + AES.base64encode(String.valueOf(eventId))
+					+ "/" + AES.base64encode(String.valueOf(serviceId));
+
 			InternetAddress internetAddress = new InternetAddress(email);
 			message.addRecipient(Message.RecipientType.TO, internetAddress);
 			message.setSubject(subject);

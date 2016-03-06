@@ -127,6 +127,7 @@
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 	<script src="resources/js/Events/eventsPublishController.js"></script>
 	<script src="resources/js/AnswerInvitation/answerInvitation.js"></script>
-	<script src="resources/js/Commons/filters.js"></script>
+	<script src="resources/js/AnswerContract/AnswerContractController.js"></script>
+	<script src="resources/js/Commons/Filters.js"></script>
 </body>
 </html>

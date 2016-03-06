@@ -7,6 +7,7 @@ angular.module('dondeEs', [
 	"dondeEs.users",
 	"dondeEs.myEvents",
 	"dondeEs.eventsPublish",
+	"dondeEs.answerContract",
 	"dondeEs.ContractModule",
 	"dondeEs.answerInvitation"
 
