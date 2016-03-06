@@ -1,5 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,15 @@ public class AuctionController {
 	
 	@Autowired private AuctionServiceInterface auctionResponseInterface;
 	
+	/**
+	 * @Author Juan Carlos Sánchez G.
+	 * @param auction Peticion que contiene la información de la subasta por crear.
+	 * @return response Respuesta del servidor de la petición.
+	 * @version 1.0
+	 */
+	
 	@RequestMapping(value ="/createAuction", method = RequestMethod.POST)
+	@Transactional
 	public AuctionResponse createAuction(@RequestBody Auction auction){
 		AuctionResponse response = new AuctionResponse();
 		Boolean state = auctionResponseInterface.saveAuction(auction);
