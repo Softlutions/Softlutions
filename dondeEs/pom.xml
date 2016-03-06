@@ -78,6 +78,12 @@
 		</dependency>
 		
 		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>angular-cookies</artifactId>
+		    <version>1.4.5</version>		    
+		</dependency>
+		
+		<dependency>
 		    <groupId>joda-time</groupId>
 		    <artifactId>joda-time</artifactId>		    
 		</dependency>

@@ -7,14 +7,14 @@
 			
 			<h1 class="text-center login-title">Iniciar sesión</h1>
 			<div id="loginDiv" class="account-wall">
-				<form class="form-signin">
-					<input type="text" class="form-control" placeholder="Correo" autofocus ng-model="user.email">
-					<input type="password" class="form-control" placeholder="Contraseña" ng-model="user.password">
+				<form class="form-signin" onSummit="return false">
+					<input name="login" autocomplete="on" type="text" class="form-control" placeholder="Correo" autofocus ng-model="user.email">
+					<input name="password" autocomplete="on" type="password" class="form-control" placeholder="Contraseña" ng-model="user.password">
 					
 					<button class="btn btn-lg btn-primary btn-block" ng-click="checkLogin()">Ingresar</button>
 					
 					<label class="pull-left">
-						<input type="checkbox" value="remember-me"> Recordarme
+						<input id="chkRememberMe" type="checkbox" value="remember-me"> Recordarme
 					</label> 
 					<a href="#" class="pull-right">¿Olvidó su contraseña?</a>
 					<span class="clearfix"></span>

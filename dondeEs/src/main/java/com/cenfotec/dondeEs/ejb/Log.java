@@ -40,8 +40,6 @@ public class Log implements Serializable {
 		this.logId = logId;
 	}
 
-	
-
 	public Date getDate() {
 		return date;
 	}

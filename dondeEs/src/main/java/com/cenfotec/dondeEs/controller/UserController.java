@@ -17,6 +17,11 @@ public class UserController {
 	
 	@Autowired private UserServiceInterface userServiceInterface;
 
+	/**
+	 * @param idUser Id del usuario
+	 * @return Lista de usuarios
+	 * @version 1.0
+	 */
 	@RequestMapping(value ="/getAllService/{idUser}", method = RequestMethod.GET)
 	public UserResponse getAllService(@PathVariable("idUser") int idUser){
 		UserResponse response = new UserResponse();
