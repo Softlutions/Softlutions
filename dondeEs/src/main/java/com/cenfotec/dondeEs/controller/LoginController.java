@@ -26,6 +26,14 @@ public class LoginController {
 	
 	@Autowired private LoginServiceInterface loginService;
 	
+	/**
+	 * @Author Ernesto Méndez A.
+	 * @param lr Petición que contiene el email y la contraseña del usuarioa logear
+	 * @param servletRequest Petición por defecto al server
+	 * @param servletResponse Canal de respuesta (puede ser nulo)
+	 * @return Respuesta que contiene los datos del usuario logueado
+	 * @version 1.0
+	 */
 	@RequestMapping(value = "/checkuser", method = RequestMethod.POST)
 	@Transactional
 	public BaseResponse checkuser(@RequestBody LoginRequest lr,HttpServletRequest servletRequest,HttpServletResponse servletResponse){	

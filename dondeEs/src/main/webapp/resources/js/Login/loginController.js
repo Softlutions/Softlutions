@@ -24,7 +24,10 @@ angular.module('loginModule', ['ngRoute'])
 							"email" : response.email,
 							"role" : response.role
 						};
+						
 						localStorage.setItem("loggedUser", JSON.stringify(responseUser));
+						//var rememberMe = $('#chkRememberMe').is(':checked');
+						
 						window.location.href = "/dondeEs/app#/index";
 					}else{
 						$("#errorMsj").css("visibility", "visible");
