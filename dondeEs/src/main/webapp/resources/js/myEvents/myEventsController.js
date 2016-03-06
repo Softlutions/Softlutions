@@ -47,5 +47,15 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 				});
 			}
 		}
+		
+		$scope.publishEvent = function(eventId){  
+			$scope.requestObject = {"eventId":eventId};
+			$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
+					$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+						$scope.events = response.eventList;
+					});
+			})
+			
+		}
 	
 	}]);

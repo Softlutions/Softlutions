@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cenfotec.dondeEs.ejb.Service;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 import com.cenfotec.dondeEs.repositories.ServiceRepository;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
+import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.ServiceInterface;
 
 @RestController
@@ -28,6 +31,7 @@ import com.cenfotec.dondeEs.services.ServiceInterface;
 public class SendEmailController {
 	@Autowired
 	private ServiceInterface serviceInterface;
+	private ServiceContactInterface serviceContact;
 
 	private static final String from = "evaluacionescenfotec@gmail.com";
 	private static final String host = "smtp.gmail.com";
@@ -58,12 +62,10 @@ public class SendEmailController {
 		try {
 
 			Transport transport = session.getTransport("smtp");
-
-			// To get the array of addresses
 			for (String email : to.getListSimple()) {
 				MimeMessage message = new MimeMessage(session);
 				message.setFrom(new InternetAddress(from));
-
+				
 				text = "http://localhost:8080/dondeEs/app#/answerInvitation?eventId=" + eventId + "&email=" + email;
 
 				InternetAddress internetAddress = new InternetAddress(email);
@@ -83,15 +85,22 @@ public class SendEmailController {
 		}
 	}
 
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param id, el id del servicio que se contrato
+	 * @version 1.0
+	 */
 	@RequestMapping(value = "/sendEmailContractNotification/{serviceId}", method = RequestMethod.GET)
 	public void sendEmailContractNotification(@PathVariable("serviceId") int id) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);
-		subject = "Invitacion a un evento";
+		subject = "Solicitud de contratación!";
 		try {
 			Transport transport = session.getTransport("smtp");
-			// To get the array of addresses
 			String email = serviceInterface.getServiceById(id).getUser().getEmail();
+			ServiceContact serviceContact = new ServiceContact();
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			text = "Link x" + id + "&email=" + email;
@@ -102,7 +111,6 @@ public class SendEmailController {
 			transport.connect(host, from, pass);
 			transport.sendMessage(message, message.getAllRecipients());
 			transport.close();
-
 		} catch (AddressException ae) {
 			ae.printStackTrace();
 		} catch (MessagingException me) {
