@@ -46,10 +46,6 @@ public class Event implements Serializable {
 	@OneToMany(fetch=FetchType.LAZY)
 	private List<Auction> auctions;
 
-	//bi-directional many-to-one association to Auction
-	@OneToMany(mappedBy="event")
-	private List<Auction> auctions;
-
 	//bi-directional many-to-one association to Chat
 	@OneToMany(fetch=FetchType.LAZY)
 	private List<Chat> chats;
@@ -172,7 +168,7 @@ public class Event implements Serializable {
 
 		return auction;
 	}
-
+	
 	public List<Chat> getChats() {
 		return this.chats;
 	}

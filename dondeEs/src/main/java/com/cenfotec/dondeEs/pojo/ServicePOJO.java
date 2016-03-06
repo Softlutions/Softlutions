@@ -80,7 +80,6 @@ public class ServicePOJO {
 	public void setServiceCatalog(ServiceCatalogPOJO serviceCatalog) {
 		this.serviceCatalog = serviceCatalog;
 	}
-	
-	
+
 
 }

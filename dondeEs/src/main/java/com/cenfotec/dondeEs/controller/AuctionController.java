@@ -23,3 +23,4 @@ public class AuctionController {
 		response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
 		return response;
 	}
+}
