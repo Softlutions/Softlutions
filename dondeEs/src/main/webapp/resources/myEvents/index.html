@@ -32,10 +32,11 @@
 							<td>{{ event.name }}</td>
 							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
-							<td><span class="label label-danger pull-right">{{
-									event.state || eventState }}</span></td>
-							<td><button type="button" ng-click="listContracts(event.eventId)" class="btn btn-info col-md-9">Listar contratos</button>
+							<td><span class="label label-danger pull-right">{{event.state || eventState }}</span></td>
+							<td>
+								<button type="button" ng-click="listContracts(event.eventId)" data-toggle="modal" data-target="#modalListContacts" class="btn btn-info col-md-9">Listar contratos</button>
 								<button type="button" ng-click="listParticipants(event.eventId)" data-toggle="modal" data-target="#modalParticipants" class="btn btn-success col-md-9">Listar participantes</button>
+								<button type="button" ng-click="auctionEventServices(event)" data-toggle="modal" data-target="#modalAuctionEventServices" class="btn btn-warning col-md-9">Subastar servicios</button>
 							<td/>
 						</tr>
 					</tbody>
@@ -72,10 +73,75 @@
 						</tbody>
 					</table>
 				</div>
+			</div>
+		</div>
+	</div>
+	
+		<div id="modalAuctionEventServices" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Crear subasta para los servicios del evento</h4>
+				</div>
+				<div class="modal-body">
+					
+							<form class="form-horizontal">								
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Nombre</label>
+									<div class="col-lg-10">
+										<input type="text" placeholder="Nombre" class="form-control" id="auctionName"> 
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Descripción</label>
+									<div class="col-lg-10">
+										<textarea rows="5" placeholder="Descripción" class="form-control"id="auctionDescription"></textarea>
+									</div>
+								</div>
+							</form>
+
+				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary" ng-click="createAuction()">Crear subasta</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<div id="modalListContacts" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Contratos del evento</h4>
+				</div>
+				<div class="modal-body">
+					
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Contrato</th>
+									<th>Estado</th>
+									<th>Comentario</th>
+								</tr>
+							</thead>
+							<tbody ng-repeat = "serviceContact in serviceContacts">
+								<tr>
+									<td>{{serviceContact.service.name}}</td>
+									<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+									<td>{{serviceContact.comment}}</td>
+								</tr>
+							</tbody>
+						</table>
+									
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </div>
