@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 
@@ -82,4 +83,24 @@ public class EventController {
 		}
 		return response;
 	}
+	
+	
+	// get event by id
+		@RequestMapping(value="/getEventByEncryptId/{idEvent}", method= RequestMethod.GET)
+		public EventResponse getEventByEncryptId(@PathVariable("idEvent") String id){
+			EventResponse response = new EventResponse();
+			int eventId = Integer.parseInt(AES.base64decode(id));
+			if(eventId != 0){
+				response.setEventPOJO(eventServiceInterface.eventById(eventId));
+				response.getEventPOJO().setPrivate_((byte)1);
+				response.getEventPOJO().setState((byte)1);
+				response.getEventPOJO().setPublishDate(new Date());
+				response.setCode(200);
+			}else{
+				response.setCode(400);
+				response.setCodeMessage("Something is wrong");
+			}
+			return response;
+		}
+	
 }

@@ -89,12 +89,9 @@ public class SendEmailController {
 
 	/**
 	 * @author Alejandro Bermúdez Vargas
-	 * @exception AddressException
-	 *                no se encuentra la direccion de correo
-	 * @exception MessagingException
-	 *                No encuentra el server.
-	 * @param id,
-	 *            el id del servicio que se contrato
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param id, el id del servicio que se contrato
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
@@ -108,7 +105,6 @@ public class SendEmailController {
 
 			Transport transport = session.getTransport("smtp");
 			// Contact service
-
 			ServiceContact serviceContact = serviceContactService.getByServiceServiceIdAndEventEventId(
 					contractNotification.getEvent().getEventId(), contractNotification.getService().getServiceId());
 			// Email del usuario
@@ -116,8 +112,8 @@ public class SendEmailController {
 					.getEmail();
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
-			text = "http://localhost:8080/dondeEs/app#/answerInvitation/" + AES.base64encode(String.valueOf(eventId))
-					+ "/" + AES.base64encode(String.valueOf(serviceId));
+			text = "http://localhost:8080/dondeEs/app#/answerInvitation/?eventId=" + AES.base64encode(String.valueOf(eventId))
+					+ "&serviceId=" + AES.base64encode(String.valueOf(serviceId));
 
 			InternetAddress internetAddress = new InternetAddress(email);
 			message.addRecipient(Message.RecipientType.TO, internetAddress);

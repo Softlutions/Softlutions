@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.Place;
+import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
@@ -18,6 +20,8 @@ public class EventService implements EventServiceInterface {
 	@Autowired
 	private EventRepository eventRepository;
 
+	
+	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -72,22 +76,43 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public EventPOJO eventById(int idEvent) {
 
+		//Event
 		Event event = eventRepository.findOne(idEvent);
 		EventPOJO eventPOJO = new EventPOJO();
-		BeanUtils.copyProperties(event, eventPOJO);	
-		eventPOJO.setEventParticipants(null);
+		eventPOJO.setEventId(event.getEventId());
+		eventPOJO.setDescription(event.getDescription());
+		eventPOJO.setImage(event.getImage());
+		eventPOJO.setLargeDescription(event.getLargeDescription());
+		eventPOJO.setName(event.getName());
+		eventPOJO.setPrivate_(event.getPrivate_());
+		eventPOJO.setPublishDate(event.getPublishDate());
+		eventPOJO.setRegisterDate(event.getRegisterDate());
+		eventPOJO.setState(event.getState());
+		
 		if(event.getPlace() != null){
+			Place place = event.getPlace();
 			PlacePOJO placePOJO = new PlacePOJO();
-			BeanUtils.copyProperties(event.getPlace(), placePOJO);
+			placePOJO.setPlaceId(place.getPlaceId());
+			placePOJO.setLatitude(place.getLatitude());
+			placePOJO.setLongitude(place.getLongitude());
+			placePOJO.setName(place.getName());
 			eventPOJO.setPlace(placePOJO);
 		}
 		if(event.getUser() != null){
+			User user  = event.getUser();
 			UserPOJO userPOJO = new UserPOJO();
-			BeanUtils.copyProperties(event.getUser(), userPOJO);
-			userPOJO.setEventParticipants(null);
+			userPOJO.setUserId(user.getUserId());
+			userPOJO.setEmail(user.getEmail());
+			userPOJO.setImage(user.getImage());
+			userPOJO.setLastName1(user.getLastName1());
+			userPOJO.setLastName2(user.getLastName2());
+			userPOJO.setName(user.getName());
+			userPOJO.setPassword(user.getPassword());
+			userPOJO.setPhone(user.getPhone());
+			if(user.getState()==1) userPOJO.setState(true);
+			if(user.getState()==0) userPOJO.setState(false);
 			eventPOJO.setUser(userPOJO);
 		}
-		
 		return eventPOJO;
 	}
 }

@@ -10,13 +10,20 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 } ])
 
 .controller('answerContractCtrl', [ '$scope', '$http','$location', function($scope, $http, $location) {
-	angular.element(document).ready(function(){
-		
-	});
+	$scope.getEventById = function(){
+		$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+			$scope.event = response.eventPOJO;
+		});
+	}
 	
-	$http.get('rest/protected/event/getEventById/'+ $location.search().eventId).success(function(response) {
-		$scope.event = response.eventPOJO;
-		$scope.nameProvaider = $scope.event.user.name + " "+ $scope.event.user.lastName1 + " "+ $scope.event.user.lastName2;
-		console.log("Provaider" + $scope.nameProvaider);
-	});
+	$scope.accept = function(event){
+		var dataCreate = {
+				eventId : $location.search().eventId,
+				serviceId : $location.search().serviceId,
+				state : 1
+		};
+		$http({method: 'POST',url:'rest/protected/sendEmail/answerContract', data:dataCreate}).success(function(response) {
+			console.log(response);
+		});
+	}
 } ]);

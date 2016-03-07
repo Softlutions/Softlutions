@@ -15,10 +15,9 @@ angular
 						function($scope, $http, $location) {
 
 							$scope.geteventById = function(){
-								$http.get('rest/protected/event/getEventById/'+ $location.search().eventId).success(function(response) {
+								$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 									$scope.event = response.eventPOJO;
 									$scope.nameProvaider = $scope.event.user.name + " "+ $scope.event.user.lastName1 + " "+ $scope.event.user.lastName2;
-									console.log("Provaider" + $scope.nameProvaider);
 								});
 								
 							}
