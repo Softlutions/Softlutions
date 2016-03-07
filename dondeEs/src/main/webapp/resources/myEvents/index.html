@@ -41,6 +41,12 @@
 								class="btn btn-info btn-xs" data-toggle="modal" ng-click="publishEvent(event.eventId)">
 									Publicar</a>
 									</td>
+							<td><span class="label label-danger pull-right">{{
+									event.state || eventState }}</span></td>
+							<td><button data-toggle="modal"
+								class="btn btn-primary btn-xs pull-right" data-toggle="modal"
+								data-target="#modal-formSendInvitation" ng-click="geteventById(event.eventId)">Enviar
+									invitacion</button></td>
 						</tr>
 					</tbody>
 

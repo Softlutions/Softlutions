@@ -36,11 +36,16 @@ public class ServiceContactController {
 		}
 		return response;
 	}
-	
 	@RequestMapping(value ="/answerContract", method = RequestMethod.POST)
 	public ServiceContactResponse answerContract(@RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();
 		Boolean state = serviceContactInterface.saveServiceContact(serviceContact);
+
+	@RequestMapping(value ="/cancelServiceContact/{contractID}", method = RequestMethod.POST)
+	public ServiceContactResponse cancelServiceContact(@PathVariable("contractID") int contractID, @RequestBody ServiceContact serviceContact){
+		ServiceContactResponse response = new ServiceContactResponse();
+		
+		Boolean state = serviceContactInterface.cancelServiceContact(contractID, serviceContact);
 		if(state){
 			response.setCode(200);
 			response.setCodeMessage("Succesfull");
@@ -48,6 +53,7 @@ public class ServiceContactController {
 			response.setCode(500);
 			response.setCodeMessage("Internal error");
 		}
+		
 		return response;
 	}
 }

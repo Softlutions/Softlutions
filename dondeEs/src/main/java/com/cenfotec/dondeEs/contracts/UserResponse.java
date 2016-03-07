@@ -2,7 +2,6 @@ package com.cenfotec.dondeEs.contracts;
 
 import java.util.List;
 
-import com.cenfotec.dondeEs.ejb.Service;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 

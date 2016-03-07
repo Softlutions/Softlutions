@@ -15,13 +15,12 @@ angular.module('dondeEs.users', [ 'ngRoute' ]).config(
 					$scope.users = [];
 
 					// #region list Users
-					/*
-					 * $http.get("rest/protected/users/getAll")
-					 * .success(function(response){ if(response.code == 200){
-					 * $scope.users = response.listUser; }else{ console.log("no
-					 * data"); } }) .error(function(response){
-					 * console.log("error" + response.message); });
-					 */
+					
+					$http.get("rest/protected/users/getAll")
+					.success(function(response){ if(response.code == 200){
+						$scope.users = response.listUser; }else{ console.log("no data"); } }) .error(function(response){
+					console.log("error" + response.message); });
+					 
 					// #endregion list Users
 					// #region create users
 					$scope.saveUser = function(user) {

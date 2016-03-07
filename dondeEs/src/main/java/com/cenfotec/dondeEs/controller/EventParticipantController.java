@@ -1,6 +1,8 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.QueryParam;
 
@@ -12,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
-
+import com.cenfotec.dondeEs.ejb.Comment;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.OfflineUser;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.services.CommentServiceInterface;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
 
-import scala.unchecked;
 
 @RestController
 @RequestMapping(value = "rest/protected/eventParticipant")
@@ -29,6 +31,8 @@ public class EventParticipantController {
 	private EventParticipantServiceInterface eventParticipantServiceInterface;
 	@Autowired
 	private UserServiceInterface userserviceInterface;
+	@Autowired
+	private CommentServiceInterface commentServiceInterface;
 	@RequestMapping(value = "/getAllEventParticipantByEvent/{id}", method = RequestMethod.GET)
 	public EventParticipantResponse getAllEventParticipantByEvent(@PathVariable("id") int id) {
 		EventParticipantResponse response = new EventParticipantResponse();
@@ -37,7 +41,7 @@ public class EventParticipantController {
 	}
 
 	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.POST)
-	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("email") String email )
+	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("email") String email, @QueryParam("comment") String comment)
 			throws ParseException {
 
 		EventParticipantResponse response = new EventParticipantResponse();
@@ -55,6 +59,16 @@ public class EventParticipantController {
 			OfflineUser offlineUser = new OfflineUser();
 			offlineUser.setEmail(email);
 			eventParticipant.setOfflineUser(offlineUser);
+		}
+		
+		Comment ncomment = new Comment();
+		ncomment.setContent(comment);
+		ncomment.setDate(new Date());
+		ncomment.setEventParticipant(eventParticipant);
+		
+		Boolean stateComment = commentServiceInterface.saveComment(ncomment);
+		if(stateComment){
+			response.setCode(200);
 		}
 
 		Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);

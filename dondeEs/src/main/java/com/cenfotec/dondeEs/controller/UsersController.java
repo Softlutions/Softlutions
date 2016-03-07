@@ -1,7 +1,5 @@
 package com.cenfotec.dondeEs.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.contracts.UserResponse;
-import com.cenfotec.dondeEs.ejb.User;
-import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 @RestController
@@ -19,10 +15,12 @@ import com.cenfotec.dondeEs.services.UserServiceInterface;
 public class UsersController {
 	
 	@Autowired private UserServiceInterface userServiceInterface;
-	@Autowired private HttpServletRequest request;
 	
-	
-	//	get all
+	/**
+	 * @author Ernesto Méndez A.
+	 * @return Lista de usuarios y servicios
+	 * @version 1.0
+	 */
 	@RequestMapping(value ="/getAll", method = RequestMethod.GET)
 	public UserResponse getAll(){	
 		UserResponse response = new UserResponse();
