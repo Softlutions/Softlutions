@@ -11,7 +11,7 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 
 .controller('answerContractCtrl', [ '$scope', '$http','$location', function($scope, $http, $location) {
 	angular.element(document).ready(function(){
-		$('#modal-form').modal('show');
+		
 	});
 	
 	$http.get('rest/protected/event/getEventById/'+ $location.search().eventId).success(function(response) {

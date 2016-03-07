@@ -25,7 +25,7 @@ angular.module('loginModule', ['ngRoute'])
 							"role" : response.role
 						};
 						localStorage.setItem("loggedUser", JSON.stringify(responseUser));
-						window.location.href = "/dondeEs/app#/index";
+						window.location.href = "/dondeEs/app#/users";
 					}else{
 						$("#errorMsj").css("visibility", "visible");
 					}
