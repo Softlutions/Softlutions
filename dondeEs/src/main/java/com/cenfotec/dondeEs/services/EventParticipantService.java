@@ -52,11 +52,6 @@ public class EventParticipantService implements EventParticipantServiceInterface
 		return listPojo;
 	}
 
-
-
-	@Autowired
-	private EventParticipantRepository eventParticipantRepository;
-
 	@Override
 	@Transactional
 	public Boolean saveParticipant(EventParticipant peventParticipant) {

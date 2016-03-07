@@ -49,8 +49,6 @@ public class AuctionController {
 		return response;
 	}
 
-}
-
 	
 	@RequestMapping(value ="/getAllAuctionByEvent/{id}", method = RequestMethod.GET)
 	public AuctionResponse getAllAuctionByEvent(@PathVariable("id") int id){				

@@ -32,7 +32,6 @@ public class AuctionService implements AuctionServiceInterface{
 		Auction serviceContact =  auctionRepository.save(auction);
 	 	return (serviceContact == null) ? false : true;
 	}
-}
 
 	/***
 	 * Obtiene todas las subastas de un evento.
@@ -68,7 +67,6 @@ public class AuctionService implements AuctionServiceInterface{
 				
 				auctionPOJO.setAuctionServices(auctionServicesPOJO);
 			} 			
-			auctionPOJO.setEvent(null);
 			auctionsPOJO.add(auctionPOJO); 
 		});
 		

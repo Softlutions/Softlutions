@@ -54,7 +54,8 @@ public class ServiceContactController {
 	public ServiceContactResponse answerContract(@RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();
 		Boolean state = serviceContactInterface.saveServiceContact(serviceContact);
-
+		return response;
+	}
 	@RequestMapping(value ="/cancelServiceContact/{contractID}", method = RequestMethod.POST)
 	public ServiceContactResponse cancelServiceContact(@PathVariable("contractID") int contractID, @RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();

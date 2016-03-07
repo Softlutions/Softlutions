@@ -42,12 +42,11 @@ public class EventParticipantController {
 		response.setEventParticipantsList(eventParticipantServiceInterface.getAllEventParticipants(idEvent));
 		return response;
 	}
-}
 
-	@Autowired
-	private UserServiceInterface userserviceInterface;
-	@Autowired
-	private CommentServiceInterface commentServiceInterface;
+
+	@Autowired private UserServiceInterface userserviceInterface;
+	@Autowired private CommentServiceInterface commentServiceInterface;
+	
 	@RequestMapping(value = "/getAllEventParticipantByEvent/{id}", method = RequestMethod.GET)
 	public EventParticipantResponse getAllEventParticipantByEvent(@PathVariable("id") int id) {
 		EventParticipantResponse response = new EventParticipantResponse();
