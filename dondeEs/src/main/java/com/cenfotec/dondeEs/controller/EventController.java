@@ -1,7 +1,6 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +33,10 @@ public class EventController {
 	}
 	
 	/***
+	 * Obtiene todos los eventos que han sido publicados.
 	 * @author Enmanuel García González
 	 * @return
+	 * @version 1.0
 	 */
 	@RequestMapping(value ="/getAllEventPublish", method = RequestMethod.GET)
 	public EventResponse getAll(){				
@@ -47,9 +48,11 @@ public class EventController {
 	}
 	
 	/***
+	 * Publica un determinado evento.
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
+	 * @version 1.0
 	 */
 	@RequestMapping(value ="/publishEvent", method = RequestMethod.PUT)
 	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
@@ -95,21 +98,19 @@ public class EventController {
 	}
 	
 	/***
+	 * Cancela un evento que ha sido previamente publicado.
 	 * @author Enmanuel García González	
 	 * @param eventRequest
 	 * @return
+	 * @version 1.0
 	 */
 	@Transactional
-	@RequestMapping(value ="/cancelEvent", method = RequestMethod.GET)
-	public EventResponse cancelEvent() { // @RequestBody EventPOJO eventRequest
+	@RequestMapping(value ="/cancelEvent", method = RequestMethod.PUT)
+	public EventResponse cancelEvent(@RequestBody EventPOJO eventRequest) { 
 		EventResponse response = new EventResponse();	
 		boolean state;
 		
-		UserService us = new UserService();
-		
-		List<UserPOJO> servicesProviders = us.getAllServicesProviderAuction(1);
-		
-	/*	if(eventRequest.getEventId() != 0){		
+		if(eventRequest.getEventId() != 0){		
 			try{
 				Event event =  eventServiceInterface.getEventById(eventRequest.getEventId());
 				event.setState((byte) 0);
@@ -131,7 +132,22 @@ public class EventController {
 		} else {
 			response.setCode(409);
 			response.setErrorMessage("eventId is zero");
-		} */
+		} 
 		return response;
 	} 
+
+	// PRUEBA DEL PROBLEMA CON LA INTERFACE 
+	/*
+	@Transactional
+	@RequestMapping(value ="/cancelEvent", method = RequestMethod.GET)
+	public EventResponse cancelEvent() { 
+		EventResponse response = new EventResponse();	
+		boolean state;
+		
+		UserService us = new UserService();
+		
+		List<UserPOJO> servicesProviders = us.getAllServicesProviderAuction(1);
+		
+		return response;
+	} */
 }

@@ -35,7 +35,9 @@ public class EventService implements EventServiceInterface {
 	}
 	
 	/***
+	 * Obtiene todo los eventos publicados.
 	 * @author Enmanuel García González
+	 * @version 1.0
 	 */
 	@Override
 	public List<EventPOJO> getAllEventPublish() {			
@@ -73,7 +75,9 @@ public class EventService implements EventServiceInterface {
 	}
 	
 	/***
+	 * Guarda un evento.
 	 * @author Enmanuel García González
+	 * @version 1.0
 	 */
 	@Override
 	public Boolean saveEvent(Event _event) {

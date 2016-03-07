@@ -3,19 +3,18 @@
 angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/auctionsEvent', {
+  $routeProvider.when('/auctionsEvent/:id', {
     templateUrl: 'resources/auctionsEvent.html',
     controller: 'auctionsEventCtrl'
   });
 }])
 
-.controller('auctionsEventCtrl', ['$scope','$http','$location', function($scope,$http,$location) {	
+.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', 
+                                  			function($scope,$http,$location,$routeParams) {	
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
-
-	var eventId = 1; // dato quedamado de prueba
 		
-	$http.get('rest/protected/auction/getAllAuctionByEvent/'+eventId).success(function(response) {
+	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$routeParams.id).success(function(response) {
 		$scope.auctionsEvent = response.auctionList;
 	});
 	
