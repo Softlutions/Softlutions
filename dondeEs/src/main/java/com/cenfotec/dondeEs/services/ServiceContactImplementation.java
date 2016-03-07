@@ -62,4 +62,19 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 	 	return (serviceContact == null) ? false : true;
 	}
 
+	@Override
+	public Boolean cancelServiceContact(int contractID, ServiceContact service) {
+		ServiceContact serviceContact = null;
+		
+		if(contractID == service.getServiceContractId()){
+			serviceContact = contactRepository.findOne(service.getServiceContractId());
+			
+			if(serviceContact != null){
+				serviceContact.setState((byte) 2);
+				contactRepository.save(serviceContact);
+			}
+		}
+		
+	 	return (serviceContact == null) ? false : true;
+	}
 }

@@ -62,7 +62,7 @@ public class AuctionPOJO {
 
 	public AuctionServicePOJO addAuctionService(AuctionServicePOJO auctionService) {
 		getAuctionServices().add(auctionService);
-		auctionService.setAuction(this);
+		auctionService.setAuction(null);
 
 		return auctionService;
 	}
@@ -73,5 +73,4 @@ public class AuctionPOJO {
 
 		return auctionService;
 	}
-
 }

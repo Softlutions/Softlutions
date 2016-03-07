@@ -5,7 +5,7 @@ import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public class AuctionServicePOJO {
-	
+
 	private int auctionServicesId;
 
 	private byte acept;

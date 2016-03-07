@@ -1,5 +1,6 @@
 package com.cenfotec.dondeEs.services;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -10,10 +11,19 @@ import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cenfotec.dondeEs.ejb.EventParticipant;
+
 import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 
 @Service
 public class EventParticipantService implements EventParticipantServiceInterface {
+
 	
 	@Autowired private EventParticipantRepository eventParticipantRepository;
 	
@@ -42,5 +52,16 @@ public class EventParticipantService implements EventParticipantServiceInterface
 		return listPojo;
 	}
 
+
+
+	@Autowired
+	private EventParticipantRepository eventParticipantRepository;
+
+	@Override
+	@Transactional
+	public Boolean saveParticipant(EventParticipant peventParticipant) {
+		EventParticipant eventParticipant = eventParticipantRepository.save(peventParticipant);
+		return (eventParticipant == null) ? false : true;
+	}
 
 }

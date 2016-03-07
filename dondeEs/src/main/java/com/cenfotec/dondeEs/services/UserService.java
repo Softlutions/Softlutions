@@ -7,23 +7,24 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.contracts.UserRequest;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.UserTypePOJO;
+import com.cenfotec.dondeEs.repositories.AuctionRepository;
 import com.cenfotec.dondeEs.repositories.RoleRepository;
 import com.cenfotec.dondeEs.repositories.UserRepository;
 
-@org.springframework.stereotype.Service
+@Service
 public class UserService implements UserServiceInterface {
 	@Autowired private UserRepository userRepository;
 	@Autowired private RoleRepository roleRepository;
-	
+	@Autowired private AuctionRepository auctionRepository;
 
 	public List<UserPOJO> getAll(){
 		List<User> usersList = userRepository.findAll();
@@ -76,7 +77,7 @@ public class UserService implements UserServiceInterface {
 			if(ta.getServiceCatalog() != null){
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
-				catalogPOJO.setServiceCatalogId(catalogPOJO.getServiceCatalogId());
+				servicePOJO.setServiceCatalog(catalogPOJO);
 			}
 				listPojo.add(servicePOJO);
 				
@@ -87,6 +88,8 @@ public class UserService implements UserServiceInterface {
 		return listPojo;
 	}
 	
+	
+	
 	public Boolean saveUser(UserRequest ur) {
 		User user = new User();
 		BeanUtils.copyProperties(ur.getUser(), user);
@@ -94,4 +97,41 @@ public class UserService implements UserServiceInterface {
 		User nuser = userRepository.save(user);
 		return (nuser == null) ? false : true;
 	}
+
+	@Override
+	@Transactional
+	public User findByEmail(String email) {
+		User user = userRepository.findByEmail(email);
+		
+		return user;
+	}
+	
+	/***
+	 * Obtiene el usuario de cada servicio ofertado en todas las subastas de un 
+	 * determinado evento.
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
+	@Override
+	@Transactional
+	public List<UserPOJO> getAllServicesProviderAuction(int idEvent) {
+		List<UserPOJO> usersPOJO = new ArrayList<UserPOJO>();
+		
+		System.out.println(auctionRepository); // prueba
+		
+		// dato de prueba en el parámetro.
+		List<Auction> auctions = auctionRepository.findAllByEventEventId(1);	
+		
+		auctions.stream().forEach(e -> {		
+			if (e.getAuctionServices() != null) {				
+				e.getAuctionServices().stream().forEach(as -> {				
+					UserPOJO userPOJO = new UserPOJO();
+					BeanUtils.copyProperties(as.getService().getUser(), userPOJO);
+					usersPOJO.add(userPOJO);					
+				});
+			} 			
+		});
+		
+		return usersPOJO;
+	}	
 }

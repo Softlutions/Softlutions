@@ -1042,6 +1042,7 @@ button.dim:active:before {
   font-weight: 600;
   padding: 3px 8px;
   text-shadow: none;
+  margin-left:5px;
 }
 .badge {
   background-color: #d1dade;
@@ -8225,3 +8226,13 @@ body.md-skin {
     margin: 0;
   }
 }
+
+/*MIs eventos*/
+
+#emailLabels{
+	margin: 20px 0px  0px 0px;
+}
+
+
+
+

@@ -11,10 +11,11 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 
 .controller('eventsPublishCtrl', ['$scope','$http',function($scope,$http,$upload) {	
 	$scope.eventsPublish = [];
-	$scope.requestObject = {"pageNumber": 0,"pageSize": 0,"direction": "","sortBy": [""],"searchColumn": "string","searchTerm": "","eventsPublish": {}};
+	$scope.requestObject = {"eventsPublish": {}};
 	
 	$http.get('rest/protected/event/getAllEventPublish',$scope.requestObject).success(function(response) {
 		$scope.eventsPublish = response.eventList;
+		console.log($scope.eventsPublish);
 		for (var i=0; i<$scope.eventsPublish.length; i++) {
 			$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 			
@@ -43,5 +44,9 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
 			console.log("$scope.eventsPublish: ",response);		
 		})
+	}
+	
+	$scope.goToEventPromoterProfile = function (eventPromoterId) {
+		//	$location.url('/login');  colocar ruta del perfil del promotor. 
 	}
 }]);
