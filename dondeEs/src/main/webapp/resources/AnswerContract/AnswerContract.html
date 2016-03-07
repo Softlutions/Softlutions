@@ -1,0 +1,52 @@
+<div class="Container">
+	<div class="modal-dialog" ng-init="getEventById()">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12 b-r">
+						<h3 class="m-t-none m-b">Evento</h3>
+						<form role="form" ng-init="service">
+							<div class="form-group">
+
+								<label class="font-noraml"><strong>Nombre</strong></label> <input
+									type="text" id="name" class="form-control" placeholder="Nombre"
+									ng-model="event.name" readonly />
+
+							</div>
+							<div class="form-group">
+								<label class="font-noraml"><strong>Descripción</strong></label>
+								<input type="text" id="desciption" class="form-control"
+									placeholder="Descripcion" ng-model="event.description" readonly />
+							</div>
+							<div class="form-group">
+								<label class="font-noraml"><strong>Lugar</strong></label> <input
+									type="text" id="desciption" class="form-control"
+									placeholder="Lugar" ng-model="event.place.name" readonly />
+							</div>
+							<div class="form-group">
+								<label class="font-noraml"><strong>Promotor</strong></label> <input
+									type="text" id="desciption" class="form-control"
+									ng-value="event.user.name +' '+ event.user.lastName1 + ' ' + event.user.lastName2"
+									readonly />
+							</div>
+							<div class="form-group">
+								<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+									type="submit" ng-click="accept(event)">
+									<strong>Aceptar</strong>
+								</button>
+
+							</div>
+
+							<div class="form-group">
+								<button type="button"
+									class="btn btn-sm btn-danger pull-right m-t-n-xs"
+									data-dismiss="modal">No aceptar</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

@@ -61,6 +61,11 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		ServiceContact serviceContact =  contactRepository.save(service);
 	 	return (serviceContact == null) ? false : true;
 	}
+	
+	@Override
+	public ServiceContact getByServiceServiceIdAndEventEventId(int eventId, int serviceId) {
+		return contactRepository.getByServiceServiceIdAndEventEventId(eventId, serviceId);
+	}
 
 	@Override
 	public Boolean cancelServiceContact(int contractID, ServiceContact service) {

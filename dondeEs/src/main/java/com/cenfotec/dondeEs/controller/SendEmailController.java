@@ -1,17 +1,8 @@
 package com.cenfotec.dondeEs.controller;
 
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,17 +59,27 @@ public class SendEmailController {
 	 * @param id, el id del servicio que se contrato
 	 * @version 1.0
 	 */
-	@RequestMapping(value = "/sendEmailContractNotification/{serviceId}", method = RequestMethod.GET)
-	public void sendEmailContractNotification(@PathVariable("serviceId") int id) {
+	/*@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
+	public void sendEmailContractNotification(@RequestBody ContractNotification contractNotification) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);
 		subject = "Solicitud de contratación!";
 		try {
+			int eventId = contractNotification.getEvent().getEventId();
+			int serviceId = contractNotification.getService().getServiceId();
+
 			Transport transport = session.getTransport("smtp");
-			String email = serviceInterface.getServiceById(id).getUser().getEmail();
+			// Contact service
+			ServiceContact serviceContact = serviceContactService.getByServiceServiceIdAndEventEventId(
+					contractNotification.getEvent().getEventId(), contractNotification.getService().getServiceId());
+			// Email del usuario
+			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
+					.getEmail();
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
-			text = "Link x" + id + "&email=" + email;
+			text = "http://localhost:8080/dondeEs/app#/answerInvitation/?eventId=" + AES.base64encode(String.valueOf(eventId))
+					+ "&serviceId=" + AES.base64encode(String.valueOf(serviceId));
+
 			InternetAddress internetAddress = new InternetAddress(email);
 			message.addRecipient(Message.RecipientType.TO, internetAddress);
 			message.setSubject(subject);
@@ -96,8 +97,7 @@ public class SendEmailController {
 	/***
 	 * @author Enmanuel García González
 	 * @param id
-	 */
-	@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
+	 /*@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
 	public void sendEmailCancelEventNotification(@PathVariable("serviceId") int id) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);
@@ -120,6 +120,6 @@ public class SendEmailController {
 		} catch (MessagingException me) {
 			me.printStackTrace();
 		}
-	}
+	}*/
 
 }
