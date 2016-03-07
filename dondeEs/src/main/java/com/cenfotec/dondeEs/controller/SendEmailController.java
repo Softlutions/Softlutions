@@ -1,4 +1,5 @@
 package com.cenfotec.dondeEs.controller;
+
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,13 +92,12 @@ public class SendEmailController {
 		} catch (MessagingException me) {
 			me.printStackTrace();
 		}
-	}*/
+	}
 	
 	/***
 	 * @author Enmanuel García González
 	 * @param id
-	 */
-	/*@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
+	 /*@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
 	public void sendEmailCancelEventNotification(@PathVariable("serviceId") int id) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);

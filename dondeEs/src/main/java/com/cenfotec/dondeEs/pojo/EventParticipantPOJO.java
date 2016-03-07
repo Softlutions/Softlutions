@@ -12,7 +12,7 @@ import org.apache.tools.ant.types.resources.BaseResourceCollectionContainer;
  * 
  */
 
-public class EventParticipantPOJO extends Base{
+public class EventParticipantPOJO{
 	private int eventParticipantId;
 
 	private Date invitationDate;
