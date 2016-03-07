@@ -43,8 +43,6 @@ public class EventParticipantController {
 		return response;
 	}
 
-
-	@Autowired private UserServiceInterface userserviceInterface;
 	@Autowired private CommentServiceInterface commentServiceInterface;
 	
 	@RequestMapping(value = "/getAllEventParticipantByEvent/{id}", method = RequestMethod.GET)
@@ -54,26 +52,15 @@ public class EventParticipantController {
 		return response;
 	}
 
-	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.POST)
-	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("email") String email, @QueryParam("comment") String comment)
+	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.PUT)
+	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("comment") String comment)
 			throws ParseException {
 
 		EventParticipantResponse response = new EventParticipantResponse();
 
-		EventParticipant eventParticipant = new EventParticipant();
-		eventParticipant.setEvent(new Event());
-		eventParticipant.getEvent().setEventId(id);
-		eventParticipant.setState(state);
-//		eventParticipant.getOfflineUser().setEmail(email);
-		User user = userserviceInterface.findByEmail(email);
+		EventParticipant eventParticipant = eventParticipantServiceInterface.findById(id);
 		
-		if(user != null){
-			eventParticipant.setUser(user);
-		}else{
-			OfflineUser offlineUser = new OfflineUser();
-			offlineUser.setEmail(email);
-			eventParticipant.setOfflineUser(offlineUser);
-		}
+		eventParticipant.setState(state);
 		
 		Comment ncomment = new Comment();
 		ncomment.setContent(comment);
@@ -84,7 +71,6 @@ public class EventParticipantController {
 		if(stateComment){
 			response.setCode(200);
 		}
-
 		Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
 
 		if (stateResponse) {

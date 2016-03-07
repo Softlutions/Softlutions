@@ -9,5 +9,8 @@ public interface EventParticipantServiceInterface {
 	List<EventParticipantPOJO> getAllEventParticipants(int idEvent);
 
 	Boolean saveParticipant(EventParticipant eventParticipant);
+	
+	EventParticipant findById(int id);
+
 
 }

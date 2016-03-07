@@ -58,5 +58,11 @@ public class EventParticipantService implements EventParticipantServiceInterface
 		EventParticipant eventParticipant = eventParticipantRepository.save(peventParticipant);
 		return (eventParticipant == null) ? false : true;
 	}
+	
+	@Override
+	public EventParticipant findById(int id) {
+		EventParticipant eventParticipant = eventParticipantRepository.findOne(id);
+		return eventParticipant;
+	}
 
 }

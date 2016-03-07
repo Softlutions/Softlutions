@@ -78,8 +78,10 @@ public class UserService implements UserServiceInterface {
 			if(ta.getServiceCatalog() != null){
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
+				
 				servicePOJO.setServiceCatalog(catalogPOJO);
 			}
+			servicePOJO.setServiceContacts(null);
 				listPojo.add(servicePOJO);
 				
 				

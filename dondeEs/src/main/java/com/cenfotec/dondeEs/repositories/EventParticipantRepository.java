@@ -11,4 +11,6 @@ public interface EventParticipantRepository extends CrudRepository<EventParticip
 
 	@Query("SELECT ep FROM EventParticipant ep JOIN ep.event e WHERE e.eventId = ?1")
 	List<EventParticipant> findEventParticipantByEventId(int EventId);
+	
+	EventParticipant findByEventParticipantId(int id);
 }
