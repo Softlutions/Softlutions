@@ -1,17 +1,7 @@
 package com.cenfotec.dondeEs.controller;
-
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +58,7 @@ public class SendEmailController {
 	 * @param id, el id del servicio que se contrato
 	 * @version 1.0
 	 */
-	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
 	public void sendEmailContractNotification(@RequestBody ContractNotification contractNotification) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);
@@ -101,13 +91,13 @@ public class SendEmailController {
 		} catch (MessagingException me) {
 			me.printStackTrace();
 		}
-	}
+	}*/
 	
 	/***
 	 * @author Enmanuel García González
 	 * @param id
 	 */
-	@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/sendEmailCancelEventNotification/{serviceId}", method = RequestMethod.GET)
 	public void sendEmailCancelEventNotification(@PathVariable("serviceId") int id) {
 		generalEmail();
 		Session session = Session.getDefaultInstance(props);
@@ -130,6 +120,6 @@ public class SendEmailController {
 		} catch (MessagingException me) {
 			me.printStackTrace();
 		}
-	}
+	}*/
 
 }

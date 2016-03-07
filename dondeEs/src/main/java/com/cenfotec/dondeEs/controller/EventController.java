@@ -1,3 +1,20 @@
+package com.cenfotec.dondeEs.controller;
+
+import java.util.Date;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cenfotec.dondeEs.contracts.EventResponse;
+import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.logic.AES;
+import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 import com.cenfotec.dondeEs.services.UserService;

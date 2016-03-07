@@ -4,7 +4,7 @@ import java.util.List;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 
-public class EventParticipantResponse {
+public class EventParticipantResponse extends BaseResponse{
 	
 	public List<EventParticipantPOJO> eventParticipantsList;
 

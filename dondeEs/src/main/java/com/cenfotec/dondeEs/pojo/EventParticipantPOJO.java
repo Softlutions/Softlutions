@@ -4,13 +4,15 @@ package com.cenfotec.dondeEs.pojo;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.tools.ant.types.resources.BaseResourceCollectionContainer;
+
 
 /**
  * The persistent class for the event_participant database table.
  * 
  */
 
-public class EventParticipantPOJO {
+public class EventParticipantPOJO extends Base{
 	private int eventParticipantId;
 
 	private Date invitationDate;
