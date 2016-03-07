@@ -1,17 +1,6 @@
 <div class="container">
-	<form role="form" class="form-inline">
-		<div class="form-group">
-			<label class="control-label">Seleccionar evento: </label>
-			<select class="form-control m-b" id="eventSelect">
-			    <option value="1">Evento 1</option>
-			    <option value="2">Evento 2</option>
-			</select>
-		</div>
-		<button class="btn btn-sm btn-primary" ng-click="listContracts()"><strong>Seleccionar</strong></button>
-		<p class="hidden" id="errorMessage"> El evento no tiene contratos.</p>
-	</form>
 	     
-	<div class="table-responsive hidden" id="contractTable">
+	<div class="table-responsive" id="contractTable">
 		<div class="ibox-title">
 	             <h4>Mis contratos</h4>
 	       </div>
@@ -27,17 +16,24 @@
 				</thead>
 				<tbody ng-repeat = "serviceContact in serviceContacts">
 					<tr>
-						<td class="hidden">{{serviceContact.serviceContactId}}</td>
+						<td class="hidden">{{serviceContact.serviceContractId}}</td>
 						<td>{{serviceContact.service.name}}</td>
-						<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+						<td>{{(serviceContact.state == 0? "Pendiente":(serviceContact.state == 1? "Concretado":"Cancelado"))}}</td>
 						<td>{{serviceContact.comment}}</td>
+						
+						<td ng-if="serviceContact.state != 2">
+							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
+						</td>
+						<td ng-if="serviceContact.state == 2">
+							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	
-	<button type="button" class="btn btn-info" data-toggle="modal" ng-click="serviceInfo()" data-target="#myModal">Open Modal</button>
+	<button type="button" class="btn btn-info" data-toggle="modal" ng-click="serviceInfo()" data-target="#myModal">Contratar Servicio</button>
 	
 	<div id="myModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
@@ -54,10 +50,27 @@
 					<textarea class="form-control" rows="5" id="comment"></textarea>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" ng-click="contractService()">Contratar</button>
+					
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" ng-click="contractService()">Contratar</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<!-- Graph morris donut chart -->
+	<div class="col-lg-6">
+	    <div class="ibox float-e-margins">
+	        <div class="ibox-title">
+	            <h5>Resumen</h5>
+	        </div>
+	        <div class="ibox-content">
+	            <div id="contracts-state-chart" class="hidden"></div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Morris -->
+    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="resources/js/plugins/morris/morris.js"></script>
 </div>

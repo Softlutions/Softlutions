@@ -129,5 +129,6 @@
 	<script src="resources/js/AnswerInvitation/answerInvitation.js"></script>
 	<script src="resources/js/AnswerContract/AnswerContractController.js"></script>
 	<script src="resources/js/Commons/Filters.js"></script>
+	<script src="resources/js/Auction/auctionController.js"></script>
 </body>
 </html>

@@ -42,18 +42,33 @@ public class EventService implements EventServiceInterface {
 		return eventsPOJO;
 	}
 	
+	/***
+	 * Obtiene todo los eventos publicados.
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	@Override
-	public List<EventPOJO> getAllEventPublish() {	
-//		List<EventPOJO> events = eventRepository.findAllByState((byte) 1);
-		
+	public List<EventPOJO> getAllEventPublish() {			
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
 		eventRepository.findAllByState((byte) 1).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
 			BeanUtils.copyProperties(e, eventPOJO);
+			eventPOJO.setChats(null);
+			eventPOJO.setEventParticipants(null);
+			eventPOJO.setNotes(null);
+			eventPOJO.setServiceContacts(null);
 			BeanUtils.copyProperties(e.getPlace(), placePOJO);
 			BeanUtils.copyProperties(e.getUser(), userPOJO);
+			userPOJO.setEventParticipants(null);
+			userPOJO.setChats(null);
+			userPOJO.setMessages(null);
+			userPOJO.setPasswordHistories(null);
+			userPOJO.setTermConditions(null);
+			userPOJO.setUsers1(null);
+			userPOJO.setUsers2(null);
+			userPOJO.setUserType(null);
 			eventPOJO.setPlace(placePOJO);
 			eventPOJO.setUser(userPOJO);
 			eventsPOJO.add(eventPOJO);
@@ -66,7 +81,12 @@ public class EventService implements EventServiceInterface {
 	public Event getEventById(int idEvent) {
 		return eventRepository.findByEventId(idEvent);
 	}
-
+	
+	/***
+	 * Guarda un evento.
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	@Override
 	public Boolean saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);

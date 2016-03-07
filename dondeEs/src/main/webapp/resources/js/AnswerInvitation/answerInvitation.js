@@ -13,7 +13,7 @@ angular
 						'$scope',
 						'$http','$location',
 						function($scope, $http, $location) {
-
+							$scope.comment;
 							$scope.geteventById = function(){
 								$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 									$scope.event = response.eventPOJO;
@@ -34,15 +34,15 @@ angular
 								 
 								var dataCreate={
 										state: $scope.event.state,
-										email: $scope.userEmail
+										email: $scope.userEmail,
+										comment: $scope.comment
 								}
-								if(document.getElementById('inlineCheckbox1').checked){
-									console.log("entro");
+								if(document.getElementById('inlineCheckbox1').checked || document.getElementById('inlineCheckbox2').checked){
+								
 									$("#modal-form").modal('hide');
 									$http({method: 'POST',url:'rest/protected/eventParticipant/createEventParticipant/'+$location.search().eventId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 									});
 								}else{
-									console.log("NO entro");
 								}
 							}
 	}])

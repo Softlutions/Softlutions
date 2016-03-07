@@ -12,7 +12,6 @@ public interface ServiceContactInterface {
 	List<ServiceContactPOJO> getAllServiceContacts(int idUser);
 
 	Boolean saveServiceContact(ServiceContact service);
-
 	ServiceContact getByServiceServiceIdAndEventEventId(int eventId, int serviceId);
-
+	Boolean cancelServiceContact(int contractID, ServiceContact service);
 }
