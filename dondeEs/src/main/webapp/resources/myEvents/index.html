@@ -23,6 +23,7 @@
 							<th>Nombre</th>
 							<th>Descripción</th>
 							<th>Lugar</th>
+							<th>Estado</th>
 							<th>Acción</th>
 
 
@@ -33,7 +34,13 @@
 							<td>{{ event.name }}</td>
 							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
-							<td><a data-toggle="modal"
+
+							<td><span class="label label-danger pull-right">{{event.state || eventState }}</span></td>
+							<td>
+								<button type="button" ng-click="listContracts(event.eventId)" data-toggle="modal" data-target="#modalListContacts" class="btn btn-info btn-xs">Listar contratos</button>
+								<button type="button" ng-click="listParticipants(event.eventId)" data-toggle="modal" data-target="#modalParticipants" class="btn btn-success btn-xs">Listar participantes</button>
+								<button type="button" ng-click="auctionEventServices(event)" data-toggle="modal" data-target="#modalAuctionEventServices" class="btn btn-warning btn-xs">Subastar servicios</button>
+								<a data-toggle="modal"
 								class="btn btn-primary btn-xs" data-toggle="modal"
 								data-target="#modal-formSendInvitation" ng-click="geteventById(event.eventId)">Enviar
 									invitacion</a>
@@ -47,6 +54,7 @@
 								class="btn btn-primary btn-xs pull-right" data-toggle="modal"
 								data-target="#modal-formSendInvitation" ng-click="geteventById(event.eventId)">Enviar
 									invitacion</button></td>
+
 						</tr>
 					</tbody>
 
@@ -108,5 +116,104 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
+	<div id="modalParticipants" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Estado de invitados</h4>
+				</div>
+				<div class="modal-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Estado</th>
+								<th>Fecha de envio de la invitación</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="participant in participants">
+							<tr>
+								<td>{{ participant.user.name }} {{ participant.user.lastName1 }} {{ participant.user.lastName2 }}</td>
+								<td>{{ ((participant.state ==0) ? "No asistirá" : ( participant.state ==1) ? "Pendiente" : "Asistirá")}}</td>
+								<td>{{ participant.invitationDate  | date:'medium' }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+		<div id="modalAuctionEventServices" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Crear subasta para los servicios del evento</h4>
+				</div>
+				<div class="modal-body">
+					
+							<form class="form-horizontal">								
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Nombre</label>
+									<div class="col-lg-10">
+										<input type="text" placeholder="Nombre" class="form-control" id="auctionName"> 
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Descripción</label>
+									<div class="col-lg-10">
+										<textarea rows="5" placeholder="Descripción" class="form-control"id="auctionDescription"></textarea>
+									</div>
+								</div>
+							</form>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" ng-click="createAuction()">Crear subasta</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="modalListContacts" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Contratos del evento</h4>
+				</div>
+				<div class="modal-body">
+					
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Contrato</th>
+									<th>Estado</th>
+									<th>Comentario</th>
+								</tr>
+							</thead>
+							<tbody ng-repeat = "serviceContact in serviceContacts">
+								<tr>
+									<td>{{serviceContact.service.name}}</td>
+									<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+									<td>{{serviceContact.comment}}</td>
+								</tr>
+							</tbody>
+						</table>
+									
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

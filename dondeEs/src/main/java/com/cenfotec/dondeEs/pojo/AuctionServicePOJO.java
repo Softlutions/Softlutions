@@ -1,8 +1,11 @@
 package com.cenfotec.dondeEs.pojo;
 
 import java.util.Date;
+import com.cenfotec.dondeEs.pojo.AuctionPOJO;
+import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public class AuctionServicePOJO {
+
 	private int auctionServicesId;
 
 	private byte acept;
@@ -17,7 +20,8 @@ public class AuctionServicePOJO {
 
 	private ServicePOJO service;
 
-	public AuctionServicePOJO() {}
+	public AuctionServicePOJO() {
+	}
 
 	public int getAuctionServicesId() {
 		return this.auctionServicesId;
@@ -74,4 +78,5 @@ public class AuctionServicePOJO {
 	public void setService(ServicePOJO service) {
 		this.service = service;
 	}
+
 }

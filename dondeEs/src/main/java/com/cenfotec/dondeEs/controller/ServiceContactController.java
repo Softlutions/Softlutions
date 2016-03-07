@@ -13,15 +13,29 @@ import com.cenfotec.dondeEs.services.ServiceContactInterface;
 @RestController
 @RequestMapping(value = "rest/protected/serviceContact")
 public class ServiceContactController {
-
+	
 	@Autowired private ServiceContactInterface serviceContactInterface;
 	
+	/**
+	 * @Author Juan Carlos Sánchez G.
+	 * @param idEvent Id del evento del que se consultarán los contratos de servicio
+	 * @return response Respuesta del servidor de la petición incluyendo la lista de contratos de servicio.
+	 * @version 1.0
+	 */
+
 	@RequestMapping(value ="/getAllServiceContact/{idEvent}", method = RequestMethod.GET)
 	public ServiceContactResponse getAllServiceContact(@PathVariable("idEvent") int idEvent){
 		ServiceContactResponse response = new ServiceContactResponse();
 		response.setListContracts(serviceContactInterface.getAllServiceContacts(idEvent));
 		return response;
 	}
+	
+	/**
+	 * @Author Juan Carlos Sánchez G.
+	 * @param serviceContact Peticion que contiene la información del contrato de servicio por crear.
+	 * @return response Respuesta del servidor de la petición.
+	 * @version 1.0
+	 */
 	
 	@RequestMapping(value ="/createServiceContact", method = RequestMethod.POST)
 	public ServiceContactResponse createServiceContact(@RequestBody ServiceContact serviceContact){
@@ -40,7 +54,8 @@ public class ServiceContactController {
 	public ServiceContactResponse answerContract(@RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();
 		Boolean state = serviceContactInterface.saveServiceContact(serviceContact);
-
+		return response;
+	}
 	@RequestMapping(value ="/cancelServiceContact/{contractID}", method = RequestMethod.POST)
 	public ServiceContactResponse cancelServiceContact(@PathVariable("contractID") int contractID, @RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();

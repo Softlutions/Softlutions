@@ -3,9 +3,10 @@ package com.cenfotec.dondeEs.pojo;
 import java.util.Date;
 import java.util.List;
 
-import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.AuctionService;
 
 public class AuctionPOJO {
+
 	private int auctionId;
 
 	private Date date;
@@ -14,11 +15,10 @@ public class AuctionPOJO {
 
 	private String name;
 
-	private Event event;
-
 	private List<AuctionServicePOJO> auctionServices;
 
-	public AuctionPOJO() {}
+	public AuctionPOJO() {
+	}
 
 	public int getAuctionId() {
 		return this.auctionId;
@@ -52,14 +52,6 @@ public class AuctionPOJO {
 		this.name = name;
 	}
 
-	public Event getEvent() {
-		return this.event;
-	}
-
-	public void setEvent(Event event) {
-		this.event = event;
-	}
-	
 	public List<AuctionServicePOJO> getAuctionServices() {
 		return this.auctionServices;
 	}
@@ -71,11 +63,11 @@ public class AuctionPOJO {
 	public AuctionServicePOJO addAuctionService(AuctionServicePOJO auctionService) {
 		getAuctionServices().add(auctionService);
 		auctionService.setAuction(null);
-		
+
 		return auctionService;
 	}
 
-	public AuctionServicePOJO removeAuctionService(AuctionServicePOJO auctionService) {
+	public AuctionService removeAuctionService(AuctionService auctionService) {
 		getAuctionServices().remove(auctionService);
 		auctionService.setAuction(null);
 

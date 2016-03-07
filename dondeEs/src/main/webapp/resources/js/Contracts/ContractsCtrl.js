@@ -10,9 +10,11 @@ angular
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 		$scope.chartValues = null;
 		
-		$scope.listContracts = function(){
-			var eventId = $('#eventSelect').val();
-			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
+		
+		//$scope.listContracts = function(){
+			
+		$http.get("rest/protected/serviceContact/getAllServiceContact/1").success(function(response){
+			
 				$scope.serviceContacts = response.listContracts;
 				
 				if($scope.serviceContacts.length == 0){
@@ -25,18 +27,18 @@ angular
 					$scope.refreshChart();
 				}
 			});
-		}
+		//}
 		
 		$scope.serviceInfo = function(){
-			var eventId = $('#eventSelect').val();
-			$http.get("rest/protected/service/getService/"+eventId).success(function(response){
+			$http.get("rest/protected/service/getService/1").success(function(response){
+				console.log(response);
 				$scope.service = response.service;
 			})
 		}
 		
 		$scope.eventInfo = function(){
-			var eventId = $('#eventSelect').val();
-			$http.get("rest/protected/service/getService/"+eventId).success(function(response){
+			
+			$http.get("rest/protected/service/getService/2").success(function(response){
 				$scope.service = response.service;
 			})
 		}
@@ -47,7 +49,7 @@ angular
 					comment:$('#comment').val(),
 					state:0,
 					event:{
-						eventId:$('#eventSelect').val(),
+						eventId:"1",
 						description:"despelote",
 						name:"fiesta cenfotec",
 						user:{

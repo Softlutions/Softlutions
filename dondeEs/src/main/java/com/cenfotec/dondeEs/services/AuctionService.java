@@ -1,5 +1,10 @@
 package com.cenfotec.dondeEs.services;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.cenfotec.dondeEs.ejb.Auction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +19,20 @@ import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 import com.cenfotec.dondeEs.pojo.AuctionServicePOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+
 import com.cenfotec.dondeEs.repositories.AuctionRepository;
 
 @Service
 public class AuctionService implements AuctionServiceInterface{
-	@Autowired
-	private AuctionRepository auctionRepository;
+
+	@Autowired private AuctionRepository auctionRepository;
 	
+	@Override
+	public Boolean saveAuction(Auction auction) {
+		Auction serviceContact =  auctionRepository.save(auction);
+	 	return (serviceContact == null) ? false : true;
+	}
+
 	/***
 	 * Obtiene todas las subastas de un evento.
 	 * @author Enmanuel García González
@@ -55,7 +67,6 @@ public class AuctionService implements AuctionServiceInterface{
 				
 				auctionPOJO.setAuctionServices(auctionServicesPOJO);
 			} 			
-			auctionPOJO.setEvent(null);
 			auctionsPOJO.add(auctionPOJO); 
 		});
 		

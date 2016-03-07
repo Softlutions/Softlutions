@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.ejb.Auction;
