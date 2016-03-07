@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('dondeEs.myEvents', ['ngRoute'])
 	.config(['$routeProvider', function($routeProvider) {
 	  $routeProvider.when('/index', {
@@ -27,6 +26,13 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			pemail.to = "";
 		}
 		
+		/*Al que ocupe notificar al que contrata
+		 * $http.get({url:'rest/protected/sendEmail/sendEmailContractNotification/idAEnviar='}).success(function(response) {
+		 * 	Lo que quieran hacer xD
+		 * });
+		 * 
+		 * */
+		
 		$scope.deleteEvent = function(event){
 			$scope.listOfEmails.splice($scope.listOfEmails.indexOf(event), 1);
 		}
@@ -40,6 +46,16 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 					
 				});
 			}
+		}
+		
+		$scope.publishEvent = function(eventId){  
+			$scope.requestObject = {"eventId":eventId};
+			$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
+					$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+						$scope.events = response.eventList;
+					});
+			})
+			
 		}
 	
 	}]);

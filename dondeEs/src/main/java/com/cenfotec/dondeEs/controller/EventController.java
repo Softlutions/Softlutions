@@ -3,6 +3,7 @@ package com.cenfotec.dondeEs.controller;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
+import com.cenfotec.dondeEs.services.UserService;
 
 @RestController
 @RequestMapping(value = "rest/protected/event")
@@ -29,7 +32,12 @@ public class EventController {
 		return response;
 	}
 	
-//	get all event publish
+	/***
+	 * Obtiene todos los eventos que han sido publicados.
+	 * @author Enmanuel García González
+	 * @return
+	 * @version 1.0
+	 */
 	@RequestMapping(value ="/getAllEventPublish", method = RequestMethod.GET)
 	public EventResponse getAll(){				
 		EventResponse response = new EventResponse();
@@ -39,7 +47,13 @@ public class EventController {
 		return response;
 	}
 	
-// publish a event	
+	/***
+	 * Publica un determinado evento.
+	 * @author Enmanuel García González
+	 * @param eventRequest
+	 * @return
+	 * @version 1.0
+	 */
 	@RequestMapping(value ="/publishEvent", method = RequestMethod.PUT)
 	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
 		EventResponse response = new EventResponse();	
@@ -82,4 +96,58 @@ public class EventController {
 		}
 		return response;
 	}
+	
+	/***
+	 * Cancela un evento que ha sido previamente publicado.
+	 * @author Enmanuel García González	
+	 * @param eventRequest
+	 * @return
+	 * @version 1.0
+	 */
+	@Transactional
+	@RequestMapping(value ="/cancelEvent", method = RequestMethod.PUT)
+	public EventResponse cancelEvent(@RequestBody EventPOJO eventRequest) { 
+		EventResponse response = new EventResponse();	
+		boolean state;
+		
+		if(eventRequest.getEventId() != 0){		
+			try{
+				Event event =  eventServiceInterface.getEventById(eventRequest.getEventId());
+				event.setState((byte) 0);
+				event.setPublishDate(new Date());
+		 						
+				state = eventServiceInterface.saveEvent(event);
+				
+				if (state) {
+					response.setCode(200);
+					response.setErrorMessage("success");
+				} else {
+					response.setCode(500);
+					response.setErrorMessage("cancel event error");
+				}
+			} catch (Exception e) {
+				response.setCode(500);
+				response.setErrorMessage("internal error. " + e);
+			}	
+		} else {
+			response.setCode(409);
+			response.setErrorMessage("eventId is zero");
+		} 
+		return response;
+	} 
+
+	// PRUEBA DEL PROBLEMA CON LA INTERFACE 
+	/*
+	@Transactional
+	@RequestMapping(value ="/cancelEvent", method = RequestMethod.GET)
+	public EventResponse cancelEvent() { 
+		EventResponse response = new EventResponse();	
+		boolean state;
+		
+		UserService us = new UserService();
+		
+		List<UserPOJO> servicesProviders = us.getAllServicesProviderAuction(1);
+		
+		return response;
+	} */
 }

@@ -23,7 +23,6 @@
 							<th>Nombre</th>
 							<th>Descripción</th>
 							<th>Lugar</th>
-							<th>Estado</th>
 							<th>Acción</th>
 
 
@@ -34,6 +33,14 @@
 							<td>{{ event.name }}</td>
 							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
+							<td><a data-toggle="modal"
+								class="btn btn-primary btn-xs" data-toggle="modal"
+								data-target="#modal-formSendInvitation" ng-click="geteventById(event.eventId)">Enviar
+									invitacion</a>
+									<a ng-show="event.state === 0" data-toggle="modal"
+								class="btn btn-info btn-xs" data-toggle="modal" ng-click="publishEvent(event.eventId)">
+									Publicar</a>
+									</td>
 							<td><span class="label label-danger pull-right">{{
 									event.state || eventState }}</span></td>
 							<td><button data-toggle="modal"

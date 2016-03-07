@@ -5,7 +5,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the event database table.
  * 
@@ -42,13 +41,13 @@ public class Event implements Serializable {
 	private Date registerDate;
 
 	private byte state;
-
+	
 	//bi-directional many-to-one association to Auction
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<Auction> auctions;
 
 	//bi-directional many-to-one association to Chat
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<Chat> chats;
 
 	//bi-directional many-to-one association to Place
@@ -62,15 +61,15 @@ public class Event implements Serializable {
 	private User user;
 
 	//bi-directional many-to-one association to EventParticipant
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<EventParticipant> eventParticipants;
 
 	//bi-directional many-to-one association to Note
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<Note> notes;
 
 	//bi-directional many-to-one association to ServiceContact
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<ServiceContact> serviceContacts;
 
 	public Event() {
@@ -169,7 +168,7 @@ public class Event implements Serializable {
 
 		return auction;
 	}
-
+	
 	public List<Chat> getChats() {
 		return this.chats;
 	}
