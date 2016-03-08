@@ -41,7 +41,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		$scope.listContracts = function(eventId){
 		
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
-				
+					
 					$scope.serviceContacts = response.listContracts;
 					if($scope.serviceContacts.length == 0){
 						$('#errorMessage').removeClass('hidden');

@@ -33,24 +33,12 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		List<ServiceContactPOJO> listPojo = new ArrayList<ServiceContactPOJO>();
 		listServiceContact.stream().forEach(ta -> {
 			ServiceContactPOJO serviceContactPOJO = new ServiceContactPOJO();
-			BeanUtils.copyProperties(ta, serviceContactPOJO);
-			if(ta.getEvent()!=null){
-				EventPOJO eventPojo = new EventPOJO();
-				BeanUtils.copyProperties(ta.getEvent(),eventPojo );
-				eventPojo.setPlace(null);
-				eventPojo.setUser(null);
-				eventPojo.setServiceContacts(null);
-				eventPojo.setChats(null);
-				eventPojo.setEventParticipants(null);
-				eventPojo.setNotes(null);
-				serviceContactPOJO.setEvent(eventPojo);
-			}
-			if(ta.getService()!=null){
-				ServicePOJO servicePojo = new ServicePOJO();
-				BeanUtils.copyProperties(ta.getService(),servicePojo );
-				servicePojo.setUser(null);
-				serviceContactPOJO.setService(servicePojo);
-			}
+			serviceContactPOJO.setComment(ta.getComment());
+			serviceContactPOJO.setState(ta.getState());
+			serviceContactPOJO.setServiceContractId(ta.getServiceContractId());
+			ServicePOJO servicePojo = new ServicePOJO();
+			servicePojo.setName(ta.getService().getName());
+			serviceContactPOJO.setService(servicePojo);
 			listPojo.add(serviceContactPOJO);
 		});
 		return listPojo;
