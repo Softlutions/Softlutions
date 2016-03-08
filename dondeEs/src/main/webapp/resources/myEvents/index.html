@@ -1,4 +1,4 @@
-<div class="container" ng-controller="MyEventsCtrl">
+<div class="container">
 	<div class="col-lg-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
@@ -24,8 +24,6 @@
 							<th>Descripción</th>
 							<th>Lugar</th>
 							<th></th>
-
-
 						</tr>
 					</thead>
 					<tbody ng-repeat="event in events">
@@ -41,7 +39,7 @@
 										Acción<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a ng-click="listParticipants(event.eventId)"
+										<li><a ng-click="listContracts(event.eventId)" data-toggle="modal" 
 											data-target="#modalListContacts">Listar contratos</a></li>
 										<li><a type="button" data-toggle="modal"
 											data-target="#modalParticipants">Listar participantes</a></li>
@@ -59,13 +57,10 @@
 											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar evento</a></li>
 									</ul>
 								</div>
-
 							</td>
 						</tr>
 					</tbody>
-
 				</table>
-
 			</div>
 		</div>
 		<div id="modal-formSendInvitation" class="modal fade"
@@ -197,7 +192,7 @@
 		</div>
 	</div>
 
-	<div id="modalListContacts" class="modal fade" role="dialog">
+	<div id="modalListContacts" class="modal fade" role="dialog" ng-controller="ContractsCtrl">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
@@ -207,7 +202,6 @@
 					<h4 class="modal-title">Contratos del evento</h4>
 				</div>
 				<div class="modal-body">
-
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -219,13 +213,30 @@
 						<tbody ng-repeat="serviceContact in serviceContacts">
 							<tr>
 								<td>{{serviceContact.service.name}}</td>
-								<td>{{(((serviceContact.state)==0)?
-									"Pendiente":"Concretado")}}</td>
+								<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
 								<td>{{serviceContact.comment}}</td>
+								
+								<td ng-if="serviceContact.state != 2">
+									<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
+								</td>
+								<td ng-if="serviceContact.state == 2">
+									<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
+								</td>
 							</tr>
 						</tbody>
 					</table>
-
+					
+					<!-- Graph morris donut chart -->
+					<div>
+					    <div class="ibox float-e-margins">
+					        <div class="ibox-title">
+					            <h5>Resumen</h5>
+					        </div>
+					        <div class="ibox-content">
+					            <div id="contracts-state-chart" class="hidden"></div>
+					        </div>
+					    </div>
+					</div>
 				</div>
 			</div>
 		</div>

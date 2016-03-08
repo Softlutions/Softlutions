@@ -8233,6 +8233,9 @@ body.md-skin {
 	margin: 20px 0px  0px 0px;
 }
 
-
-
+/*Morrit donut graph*/
+#contracts-state-chart{
+	width: 100%;
+	height: 100%;
+}
 
