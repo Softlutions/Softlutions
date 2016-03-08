@@ -28,6 +28,11 @@ public class Auction implements Serializable {
 
 	private String name;
 
+	//bi-directional many-to-one association to Event
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="event_id")
+	private Event event;
+
 	//bi-directional many-to-one association to AuctionService
 	@OneToMany(mappedBy="auction")
 	private List<AuctionService> auctionServices;
@@ -65,6 +70,14 @@ public class Auction implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Event getEvent() {
+		return this.event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 	public List<AuctionService> getAuctionServices() {

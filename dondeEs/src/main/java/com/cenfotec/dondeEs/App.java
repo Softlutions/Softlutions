@@ -10,6 +10,7 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories("com.cenfotec.dondeEs.repositories")
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.cenfotec.dondeEs.ejb")
-
+@ImportResource(value = { "config/spring-mvc.xml" })
 public class App{
 	
     public static void main(String[] args) {
