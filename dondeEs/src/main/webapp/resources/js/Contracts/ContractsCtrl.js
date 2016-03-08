@@ -9,12 +9,10 @@ angular
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 		$scope.chartValues = null;
+		console.log("dawdaw");
 		
-		
-		//$scope.listContracts = function(){
-			
-		$http.get("rest/protected/serviceContact/getAllServiceContact/1").success(function(response){
-			
+		$scope.listContracts = function(idEvent){
+			$http.get("rest/protected/serviceContact/getAllServiceContact/"+idEvent).success(function(response){
 				$scope.serviceContacts = response.listContracts;
 				
 				if($scope.serviceContacts.length == 0){
@@ -24,10 +22,12 @@ angular
 				}else{
 					$('#contractTable').removeClass('hidden');
 					$('#errorMessage').addClass('hidden');
+					console.log($scope.serviceContacts);
 					$scope.refreshChart();
 				}
 			});
-		//}
+		}
+		$scope.listContracts(1);
 		
 		$scope.serviceInfo = function(){
 			$http.get("rest/protected/service/getService/1").success(function(response){
@@ -80,8 +80,9 @@ angular
 		}
 		
 		$scope.refreshChart = function(){
-			var contractsLeft = 0;
-			var contractsOk = 0;
+			console.log("ok");
+			var contractsLeft = 1;
+			var contractsOk = 2;
 			var contractsCanceled = 0;
 			
 			$('#contracts-state-chart').removeClass('hidden');
