@@ -36,6 +36,11 @@ public class EventParticipant implements Serializable {
 	@JoinColumn(name="event_id")
 	private Event event;
 
+	//bi-directional many-to-one association to OfflineUser
+	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="offline_user_id")
+	private OfflineUser offlineUser;
+
 	//bi-directional many-to-one association to User
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
@@ -96,6 +101,14 @@ public class EventParticipant implements Serializable {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	public OfflineUser getOfflineUser() {
+		return this.offlineUser;
+	}
+
+	public void setOfflineUser(OfflineUser offlineUser) {
+		this.offlineUser = offlineUser;
 	}
 
 	public User getUser() {

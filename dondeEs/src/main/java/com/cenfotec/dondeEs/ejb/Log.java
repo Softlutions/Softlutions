@@ -20,13 +20,14 @@ public class Log implements Serializable {
 	@Column(name="log_id")
 	private int logId;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="date")
+	private Date date;
+
 	private String event;
 
 	@Column(name="user_id")
 	private int userId;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date when;
 
 	public Log() {
 	}
@@ -37,6 +38,14 @@ public class Log implements Serializable {
 
 	public void setLogId(int logId) {
 		this.logId = logId;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public String getEvent() {
@@ -53,14 +62,6 @@ public class Log implements Serializable {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public Date getWhen() {
-		return this.when;
-	}
-
-	public void setWhen(Date when) {
-		this.when = when;
 	}
 
 }

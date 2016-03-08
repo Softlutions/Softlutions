@@ -1,0 +1,75 @@
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>Subastas del evento</h5>
+        </div>
+        <div class="ibox-content">
+
+            <table class="table table-hover table-responsive">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fecha de publicación</th>
+                    <th>Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="auction in auctionsEvent">
+                    <td>{{auction.name}}</td>
+                    <td>{{auction.description}}</td>
+                    <td>{{auction.date | date:'dd-MM-yyyy'}}</td>
+                    <td>		
+                    	<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-form" 
+                    				ng-click="loadAuctionServices($index)">Ver servicios</a>
+					</td>
+                </tr>	
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modal-form" class="modal fade" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<h3 class="m-t-none m-b">Oferta de servicios</h3>
+					    <div class="ibox float-e-margins">
+					        <div class="ibox-content">
+					            <table class="table table-hover table-responsive">
+					                <thead>
+					                <tr>
+					                    <th>Descripción de la oferta</th>
+					                    <th>Precio</th>
+					                    <th>Fecha de publicación</th>
+					                    <th>Nombre del servicio</th>
+					                    <th>Descripción del servicio</th>
+					                    <th></th>
+					                </tr>
+					                </thead>
+					                <tbody>
+					                <tr ng-repeat="service in auctionServices">
+					                    <td>{{service.description}}</td>
+					                    <td>₡{{service.price}}</td>
+					                    <td>{{service.date | date:'dd-MM-yyyy'}}</td>
+					                    <td>{{service.service.name}}</td>
+					                    <td>{{service.service.description}}</td>
+					                    <td>
+					                    	<a data-toggle="modal" class="btn btn-primary btn-sm" data-toggle="modal"
+											data-target="#modal-form" ng-click="goToServiceProviderProfile(service.service.user.userId)">
+															<di>Ver</di><div>prestatario</div></a>
+					                    </td>
+					                </tr>	
+					                </tbody>
+					            </table>
+					        </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

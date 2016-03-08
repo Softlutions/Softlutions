@@ -2,10 +2,8 @@ package com.cenfotec.dondeEs.ejb;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.List;
-
 
 /**
  * The persistent class for the event database table.
@@ -43,9 +41,13 @@ public class Event implements Serializable {
 	private Date registerDate;
 
 	private byte state;
+	
+	//bi-directional many-to-one association to Auction
+	@OneToMany(fetch=FetchType.LAZY)
+	private List<Auction> auctions;
 
 	//bi-directional many-to-one association to Chat
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<Chat> chats;
 
 	//bi-directional many-to-one association to Place
@@ -59,15 +61,15 @@ public class Event implements Serializable {
 	private User user;
 
 	//bi-directional many-to-one association to EventParticipant
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<EventParticipant> eventParticipants;
 
 	//bi-directional many-to-one association to Note
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<Note> notes;
 
 	//bi-directional many-to-one association to ServiceContact
-	@OneToMany(mappedBy="event")
+	@OneToMany(fetch=FetchType.LAZY)
 	private List<ServiceContact> serviceContacts;
 
 	public Event() {
@@ -145,6 +147,28 @@ public class Event implements Serializable {
 		this.state = state;
 	}
 
+	public List<Auction> getAuctions() {
+		return this.auctions;
+	}
+
+	public void setAuctions(List<Auction> auctions) {
+		this.auctions = auctions;
+	}
+
+	public Auction addAuction(Auction auction) {
+		getAuctions().add(auction);
+		auction.setEvent(this);
+
+		return auction;
+	}
+
+	public Auction removeAuction(Auction auction) {
+		getAuctions().remove(auction);
+		auction.setEvent(null);
+
+		return auction;
+	}
+	
 	public List<Chat> getChats() {
 		return this.chats;
 	}

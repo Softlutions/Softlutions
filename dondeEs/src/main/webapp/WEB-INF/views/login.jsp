@@ -81,7 +81,7 @@
 
 
 	<!-- JQueryUI -->
-	<script src="resources/bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>

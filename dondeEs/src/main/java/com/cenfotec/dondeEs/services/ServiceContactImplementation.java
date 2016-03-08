@@ -33,24 +33,12 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		List<ServiceContactPOJO> listPojo = new ArrayList<ServiceContactPOJO>();
 		listServiceContact.stream().forEach(ta -> {
 			ServiceContactPOJO serviceContactPOJO = new ServiceContactPOJO();
-			BeanUtils.copyProperties(ta, serviceContactPOJO);
-			if(ta.getEvent()!=null){
-				EventPOJO eventPojo = new EventPOJO();
-				BeanUtils.copyProperties(ta.getEvent(),eventPojo );
-				eventPojo.setPlace(null);
-				eventPojo.setUser(null);
-				eventPojo.setServiceContacts(null);
-				eventPojo.setChats(null);
-				eventPojo.setEventParticipants(null);
-				eventPojo.setNotes(null);
-				serviceContactPOJO.setEvent(eventPojo);
-			}
-			if(ta.getService()!=null){
-				ServicePOJO servicePojo = new ServicePOJO();
-				BeanUtils.copyProperties(ta.getService(),servicePojo );
-				servicePojo.setUser(null);
-				serviceContactPOJO.setService(servicePojo);
-			}
+			serviceContactPOJO.setComment(ta.getComment());
+			serviceContactPOJO.setState(ta.getState());
+			serviceContactPOJO.setServiceContractId(ta.getServiceContractId());
+			ServicePOJO servicePojo = new ServicePOJO();
+			servicePojo.setName(ta.getService().getName());
+			serviceContactPOJO.setService(servicePojo);
 			listPojo.add(serviceContactPOJO);
 		});
 		return listPojo;
@@ -61,5 +49,25 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		ServiceContact serviceContact =  contactRepository.save(service);
 	 	return (serviceContact == null) ? false : true;
 	}
+	
+	@Override
+	public ServiceContact getByServiceServiceIdAndEventEventId(int eventId, int serviceId) {
+		return contactRepository.getByServiceServiceIdAndEventEventId(eventId, serviceId);
+	}
 
+	@Override
+	public Boolean cancelServiceContact(int contractID, ServiceContact service) {
+		ServiceContact serviceContact = null;
+		
+		if(contractID == service.getServiceContractId()){
+			serviceContact = contactRepository.findOne(service.getServiceContractId());
+			
+			if(serviceContact != null){
+				serviceContact.setState((byte) 2);
+				contactRepository.save(serviceContact);
+			}
+		}
+		
+	 	return (serviceContact == null) ? false : true;
+	}
 }
