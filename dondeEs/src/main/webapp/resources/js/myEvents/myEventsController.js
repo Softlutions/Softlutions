@@ -94,4 +94,14 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			})
 			
 		}
+		
+		$scope.cancelEvent = function(eventId){  
+		 	$scope.requestObject = {"eventId":eventId};
+		 	$http.put('rest/protected/event/cancelEvent',$scope.requestObject).success(function(response) {
+		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+					$scope.events = response.eventList;
+				});
+		 	})
+		 }
+		
 	}]);
