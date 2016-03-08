@@ -25,4 +25,6 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 	$scope.goToServiceProviderProfile = function () {
 	//	$location.url('/login');  colocar ruta del perfil del prestatario de servicio. 
 	}
+	
+	
 }]);

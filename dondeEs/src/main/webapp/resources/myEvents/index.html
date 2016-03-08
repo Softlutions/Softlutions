@@ -23,8 +23,7 @@
 							<th>Nombre</th>
 							<th>Descripción</th>
 							<th>Lugar</th>
-							<th>Estado</th>
-							<th>Acción</th>
+							<th></th>
 
 
 						</tr>
@@ -35,13 +34,32 @@
 							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
 
-							<td><span class="label label-danger pull-right">{{event.state || eventState }}</span></td>
 							<td>
-								<button type="button" ng-click="listContracts(event.eventId)" data-toggle="modal" data-target="#modalListContacts" class="btn btn-info btn-xs">Listar contratos</button>
-								<button type="button" ng-click="listParticipants(event.eventId)" data-toggle="modal" data-target="#modalParticipants" class="btn btn-success btn-xs">Listar participantes</button>
-								<button type="button" ng-click="auctionEventServices(event)" data-toggle="modal" data-target="#modalAuctionEventServices" class="btn btn-warning btn-xs">Subastar servicios</button>
-								<button type="button" ng-click="geteventById(event.eventId)" data-toggle="modal" data-target="#modal-formSendInvitation" class="btn btn-primary btn-xs"  >Enviar invitación</button>
-								<button type="button" ng-click="publishEvent(event.eventId)" data-toggle="modal" ng-show="event.state === 0"  class="btn btn-info btn-xs">Publicar</button>
+								<div class="btn-group">
+									<button data-toggle="dropdown"
+										class="btn btn-primary btn-xs dropdown-toggle">
+										Acción<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li><a ng-click="listParticipants(event.eventId)"
+											data-target="#modalListContacts">Listar contratos</a></li>
+										<li><a type="button" data-toggle="modal"
+											data-target="#modalParticipants">Listar participantes</a></li>
+										<li><a ng-click="auctionEventServices(event)"
+											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
+												servicios</a></li>
+										<li><a type="button"
+											ng-click="geteventById(event.eventId)" data-toggle="modal"
+											data-target="#modal-formSendInvitation">Invitar
+												participantes de evento</a></li>
+										<li class="divider"></li>
+										<li ng-show="event.state===0"><a type="button"
+											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
+										<li ng-show="event.state===1"><a type="button"
+											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar evento</a></li>
+									</ul>
+								</div>
+
 							</td>
 						</tr>
 					</tbody>
@@ -50,7 +68,8 @@
 
 			</div>
 		</div>
-		<div id="modal-formSendInvitation" class="modal fade" aria-hidden="true">
+		<div id="modal-formSendInvitation" class="modal fade"
+			aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-body">
@@ -104,12 +123,12 @@
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 	<div id="modalParticipants" class="modal fade" role="dialog">
 		<div class="modal-dialog">
-		
+
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
@@ -127,9 +146,11 @@
 						</thead>
 						<tbody ng-repeat="participant in participants">
 							<tr>
-								<td>{{ participant.user.name }} {{ participant.user.lastName1 }} {{ participant.user.lastName2 }}</td>
-								<td>{{ ((participant.state ==0) ? "No asistirá" : ( participant.state ==1) ? "Pendiente" : "Asistirá")}}</td>
-								<td>{{ participant.invitationDate  | date:'medium' }}</td>
+								<td>{{ participant.user.name }} {{
+									participant.user.lastName1 }} {{ participant.user.lastName2 }}</td>
+								<td>{{ ((participant.state ==0) ? "No asistirá" : (
+									participant.state ==1) ? "Pendiente" : "Asistirá")}}</td>
+								<td>{{ participant.invitationDate | date:'medium' }}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -137,44 +158,48 @@
 			</div>
 		</div>
 	</div>
-	
-		<div id="modalAuctionEventServices" class="modal fade" role="dialog">
+
+	<div id="modalAuctionEventServices" class="modal fade" role="dialog">
 		<div class="modal-dialog">
-		
+
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Crear subasta para los servicios del evento</h4>
+					<h4 class="modal-title">Crear subasta para los servicios del
+						evento</h4>
 				</div>
 				<div class="modal-body">
-					
-							<form class="form-horizontal">								
-								<div class="form-group">
-									<label class="col-lg-2 control-label">Nombre</label>
-									<div class="col-lg-10">
-										<input type="text" placeholder="Nombre" class="form-control" id="auctionName"> 
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-2 control-label">Descripción</label>
-									<div class="col-lg-10">
-										<textarea rows="5" placeholder="Descripción" class="form-control"id="auctionDescription"></textarea>
-									</div>
-								</div>
-							</form>
+
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Nombre</label>
+							<div class="col-lg-10">
+								<input type="text" placeholder="Nombre" class="form-control"
+									id="auctionName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Descripción</label>
+							<div class="col-lg-10">
+								<textarea rows="5" placeholder="Descripción"
+									class="form-control" id="auctionDescription"></textarea>
+							</div>
+						</div>
+					</form>
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" ng-click="createAuction()">Crear subasta</button>
+					<button type="button" class="btn btn-primary"
+						ng-click="createAuction()">Crear subasta</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="modalListContacts" class="modal fade" role="dialog">
 		<div class="modal-dialog">
-		
+
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
@@ -182,24 +207,25 @@
 					<h4 class="modal-title">Contratos del evento</h4>
 				</div>
 				<div class="modal-body">
-					
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Contrato</th>
-									<th>Estado</th>
-									<th>Comentario</th>
-								</tr>
-							</thead>
-							<tbody ng-repeat = "serviceContact in serviceContacts">
-								<tr>
-									<td>{{serviceContact.service.name}}</td>
-									<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
-									<td>{{serviceContact.comment}}</td>
-								</tr>
-							</tbody>
-						</table>
-									
+
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Contrato</th>
+								<th>Estado</th>
+								<th>Comentario</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="serviceContact in serviceContacts">
+							<tr>
+								<td>{{serviceContact.service.name}}</td>
+								<td>{{(((serviceContact.state)==0)?
+									"Pendiente":"Concretado")}}</td>
+								<td>{{serviceContact.comment}}</td>
+							</tr>
+						</tbody>
+					</table>
+
 				</div>
 			</div>
 		</div>

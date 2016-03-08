@@ -47,13 +47,9 @@ public class EventParticipantController {
 	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.PUT)
 	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("comment") String comment)
 			throws ParseException {
-
 		EventParticipantResponse response = new EventParticipantResponse();
-
 		EventParticipant eventParticipant = eventParticipantServiceInterface.findById(id);
-		
 		eventParticipant.setState(state);
-		
 		Comment ncomment = new Comment();
 		ncomment.setContent(comment);
 		ncomment.setDate(new Date());
