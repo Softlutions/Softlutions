@@ -49,4 +49,17 @@ public class ServiceController {
 		response.setService(serviceInterface.getService(serviceId));
 		return response;
 	}
+
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param catalogId id del catalogo al cual el servicio pertenece
+	 * @return lista de servicios con el catalogo especificado
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getServicesByCatalog/{catalogId}", method = RequestMethod.GET)
+	public ServiceResponse getServicesByCatalog(@PathVariable("catalogId") int catalogId){
+		ServiceResponse response = new ServiceResponse();
+		response.setServiceLists(serviceInterface.getByCatalog(catalogId));
+		return response;
+	}
 }

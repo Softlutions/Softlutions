@@ -8,6 +8,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	}])
 	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
 		$scope.listOfEmails = [];
+		$scope.catalogs = [];
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
@@ -25,7 +26,6 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		}
 		
 		$scope.createAuction = function(){
-			
 			var auction = {
 					name: $('#auctionName').val(),
 					description: $('#auctionDescription').val(),
@@ -39,7 +39,6 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		}
 		
 		$scope.listContracts = function(eventId){
-		
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 					
 					$scope.serviceContacts = response.listContracts;
@@ -63,6 +62,16 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			pemail.to = "";
 		}
 		
+		$scope.catalogsList = function(){
+			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
+				$scope.catalogs = response.serviceCatalogList;
+			});
+		}
+		
+		$scope.getServicesByCatalog = function(catalogSelected){
+			console.log(catalogSelected);
+		}
+		
 		/*Al que ocupe notificar al que contrata
 		 * $http.get({url:'rest/protected/sendEmail/sendEmailContractNotification/idAEnviar='}).success(function(response) {
 		 * 	Lo que quieran hacer xD
@@ -73,6 +82,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		$scope.deleteEvent = function(event){
 			$scope.listOfEmails.splice($scope.listOfEmails.indexOf(event), 1);
 		}
+		
 		$scope.sendEmail = function(event){
 			var dataCreate = {
 					listSimple:$scope.listOfEmails

@@ -9,4 +9,12 @@ public interface ServiceInterface {
 	List<Service> getAll();
 	ServicePOJO getService(int idEvent);
 	ServicePOJO getServiceById(int idService);
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param catalogId id del catalogo
+	 * @return lista de serviciosPOJO
+	 * @version 1.0
+	 */
+	List<ServicePOJO> getByCatalog(int catalogId);
 }

@@ -8,12 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cenfotec.dondeEs.ejb.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import com.cenfotec.*;
-
-import com.cenfotec.dondeEs.contracts.UserResponse;
-import com.cenfotec.dondeEs.ejb.User;
-import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.ServiceRepository;
@@ -42,6 +36,32 @@ public class ServiceImplementation implements ServiceInterface {
 		ServicePOJO servicePOJO = new ServicePOJO();
 		BeanUtils.copyProperties(nservice, servicePOJO);
 		return servicePOJO;
+	}
+	
+	@Override
+	@Transactional
+	public List<ServicePOJO> getByCatalog(int catalogId){
+		List<Service> serviceList = serviceRepository.getByCatalogId(catalogId);
+		List<ServicePOJO> servicePOJOList = new ArrayList<>();
+		
+		serviceList.forEach(s -> {
+			ServicePOJO service = new ServicePOJO();
+			service.setServiceId(s.getServiceId());
+			service.setName(s.getName());
+			service.setDescription(s.getDescription());
+			
+			UserPOJO userPOJO = new UserPOJO();
+			userPOJO.setUserId(s.getUser().getUserId());
+			userPOJO.setName(s.getUser().getName());
+			userPOJO.setLastName1(s.getUser().getLastName1());
+			userPOJO.setLastName2(s.getUser().getLastName2());
+			userPOJO.setEmail(s.getUser().getEmail());
+			service.setUser(userPOJO);
+			
+			servicePOJOList.add(service);
+		});
+		
+		return servicePOJOList;
 	}
 	
 	@Transactional
