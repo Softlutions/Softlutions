@@ -1,5 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
+import java.util.Date;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,4 +60,30 @@ public class AuctionController {
 		response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
 		return response;
 	}
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param nauction se recibe la subasta a la modificar
+	 * @return retorna la respuesta con el estado del url
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/finishAuction", method = RequestMethod.PUT)
+	@Transactional
+	public AuctionResponse finishAuction(@RequestBody Auction nauction){
+		AuctionResponse auctionResponse = new AuctionResponse();
+		if(nauction.getAuctionId() != 0){
+		Auction auction = auctionServiceInterface.findById(nauction.getAuctionId());
+		
+		auction.setState((byte)0);
+		auction.setDate(new Date());
+		Boolean stateAuction = auctionServiceInterface.saveAuction(auction);
+		
+		if(stateAuction){
+			auctionResponse.setCode(200);
+		}else{
+			auctionResponse.setCode(500);
+		}
+		}
+		return auctionResponse;
+	}
+	
 }

@@ -17,6 +17,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		$scope.listParticipants = function(eventId){
 			$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+eventId).success(function(response) {
 				$scope.participants = response.eventParticipantsList;
+				console.log("Todo bien")
 			});
 		}
 		

@@ -72,4 +72,10 @@ public class AuctionService implements AuctionServiceInterface{
 		
 		return auctionsPOJO;		
 	}
+
+	@Override
+	public Auction findById(int auctionId) {
+		Auction actn = auctionRepository.findOne(auctionId);
+		return actn;
+	}
 }

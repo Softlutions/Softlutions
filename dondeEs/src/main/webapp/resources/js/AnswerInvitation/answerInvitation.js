@@ -14,8 +14,9 @@ angular
 						'$http','$location',
 						function($scope, $http, $location) {
 							$scope.comment;
+							console.log("ID "+$location.search().eventId);
 							$scope.geteventById = function(){
-								$http.get('rest/protected/event/getEventById/'+ $location.search().eventId).success(function(response) {
+								$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 									$scope.event = response.eventPOJO;
 									$scope.nameProvaider = $scope.event.user.name + " "+ $scope.event.user.lastName1 + " "+ $scope.event.user.lastName2;
 									console.log("Provaider" + $scope.nameProvaider);
@@ -26,10 +27,10 @@ angular
 							console.log("Email "+$scope.userEmail);
 							console.log($location.search().eventParticipantId);
 							$scope.createParticipant = function($event){
-								 if(document.getElementById('inlineCheckbox1').checked){
+								 if(document.getElementById('optionsRadios1').checked){
 								    	$scope.event.state = 2
 								    }
-								    else{
+								    else if (document.getElementById('optionsRadios2').checked){
 								    	$scope.event.state = 0
 								    }
 						
@@ -38,7 +39,7 @@ angular
 										state: $scope.event.state,
 										comment: $scope.comment
 								}
-								if(document.getElementById('inlineCheckbox1').checked || document.getElementById('inlineCheckbox2').checked){
+								if(document.getElementById('optionsRadios1').checked || document.getElementById('optionsRadios2').checked){
 								
 									$("#modal-form").modal('hide');
 									
