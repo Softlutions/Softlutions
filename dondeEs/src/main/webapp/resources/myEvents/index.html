@@ -4,16 +4,8 @@
 			<div class="ibox-title">
 				<h5>Mis eventos</h5>
 				<div class="ibox-tools">
-					<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
-					</a> <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i
-						class="fa fa-wrench"></i>
-					</a>
-					<ul class="dropdown-menu dropdown-user">
-						<li><a href="#">Config option 1</a></li>
-						<li><a href="#">Config option 2</a></li>
-					</ul>
-					<a class="close-link"> <i class="fa fa-times"></i>
-					</a>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#modalCreateEvent">
+							Crear evento</button>
 				</div>
 			</div>
 			<div class="ibox-content">
@@ -236,6 +228,32 @@
 					            <div id="contracts-state-chart" class="hidden"></div>
 					        </div>
 					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="modalCreateEvent" class="modal fade"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Crear evento</h3>
+							<form role="form" ng-init="service">
+								<div class="form-group">
+									<label class='control-label'>Imagen</label>
+									<input type="file" name="inputfile" required ng-file-select="onFileSelect($files)" >
+								</div>
+								<div class="form-group">
+									<button type="button"
+										class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										data-dismiss="modal">Crear</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

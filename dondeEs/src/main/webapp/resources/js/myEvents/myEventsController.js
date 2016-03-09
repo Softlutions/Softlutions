@@ -8,6 +8,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	}])
 	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
 		$scope.listOfEmails = [];
+		$scope.files = {};
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
@@ -104,4 +105,38 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		 	})
 		 }
 		
+		$scope.onFileSelect = function($files) {
+			$scope.files = $files;
+		};
+		
+		$scope.updateCreateEvent = function(event) {
+				// $files: an array of files selected, each
+				// file has name, size, and type.
+				for (var i = 0; i < $scope.files.length; i++) {
+					var file = $scope.files[i];
+					$scope.upload = $upload
+							.upload(
+									{
+										url : 'rest/protected/event/updateCreateEvent',
+										data : {
+											// DATOS
+										},
+										file : file,
+									})
+							.progress(
+									function(evt) {
+										console
+												.log('percent: '
+														+ parseInt(100.0
+																* evt.loaded
+																/ evt.total));
+									})
+							.success(
+									function(data, status,
+											headers, config) {
+										alert('Bien');
+										console.log(data);
+									});
+				}
+		};
 	}]);

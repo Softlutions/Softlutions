@@ -15,9 +15,7 @@ import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
-import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
-import com.cenfotec.dondeEs.services.UserService;
 
 @RestController
 @RequestMapping(value = "rest/protected/event")
@@ -170,4 +168,22 @@ public class EventController {
 			}
 			return response;
 		}
+		
+	/***
+	 * Crea un evento.
+	 * @author Enmanuel García González	
+	 * @param eventRequest
+	 * @return
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/updateCreateEvent", method = RequestMethod.POST)
+	public EventResponse create(@RequestBody Event _event){	
+		EventResponse event = new EventResponse();
+		Boolean state = eventServiceInterface.saveEvent(_event);
+		if(state){
+			event.setCode(200);
+			event.setCodeMessage("Event created succesfully");
+		}
+		return event;
+	}
 }

@@ -2,6 +2,7 @@ package com.cenfotec.dondeEs.services;
 
 import java.util.List;
 
+import com.cenfotec.dondeEs.contracts.EventRequest;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 
