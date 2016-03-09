@@ -9,7 +9,6 @@ angular
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 		$scope.chartValues = null;
-		console.log("dawdaw");
 		
 		$scope.listContracts = function(idEvent){
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+idEvent).success(function(response){
@@ -22,7 +21,6 @@ angular
 				}else{
 					$('#contractTable').removeClass('hidden');
 					$('#errorMessage').addClass('hidden');
-					console.log($scope.serviceContacts);
 					$scope.refreshChart();
 				}
 			});
@@ -80,7 +78,6 @@ angular
 		}
 		
 		$scope.refreshChart = function(){
-			console.log("ok");
 			var contractsLeft = 1;
 			var contractsOk = 2;
 			var contractsCanceled = 0;

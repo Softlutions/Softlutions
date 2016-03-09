@@ -1,6 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -33,6 +34,7 @@ import com.cenfotec.dondeEs.services.UserServiceInterface;
 @RequestMapping(value = "rest/protected/sendEmail")
 public class SendEmailController {
 
+	public static final String APP_DOMAIN = "http://localhost:8080";
 	private static String subject;
 	private static String text;
 	@Autowired
@@ -88,6 +90,30 @@ public class SendEmailController {
 			}
 
 		} catch (Exception ae) {
+			ae.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param invitationId id de la invitacion
+	 * @param to email objectivo
+	 * @param event event asociado
+	 * @version 1.0
+	 */
+	public void sendAuctionInvitationEmail(int invitationId, String to, Event event) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(to);
+		
+		String subject = "Invitación a subasta";
+		mailMessage.setSubject(subject);
+		
+		String msj = APP_DOMAIN+"/dondeEs/app#/auctionInvitation?id="+invitationId;
+		mailMessage.setText(msj);
+		
+		try{
+			mailSender.send(mailMessage);
+		}catch(Exception ae){
 			ae.printStackTrace();
 		}
 	}

@@ -8,7 +8,12 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	}])
 	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
 		$scope.listOfEmails = [];
+		
+		// Create auction
 		$scope.catalogs = [];
+		$scope.servicesByCatalog = [];
+		$scope.auctionServices = [];
+		// --------------
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
@@ -26,21 +31,26 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		}
 		
 		$scope.createAuction = function(){
+			$("#btnCreateAuction").prop("disabled", true);
+			
 			var auction = {
 					name: $('#auctionName').val(),
 					description: $('#auctionDescription').val(),
 					date: new Date(),
-					event: $scope.selectedEvent
+					event: $scope.selectedEvent,
+					auctionServices: $scope.auctionServices
 			}
+			
 			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 				$('#modalAuctionEventServices').modal('toggle');
-				
+				$("#btnCreateAuction").prop("disabled", false);
+				$('#auctionName').val("");
+				$('#auctionDescription').val("");
 			})	
 		}
 		
 		$scope.listContracts = function(eventId){
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
-					
 					$scope.serviceContacts = response.listContracts;
 					if($scope.serviceContacts.length == 0){
 						$('#errorMessage').removeClass('hidden');
@@ -63,13 +73,53 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		}
 		
 		$scope.catalogsList = function(){
-			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
-				$scope.catalogs = response.serviceCatalogList;
-			});
+			if($scope.catalogs.length == 0){
+				$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
+					$scope.catalogs = response.serviceCatalogList;
+				});
+			}
+			
+			$scope.servicesByCatalog = [];
+			$scope.auctionServices = [];
 		}
 		
 		$scope.getServicesByCatalog = function(catalogSelected){
-			console.log(catalogSelected);
+			$http.get('rest/protected/service/getServicesByCatalog/'+catalogSelected.serviceCatalogId).success(function(response) {
+				$scope.servicesByCatalog = response.serviceLists;
+			});
+		}
+		
+		$scope.selectService = function(selectedService){
+			var row = $("#serviceRow"+selectedService.serviceId);
+			
+			if(row.hasClass("selected-table-item")){
+				row.removeClass("selected-table-item");
+				
+				var indexToRemove = -1;
+				var i = 0;
+				
+				while(i < $scope.auctionServices.length && indexToRemove == -1){
+					if($scope.auctionServices[i].service.serviceId == selectedService.serviceId){
+						indexToRemove = i;
+					}
+					
+					i++;
+				}
+				
+				$scope.auctionServices.splice(indexToRemove, 1);
+			}else{
+				row.addClass("selected-table-item");
+				var auctionService = {
+						service: selectedService,
+						description: '',
+						date: new Date(),
+						auction: null,
+						price: 0,
+						acept: 0	
+				};
+				
+				$scope.auctionServices.push(auctionService);
+			}
 		}
 		
 		/*Al que ocupe notificar al que contrata

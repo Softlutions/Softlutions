@@ -184,18 +184,34 @@
 					<div>
 						<form class="form-horizontal">
 							<div class="form-group">
-								<label class="col-lg-2 control-label">Tipo de servicios:</label>
-								<select ng-options="c as c.name for c in catalogs track by c.serviceCatalogId" ng-change="getServicesByCatalog(selected)" ng-model="selected"></select>
+								<label class="col-lg-2 control-label">Tipo de servicio:</label>
+								<select ng-options="c as c.name for c in catalogs" ng-change="getServicesByCatalog(selected)" ng-model="selected"></select>
 							</div>
 						</form>
 						
-						
-						
+						<table class="table table-hover" id="servicesTable">
+							<thead>
+								<tr>
+									<td>Nombre</td>
+									<td>Descripción</td>
+									<td>Contacto</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="s in servicesByCatalog" ng-click="selectService(s)" id="serviceRow{{s.serviceId}}">
+									<td>{{s.name}}</td>
+									<td data-toggle="tooltip" title={{s.description}}>
+										{{s.description.length > 45? s.description.substring(0, 42)+"...":s.description}}
+									</td>
+									<td>{{s.user.email}}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
+					<button type="button" class="btn btn-primary" id="btnCreateAuction"
 						ng-click="createAuction()">Crear subasta</button>
 				</div>
 			</div>

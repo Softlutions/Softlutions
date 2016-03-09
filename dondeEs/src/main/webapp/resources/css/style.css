@@ -8239,3 +8239,13 @@ body.md-skin {
 	height: 100%;
 }
 
+/*Table selection*/
+.selected-table-item{ background-color: #ffffcc; }
+
+#servicesTable.thead, #servicesTable.tbody { display: block; }
+
+servicesTable.tbody {
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

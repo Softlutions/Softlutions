@@ -3,6 +3,8 @@ package com.cenfotec.dondeEs.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.Auction;
 
 import java.util.ArrayList;
@@ -11,26 +13,39 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 import com.cenfotec.dondeEs.pojo.AuctionServicePOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 
 import com.cenfotec.dondeEs.repositories.AuctionRepository;
+import com.cenfotec.dondeEs.repositories.AuctionServiceRepository;
 
 @Service
 public class AuctionService implements AuctionServiceInterface{
 
 	@Autowired private AuctionRepository auctionRepository;
+	@Autowired private AuctionServiceRepository auctionServiceRepository;
+	@Autowired private SendEmailController sendEmailController;
 	
 	@Override
 	public Boolean saveAuction(Auction auction) {
-		Auction serviceContact =  auctionRepository.save(auction);
-	 	return (serviceContact == null) ? false : true;
+		List<com.cenfotec.dondeEs.ejb.AuctionService> services = auction.getAuctionServices();
+		auction.setAuctionServices(null);
+		
+		Auction saveAuction =  auctionRepository.save(auction);
+		
+		if(saveAuction != null){
+			services.forEach(s -> {
+				s.setDate(new java.util.Date());
+				s.setAuction(saveAuction);
+				auctionServiceRepository.save(s);
+				sendEmailController.sendAuctionInvitationEmail(s.getAuctionServicesId(), s.getService().getUser().getEmail(), saveAuction.getEvent());
+			});
+		}
+		
+	 	return (saveAuction != null);
 	}
 
 	/***

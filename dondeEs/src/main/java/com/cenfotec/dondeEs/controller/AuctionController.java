@@ -28,12 +28,12 @@ public class AuctionController {
 	@Autowired private AuctionServiceInterface auctionServiceInterface;
 	
 	/**
-	 * @Author Juan Carlos Sánchez G.
+	 * @author Juan Carlos Sánchez G. (Autor)
+	 * @author Ernesto Mendez Arias (Contribuyente)
 	 * @param auction Peticion que contiene la información de la subasta por crear.
 	 * @return response Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
-	
 	@RequestMapping(value ="/createAuction", method = RequestMethod.POST)
 	@Transactional
 	public AuctionResponse createAuction(@RequestBody Auction auction){
