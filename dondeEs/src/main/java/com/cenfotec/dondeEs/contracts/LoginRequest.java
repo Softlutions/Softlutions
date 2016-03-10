@@ -4,6 +4,7 @@ public class LoginRequest {
 
 	private String email;
 	private String password;
+	private boolean isCript;
 	
 	public LoginRequest() {
 		super();
@@ -29,5 +30,13 @@ public class LoginRequest {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isCript() {
+		return isCript;
+	}
+
+	public void setCript(boolean isCript) {
+		this.isCript = isCript;
 	}
 }

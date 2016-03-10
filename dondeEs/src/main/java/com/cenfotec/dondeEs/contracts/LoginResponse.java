@@ -8,6 +8,7 @@ public class LoginResponse extends BaseResponse {
 	private String firstName;
 	private String lastName; 
 	private String email;
+	private String criptPass;
 	private RolePOJO role;
 
 	public LoginResponse() {
@@ -44,6 +45,14 @@ public class LoginResponse extends BaseResponse {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getCriptPass() {
+		return criptPass;
+	}
+
+	public void setCriptPass(String criptPass) {
+		this.criptPass = criptPass;
 	}
 
 	public RolePOJO getRole() {
