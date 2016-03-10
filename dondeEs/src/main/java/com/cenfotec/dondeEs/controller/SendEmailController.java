@@ -108,7 +108,7 @@ public class SendEmailController {
 		String subject = "Invitación a subasta";
 		mailMessage.setSubject(subject);
 		
-		String msj = APP_DOMAIN+"/dondeEs/app#/auctionInvitation?id="+invitationId;
+		String msj = APP_DOMAIN+"/dondeEs/app#/index?auctionInvitation="+invitationId;
 		mailMessage.setText(msj);
 		
 		try{

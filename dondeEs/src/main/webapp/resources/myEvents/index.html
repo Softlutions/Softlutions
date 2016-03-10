@@ -181,10 +181,10 @@
 					</form>
 					
 					<!-- Services lists by catalog -->
-					<div>
+					<div class="ibox ibox-content">
 						<form class="form-horizontal">
 							<div class="form-group">
-								<label class="col-lg-2 control-label">Tipo de servicio:</label>
+								<label class="control-label">Tipo de servicio:</label>
 								<select ng-options="c as c.name for c in catalogs" ng-change="getServicesByCatalog(selected)" ng-model="selected"></select>
 							</div>
 						</form>
@@ -239,7 +239,7 @@
 						<tbody ng-repeat="serviceContact in serviceContacts">
 							<tr>
 								<td>{{serviceContact.service.name}}</td>
-								<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+								<td>{{(serviceContact.state==0)? "Pendiente":(serviceContact.state==1)? "Concretado":"Cancelado"}}</td>
 								<td>{{serviceContact.comment}}</td>
 								
 								<td ng-if="serviceContact.state != 2">
@@ -253,18 +253,80 @@
 					</table>
 					
 					<!-- Graph morris donut chart -->
-					<div>
-					    <div class="ibox float-e-margins">
-					        <div class="ibox-title">
-					            <h5>Resumen</h5>
-					        </div>
-					        <div class="ibox-content">
-					            <div id="contracts-state-chart" class="hidden"></div>
-					        </div>
-					    </div>
-					</div>
+					<div class="ibox">
+				        <div class="ibox-title">
+				            <h5>Resumen</h5>
+				        </div>
+				        <div id="contracts-state-chart" class="hidden"></div>
+				    </div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<div id="modalAuctionAnswerInvitation" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Invitación a {{auctionInvitation.auction.name}}</h4>
+				</div>
+				
+				<div class="modal-body">
+					<div ng-show="requestInfo == false">
+						<p class="text text-center">
+							{{auctionInvitation.auction.event.user.name}} 
+							{{auctionInvitation.auction.event.user.lastName1}} 
+							{{auctionInvitation.auction.event.user.lastName2}}
+							esta solicitando tus servicios para su evento 
+							{{auctionInvitation.auction.event.name}}
+						</p>
+						
+						<p class="text text-center"><label>Descripción de la subasta</label></p>
+						<p class="text text-center">
+							{{auctionInvitation.auction.description}} 
+						</p>
+						
+						<p class="text text-center"><label>¿Deseas aceptar la invitación?</label></p>
+						
+						<div class="text-center">
+							<button class="btn btn-danger" id="btnAuctionDiscard"
+								ng-click="answerAuctionInvitation(false)">Rechazar</button>
+							<button class="btn btn-primary" id="btnAuctionAcept"
+								ng-click="requestInfo = true">Aceptar</button>
+						</div>
+					</div>
+					
+					<div ng-show="requestInfo == true">
+						<p class="text text-center">Favor llenar los siguientes campos para tu apuesta inicial</p>
+						<form class="form-horizontal">
+							<div class="form-group" id="divInitialPrice">
+								<label class="control-label" for="initialPrice">Precio inicial de tu servicio:</label>
+								<div>
+									<input type="number" min="0" step="1000" placeholder="$0.00" class="form-control" id="initialPrice">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="answerDescription">Comentarios:</label>
+								<div>
+									<textarea rows="5" maxlength="250" class="form-control" placeholder="(opcional)" id="answerDescription"></textarea>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				<div class="modal-footer" ng-show="requestInfo == true">
+					<button class="btn btn-danger" id="btnAuctionDiscard"
+						ng-click="answerAuctionInvitation(false)">Rechazar</button>
+					<button class="btn btn-primary" id="btnAuctionAcept"
+						ng-click="answerAuctionInvitation(true)">Entrar</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
 </div>

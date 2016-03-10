@@ -6,13 +6,15 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	    controller: 'MyEventsCtrl'
 	  });
 	}])
-	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
+	.controller('MyEventsCtrl', ['$scope', '$http', '$location',function($scope, $http, $location) {
 		$scope.listOfEmails = [];
 		
 		// Create auction
 		$scope.catalogs = [];
 		$scope.servicesByCatalog = [];
 		$scope.auctionServices = [];
+		// Auction answer
+		$scope.requestInfo = false;
 		// --------------
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -164,4 +166,36 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		 	})
 		 }
 		
+		// respuesta a invitaciones de subasta
+		angular.element(document).ready(function () {
+		    var invitationCode = $location.search().auctionInvitation;
+			
+			if(invitationCode != null){
+				$http.get('rest/protected/auction/getAuctionService/'+invitationCode).success(function(response) {
+					if(response.auctionService.acept == 0){
+						$scope.auctionInvitation = response.auctionService;
+						$("#modalAuctionAnswerInvitation").modal("toggle");
+					}
+				});
+			}
+		});
+		
+		$scope.answerAuctionInvitation = function(auctionAcept){
+			var price = $("#initialPrice").val();
+			
+			if(price == ""){
+				$("#divInitialPrice").addClass("has-error");
+			}else{
+				var auctionRequest = {
+						auctionServiceId: $scope.auctionInvitation.auctionServicesId,
+						initialPrice: price,
+						description: $("#answerDescription").val(),
+						acept: auctionAcept
+				};
+				
+				$http.post('rest/protected/auction/auctionInvitationAnswer', auctionRequest).success(function(response) {
+					$("#modalAuctionAnswerInvitation").modal("toggle");
+				});
+			}
+		}
 	}]);

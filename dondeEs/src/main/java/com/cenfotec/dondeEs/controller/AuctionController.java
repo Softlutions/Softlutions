@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
+import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ public class AuctionController {
 	
 	/**
 	 * @author Juan Carlos Sánchez G. (Autor)
-	 * @author Ernesto Mendez Arias (Contribuyente)
+	 * @author Ernesto Mendez A. (Contribuyente)
 	 * @param auction Peticion que contiene la información de la subasta por crear.
 	 * @return response Respuesta del servidor de la petición.
 	 * @version 1.0
@@ -48,7 +51,42 @@ public class AuctionController {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param id Id de la subasta a obtener
+	 * @return Informacion de la subasta, servicio y evento
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getAuctionService/{id}", method = RequestMethod.GET)
+	public AuctionServiceResponse getAuctionService(@PathVariable("id") int id){				
+		AuctionServiceResponse response = new AuctionServiceResponse();
+		response.setCode(200);
+		response.setCodeMessage("Auction service fetched successfully");
+		response.setAuctionService(auctionServiceInterface.getAuctionService(id));
+		return response;
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param request Respuesta de la invitacion a la subasta
+	 * @return codigo y mensaje del resultado de la operacion
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/auctionInvitationAnswer", method = RequestMethod.POST)
+	public AuctionResponse auctionInvitationAnswer(@RequestBody AuctionRequest request){				
+		AuctionResponse response = new AuctionResponse();
+		
+		if(auctionServiceInterface.auctionInvitationAnswer(request)){
+			response.setCode(200);
+			response.setCodeMessage("Successfull");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("Something is wrong");
+		}
+		
+		return response;
+	}
 	
 	@RequestMapping(value ="/getAllAuctionByEvent/{id}", method = RequestMethod.GET)
 	public AuctionResponse getAllAuctionByEvent(@PathVariable("id") int id){				

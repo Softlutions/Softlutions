@@ -4,6 +4,7 @@ package com.cenfotec.dondeEs.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.Auction;
 
@@ -16,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 import com.cenfotec.dondeEs.pojo.AuctionServicePOJO;
+import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 
@@ -86,5 +88,76 @@ public class AuctionService implements AuctionServiceInterface{
 		});
 		
 		return auctionsPOJO;		
+	}
+	
+	@Override
+	@Transactional
+	public AuctionServicePOJO getAuctionService(int auctionServiceId) {
+		com.cenfotec.dondeEs.ejb.AuctionService auctionService = auctionServiceRepository.findOne(auctionServiceId);
+		
+		AuctionServicePOJO auctionservicePOJO = null;
+		
+		if(auctionService != null){
+			auctionservicePOJO = new AuctionServicePOJO();
+			auctionservicePOJO.setAuctionServicesId(auctionService.getAuctionServicesId());
+			auctionservicePOJO.setAcept(auctionService.getAcept());
+			auctionservicePOJO.setDate(auctionService.getDate());
+			auctionservicePOJO.setDescription(auctionService.getDescription());
+			auctionservicePOJO.setPrice(auctionService.getPrice());
+			
+			AuctionPOJO auctionPOJO = new AuctionPOJO();
+			auctionPOJO.setAuctionId(auctionService.getAuction().getAuctionId());
+			auctionPOJO.setDate(auctionService.getAuction().getDate());
+			auctionPOJO.setName(auctionService.getAuction().getName());
+			auctionPOJO.setDescription(auctionService.getAuction().getDescription());
+			auctionservicePOJO.setAuction(auctionPOJO);
+			
+			EventPOJO eventPOJO = new EventPOJO();
+			eventPOJO.setEventId(auctionService.getAuction().getEvent().getEventId());
+			eventPOJO.setName(auctionService.getAuction().getEvent().getName());
+			eventPOJO.setDescription(auctionService.getAuction().getEvent().getDescription());
+			eventPOJO.setLargeDescription(auctionService.getAuction().getEvent().getLargeDescription());
+			eventPOJO.setImage(auctionService.getAuction().getEvent().getImage());
+			eventPOJO.setPublishDate(auctionService.getAuction().getEvent().getPublishDate());
+			auctionPOJO.setEvent(eventPOJO);
+			
+			UserPOJO userPOJO = new UserPOJO();
+			userPOJO.setUserId(auctionService.getAuction().getEvent().getUser().getUserId());
+			userPOJO.setName(auctionService.getAuction().getEvent().getUser().getName());
+			userPOJO.setLastName1(auctionService.getAuction().getEvent().getUser().getLastName1());
+			userPOJO.setLastName2(auctionService.getAuction().getEvent().getUser().getLastName2());
+			userPOJO.setEmail(auctionService.getAuction().getEvent().getUser().getEmail());
+			userPOJO.setImage(auctionService.getAuction().getEvent().getUser().getImage());
+			eventPOJO.setUser(userPOJO);
+			
+			ServicePOJO servicePOJO = new ServicePOJO();
+			servicePOJO.setServiceId(auctionService.getService().getServiceId());
+			servicePOJO.setName(auctionService.getService().getName());
+			servicePOJO.setDescription(auctionService.getService().getDescription());
+			auctionservicePOJO.setService(servicePOJO);
+		}
+		
+		return auctionservicePOJO;		
+	}
+	
+	@Override
+	@Transactional
+	public boolean auctionInvitationAnswer(AuctionRequest request){
+		com.cenfotec.dondeEs.ejb.AuctionService auctionService = auctionServiceRepository.findOne(request.getAuctionServiceId());
+		boolean state = false;
+		
+		if(auctionService != null && auctionService.getAcept() == 0){
+			if(!request.isAcept()){
+				auctionServiceRepository.delete(auctionService);
+			}else{
+				auctionService.setAcept((byte) 1);
+				auctionService.setDescription(request.getDescription());
+				auctionService.setPrice(request.getInitialPrice());
+			}
+			
+			state = true;
+		}
+		
+		return state;
 	}
 }

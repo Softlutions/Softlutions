@@ -8235,8 +8235,9 @@ body.md-skin {
 
 /*Morrit donut graph*/
 #contracts-state-chart{
-	width: 100%;
-	height: 100%;
+	margin: 0 auto;
+	width: 250px;
+	height: 250px;
 }
 
 /*Table selection*/
@@ -8248,4 +8249,8 @@ servicesTable.tbody {
     height: 100px;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+textarea {
+	resize:none;
 }

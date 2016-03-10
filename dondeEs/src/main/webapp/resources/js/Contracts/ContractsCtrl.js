@@ -78,8 +78,8 @@ angular
 		}
 		
 		$scope.refreshChart = function(){
-			var contractsLeft = 1;
-			var contractsOk = 2;
+			var contractsLeft = 0;
+			var contractsOk = 0;
 			var contractsCanceled = 0;
 			
 			$('#contracts-state-chart').removeClass('hidden');
@@ -101,7 +101,7 @@ angular
 					{ label: "Concretados", value: contractsOk },
 					{ label: "Cancelados", value: contractsCanceled }
 				]);
-			}else{
+			}else if(contractsLeft > 0 || contractsOk > 0 || contractsCanceled > 0){
 				$scope.chartValues = Morris.Donut({
 				    element: 'contracts-state-chart',
 				    data: [
@@ -109,7 +109,7 @@ angular
 				           { label: "Concretados", value: contractsOk },
 				           { label: "Cancelados", value: contractsCanceled }
 		            ],
-				    resize: true,
+				    resize: false,
 				    colors: ['#87d6c6', '#54cdb4','#1ab394'],
 				});
 			}
