@@ -44,7 +44,7 @@ public class SendEmailController {
 	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-
+		EventParticipantController ec = new EventParticipantController();
 		subject = "Invitacion a un evento";
 		try {
 
@@ -52,7 +52,7 @@ public class SendEmailController {
 			for (String email : to.getListSimple()) {
 
 				EventParticipantResponse response = new EventParticipantResponse();
-
+				
 				EventParticipant eventParticipant = new EventParticipant();
 				eventParticipant.setEvent(new Event());
 				eventParticipant.getEvent().setEventId(eventId);

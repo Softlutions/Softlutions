@@ -16,6 +16,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 		
 	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$routeParams.id).success(function(response) {
 		$scope.auctionsEvent = response.auctionList;
+
 	});
 	
 	$scope.loadAuctionServices = function (index) {
@@ -26,5 +27,15 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 	//	$location.url('/login');  colocar ruta del perfil del prestatario de servicio. 
 	}
 	
+	$scope.finishAuction= function (id){
+		var dataCreate={
+			auctionId:id
+		}
+		$http({method: 'PUT',url:'rest/protected/auction/finishAuction', data:dataCreate}).success(function(response) {
+			console.log(response);
+			
+		});
+		
+	}
 	
 }]);

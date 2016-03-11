@@ -40,6 +40,7 @@ public class AuctionController {
 	@Transactional
 	public AuctionResponse createAuction(@RequestBody Auction auction){
 		AuctionResponse response = new AuctionResponse();
+		auction.setState((byte)1);
 		Boolean state = auctionServiceInterface.saveAuction(auction);
 		if(state){
 			response.setCode(200);

@@ -43,7 +43,7 @@ angular
 								
 									$("#modal-form").modal('hide');
 									
-									$http({method: 'PUT',url:'rest/protected/eventParticipant/createEventParticipant/'+$location.search().eventParticipantId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+									$http({method: 'PUT',url:'rest/protected/eventParticipant/updateEventParticipant/'+$location.search().eventParticipantId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 									});
 								}else{
 								}

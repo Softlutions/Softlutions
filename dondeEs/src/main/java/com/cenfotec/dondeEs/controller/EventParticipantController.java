@@ -54,8 +54,8 @@ public class EventParticipantController {
 	 * @throws ParseException
 	 * @version 1.0
 	 */
-	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.PUT)
-	public EventParticipantResponse createEventParticipant(@PathVariable("id") String id, @QueryParam("state") byte state, @QueryParam("comment") String comment)
+	@RequestMapping(value = "/updateEventParticipant/{id}", method = RequestMethod.PUT)
+	public EventParticipantResponse updateEventParticipant(@PathVariable("id") String id, @QueryParam("state") byte state, @QueryParam("comment") String comment)
 			throws ParseException {
 
 		EventParticipantResponse response = new EventParticipantResponse();
