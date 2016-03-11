@@ -4,7 +4,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/eventsPublish', {
-    templateUrl: 'resources/eventsPublish.html',
+    templateUrl: 'resources/Events/eventsPublish.html',
     controller: 'eventsPublishCtrl'
   });
 }])

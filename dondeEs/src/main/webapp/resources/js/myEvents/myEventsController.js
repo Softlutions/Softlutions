@@ -6,7 +6,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	    controller: 'MyEventsCtrl'
 	  });
 	}])
-	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) {
+	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) { // ,'$upload'
 		$scope.listOfEmails = [];
 		$scope.files = {};
 		
@@ -105,38 +105,32 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		 	})
 		 }
 		
-		$scope.onFileSelect = function($files) {
-			$scope.files = $files;
+		$scope.onFileSelect = function($file) {
+			$scope.file = $file;
 		};
 		
-		$scope.updateCreateEvent = function(event) {
-				// $files: an array of files selected, each
-				// file has name, size, and type.
-				for (var i = 0; i < $scope.files.length; i++) {
-					var file = $scope.files[i];
-					$scope.upload = $upload
-							.upload(
-									{
-										url : 'rest/protected/event/updateCreateEvent',
-										data : {
-											// DATOS
-										},
-										file : file,
-									})
-							.progress(
-									function(evt) {
-										console
-												.log('percent: '
-														+ parseInt(100.0
-																* evt.loaded
-																/ evt.total));
-									})
-							.success(
-									function(data, status,
-											headers, config) {
-										alert('Bien');
-										console.log(data);
-									});
-				}
+		$scope.createEvent = function() {
+			console.log($('#txtEventName').val() + " " + $('#txtEventDescription').val() + " " + $('#txtEventLargeDescription').val() +
+					 " " + $scope.file);
+			$scope.upload = $upload
+					.upload(
+							{
+								url : 'rest/protected/event/createEvent',
+								data : {
+									name: $('#txtEventName').val(),
+									description: $('#txtEventDescription').val(),
+									largeDescription: $('#txtEventLargeDescription').val(),
+									image: $scope.file
+								}
+							})
+					.progress(
+							function(evt) {
+								console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+							})
+					.success(
+							function(data, status, headers, config) {
+								$('#modalCreateEvent').modal('toggle');
+								console.log(data);
+							});
 		};
 	}]);

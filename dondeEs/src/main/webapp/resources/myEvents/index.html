@@ -238,23 +238,67 @@
 		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Crear evento</h4>
+				</div>
+				
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-sm-12 b-r">
-							<h3 class="m-t-none m-b">Crear evento</h3>
-							<form role="form" ng-init="service">
+						<div class="col-sm-12">
+							<form class="form-horizontal" role="form" name="formCreateEvent">
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Nombre</label>
+									<div class="col-lg-10">
+										<input id="txtEventName" type="text" class="form-control" required>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Descripción</label>
+									<div class="col-lg-10">
+										<input id="txtEventDescription" type="text" class="form-control" required>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Descripción larga</label>
+									<div class="col-lg-10">
+										<input id="txtEventLargeDescription" type="text" class="form-control">
+									</div>
+								</div>
+							
+								<div class="form-group">	
+									<label class="col-lg-2 control-label">Tipo de evento</label>
+									<div class="col-lg-10">		
+										<div class="radio-inline">
+										  <label>
+										    <input type="radio" name="optionsRadios" id="publicEvent" checked>
+										    Público
+										  </label>
+										</div>
+										<div class="radio-inline">
+										  <label>
+										    <input type="radio" name="optionsRadios" id="privateEvent">
+										    Privado
+										  </label>
+										</div>
+									</div>
+								</div> 
+							
 								<div class="form-group">
 									<label class='control-label'>Imagen</label>
-									<input type="file" name="inputfile" required ng-file-select="onFileSelect($files)" >
-								</div>
-								<div class="form-group">
-									<button type="button"
-										class="btn btn-sm btn-primary pull-right m-t-n-xs"
-										data-dismiss="modal">Crear</button>
-								</div>
+									<input class="btn btn-primary" type="file" name="inputfile" required ng-file-select="onFileSelect($file)" ngf-accept="image/*" 
+									accept="image/*" ngf-pattern="image/*" ngf-validate="size: {max: '5MB', min: '10B'}">
+								</div>  
 							</form>
 						</div>
 					</div>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button"
+						class="btn btn-primary pull-right" ng-disabled="" ng-click="createEvent()">Crear</button>				
 				</div>
 			</div>
 		</div>

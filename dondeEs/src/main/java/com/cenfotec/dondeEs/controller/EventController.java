@@ -176,7 +176,7 @@ public class EventController {
 	 * @return
 	 * @version 1.0
 	 */
-	@RequestMapping(value ="/updateCreateEvent", method = RequestMethod.POST)
+	@RequestMapping(value ="/createEvent", method = RequestMethod.POST)
 	public EventResponse create(@RequestBody Event _event){	
 		EventResponse event = new EventResponse();
 		Boolean state = eventServiceInterface.saveEvent(_event);
