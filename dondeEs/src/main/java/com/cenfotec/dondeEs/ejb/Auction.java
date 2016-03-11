@@ -27,6 +27,8 @@ public class Auction implements Serializable {
 	private String description;
 
 	private String name;
+	
+	private byte state;
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -70,6 +72,14 @@ public class Auction implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public byte getState() {
+		return state;
+	}
+
+	public void setState(byte state) {
+		this.state = state;
 	}
 
 	public Event getEvent() {
