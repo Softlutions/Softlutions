@@ -48,4 +48,11 @@ angular
 								}else{
 								}
 							}
+							
+							
+								$http.get('rest/protected/service/getServiceByProvider/3').success(function(response) {
+									$scope.services = response.serviceLists;
+									console.log("SERVICES "+$scope.services[0].name);
+								});
+							
 	}])

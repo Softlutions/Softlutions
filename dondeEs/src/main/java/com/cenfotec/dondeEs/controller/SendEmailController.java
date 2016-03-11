@@ -44,7 +44,6 @@ public class SendEmailController {
 	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		EventParticipantController ec = new EventParticipantController();
 		subject = "Invitacion a un evento";
 		try {
 
