@@ -11,14 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.OfflineUser;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
+import com.cenfotec.dondeEs.services.ServiceContactInterface;
+import com.cenfotec.dondeEs.services.ServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 @RestController
@@ -136,19 +140,23 @@ public class SendEmailController {
 	 * @author Enmanuel García González
 	 * 
 	 * @param id /*@RequestMapping(value =
+	 *            /*@RequestMapping(value =
 	 * "/sendEmailCancelEventNotification/{serviceId}", method =
 	 * RequestMethod.GET) public void
 	 * sendEmailCancelEventNotification(@PathVariable("serviceId") int id) {
 	 * generalEmail(); Session session = Session.getDefaultInstance(props);
+	 *            Session.getDefaultInstance(props); subject =
 	 * subject = "Solicitud de contratación!"; try { Transport transport =
 	 * session.getTransport("smtp"); String email =
 	 * serviceInterface.getServiceById(id).getUser().getEmail(); MimeMessage
 	 * message = new MimeMessage(session); message.setFrom(new
 	 * InternetAddress(from)); text = "Link x" + id + "&email=" + email;
+	 *            id + "&email=" + email; InternetAddress internetAddress = new
 	 * InternetAddress internetAddress = new InternetAddress(email);
 	 * message.addRecipient(Message.RecipientType.TO, internetAddress);
 	 * message.setSubject(subject); message.setText(text);
 	 * transport.connect(host, from, pass); transport.sendMessage(message,
+	 *            transport.sendMessage(message, message.getAllRecipients());
 	 * message.getAllRecipients()); transport.close(); } catch (AddressException
 	 * ae) { ae.printStackTrace(); } catch (MessagingException me) {
 	 * me.printStackTrace(); } }
