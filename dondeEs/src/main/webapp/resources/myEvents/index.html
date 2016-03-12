@@ -242,16 +242,14 @@
 		</div>
 	</div>
 	<div class="ibox-content">
-		<div class="col-md-11">
-	        <div class="input-group">
-		        <label>Buscar</label>
+	          <label>Buscar</label>
 		        <input type="text" ng-model="search.name" placeholder="Buscar servicio" class="form-control"> 
-		        	
+
 		        <table class="table table-hover">
 					<thead>
 							<tr>
 								<th>Nombre</th>
-						  		<th>Descripcion</th>
+						  		<th>Descripción</th>
 						  	</tr>
 					</thead>
 				 	<tbody ng-repeat="service in services | filter:search:strict">
@@ -262,6 +260,5 @@
 				  	</tbody>
 				</table>
 			</div>
-		</div>
-    </div>
+	
 </div>
