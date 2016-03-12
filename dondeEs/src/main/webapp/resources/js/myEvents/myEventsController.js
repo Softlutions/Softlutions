@@ -105,4 +105,8 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		 	})
 		 }
 		
+		$http.get('rest/protected/service/getServiceByProvider/'+$scope.loggedUser.userId ).success(function(response) {
+			$scope.services = response.serviceLists;
+		});
+		
 	}]);

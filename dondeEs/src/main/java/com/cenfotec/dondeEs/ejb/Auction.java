@@ -27,13 +27,18 @@ public class Auction implements Serializable {
 	private String description;
 
 	private String name;
-	
+
 	private byte state;
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="event_id")
 	private Event event;
+
+	//bi-directional many-to-one association to ServiceCatalog
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="service_catalog_id")
+	private ServiceCatalog serviceCatalog;
 
 	//bi-directional many-to-one association to AuctionService
 	@OneToMany(mappedBy="auction")
@@ -75,7 +80,7 @@ public class Auction implements Serializable {
 	}
 
 	public byte getState() {
-		return state;
+		return this.state;
 	}
 
 	public void setState(byte state) {
@@ -88,6 +93,14 @@ public class Auction implements Serializable {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	public ServiceCatalog getServiceCatalog() {
+		return this.serviceCatalog;
+	}
+
+	public void setServiceCatalog(ServiceCatalog serviceCatalog) {
+		this.serviceCatalog = serviceCatalog;
 	}
 
 	public List<AuctionService> getAuctionServices() {

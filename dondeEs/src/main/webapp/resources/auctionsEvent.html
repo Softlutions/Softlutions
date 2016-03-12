@@ -23,10 +23,13 @@
                     	<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-form" 
                     				ng-click="loadAuctionServices($index)">Ver servicios</a>
 					</td>
-					<td>
-						<a ng-show="auction.state===1" type="button"class="btn btn-danger btn-sm" ng-click="finishAuction(auction.auctionId)">Finalizar subasta</a>
-
+					<td ng-if="auction.state == 1">
+						<button id="finishAuctionId-{{auction.auctionId}}" class="btn btn-danger btn-sm" ng-click="finishAuction(auction.auctionId)">Finalizar subasta</button>
 					</td>
+					<td ng-if="auction.state != 1">
+						<button id="finishAuctionId-{{auction.auctionId}}" class="btn btn-warning btn-sm" ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
+					</td>
+					
                 </tr>	
                 </tbody>
             </table>

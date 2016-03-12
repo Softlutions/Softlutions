@@ -9,8 +9,8 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
   });
 }])
 
-.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', 
-                                  			function($scope,$http,$location,$routeParams) {	
+.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window',
+                                  			function($scope,$http,$location,$routeParams, $window) {	
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
 		
@@ -33,7 +33,10 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 		}
 		$http({method: 'PUT',url:'rest/protected/auction/finishAuction', data:dataCreate}).success(function(response) {
 			console.log(response);
-			
+			$("#finishAuctionId-"+id).text("Finalizada");
+			$("#finishAuctionId-"+id).removeClass("btn-danger");
+			$("#finishAuctionId-"+id).addClass("btn-warning");
+			$("#finishAuctionId-"+id).prop("disabled", true);
 		});
 		
 	}
