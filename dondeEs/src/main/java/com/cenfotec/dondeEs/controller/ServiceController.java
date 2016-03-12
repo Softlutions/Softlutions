@@ -49,4 +49,13 @@ public class ServiceController {
 		response.setService(serviceInterface.getService(serviceId));
 		return response;
 	}
+	
+	@RequestMapping(value ="/getServiceByProvider/{userId}", method = RequestMethod.GET)
+	public ServiceResponse getServiceByProvider(@PathVariable("userId") int userId){
+		ServiceResponse response = new ServiceResponse();
+		response.setServiceLists(serviceInterface.getByProvider(userId));
+		
+		return response;
+		
+	}
 }
