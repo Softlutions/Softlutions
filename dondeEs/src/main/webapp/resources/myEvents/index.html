@@ -36,11 +36,12 @@
 								<div class="btn-group">
 									<button data-toggle="dropdown"
 										class="btn btn-primary btn-xs dropdown-toggle">
-										Acción<span class="caret"></span>
+										Acción <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a ng-click="listContracts(event.eventId)" data-toggle="modal" 
-											data-target="#modalListContacts">Listar contratos</a></li>
+										<li><a ng-click="listContracts(event.eventId)"
+											data-toggle="modal" data-target="#modalListContacts">Listar
+												contratos</a></li>
 										<li><a type="button" data-toggle="modal"
 											data-target="#modalParticipants">Listar participantes</a></li>
 										<li><a ng-click="auctionEventServices(event)"
@@ -54,7 +55,8 @@
 										<li ng-show="event.state===0"><a type="button"
 											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
 										<li ng-show="event.state===1"><a type="button"
-											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar evento</a></li>
+											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar
+												evento</a></li>
 									</ul>
 								</div>
 							</td>
@@ -192,7 +194,8 @@
 		</div>
 	</div>
 
-	<div id="modalListContacts" class="modal fade" role="dialog" ng-controller="ContractsCtrl">
+	<div id="modalListContacts" class="modal fade" role="dialog"
+		ng-controller="ContractsCtrl">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
@@ -213,32 +216,84 @@
 						<tbody ng-repeat="serviceContact in serviceContacts">
 							<tr>
 								<td>{{serviceContact.service.name}}</td>
-								<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+								<td>{{(((serviceContact.state)==0)?
+									"Pendiente":"Concretado")}}</td>
 								<td>{{serviceContact.comment}}</td>
-								
+
 								<td ng-if="serviceContact.state != 2">
-									<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
+									<Button
+										id="btnCancelService-{{serviceContact.serviceContractId}}"
+										class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
 								</td>
 								<td ng-if="serviceContact.state == 2">
-									<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
+									<Button
+										id="btnCancelService-{{serviceContact.serviceContractId}}"
+										class="btn btn-warning" ng-click="cancel(serviceContact)"
+										disabled>Cancelado</Button>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					
+
 					<!-- Graph morris donut chart -->
 					<div>
-					    <div class="ibox float-e-margins">
-					        <div class="ibox-title">
-					            <h5>Resumen</h5>
-					        </div>
-					        <div class="ibox-content">
-					            <div id="contracts-state-chart" class="hidden"></div>
-					        </div>
-					    </div>
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>Resumen</h5>
+							</div>
+							<div class="ibox-content">
+								<div id="contracts-state-chart" class="hidden"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+
+<button data-toggle="modal" class="btn btn-danger btn-xs" data-target="#asistenteCreacion">Asistente de creacion</button>
+
+<!-- asisstente de creacion -->
+<div id="asistenteCreacion" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Asitente de creacion</h4>
+			</div>
+			<div class="modal-body">
+				<form id="example-advanced-form" action="#">
+					<h3>Crear evento</h3>
+					<fieldset>
+						
+					</fieldset>
+
+					<h3>Subasta</h3>
+					<fieldset>
+						
+					</fieldset>
+
+					<h3>Chat administrativo</h3>
+					<fieldset>
+						<legend>You are to young</legend>
+
+						<p>Please go away ;-)</p>
+					</fieldset>
+
+					<h3>Finish</h3>
+					<fieldset>
+						
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
