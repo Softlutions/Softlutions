@@ -10,17 +10,17 @@ angular.module('dondeEs.Contact', ['ngRoute'])
 
 		$scope.sendMessage = function () {
 			var data = {
-				name: $('#txtName').val(),
-				email: $('#txtEmail').val(),
+				userName: $('#txtName').val(),
+				userEmail: $('#txtEmail').val(),
 				message: $('#txtMessage').val()
 			}
 			
 			console.log(data);
-			/*
-			$http({method: 'POST',url:'rest/protected/auction/createAuction', data, headers: {'Content-Type': 'application/json'}})
-					.success(function(response) {
-				console.log('result: ' + response);
-			}); */
-		}
-		
-	}]);
+			
+			
+		$http.post('rest/protected/sendEmail/sendMessage', data)				
+			.success(function(response) {
+					console.log(response);
+		});
+	}
+}]);

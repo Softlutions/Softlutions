@@ -17,7 +17,7 @@ public interface UserServiceInterface {
 	 */
 	List<ServicePOJO> getAllService(int idUser);
 	
-	public Boolean saveUser(UserRequest	 ur);
+	Boolean saveUser(UserRequest ur);
 	
 	User findByEmail(String email);
 

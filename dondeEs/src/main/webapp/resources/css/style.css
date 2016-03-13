@@ -8239,3 +8239,16 @@ body.md-skin {
 	height: 100%;
 }
 
+/*Conteiner google maps api*/
+.angular-google-map-container {
+     width: 300px;
+    height: 200px;   
+}
+.markerlabel {
+    font-weight: bold;
+    font-size: 13px;
+    border: 1px solid #333;
+    padding: 2px;
+    background: #fff;
+    color: #333;
+}
