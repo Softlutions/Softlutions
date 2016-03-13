@@ -41,4 +41,25 @@ angular.module('loginModule', ['ngRoute'])
 				$("#errorMsj").css("visibility", "visible");
 			}
 		}
+		
+		$scope.forgotPassword = function() {
+			if($scope.user.email != ''){
+				$http.post("rest/login/updatePassword", $scope.user)
+				.success(function(response){
+					if(response.code == 200){
+						alert('Password cambiado correctamente!');
+					}else{
+						alert('NO se  poder');
+					}
+				})
+				.error(function(response){
+					$("#errorMsj").css("visibility", "visible");
+				});
+			}else{
+				$("#errorMsj").css("visibility", "visible");
+			}
+		}
+		
+		
+		
 	}]);
