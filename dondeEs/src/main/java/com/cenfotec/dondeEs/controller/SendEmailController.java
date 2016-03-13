@@ -1,17 +1,12 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
-import java.util.Properties;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
-import com.cenfotec.dondeEs.ejb.Comment;
+import com.cenfotec.dondeEs.contracts.MessageRequest;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.OfflineUser;
@@ -154,5 +150,30 @@ public class SendEmailController {
 	 * ae) { ae.printStackTrace(); } catch (MessagingException me) {
 	 * me.printStackTrace(); } }
 	 */
+
+	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
+	public void sendMessage(@RequestBody MessageRequest message) {
+		BaseResponse response = new BaseResponse();
+		
+		try {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			subject = "Message del usuario";
+			text = "Ha recibido un mensaje del usuario: " + message.getUserName() + "\n" +
+						"Correo: " + message.getUserEmail() + "\n" +
+						"Mensage: " + message.getMessage();
+				
+			mailMessage.setTo("egarciag@ucenfotec.ac.cr"); // correo de prueba
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+			
+			response.setCode(200);
+		} catch (Exception ae) {
+			response.setCode(500);
+			response.setErrorMessage("Ha ocurrido un error interno.");
+			ae.printStackTrace();
+		}
+	}
 
 }

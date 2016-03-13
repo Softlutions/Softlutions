@@ -6,7 +6,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	    controller: 'MyEventsCtrl'
 	  });
 	}])
-	.controller('MyEventsCtrl', ['$scope','$http',function($scope,$http,$upload) { // ,'$upload'
+	.controller('MyEventsCtrl', ['$scope','$http','$upload', function($scope,$http,$upload) { // ,'$upload'
 		$scope.listOfEmails = [];
 		$scope.files = {};
 		
@@ -105,23 +105,25 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		 	})
 		 }
 		
-		$scope.onFileSelect = function($file) {
-			$scope.file = $file;
+		$scope.onFileSelect = function($files) {
+			$scope.file = $files[0];
+			console.log($files);
+			console.log($scope.file);
 		};
 		
 		$scope.createEvent = function() {
-			console.log($('#txtEventName').val() + " " + $('#txtEventDescription').val() + " " + $('#txtEventLargeDescription').val() +
+			console.log($scope.eventName + " " + $scope.eventDescription + " " + $scope.eventLargeDescription +
 					 " " + $scope.file);
 			$scope.upload = $upload
 					.upload(
 							{
 								url : 'rest/protected/event/createEvent',
 								data : {
-									name: $('#txtEventName').val(),
-									description: $('#txtEventDescription').val(),
-									largeDescription: $('#txtEventLargeDescription').val(),
-									image: $scope.file
-								}
+									name:$scope.eventName,
+									description:$scope.eventDescription,
+									largeDescription:$scope.eventLargeDescription,
+								},
+								file : $scope.file,
 							})
 					.progress(
 							function(evt) {
@@ -131,6 +133,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 							function(data, status, headers, config) {
 								$('#modalCreateEvent').modal('toggle');
 								console.log(data);
+								console.log(status);
 							});
 		};
 	}]);
