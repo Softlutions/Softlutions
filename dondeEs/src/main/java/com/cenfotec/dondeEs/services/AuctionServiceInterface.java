@@ -9,6 +9,5 @@ public interface AuctionServiceInterface {
 
 	Boolean saveAuction(Auction auction);
 	List<AuctionPOJO> getAllAuctionByEvent(int event_id);
-	Auction findById (int auctionId);
 
 }
