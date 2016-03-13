@@ -136,4 +136,8 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 								console.log(status);
 							});
 		};
+
+		$http.get('rest/protected/service/getServiceByProvider/'+$scope.loggedUser.userId ).success(function(response) {
+			$scope.services = response.serviceLists;
+		});
 	}]);

@@ -48,5 +48,31 @@
 			</div>
 		</div>
 	</div>
-</div>
+
+	
+	<div class="col-lg-6">
+		<div class="widget-head-color-box navy-bg p-lg text-center">
+			<div class="m-b-md">
+				<h2 class="font-bold no-margins">{{event.name}}</h2>
+				<small>{{event.place.name}}</small>
+			</div>
+			<img
+				src="http://lorempixel.com/image_output/people-q-c-100-100-1.jpg"
+				class="img-circle circle-border m-b-md" alt="profile">
+			<div>
+				<span>Correo: {{event.user.email}}</span>
+			</div>
+		</div>
+		<div class="widget-text-box">
+			<h4 class="media-heading">{{loggedUser.name + ' ' +
+				loggedUser.lastName}}</h4>
+			<p>Has sido contratado para brindar tus servicios en este evento!</p>
+			<div class="text-right">
+				<a class="btn btn-xs btn-danger" ><i class="fa fa-thumbs-down"></i>
+					NO aceptar </a> <a ng-click="accept(event)" class="btn btn-xs btn-primary"><i
+					class="fa fa-thumbs-up"></i> Aceptar</a>
+			</div>
+		</div>
+	</div>
+	
 </div>

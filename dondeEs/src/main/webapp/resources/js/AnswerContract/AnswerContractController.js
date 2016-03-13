@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('dondeEs.answerContract', [ 'ngRoute' ])
-
 .config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/answerContract', {
 		templateUrl : 'resources/AnswerContract/AnswerContract.html',
@@ -16,13 +15,16 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 		});
 	}
 	
+	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	console.log($scope.loggedUser);
+	
 	$scope.accept = function(event){
 		var dataCreate = {
 				eventId : $location.search().eventId,
 				serviceId : $location.search().serviceId,
 				state : 1
 		};
-		$http({method: 'POST',url:'rest/protected/sendEmail/answerContract', data:dataCreate}).success(function(response) {
+		$http({method: 'POST',url:'rest/protected/serviceContact/answerContract', data:dataCreate}).success(function(response) {
 			console.log(response);
 		});
 	}
