@@ -9,4 +9,5 @@ public interface ServiceInterface {
 	List<Service> getAll();
 	ServicePOJO getService(int idEvent);
 	ServicePOJO getServiceById(int idService);
+	List<ServicePOJO> getByCatalog(int catalogId);
 }

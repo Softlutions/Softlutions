@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
+import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.cenfotec.dondeEs.services.AuctionServiceInterface;
@@ -50,6 +51,28 @@ public class AuctionController {
 		return response;
 	}
 	
+	@RequestMapping(value ="/getAllAuctionsByServiceCatalog/{id}", method = RequestMethod.GET)
+	public AuctionResponse getAllAuctionsByServiceCatalog(@PathVariable("id") int id){				
+		AuctionResponse response = new AuctionResponse();
+		response.setAuctionList(auctionServiceInterface.getAllByAuctionsByServiceCatalog(id));
+		return response;
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param id Id de la subasta a obtener
+	 * @return Informacion de la subasta, servicio y evento
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getAuctionService/{id}", method = RequestMethod.GET)
+	public AuctionServiceResponse getAuctionService(@PathVariable("id") int id){				
+		AuctionServiceResponse response = new AuctionServiceResponse();
+		response.setCode(200);
+		response.setCodeMessage("Auction service fetched successfully");
+		response.setAuctionService(auctionServiceInterface.getAuctionService(id));
+		return response;
+	}
+
 	/**
 	 * @Author Juan Carlos Sánchez G.
 	 * @return response Respuesta del servidor de la petición.

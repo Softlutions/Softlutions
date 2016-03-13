@@ -2,8 +2,9 @@
 	<div class="table-responsive">
 		<div class="ibox-title">
 	    	<h4>Subastas disponibles</h4>
+	    	<select	class="form-control m-b" ng-change="getAuctionsByCatalog(serviceCatalog)" ng-options="serviceCatalog as serviceCatalog.name for serviceCatalog in catalogs " ng-model="serviceCatalog"></select>
 	    </div>
-		<div class="ibox-content">
+		<div ng-show="showError" class="ibox-content">
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -22,6 +23,9 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div ng-hide="showError">
+			<p>No hay subastas disponibles.</p>
 		</div>
 	</div>
 	
@@ -67,7 +71,7 @@
 				<div class="modal-body">
 					<form class="form-horizontal">
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Seleccione el servicio con el que desea participar</label>
+							<label class="col-lg-2 control-label">Servicio</label>
 							<div class="col-lg-10">
 								<select	class="form-control m-b" ng-options="service as service.name for service in services track by service.serviceId" ng-model="auctionService.service"></select>
 							</div>
@@ -75,7 +79,7 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Descripción</label>
 							<div class="col-lg-10">
-								<textarea rows="5" placeholder="Descripción" class="form-control" ng-model="auctionService.description"></textarea>
+								<textarea rows="5" style="resize:none" placeholder="Descripción" class="form-control" ng-model="auctionService.description"></textarea>
 							</div>
 						</div>	
 						<div class="form-group">
@@ -91,5 +95,5 @@
 				</div>
 			</div>
 	</div>
-	
+	</div>
 </div>
