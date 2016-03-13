@@ -61,6 +61,7 @@ public class ServiceController {
 		ServiceResponse response = new ServiceResponse();
 		response.setServiceLists(serviceInterface.getByCatalog(catalogId));
 		return response;
+	}
 
 	@RequestMapping(value ="/getServiceByProvider/{userId}", method = RequestMethod.GET)
 	public ServiceResponse getServiceByProvider(@PathVariable("userId") int userId){
