@@ -24,6 +24,8 @@ public class EventParticipantPOJO{
 	private EventPOJO event;
 
 	private UserPOJO user;
+	
+	private OfflineUserPOJO offlineUser;
 
 	public EventParticipantPOJO() {
 	}
@@ -74,6 +76,14 @@ public class EventParticipantPOJO{
 
 	public void setUser(UserPOJO user) {
 		this.user = user;
+	}
+
+	public OfflineUserPOJO getOfflineUser() {
+		return offlineUser;
+	}
+
+	public void setOfflineUser(OfflineUserPOJO offlineUser) {
+		this.offlineUser = offlineUser;
 	}
 
 }

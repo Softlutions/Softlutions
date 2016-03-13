@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
+import com.cenfotec.dondeEs.pojo.OfflineUserPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 
 import javax.transaction.Transactional;
@@ -36,16 +37,20 @@ public class EventParticipantService implements EventParticipantServiceInterface
 		
 		eventParticipantList.stream().forEach(ep -> {
 			EventParticipantPOJO eventParticipantPOJO = new EventParticipantPOJO();
-			BeanUtils.copyProperties(ep, eventParticipantPOJO);
-			eventParticipantPOJO.setEvent(null);
+			eventParticipantPOJO.setEventParticipantId(ep.getEventParticipantId());
+			eventParticipantPOJO.setInvitationDate(ep.getInvitationDate());
+			eventParticipantPOJO.setState(ep.getState());
 			if(ep.getUser()!=null){
 				UserPOJO userPojo = new UserPOJO();
 				userPojo.setName(ep.getUser().getName());
 				userPojo.setLastName1(ep.getUser().getLastName1());
 				userPojo.setLastName2(ep.getUser().getLastName2());
-				userPojo.setPhone(ep.getUser().getPhone());
-				userPojo.setEmail(ep.getUser().getEmail());
 				eventParticipantPOJO.setUser(userPojo);
+			}
+			if(ep.getOfflineUser()!=null){
+				OfflineUserPOJO offlineUserPOJO = new OfflineUserPOJO();
+				offlineUserPOJO.setEmail(ep.getOfflineUser().getEmail());
+				eventParticipantPOJO.setOfflineUser(offlineUserPOJO);
 			}
 			listPojo.add(eventParticipantPOJO);
 		});

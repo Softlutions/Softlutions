@@ -130,7 +130,7 @@
 	<script src="resources/js/AnswerContract/AnswerContractController.js"></script>
 	<script src="resources/js/Commons/Filters.js"></script>
 	<script src="resources/js/Auction/auctionController.js"></script>
-	
+	<script src="resources/js/Auction/ListAuctionsController.js"></script>
 	<!-- Morris -->
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>
