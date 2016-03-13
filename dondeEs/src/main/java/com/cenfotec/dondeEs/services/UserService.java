@@ -1,17 +1,23 @@
 package com.cenfotec.dondeEs.services;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.ejb.Auction;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
@@ -29,6 +35,9 @@ public class UserService implements UserServiceInterface {
 	private RoleRepository roleRepository;
 	@Autowired
 	private AuctionRepository auctionRepository;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	public List<UserPOJO> getAll() {
 		List<User> usersList = userRepository.findAll();
@@ -92,6 +101,31 @@ public class UserService implements UserServiceInterface {
 		user.setRole(roleRepository.findOne(ur.getUser().getRole().getRoleId()));
 		User nuser = userRepository.save(user);
 		return (nuser == null) ? false : true;
+	}
+
+	public Boolean updatePassword(LoginRequest ur) {
+		User user = userRepository.findByEmail(ur.getEmail());
+		if (user == null)
+			return false;
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		String subject = "Contraseña restablecida!";
+		try {
+			String email = user.getEmail();
+			String password = UUID.randomUUID().toString().substring(0, 7);
+			String encryptPassword = AES.base64encode(password);
+			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password
+					+ ".";
+			user.setPassword(encryptPassword);
+			mailMessage.setTo(email);
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+			User nuser = userRepository.save(user);
+			if(nuser!=null) return true;
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override
