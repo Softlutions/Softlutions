@@ -10,4 +10,5 @@ public interface ServiceInterface {
 	ServicePOJO getService(int idEvent);
 	ServicePOJO getServiceById(int idService);
 	List<ServicePOJO> getByCatalog(int catalogId);
+	List<ServicePOJO> getByProvider(int idUser);
 }

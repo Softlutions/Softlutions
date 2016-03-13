@@ -49,7 +49,7 @@ public class ServiceController {
 		response.setService(serviceInterface.getService(serviceId));
 		return response;
 	}
-	
+
 	/**
 	 * @author Ernesto Mendez A.
 	 * @param catalogId id del catalogo al cual el servicio pertenece
@@ -60,6 +60,13 @@ public class ServiceController {
 	public ServiceResponse getServicesByCatalog(@PathVariable("catalogId") int catalogId){
 		ServiceResponse response = new ServiceResponse();
 		response.setServiceLists(serviceInterface.getByCatalog(catalogId));
+		return response;
+
+	@RequestMapping(value ="/getServiceByProvider/{userId}", method = RequestMethod.GET)
+	public ServiceResponse getServiceByProvider(@PathVariable("userId") int userId){
+		ServiceResponse response = new ServiceResponse();
+		response.setServiceLists(serviceInterface.getByProvider(userId));
+		
 		return response;
 	}
 }

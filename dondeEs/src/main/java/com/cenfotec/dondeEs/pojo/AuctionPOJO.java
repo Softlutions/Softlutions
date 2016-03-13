@@ -18,7 +18,9 @@ public class AuctionPOJO {
 	private EventPOJO event;
 
 	private List<AuctionServicePOJO> auctionServices;
-
+	
+	private byte state;
+	
 	public AuctionPOJO() {
 	}
 
@@ -60,6 +62,14 @@ public class AuctionPOJO {
 
 	public void setAuctionServices(List<AuctionServicePOJO> auctionServices) {
 		this.auctionServices = auctionServices;
+	}
+
+	public byte getState() {
+		return state;
+	}
+
+	public void setState(byte state) {
+		this.state = state;
 	}
 
 	public AuctionServicePOJO addAuctionService(AuctionServicePOJO auctionService) {

@@ -192,41 +192,10 @@ public class AuctionService implements AuctionServiceInterface{
 		
 		return auctionsPOJO;
 	}
-	/*
-	 * @Override
-	@Transactional
-	public List<AuctionPOJO> getAllAuctionByEvent(int event_id) {
-		List<Auction> auctions = auctionRepository.findAllByEventEventId(event_id);	
-		List<AuctionPOJO> auctionsPOJO = new ArrayList<AuctionPOJO>();
-		auctions.stream().forEach(e -> {
-			AuctionPOJO auctionPOJO = new AuctionPOJO();
-			BeanUtils.copyProperties(e, auctionPOJO);
-			
-			if (e.getAuctionServices() != null) {
-				List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
-				
-				e.getAuctionServices().stream().forEach(as -> {
-					AuctionServicePOJO asp = new AuctionServicePOJO();
-					BeanUtils.copyProperties(as, asp);
-					
-					asp.setService(new ServicePOJO()); 
-					BeanUtils.copyProperties(as.getService(), asp.getService());
-					asp.getService().setServiceContacts(null);
-					asp.getService().setServiceCatalog(null);
-					
-					asp.getService().setUser(new UserPOJO()); 
-					asp.getService().getUser().setUserId(as.getService().getUser().getUserId());
-					
-					auctionServicesPOJO.add(asp);
-				});
-				
-				auctionPOJO.setAuctionServices(auctionServicesPOJO);
-			} 			
-			auctionsPOJO.add(auctionPOJO); 
-		});
-		
-		return auctionsPOJO;		
+
+	@Override
+	public Auction findById(int auctionId) {
+		Auction actn = auctionRepository.findOne(auctionId);
+		return actn;
 	}
-	 * 
-	 */
 }
