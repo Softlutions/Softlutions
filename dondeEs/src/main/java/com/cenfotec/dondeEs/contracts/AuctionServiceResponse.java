@@ -23,6 +23,4 @@ public class AuctionServiceResponse extends BaseResponse{
 	public void setAuctionService(AuctionServicePOJO auctionService) {
 		this.auctionService = auctionService;
 	}
-
-
 }

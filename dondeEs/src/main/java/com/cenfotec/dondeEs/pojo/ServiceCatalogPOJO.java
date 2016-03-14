@@ -18,6 +18,7 @@ public class ServiceCatalogPOJO {
 
 	private String name;
 
+	private List<AuctionPOJO> auctions;
 //	private List<ServicePOJO> services;
 
 	public ServiceCatalogPOJO() {
@@ -37,6 +38,14 @@ public class ServiceCatalogPOJO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<AuctionPOJO> getAuctions() {
+		return auctions;
+	}
+
+	public void setAuctions(List<AuctionPOJO> auctions) {
+		this.auctions = auctions;
 	}
 
 //	public List<ServicePOJO> getServices() {
