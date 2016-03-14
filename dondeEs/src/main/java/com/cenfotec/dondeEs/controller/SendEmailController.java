@@ -104,12 +104,9 @@ public class SendEmailController {
 
 	/**
 	 * @author Alejandro Bermúdez Vargas
-	 * @exception AddressException
-	 *                no se encuentra la direccion de correo
-	 * @exception MessagingException
-	 *                No encuentra el server.
-	 * @param id,
-	 *            el id del servicio que se contrato
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param id, el id del servicio que se contrato
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)

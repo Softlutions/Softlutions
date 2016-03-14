@@ -170,4 +170,20 @@ public class EventController {
 			}
 			return response;
 		}
+		
+		/*@RequestMapping(value="/getActualEventStep", method= RequestMethod.GET)
+		public EventResponse getActualEventStep(@PathVariable("idEvent") String id){
+			EventResponse response = new EventResponse();
+			int eventId = Integer.parseInt(AES.base64decode(id));
+			if(eventId != 0){
+				EventPOJO eventPOJO = eventServiceInterface.eventById(eventId);
+				if(eventPOJO.getServiceContacts()==null) eventPOJO.setState(2);
+				if(eventPOJO.getChats()==null) eventPOJO.setState(3);
+				response.setEventPOJO(eventPOJO);
+			}else{
+				response.setCode(400);
+				response.setCodeMessage("Something is wrong");
+			}
+			return response;
+		}*/
 }

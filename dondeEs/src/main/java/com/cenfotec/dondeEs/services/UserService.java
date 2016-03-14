@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -102,7 +104,15 @@ public class UserService implements UserServiceInterface {
 		User nuser = userRepository.save(user);
 		return (nuser == null) ? false : true;
 	}
-
+	
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
+	 * @version 1.0
+	 */
 	public Boolean updatePassword(LoginRequest ur) {
 		User user = userRepository.findByEmail(ur.getEmail());
 		if (user == null)

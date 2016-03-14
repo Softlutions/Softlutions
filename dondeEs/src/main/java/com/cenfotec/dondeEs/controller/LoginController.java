@@ -1,5 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,6 +50,13 @@ public class LoginController {
 		
 	}
 	
+	
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @param LoginRequest, Este objeto poosee un atributo email del usuario.
+	 * @version 1.0
+	 */
 	@RequestMapping(value ="/updatePassword", method = RequestMethod.POST)
 	public UserResponse updatePassword(@RequestBody LoginRequest lr,HttpServletRequest servletRequest,HttpServletResponse servletResponse){	
 		UserResponse us = new UserResponse();
