@@ -137,5 +137,13 @@
 	<!-- Morris -->
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>
+    
+    
+    <!-- Google Maps -->
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
+
+    <!-- angular-google-maps -->
+    <script src="resources/non_bower_components/lodash.underscore.min.js?v=2.4.1"></script>
+    <script src="resources/non_bower_components/angular-google-maps.min.js?v=1.2.2"></script>
 </body>
 </html>

@@ -29,4 +29,6 @@ public interface UserServiceInterface {
 	List<UserPOJO> getAll();
 
 	List<UserPOJO> getAllServicesProviderAuction(int idEvent);
+	
+	User findById(int id);
 }

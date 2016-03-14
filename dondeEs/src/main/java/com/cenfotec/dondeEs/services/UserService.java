@@ -131,4 +131,15 @@ public class UserService implements UserServiceInterface {
 
 		return usersPOJO;
 	}
+
+	/***
+	 * Obtiene un usuario por su id.
+	 * 
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
+	@Override
+	public User findById(int id) {	
+		return userRepository.findByUserId(id);
+	}
 }

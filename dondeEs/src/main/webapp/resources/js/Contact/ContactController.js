@@ -10,16 +10,15 @@ angular.module('dondeEs.Contact', ['ngRoute'])
 
 		$scope.sendMessage = function () {
 			var data = {
-				userName: $('#txtName').val(),
-				userEmail: $('#txtEmail').val(),
-				message: $('#txtMessage').val()
+				userName: $scope.name,
+				userEmail: $scope.email,
+				message: $scope.message
 			}
 			
 			console.log(data);
 			
 			$http({method: 'POST',url:'rest/protected/sendEmail/sendMessage', data, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
-				console.log(response);
 			}); 
 		}
 		

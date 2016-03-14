@@ -18,10 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
+import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
+import com.cenfotec.dondeEs.services.PlaceServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
 import com.cenfotec.dondeEs.utils.Utils;
 
@@ -32,6 +34,7 @@ public class EventController {
 	@Autowired private EventServiceInterface eventServiceInterface;
 	@Autowired private UserServiceInterface userServiceInterface;
 	@Autowired private ServletContext servletContext;
+	@Autowired private PlaceServiceInterface placeServiceInterface;
 	
 	@RequestMapping(value ="/getAllEventByUser/{id}", method = RequestMethod.GET)
 	public EventResponse getAllByUser(@PathVariable("id") int id){				
@@ -129,8 +132,7 @@ public class EventController {
 				state = eventServiceInterface.saveEvent(event);
 				
 				if (state) {
-					List<UserPOJO> servicesProviders = userServiceInterface.getAllServicesProviderAuction(1);
-					/* agregar: enviar correos a los usuarios involucrados en el evento */
+				//	List<UserPOJO> servicesProviders = userServiceInterface.getAllServicesProviderAuction(1);
 					
 					response.setCode(200);
 					response.setErrorMessage("success");
@@ -184,33 +186,47 @@ public class EventController {
 	 * @author Enmanuel García González	
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 1.0    
 	 */ 
 	@RequestMapping(value="/createEvent", method=RequestMethod.POST)
-	public EventResponse create(
-			//		@RequestParam("file") MultipartFile file,
-					@RequestParam("name") String name,
-					@RequestParam("description") String description,
-					@RequestParam("largeDescription") String largeDescription) {	
+	public EventResponse create(@RequestParam("name") String name,
+								@RequestParam("description") String description,
+								@RequestParam("largeDescription") String largeDescription,
+								@RequestParam("eventType") int eventType,
+								@RequestParam("eventPlaceName") String placeName,
+								@RequestParam("placeLatitude") String placeLatitude,
+								@RequestParam("placeLongitude") String placeLongitude, 
+								@RequestParam("loggedUser") int userId,
+								@RequestParam("file") MultipartFile file) {		
 		EventResponse eventResponse = new EventResponse();
 		Event event = new Event();
 		Place place;
 		
-	//	String resultFileName = Utils.writeToFile(file,servletContext);
-	//	if(!resultFileName.equals("")){
+		String resultFileName = Utils.writeToFile(file,servletContext);
+				
+		if(!resultFileName.equals("")){
 			place = new Place();
-			place.setLatitude("9.936791");
-			place.setLongitude("-84.107693");
-			place.setName("test create event");
+			place.setLatitude(placeLatitude);
+			place.setLongitude(placeLongitude);
+			place.setName(placeName);
+			place = placeServiceInterface.savePlace(place);
+						
+			User user = userServiceInterface.findById(userId);
 			
-			event = new Event(); 
 			event.setName(name);
 			event.setDescription(description);
 			event.setLargeDescription(largeDescription);
+			event.setImage(resultFileName);
 			event.setState((byte) 0);
+			event.setPrivate_((byte) eventType);
+			event.setRegisterDate(new Date());
+			event.setUser(user);
 			event.setPlace(place);
-	//	}
+			
+		}
+		
 		Boolean state = eventServiceInterface.saveEvent(event);
+				
 		if(state){
 			eventResponse.setCode(200);
 			eventResponse.setCodeMessage("Event created succesfully");

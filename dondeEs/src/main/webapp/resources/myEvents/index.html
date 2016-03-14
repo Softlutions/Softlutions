@@ -243,21 +243,21 @@
 					<h4 class="modal-title">Crear evento</h4>
 				</div>
 				
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-sm-12">
-							<form class="form-horizontal" role="form" name="formCreateEvent">
+				<form class="form-horizontal">		
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-12">
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Nombre</label>
 									<div class="col-lg-10">
-										<input ng-model="eventName" type="text" class="form-control" required>
+										<input ng-model="eventName" type="text" class="form-control">
 									</div>
 								</div>
 								
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Descripción</label>
 									<div class="col-lg-10">
-										<input ng-model="eventDescription" type="text" class="form-control" required>
+										<input ng-model="eventDescription" type="text" class="form-control">
 									</div>
 								</div>
 								
@@ -273,33 +273,56 @@
 									<div class="col-lg-10">		
 										<div class="radio-inline">
 										  <label>
-										    <input type="radio" name="optionsRadios" id="publicEvent" checked>
+										    <input type="radio" ng-model="eventType" ng-value="0" checked>
 										    Público
 										  </label>
 										</div>
 										<div class="radio-inline">
 										  <label>
-										    <input type="radio" name="optionsRadios" id="privateEvent">
+										    <input type="radio" ng-model="eventType" ng-value="1">
 										    Privado
 										  </label>
 										</div>
 									</div>
 								</div> 
-							
+								
+								<div class="form-group">
+									<label class="col-lg-2 control-label">Nombre del lugar</label>
+									<div class="col-lg-10">
+										<input ng-model="eventPlaceName" type="text" class="form-control">
+									</div>
+								</div>
+								
+								 <div class="form-group">
+						            <google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" control="map.control">
+						                <markers models="map.markers" coords="'self'" options="'options'" isLabel='true'>
+						                </markers>
+						            </google-map>
+						            <button class="btn btn-primary" ng-click="addCurrentLocation()">Ir a mi localización</button>
+						        </div>                
+						            
+					            <div class="form-group">
+						            <label class="control-label">Buscar lugar</label>
+						            <input class="form-control" type="text" placeholder="San José, Costa Rica" ng-model="address"/>
+						            <button class="btn btn-primary" ng-click="addAddress()">Ir a esta dirección</button>
+						            <label class="has-error" ng-show="resultSearch">La dirección no pudo ser encontrada.</label>    
+					            </div>
+								 						 							
 								<div class="form-group">
 									<label class='control-label'>Imagen</label>
-									<input class="btn btn-primary" type="file" name="inputfile" required ngf-pattern="'image/*'"
+									<input class="btn btn-primary" type="file" name="inputfile" ngf-pattern="'image/*'"
     									ngf-accept="'image/*'" ngf-max-size="5MB" ng-file-select="onFileSelect($files)">
-								</div>  
-							</form>
+								</div> 
+								
+								<div class="modal-footer">
+									<button type="submit"
+										class="btn btn-primary pull-right" ng-disabled="" ng-click="createEvent()">Crear</button>				
+								</div> 
+							</div>
 						</div>
 					</div>
-				</div>
+				</form>
 				
-				<div class="modal-footer">
-					<button type="button"
-						class="btn btn-primary pull-right" ng-disabled="" ng-click="createEvent()">Crear</button>				
-				</div>
 			</div>
 		</div>
 	</div>
