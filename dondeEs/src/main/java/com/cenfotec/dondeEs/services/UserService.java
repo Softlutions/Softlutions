@@ -90,6 +90,7 @@ public class UserService implements UserServiceInterface {
 				servicePOJO.setServiceCatalog(catalogPOJO);
 			}
 			servicePOJO.setServiceContacts(null);
+			servicePOJO.setServiceCatalog(null);
 			listPojo.add(servicePOJO);
 
 		});

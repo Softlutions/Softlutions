@@ -69,6 +69,8 @@ angular
 						$scope.auctionService.price = "",
 						$scope.listForm = true;
 					})
+					$scope.listForm = true;
+					('#modalAuctionParticipants').toggle();
 				}
 			}
 			
