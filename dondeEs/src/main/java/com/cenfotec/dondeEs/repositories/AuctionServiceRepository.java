@@ -7,4 +7,5 @@ import com.cenfotec.dondeEs.ejb.AuctionService;
 public interface AuctionServiceRepository extends CrudRepository<AuctionService, Integer> {
 	
 	List<AuctionService> findAll();
+	List<AuctionService> findAllByAuctionAuctionId(int auction_id);
 }

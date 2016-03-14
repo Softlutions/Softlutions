@@ -21,7 +21,6 @@ import com.cenfotec.dondeEs.ejb.Place;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
-import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 import com.cenfotec.dondeEs.services.PlaceServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
@@ -181,6 +180,7 @@ public class EventController {
 			return response;
 		}
 		
+<<<<<<< HEAD
 	/***
 	 * Crea un evento.
 	 * @author Enmanuel García González	
@@ -233,4 +233,20 @@ public class EventController {
 		}
 		return eventResponse;
 	}
+
+		/*@RequestMapping(value="/getActualEventStep", method= RequestMethod.GET)
+		public EventResponse getActualEventStep(@PathVariable("idEvent") String id){
+			EventResponse response = new EventResponse();
+			int eventId = Integer.parseInt(AES.base64decode(id));
+			if(eventId != 0){
+				EventPOJO eventPOJO = eventServiceInterface.eventById(eventId);
+				if(eventPOJO.getServiceContacts()==null) eventPOJO.setState(2);
+				if(eventPOJO.getChats()==null) eventPOJO.setState(3);
+				response.setEventPOJO(eventPOJO);
+			}else{
+				response.setCode(400);
+				response.setCodeMessage("Something is wrong");
+			}
+			return response;
+		}*/
 }

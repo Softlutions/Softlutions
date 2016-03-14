@@ -2,7 +2,6 @@ package com.cenfotec.dondeEs.contracts;
 
 import java.util.List;
 
-import com.cenfotec.dondeEs.ejb.ServiceCatalog;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 
 public class ServiceCatalogResponse extends BaseResponse {

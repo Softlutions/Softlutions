@@ -16,7 +16,7 @@ angular.module('dondeEs', [
 	"dondeEs.auctions"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
-	$routeProvider.otherwise({redirectTo: '/login'});
+	$routeProvider.otherwise({redirectTo: '/index'});
   
 	$provide.factory('responseHttpInterceptor', function($q) {
 		  return {

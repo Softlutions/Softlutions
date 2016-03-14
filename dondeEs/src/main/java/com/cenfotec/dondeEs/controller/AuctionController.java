@@ -1,13 +1,13 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
-
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
 import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
@@ -22,12 +22,12 @@ public class AuctionController {
 	@Autowired private AuctionServiceInterface auctionServiceInterface;
 	
 	/**
-	 * @Author Juan Carlos Sánchez G.
+	 * @author Juan Carlos Sánchez G. (Autor)
+	 * @author Ernesto Mendez A. (Contribuyente)
 	 * @param auction Peticion que contiene la información de la subasta por crear.
 	 * @return response Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
-	
 	@RequestMapping(value ="/createAuction", method = RequestMethod.POST)
 	@Transactional
 	public AuctionResponse createAuction(@RequestBody Auction auction){
@@ -41,23 +41,6 @@ public class AuctionController {
 			response.setCode(500);
 			response.setCodeMessage("Internal error");
 		}
-		return response;
-	}
-
-	
-	@RequestMapping(value ="/getAllAuctionByEvent/{id}", method = RequestMethod.GET)
-	public AuctionResponse getAllAuctionByEvent(@PathVariable("id") int id){				
-		AuctionResponse response = new AuctionResponse();
-		response.setCode(200);
-		response.setCodeMessage("Auctions by event");
-		response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
-		return response;
-	}
-	
-	@RequestMapping(value ="/getAllAuctionsByServiceCatalog/{id}", method = RequestMethod.GET)
-	public AuctionResponse getAllAuctionsByServiceCatalog(@PathVariable("id") int id){				
-		AuctionResponse response = new AuctionResponse();
-		response.setAuctionList(auctionServiceInterface.getAllByAuctionsByServiceCatalog(id));
 		return response;
 	}
 	
@@ -75,13 +58,49 @@ public class AuctionController {
 		response.setAuctionService(auctionServiceInterface.getAuctionService(id));
 		return response;
 	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param request Respuesta de la invitacion a la subasta
+	 * @return codigo y mensaje del resultado de la operacion
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/auctionInvitationAnswer", method = RequestMethod.POST)
+	public AuctionResponse auctionInvitationAnswer(@RequestBody AuctionRequest request){				
+		AuctionResponse response = new AuctionResponse();
+		
+		if(auctionServiceInterface.auctionInvitationAnswer(request)){
+			response.setCode(200);
+			response.setCodeMessage("Successfull");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("Something is wrong");
+		}
+		
+		return response;
+	}
+	
+	@RequestMapping(value ="/getAllAuctionByEvent/{id}", method = RequestMethod.GET)
+	public AuctionResponse getAllAuctionByEvent(@PathVariable("id") int id){				
+		AuctionResponse response = new AuctionResponse();
+		response.setCode(200);
+		response.setCodeMessage("Auctions by event");
+		response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
+		return response;
+	}
+	
+	@RequestMapping(value ="/getAllAuctionsByServiceCatalog/{id}", method = RequestMethod.GET)
+	public AuctionResponse getAllAuctionsByServiceCatalog(@PathVariable("id") int id){				
+		AuctionResponse response = new AuctionResponse();
+		response.setAuctionList(auctionServiceInterface.getAllByAuctionsByServiceCatalog(id));
+		return response;
+	}
 
 	/**
 	 * @Author Juan Carlos Sánchez G.
 	 * @return response Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
-	
 	@RequestMapping(value ="/getAllAuctions", method = RequestMethod.GET)
 	public AuctionResponse getAllAuctions(){				
 		AuctionResponse response = new AuctionResponse();

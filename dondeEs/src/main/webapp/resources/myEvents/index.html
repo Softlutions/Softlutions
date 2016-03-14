@@ -6,6 +6,12 @@
 				<div class="ibox-tools">
 					<button class="btn btn-primary" data-toggle="modal" data-target="#modalCreateEvent">
 							Crear evento</button>
+				<button data-toggle="modal"
+					class="btn btn-success btn-xs pull-right"
+					data-target="#asistenteCreacion">Asistente de creación</button>
+				<div class="form-group">
+					<input type="text" ng-model="search.name"
+						placeholder="Buscar evento" class="form-control">
 				</div>
 			</div>
 			<div class="ibox-content">
@@ -18,7 +24,7 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="event in events">
+					<tbody ng-repeat="event in events | filter:search:strict">
 						<tr>
 							<td>{{ event.name }}</td>
 							<td>{{ event.description }}</td>
@@ -28,14 +34,17 @@
 								<div class="btn-group">
 									<button data-toggle="dropdown"
 										class="btn btn-primary btn-xs dropdown-toggle">
-										Acción<span class="caret"></span>
+										Acción <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a ng-click="listContracts(event.eventId)" data-toggle="modal" 
-											data-target="#modalListContacts">Listar contratos</a></li>
-										<li><a ng-click="listParticipants(event.eventId)" data-toggle="modal"
-											data-target="#modalParticipants">Listar participantes</a></li>
-										<li><a ng-click="auctionEventServices(event)"
+										<li><a ng-click="listContracts(event.eventId)"
+											data-toggle="modal" data-target="#modalListContacts">Listar
+												contratos</a></li>
+										<li><a ng-click="listParticipants(event.eventId)"
+											data-toggle="modal" data-target="#modalParticipants">Listar
+												participantes</a></li>
+										<li><a
+											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
 										<li><a type="button"
@@ -46,7 +55,8 @@
 										<li ng-show="event.state===0"><a type="button"
 											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
 										<li ng-show="event.state===1"><a type="button"
-											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar evento</a></li>
+											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar
+												evento</a></li>
 									</ul>
 								</div>
 							</td>
@@ -133,8 +143,12 @@
 						</thead>
 						<tbody ng-repeat="participant in participants">
 							<tr>
-								<td>{{ ((participant.user != null) ?  (participant.user.name+" "+participant.user.lastName1+" "+participant.user.lastName2 ) : ( participant.offlineUser.email)) }}</td>
-								<td>{{ ((participant.state == 0) ? "No asistirá" : (participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
+								<td>{{ ((participant.user != null) ?
+									(participant.user.name+" "+participant.user.lastName1+"
+									"+participant.user.lastName2 ) : (
+									participant.offlineUser.email)) }}</td>
+								<td>{{ ((participant.state == 0) ? "No asistirá" :
+									(participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
 								<td>{{ participant.invitationDate | date:'medium' }}</td>
 							</tr>
 						</tbody>
@@ -155,13 +169,21 @@
 						evento</h4>
 				</div>
 				<div class="modal-body">
-
 					<form class="form-horizontal">
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Nombre</label>
 							<div class="col-lg-10">
 								<input type="text" placeholder="Nombre" class="form-control"
 									id="auctionName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Tipo de servicio a
+								subastar</label>
+							<div class="col-lg-10">
+								<select id="cboAuctionCatalogs" class="form-control"
+									ng-options="c as c.name for c in catalogs"
+									ng-click="selectCatalog(selected)" ng-model="selected"></select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -175,14 +197,15 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
+					<button type="button" class="btn btn-primary" id="btnCreateAuction"
 						ng-click="createAuction()">Crear subasta</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div id="modalListContacts" class="modal fade" role="dialog" ng-controller="ContractsCtrl">
+	<div id="modalListContacts" class="modal fade" role="dialog"
+		ng-controller="ContractsCtrl">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
@@ -203,29 +226,32 @@
 						<tbody ng-repeat="serviceContact in serviceContacts">
 							<tr>
 								<td>{{serviceContact.service.name}}</td>
-								<td>{{(((serviceContact.state)==0)? "Pendiente":"Concretado")}}</td>
+								<td>{{(serviceContact.state==0)?
+									"Pendiente":(serviceContact.state==1)?
+									"Concretado":"Cancelado"}}</td>
 								<td>{{serviceContact.comment}}</td>
-								
+
 								<td ng-if="serviceContact.state != 2">
-									<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
+									<Button
+										id="btnCancelService-{{serviceContact.serviceContractId}}"
+										class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
 								</td>
 								<td ng-if="serviceContact.state == 2">
-									<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
+									<Button
+										id="btnCancelService-{{serviceContact.serviceContractId}}"
+										class="btn btn-warning" ng-click="cancel(serviceContact)"
+										disabled>Cancelado</Button>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					
+
 					<!-- Graph morris donut chart -->
-					<div>
-					    <div class="ibox float-e-margins">
-					        <div class="ibox-title">
-					            <h5>Resumen</h5>
-					        </div>
-					        <div class="ibox-content">
-					            <div id="contracts-state-chart" class="hidden"></div>
-					        </div>
-					    </div>
+					<div class="ibox">
+						<div class="ibox-title">
+							<h5>Resumen</h5>
+						</div>
+						<div id="contracts-state-chart" class="hidden"></div>
 					</div>
 				</div>
 			</div>
@@ -325,3 +351,37 @@
 		</div>
 	</div>
 </div>
+
+	<!-- asisstente de creacion -->
+	<div id="asistenteCreacion" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Asitente de creacion</h4>
+				</div>
+				<div class="modal-body">
+					<form id="example-advanced-form" action="#">
+						<h3>Crear evento</h3>
+						<fieldset>
+							<legend>Caso de uso de Enmanuel</legend>
+						</fieldset>
+
+						<h3>Subasta</h3>
+						<fieldset>Caso de uso de juanca</fieldset>
+
+						<h3>Prepublicación</h3>
+						<fieldset>
+							<legend>Caso de uso de chat administrativo</legend>
+						</fieldset>
+
+						<h3>Publicación</h3>
+						<fieldset>
+							<legend>Detalles del evento</legend>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>

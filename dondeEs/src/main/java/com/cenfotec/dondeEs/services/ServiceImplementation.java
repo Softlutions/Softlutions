@@ -7,10 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.cenfotec.dondeEs.ejb.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 import com.cenfotec.*;
-
 import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
@@ -35,8 +32,14 @@ public class ServiceImplementation implements ServiceInterface {
 		return listService;
 	}
 	
-	
-	
+	@Override
+	@Transactional
+	public ServicePOJO getService(int idEvent){
+		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idEvent);
+		ServicePOJO servicePOJO = new ServicePOJO();
+		BeanUtils.copyProperties(nservice, servicePOJO);
+		return servicePOJO;
+	}
 	
 	@Override
 	@Transactional
@@ -82,6 +85,21 @@ public class ServiceImplementation implements ServiceInterface {
 		BeanUtils.copyProperties(nservice.getUser(), userPOJO);
 		servicePOJO.setUser(userPOJO);
 		return servicePOJO;
+	}
+	
+	@Override
+	@Transactional
+	public List<ServicePOJO> getByProvider(int idUser){
+		List<Service> service = serviceRepository.getService(idUser);
+		List<ServicePOJO> servicePOJOList = new ArrayList<ServicePOJO>();
+		service.stream().forEach(ta -> {
+			ServicePOJO servicePOJO = new ServicePOJO();
+			BeanUtils.copyProperties(ta, servicePOJO);
+			servicePOJO.setServiceContacts(null);
+			servicePOJOList.add(servicePOJO);
+		});
+		
+		return servicePOJOList;
 	}
 
 	

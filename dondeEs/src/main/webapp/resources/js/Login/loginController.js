@@ -1,15 +1,16 @@
 'use strict';
-angular.module('loginModule', ['ngRoute'])
+angular.module('loginModule', ['ngRoute', 'ngCookies'])
 	.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/login', {
 			templateUrl : 'resources/login/login.html',
 			controller : 'LoginCtrl'
 		});
 	}])
-	.controller('LoginCtrl', ['$scope', '$http', function($scope, $http){
+	.controller('LoginCtrl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
 		$scope.user = {
 			email : "",
-			password : ""
+			password : "",
+			isCript: false
 		};
 		
 		$scope.checkLogin = function() {
@@ -26,7 +27,19 @@ angular.module('loginModule', ['ngRoute'])
 						};
 						
 						localStorage.setItem("loggedUser", JSON.stringify(responseUser));
-						//var rememberMe = $('#chkRememberMe').is(':checked');
+						var rememberMe = $('#chkRememberMe').is(':checked');
+						
+						if(rememberMe){
+							var session = {
+								email: responseUser.email,
+								pass: response.criptPass,
+								autologin: true
+							};
+							
+							var expireDate = new Date();
+							expireDate.setDate(expireDate.getDate() + 7);
+							$cookies.putObject("lastSession", session, {expires: expireDate});
+						}
 						
 						window.location.href = "/dondeEs/app#/index";
 					}else{
@@ -36,6 +49,34 @@ angular.module('loginModule', ['ngRoute'])
 				.error(function(response){
 					$("#errorMsj").css("visibility", "visible");
 					console.log("error" + response.message);
+				});
+			}else{
+				$("#errorMsj").css("visibility", "visible");
+			}
+		}
+		
+		var sessionCookie = $cookies.getObject("lastSession");
+		if(sessionCookie != null){
+			$scope.user.email = sessionCookie.email;
+			$scope.user.password = sessionCookie.pass;
+			$scope.user.isCript = true;
+			$('#chkRememberMe').prop('checked', true);
+
+			if(sessionCookie.autologin)
+				$scope.checkLogin();
+		}
+		$scope.forgotPassword = function() {
+			if($scope.user.email != ''){
+				$http.post("rest/login/updatePassword", $scope.user)
+				.success(function(response){
+					if(response.code == 200){
+						alert('Password cambiado correctamente!');
+					}else{
+						alert('NO se  poder');
+					}
+				})
+				.error(function(response){
+					$("#errorMsj").css("visibility", "visible");
 				});
 			}else{
 				$("#errorMsj").css("visibility", "visible");

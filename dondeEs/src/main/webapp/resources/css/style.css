@@ -8235,8 +8235,9 @@ body.md-skin {
 
 /*Morrit donut graph*/
 #contracts-state-chart{
-	width: 100%;
-	height: 100%;
+	margin: 0 auto;
+	width: 250px;
+	height: 250px;
 }
 
 /*Conteiner google maps api*/
@@ -16504,4 +16505,23 @@ body.md-skin {
     padding: 2px;
     background: #fff;
     color: #333;
+}
+
+/*Table selection*/
+.selected-table-item{ background-color: #ffffcc; }
+
+#servicesTable.thead, #servicesTable.tbody { display: block; }
+
+servicesTable.tbody {
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+textarea {
+	resize:none;
+}
+
+#emailLabels{
+	margin: 20px 0px  0px 0px;
 }

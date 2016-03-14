@@ -16,6 +16,7 @@ import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
 import com.cenfotec.dondeEs.contracts.MessageRequest;
 import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.OfflineUser;
@@ -32,6 +33,7 @@ import com.cenfotec.dondeEs.services.UserServiceInterface;
 @RequestMapping(value = "rest/protected/sendEmail")
 public class SendEmailController {
 
+	public static final String APP_DOMAIN = "http://localhost:8080";
 	private static String subject;
 	private static String text;
 	@Autowired
@@ -40,6 +42,10 @@ public class SendEmailController {
 	private UserServiceInterface userserviceInterface;
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	private ServiceInterface serviceInterface;
+	@Autowired
+	private ServiceContactInterface serviceContactService;
 
 	/**
 	 * @author Antoni Ramirez Montano
@@ -58,7 +64,7 @@ public class SendEmailController {
 			for (String email : to.getListSimple()) {
 
 				EventParticipantResponse response = new EventParticipantResponse();
-				
+
 				EventParticipant eventParticipant = new EventParticipant();
 				eventParticipant.setEvent(new Event());
 				eventParticipant.getEvent().setEventId(eventId);
@@ -97,73 +103,64 @@ public class SendEmailController {
 			ae.printStackTrace();
 		}
 	}
-
+	
 	/**
-	 * @author Alejandro Bermúdez Vargas
-	 * @exception AddressException
-	 *                no se encuentra la direccion de correo
-	 * @exception MessagingException
-	 *                No encuentra el server.
-	 * @param id,
-	 *            el id del servicio que se contrato
+	 * @author Ernesto Mendez A.
+	 * @param auction subasta a la que se desea invitar
+	 * @param to email del usuariod el servicio a invitar
+	 * @param event evento al cual se crea la subasta
 	 * @version 1.0
 	 */
-	/*
-	 * @RequestMapping(value = "/sendEmailContractNotification", method =
-	 * RequestMethod.POST) public void
-	 * sendEmailContractNotification(@RequestBody ContractNotification
-	 * contractNotification) { generalEmail(); Session session =
-	 * Session.getDefaultInstance(props); subject = "Solicitud de contratación!"
-	 * ; try { int eventId = contractNotification.getEvent().getEventId(); int
-	 * serviceId = contractNotification.getService().getServiceId();
-	 * 
-	 * Transport transport = session.getTransport("smtp"); // Contact service
-	 * ServiceContact serviceContact =
-	 * serviceContactService.getByServiceServiceIdAndEventEventId(
-	 * contractNotification.getEvent().getEventId(),
-	 * contractNotification.getService().getServiceId()); // Email del usuario
-	 * String email =
-	 * serviceInterface.getServiceById(serviceContact.getService().getServiceId(
-	 * )).getUser() .getEmail(); MimeMessage message = new MimeMessage(session);
-	 * message.setFrom(new InternetAddress(from)); text =
-	 * "http://localhost:8080/dondeEs/app#/answerInvitation/?eventId=" +
-	 * AES.base64encode(String.valueOf(eventId)) + "&serviceId=" +
-	 * AES.base64encode(String.valueOf(serviceId));
-	 * 
-	 * InternetAddress internetAddress = new InternetAddress(email);
-	 * message.addRecipient(Message.RecipientType.TO, internetAddress);
-	 * message.setSubject(subject); message.setText(text);
-	 * transport.connect(host, from, pass); transport.sendMessage(message,
-	 * message.getAllRecipients()); transport.close(); } catch (AddressException
-	 * ae) { ae.printStackTrace(); } catch (MessagingException me) {
-	 * me.printStackTrace(); } }
-	 * 
-	 * /***
-	 * 
-	 * @author Enmanuel García González
-	 * 
-	 * @param id /*@RequestMapping(value =
-	 *            /*@RequestMapping(value =
-	 * "/sendEmailCancelEventNotification/{serviceId}", method =
-	 * RequestMethod.GET) public void
-	 * sendEmailCancelEventNotification(@PathVariable("serviceId") int id) {
-	 * generalEmail(); Session session = Session.getDefaultInstance(props);
-	 *            Session.getDefaultInstance(props); subject =
-	 * subject = "Solicitud de contratación!"; try { Transport transport =
-	 * session.getTransport("smtp"); String email =
-	 * serviceInterface.getServiceById(id).getUser().getEmail(); MimeMessage
-	 * message = new MimeMessage(session); message.setFrom(new
-	 * InternetAddress(from)); text = "Link x" + id + "&email=" + email;
-	 *            id + "&email=" + email; InternetAddress internetAddress = new
-	 * InternetAddress internetAddress = new InternetAddress(email);
-	 * message.addRecipient(Message.RecipientType.TO, internetAddress);
-	 * message.setSubject(subject); message.setText(text);
-	 * transport.connect(host, from, pass); transport.sendMessage(message,
-	 *            transport.sendMessage(message, message.getAllRecipients());
-	 * message.getAllRecipients()); transport.close(); } catch (AddressException
-	 * ae) { ae.printStackTrace(); } catch (MessagingException me) {
-	 * me.printStackTrace(); } }
+	public void sendAuctionInvitationEmail(Auction auction, String to, Event event) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(to);
+		
+		String subject = "Invitación a "+auction.getName();
+		mailMessage.setSubject(subject);
+		
+		String msj = APP_DOMAIN+"/dondeEs/app#/getAllAuctionByEvent/?id="+event.getEventId();
+		mailMessage.setText(msj);
+		
+		try{
+			mailSender.send(mailMessage);
+		}catch(Exception ae){
+			ae.printStackTrace();
+		}
+	}
+
+	 /**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param id, el id del servicio que se contrato
+	 * @version 1.0
 	 */
+	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
+	public void sendEmailContractNotification(@RequestBody ContractNotification contractNotification) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		subject = "Has sido contratado por un promotor";
+		try {
+			int eventId = contractNotification.getEvent().getEventId();
+			int serviceId = contractNotification.getService().getServiceId();
+
+			ServiceContact serviceContact = serviceContactService.getByServiceServiceIdAndEventEventId(
+					contractNotification.getEvent().getEventId(), contractNotification.getService().getServiceId());
+			
+			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
+					.getEmail();
+			text = "http://localhost:8080/dondeEs/app#/answerContract/?eventId="
+					+ AES.base64encode(String.valueOf(eventId)) + "&serviceId="
+					+ AES.base64encode(String.valueOf(serviceId));
+
+			mailMessage.setTo(email);
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+
+		} catch (Exception ae) {
+			ae.printStackTrace();
+		}
+	}
 
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	public void sendMessage(@RequestBody MessageRequest message) {
