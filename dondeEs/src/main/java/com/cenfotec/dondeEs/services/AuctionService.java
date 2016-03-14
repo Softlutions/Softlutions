@@ -23,27 +23,24 @@ import com.cenfotec.dondeEs.pojo.UserPOJO;
 
 import com.cenfotec.dondeEs.repositories.AuctionRepository;
 import com.cenfotec.dondeEs.repositories.AuctionServiceRepository;
+import com.cenfotec.dondeEs.repositories.ServiceRepository;
 
 @Service
 public class AuctionService implements AuctionServiceInterface{
 
 	@Autowired private AuctionRepository auctionRepository;
 	@Autowired private AuctionServiceRepository auctionServiceRepository;
+	@Autowired private ServiceRepository serviceRepository;
 	@Autowired private SendEmailController sendEmailController;
 	
 	@Override
 	public Boolean saveAuction(Auction auction) {
-		List<com.cenfotec.dondeEs.ejb.AuctionService> services = auction.getAuctionServices();
-		auction.setAuctionServices(null);
-		
 		Auction saveAuction =  auctionRepository.save(auction);
+		List<com.cenfotec.dondeEs.ejb.Service> services = serviceRepository.getByCatalogId(auction.getServiceCatalog().getServiceCatalogId());
 		
 		if(saveAuction != null){
 			services.forEach(s -> {
-				s.setDate(new java.util.Date());
-				s.setAuction(saveAuction);
-				auctionServiceRepository.save(s);
-				sendEmailController.sendAuctionInvitationEmail(s.getAuctionServicesId(), s.getService().getUser().getEmail(), saveAuction.getEvent());
+				sendEmailController.sendAuctionInvitationEmail(auction, s.getUser().getEmail(), saveAuction.getEvent());
 			});
 		}
 		

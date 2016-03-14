@@ -27,7 +27,6 @@ public class LoginService implements LoginServiceInterface{
 	@Transactional
 	public void checkUser(LoginRequest lr, LoginResponse response, HttpSession currentSession) {
 		String pass = lr.isCript()? AES.base64decode(lr.getPassword()):lr.getPassword();
-		
 		User loggedUser = loginRepository.findByEmailAndPassword(lr.getEmail(), pass);
 		
 		if(loggedUser == null){

@@ -11,10 +11,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		
 		// Create auction
 		$scope.catalogs = [];
-		$scope.servicesByCatalog = [];
-		$scope.auctionServices = [];
-		// Auction answer
-		$scope.requestInfo = false;
+		$scope.catalogServiceSelected = {};
 		// --------------
 		
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -40,7 +37,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 					description: $('#auctionDescription').val(),
 					date: new Date(),
 					event: $scope.selectedEvent,
-					auctionServices: $scope.auctionServices
+					serviceCatalog: $scope.catalogServiceSelected
 			}
 			
 			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
@@ -48,6 +45,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 				$("#btnCreateAuction").prop("disabled", false);
 				$('#auctionName').val("");
 				$('#auctionDescription').val("");
+				$scope.catalogServiceSelected = {};
 			})	
 		}
 		
@@ -68,7 +66,11 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			$scope.eventId = eventId;
 
 		};
-
+		
+		$scope.selectCatalog = function(selectedCatalog){
+			$scope.catalogServiceSelected = selectedCatalog;
+		}
+		
 		$scope.addEmail = function(pemail){
 			$scope.listOfEmails.push(pemail.to);
 			pemail.to = "";
@@ -80,15 +82,6 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 					$scope.catalogs = response.serviceCatalogList;
 				});
 			}
-			
-			$scope.servicesByCatalog = [];
-			$scope.auctionServices = [];
-		}
-		
-		$scope.getServicesByCatalog = function(catalogSelected){
-			$http.get('rest/protected/service/getServicesByCatalog/'+catalogSelected.serviceCatalogId).success(function(response) {
-				$scope.servicesByCatalog = response.serviceLists;
-			});
 		}
 		
 		$scope.selectService = function(selectedService){
@@ -165,37 +158,4 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 				});
 		 	})
 		 }
-		
-		// respuesta a invitaciones de subasta
-		angular.element(document).ready(function () {
-		    var invitationCode = $location.search().auctionInvitation;
-			
-			if(invitationCode != null){
-				$http.get('rest/protected/auction/getAuctionService/'+invitationCode).success(function(response) {
-					if(response.auctionService.acept == 0){
-						$scope.auctionInvitation = response.auctionService;
-						$("#modalAuctionAnswerInvitation").modal("toggle");
-					}
-				});
-			}
-		});
-		
-		$scope.answerAuctionInvitation = function(auctionAcept){
-			var price = $("#initialPrice").val();
-			
-			if(price == ""){
-				$("#divInitialPrice").addClass("has-error");
-			}else{
-				var auctionRequest = {
-						auctionServiceId: $scope.auctionInvitation.auctionServicesId,
-						initialPrice: price,
-						description: $("#answerDescription").val(),
-						acept: auctionAcept
-				};
-				
-				$http.post('rest/protected/auction/auctionInvitationAnswer', auctionRequest).success(function(response) {
-					$("#modalAuctionAnswerInvitation").modal("toggle");
-				});
-			}
-		}
 	}]);

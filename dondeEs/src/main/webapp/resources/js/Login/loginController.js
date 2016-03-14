@@ -56,13 +56,12 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 		}
 		
 		var sessionCookie = $cookies.getObject("lastSession");
-		
 		if(sessionCookie != null){
 			$scope.user.email = sessionCookie.email;
 			$scope.user.password = sessionCookie.pass;
 			$scope.user.isCript = true;
 			$('#chkRememberMe').prop('checked', true);
-			
+
 			if(sessionCookie.autologin)
 				$scope.checkLogin();
 		}

@@ -1,18 +1,9 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
-import com.cenfotec.dondeEs.ejb.Comment;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.OfflineUser;
@@ -96,19 +87,19 @@ public class SendEmailController {
 	
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param invitationId id de la invitacion
-	 * @param to email objectivo
-	 * @param event event asociado
+	 * @param auction subasta a la que se desea invitar
+	 * @param to email del usuariod el servicio a invitar
+	 * @param event evento al cual se crea la subasta
 	 * @version 1.0
 	 */
-	public void sendAuctionInvitationEmail(int invitationId, String to, Event event) {
+	public void sendAuctionInvitationEmail(Auction auction, String to, Event event) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(to);
 		
-		String subject = "Invitación a subasta";
+		String subject = "Invitación a "+auction.getName();
 		mailMessage.setSubject(subject);
 		
-		String msj = APP_DOMAIN+"/dondeEs/app#/index?auctionInvitation="+invitationId;
+		String msj = APP_DOMAIN+"/dondeEs/app#/getAllAuctionByEvent/?id="+event.getEventId();
 		mailMessage.setText(msj);
 		
 		try{

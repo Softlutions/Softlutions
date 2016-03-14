@@ -1,6 +1,6 @@
 package com.cenfotec.dondeEs.contracts;
 
-public class LoginRequest {
+public class LoginRequest extends BaseRequest{
 
 	private String email;
 	private String password;
@@ -36,7 +36,7 @@ public class LoginRequest {
 		return isCript;
 	}
 
-	public void setCript(boolean isCript) {
+	public void setIsCript(boolean isCript) {
 		this.isCript = isCript;
 	}
 }

@@ -3,6 +3,7 @@ package com.cenfotec.dondeEs.controller;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,14 +13,6 @@ import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
 import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.cenfotec.dondeEs.contracts.AuctionResponse;
 
 import com.cenfotec.dondeEs.services.AuctionServiceInterface;
 
