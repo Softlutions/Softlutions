@@ -22,6 +22,10 @@ public class ServiceCatalog implements Serializable {
 
 	private String name;
 
+	//bi-directional many-to-one association to Auction
+	@OneToMany(mappedBy="serviceCatalog")
+	private List<Auction> auctions;
+
 	//bi-directional many-to-one association to Service
 	@OneToMany(mappedBy="serviceCatalog")
 	private List<Service> services;
@@ -43,6 +47,28 @@ public class ServiceCatalog implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Auction> getAuctions() {
+		return this.auctions;
+	}
+
+	public void setAuctions(List<Auction> auctions) {
+		this.auctions = auctions;
+	}
+
+	public Auction addAuction(Auction auction) {
+		getAuctions().add(auction);
+		auction.setServiceCatalog(this);
+
+		return auction;
+	}
+
+	public Auction removeAuction(Auction auction) {
+		getAuctions().remove(auction);
+		auction.setServiceCatalog(null);
+
+		return auction;
 	}
 
 	public List<Service> getServices() {
