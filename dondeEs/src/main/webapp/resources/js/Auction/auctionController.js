@@ -4,7 +4,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/auctionsEvent/:id', {
-    templateUrl: 'resources/auctionsEvent.html',
+    templateUrl: 'resources/auction/auctionsEvent.html',
     controller: 'auctionsEventCtrl'
   });
 }])

@@ -2,6 +2,7 @@
 
 angular.module('dondeEs', [
 	"ngRoute",
+	"dondeEs.update",
 	"dondeEs.index",
 	"dondeEs.serviceByUser",
 	"dondeEs.users",
@@ -11,6 +12,7 @@ angular.module('dondeEs', [
 	"dondeEs.ContractModule",
 	"dondeEs.answerInvitation",
 	"dondeEs.auctionsEvent",
+	"dondeEs.Contact",
 	"dondeEs.auctions"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {

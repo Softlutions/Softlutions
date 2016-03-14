@@ -119,6 +119,8 @@
 
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
+	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
+	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	
@@ -138,9 +140,18 @@
 	<script src="resources/js/AnswerContract/AnswerContractController.js"></script>
 	<script src="resources/js/Commons/Filters.js"></script>
 	<script src="resources/js/Auction/auctionController.js"></script>
+	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/Auction/ListAuctionsController.js"></script>
+	
 	<!-- Morris -->
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>
+    
+    <!-- Google Maps -->
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
+
+    <!-- angular-google-maps -->
+    <script src="resources/non_bower_components/lodash.underscore.min.js?v=2.4.1"></script>
+    <script src="resources/non_bower_components/angular-google-maps.min.js?v=1.2.2"></script>
 </body>
 </html>
