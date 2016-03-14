@@ -61,7 +61,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		    },
 		    onFinished: function (event, currentIndex)
 		    {
-		        alert("Submitted!");
+		        alert("Se publico el evento!");
 		    }
 		}).validate({
 		    errorPlacement: function errorPlacement(error, element) { element.before(error); },
