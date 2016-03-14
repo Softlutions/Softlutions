@@ -41,7 +41,7 @@
 									<ul class="dropdown-menu">
 										<li><a ng-click="listContracts(event.eventId)" data-toggle="modal" 
 											data-target="#modalListContacts">Listar contratos</a></li>
-										<li><a type="button" data-toggle="modal"
+										<li><a ng-click="listParticipants(event.eventId)" data-toggle="modal"
 											data-target="#modalParticipants">Listar participantes</a></li>
 										<li><a ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar servicios</a></li>
@@ -140,10 +140,8 @@
 						</thead>
 						<tbody ng-repeat="participant in participants">
 							<tr>
-								<td>{{ participant.user.name }} {{
-									participant.user.lastName1 }} {{ participant.user.lastName2 }}</td>
-								<td>{{ ((participant.state ==0) ? "No asistirá" : (
-									participant.state ==1) ? "Pendiente" : "Asistirá")}}</td>
+								<td>{{ ((participant.user != null) ?  (participant.user.name+" "+participant.user.lastName1+" "+participant.user.lastName2 ) : ( participant.offlineUser.email)) }}</td>
+								<td>{{ ((participant.state == 0) ? "No asistirá" : (participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
 								<td>{{ participant.invitationDate | date:'medium' }}</td>
 							</tr>
 						</tbody>
@@ -240,4 +238,24 @@
 			</div>
 		</div>
 	</div>
+	<div class="ibox-content">
+	          <label>Buscar</label>
+		        <input type="text" ng-model="search.name" placeholder="Buscar servicio" class="form-control"> 
+
+		        <table class="table table-hover">
+					<thead>
+							<tr>
+								<th>Nombre</th>
+						  		<th>Descripción</th>
+						  	</tr>
+					</thead>
+				 	<tbody ng-repeat="service in services | filter:search:strict">
+					  	<tr>
+					 	    <td>{{service.name}}</td>
+						   <td>{{service.description}}</td>
+					  	</tr>
+				  	</tbody>
+				</table>
+			</div>
+	
 </div>

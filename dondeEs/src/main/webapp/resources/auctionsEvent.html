@@ -23,6 +23,13 @@
                     	<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-form" 
                     				ng-click="loadAuctionServices($index)">Ver servicios</a>
 					</td>
+					<td ng-if="auction.state == 1">
+						<button id="finishAuctionId-{{auction.auctionId}}" class="btn btn-danger btn-sm" ng-click="finishAuction(auction.auctionId)">Finalizar subasta</button>
+					</td>
+					<td ng-if="auction.state != 1">
+						<button id="finishAuctionId-{{auction.auctionId}}" class="btn btn-warning btn-sm" ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
+					</td>
+					
                 </tr>	
                 </tbody>
             </table>
@@ -62,7 +69,7 @@
 											data-target="#modal-form" ng-click="goToServiceProviderProfile(service.service.user.userId)">
 															<di>Ver</di><div>prestatario</div></a>
 					                    </td>
-					                </tr>	
+					                 </tr>	
 					                </tbody>
 					            </table>
 					        </div>

@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-import com.cenfotec.dondeEs.ejb.Service;
 import com.cenfotec.dondeEs.ejb.ServiceContact;;
 
 public interface ServiceContactRepository extends CrudRepository<ServiceContact, Integer> {

@@ -1,8 +1,5 @@
 package com.cenfotec.dondeEs.controller;
 
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,4 +59,13 @@ public class ServiceController {
 		response.setServiceLists(serviceInterface.getByCatalog(catalogId));
 		return response;
 	}
+
+	@RequestMapping(value ="/getServiceByProvider/{userId}", method = RequestMethod.GET)
+	public ServiceResponse getServiceByProvider(@PathVariable("userId") int userId){
+		ServiceResponse response = new ServiceResponse();
+		response.setServiceLists(serviceInterface.getByProvider(userId));
+		
+		return response;
+	}
+
 }

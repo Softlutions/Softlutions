@@ -13,6 +13,7 @@ import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.ejb.Comment;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.services.CommentServiceInterface;
 
 @RestController
@@ -44,12 +45,29 @@ public class EventParticipantController {
 		return response;
 	}
 
-	@RequestMapping(value = "/createEventParticipant/{id}", method = RequestMethod.PUT)
-	public EventParticipantResponse createEventParticipant(@PathVariable("id") int id, @QueryParam("state") byte state, @QueryParam("comment") String comment)
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param id del participante a modificar
+	 * @param state se recibe la respuesta si va asistir
+	 * @param comment espacio para agregar algun mensaje con respecto al evento
+	 * @return retorna el response que tiene el estado del url
+	 * @throws ParseException
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/updateEventParticipant/{id}", method = RequestMethod.PUT)
+	public EventParticipantResponse updateEventParticipant(@PathVariable("id") String id, @QueryParam("state") byte state, @QueryParam("comment") String comment)
 			throws ParseException {
+
 		EventParticipantResponse response = new EventParticipantResponse();
-		EventParticipant eventParticipant = eventParticipantServiceInterface.findById(id);
+		
+		int idParticipant = Integer.parseInt(AES.base64decode(id));
+		
+		EventParticipant eventParticipant = eventParticipantServiceInterface.findById(idParticipant);
+		
 		eventParticipant.setState(state);
+//		eventParticipant.getOfflineUser().setEmail(email);
+		
+		
 		Comment ncomment = new Comment();
 		ncomment.setContent(comment);
 		ncomment.setDate(new Date());
@@ -59,6 +77,7 @@ public class EventParticipantController {
 		if(stateComment){
 			response.setCode(200);
 		}
+
 		Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
 
 		if (stateResponse) {
