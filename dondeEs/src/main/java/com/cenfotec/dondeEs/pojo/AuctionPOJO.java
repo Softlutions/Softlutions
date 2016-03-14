@@ -14,6 +14,8 @@ public class AuctionPOJO {
 	private String description;
 
 	private String name;
+	
+	private EventPOJO event;
 
 	private List<AuctionServicePOJO> auctionServices;
 	
@@ -82,5 +84,13 @@ public class AuctionPOJO {
 		auctionService.setAuction(null);
 
 		return auctionService;
+	}
+
+	public EventPOJO getEvent() {
+		return event;
+	}
+
+	public void setEvent(EventPOJO event) {
+		this.event = event;
 	}
 }

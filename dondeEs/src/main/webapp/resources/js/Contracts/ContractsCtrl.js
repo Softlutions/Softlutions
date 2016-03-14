@@ -9,7 +9,6 @@ angular
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 		$scope.chartValues = null;
-		console.log("dawdaw");
 		
 		$scope.listContracts = function(idEvent){
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+idEvent).success(function(response){

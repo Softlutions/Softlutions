@@ -133,11 +133,11 @@
 	<script src="resources/js/Commons/Filters.js"></script>
 	<script src="resources/js/Auction/auctionController.js"></script>
 	<script src="resources/js/Contact/ContactController.js"></script>
+	<script src="resources/js/Auction/ListAuctionsController.js"></script>
 	
 	<!-- Morris -->
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>
-    
     
     <!-- Google Maps -->
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
