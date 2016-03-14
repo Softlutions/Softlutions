@@ -72,77 +72,70 @@ app.controller('MyEventsCtrl', ['$scope','$http','$upload','MarkerCreatorService
 	$scope.listOfEmails = [];
 	$scope.files = {};
 	$scope.eventType = 0;
-	
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-	$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-		$scope.events = response.eventList;
-	});
 	
+	// Create auction
+	$scope.catalogs = [];
+	$scope.catalogServiceSelected = {};
+	// --------------
+	var form = $("#example-advanced-form").show();
+
+	form.steps({
+	    headerTag: "h3",
+	    bodyTag: "fieldset",
+	    transitionEffect: "slideLeft",
+	    onStepChanging: function (event, currentIndex, newIndex)
+	    {
+	        if (currentIndex > newIndex)
+	        {
+	            return true;
+	        }
+	        if (newIndex === 3 && Number($("#age-2").val()) < 18)
+	        {
+	            return false;
+	        }
+	        if (currentIndex < newIndex)
+	        {
+	            form.find(".body:eq(" + newIndex + ") label.error").remove();
+	            form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
+	        }
+	        form.validate().settings.ignore = ":disabled,:hidden";
+	        return form.valid();
+	    },
+	    onStepChanged: function (event, currentIndex, priorIndex)
+	    {
+	        if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
+	        {
+	            form.steps("next");
+	        }
+	        if (currentIndex === 2 && priorIndex === 3)
+	        {
+	            form.steps("previous");
+	        }
+	    },
+	    onFinishing: function (event, currentIndex)
+	    {
+	        form.validate().settings.ignore = ":disabled";
+	        return form.valid();
+	    },
+	    onFinished: function (event, currentIndex)
+	    {
+	        alert("Se publico el evento!");
+	    }
+	}).validate({
+	    errorPlacement: function errorPlacement(error, element) { element.before(error); },
+	    rules: {
+	        confirm: {
+	            equalTo: "#password-2"
+	        }
+	    }
+	});
+		
 	$scope.listParticipants = function(eventId){
 		$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+eventId).success(function(response) {
 			$scope.participants = response.eventParticipantsList;
-	}])
-	.controller('MyEventsCtrl', ['$scope', '$http', '$location',function($scope, $http, $location) {
-		$scope.listOfEmails = [];
-
-		// Create auction
-		$scope.catalogs = [];
-		$scope.catalogServiceSelected = {};
-		// --------------
-		var form = $("#example-advanced-form").show();
-
-		form.steps({
-		    headerTag: "h3",
-		    bodyTag: "fieldset",
-		    transitionEffect: "slideLeft",
-		    onStepChanging: function (event, currentIndex, newIndex)
-		    {
-		        if (currentIndex > newIndex)
-		        {
-		            return true;
-		        }
-		        if (newIndex === 3 && Number($("#age-2").val()) < 18)
-		        {
-		            return false;
-		        }
-		        if (currentIndex < newIndex)
-		        {
-		            form.find(".body:eq(" + newIndex + ") label.error").remove();
-		            form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-		        }
-		        form.validate().settings.ignore = ":disabled,:hidden";
-		        return form.valid();
-		    },
-		    onStepChanged: function (event, currentIndex, priorIndex)
-		    {
-		        if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
-		        {
-		            form.steps("next");
-		        }
-		        if (currentIndex === 2 && priorIndex === 3)
-		        {
-		            form.steps("previous");
-		        }
-		    },
-		    onFinishing: function (event, currentIndex)
-		    {
-		        form.validate().settings.ignore = ":disabled";
-		        return form.valid();
-		    },
-		    onFinished: function (event, currentIndex)
-		    {
-		        alert("Se publico el evento!");
-		    }
-		}).validate({
-		    errorPlacement: function errorPlacement(error, element) { element.before(error); },
-		    rules: {
-		        confirm: {
-		            equalTo: "#password-2"
-		        }
-		    }
 		});
 
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			$scope.events = response.eventList;
 		});
@@ -185,7 +178,6 @@ app.controller('MyEventsCtrl', ['$scope','$http','$upload','MarkerCreatorService
 		$scope.listParticipants = function(eventId){
 			$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+eventId).success(function(response) {
 				$scope.participants = response.eventParticipantsList;
-				console.log("Todo bien")
 			});
 		}
 		

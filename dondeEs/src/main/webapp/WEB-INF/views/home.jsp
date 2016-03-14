@@ -121,6 +121,7 @@
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
+	<script src="resources/non_bower_components/jquery.toaster.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	

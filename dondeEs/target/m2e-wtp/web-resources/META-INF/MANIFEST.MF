@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Implementation-Title: dondeEs
 Implementation-Version: 1.0.0-BUILD-SNAPSHOT
-Built-By: alomatics
+Built-By: root
 Implementation-Vendor-Id: com.cenfotec
-Build-Jdk: 1.8.0_74
+Build-Jdk: 1.8.0_51
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
 Main-Class: dondeEs.App
+

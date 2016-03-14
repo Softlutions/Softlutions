@@ -180,7 +180,6 @@ public class EventController {
 			return response;
 		}
 		
-<<<<<<< HEAD
 	/***
 	 * Crea un evento.
 	 * @author Enmanuel García González	
