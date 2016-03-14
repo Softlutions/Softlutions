@@ -1,5 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.LoginResponse;
+import com.cenfotec.dondeEs.contracts.UserRequest;
+import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.services.LoginServiceInterface;
+import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 
 /**
@@ -25,7 +30,7 @@ import com.cenfotec.dondeEs.services.LoginServiceInterface;
 public class LoginController {
 	
 	@Autowired private LoginServiceInterface loginService;
-	
+	@Autowired private UserServiceInterface userServiceInterface;
 	/**
 	 * @Author Ernesto Méndez A.
 	 * @param lr Petición que contiene el email y la contraseña del usuarioa logear
@@ -43,5 +48,25 @@ public class LoginController {
 		
 		return response;
 		
+	}
+	
+	
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @param LoginRequest, Este objeto poosee un atributo email del usuario.
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/updatePassword", method = RequestMethod.POST)
+	public UserResponse updatePassword(@RequestBody LoginRequest lr,HttpServletRequest servletRequest,HttpServletResponse servletResponse){	
+		UserResponse us = new UserResponse();
+		if(userServiceInterface.updatePassword(lr)){
+			us.setCode(200);
+			us.setCodeMessage("Password cambiado exitosamente");
+		}else{
+			us.setCode(401);
+			us.setCodeMessage("No se pudo cambiar la contraseña");
+		}
+		return us;
 	}
 }

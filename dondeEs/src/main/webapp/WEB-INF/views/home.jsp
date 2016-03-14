@@ -24,6 +24,7 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
+<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -43,36 +44,41 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="profile.html">Profile</a></li>
-								<li><a href="contacts.html">Contacts</a></li>
-								<li><a href="mailbox.html">Mailbox</a></li>
+								<li><a href="#">Profile</a></li>
+								<li><a href="#">Contacts</a></li>
+								<li><a href="#">Mailbox</a></li>
 								<li class="divider"></li>
-								<li><a href="login.html">Logout</a></li>
+								<li><a href="#">Logout</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
 					</li>
-					<li><a href="index.html"><i class="fa fa-th-large"></i> <span
+					<li><a href="#"><i class="fa fa-th-large"></i> <span
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="/dondeEs/app#/myEvents">Mis eventos</a></li>
+							<li><a href="#">Mis eventos</a></li>
 						</ul></li>
 					<li><a href="#"><i class="fa fa-bar-chart-o"></i> <span
 							class="nav-label">Reportes</span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="graph_flot.html">Reporte x</a></li>
-							<li><a href="graph_flot.html">Reporte x</a></li>
+							<li><a href="#">Reporte x</a></li>
+							<li><a href="#">Reporte x</a></li>
 						</ul></li>
-					<li><a href="mailbox.html"><i class="fa fa-envelope"></i>
+						<li><a href="#"><i class="fa fa-user"></i> <span
+							class="nav-label">Usuarios</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="/dondeEs/app#/users">Lista de usuarios</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-envelope"></i>
 							<span class="nav-label">Notificaciones </span><span
 							class="label label-warning pull-right">n/x</span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="mailbox.html">Inbox</a></li>
+							<li><a href="#">Inbox</a></li>
 						</ul></li>
 					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
 							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="ecommerce_products_grid.html">Mis servicios</a></li>
+							<li><a href="#">Mis servicios</a></li>
 						</ul></li>
 				</ul>
 
@@ -97,12 +103,6 @@
 		</div>
 	</div>
 
-	<!--div ng-view></div>
-	<div class="container">
-		<div>
-			version <strong><span app-version></span></strong>
-		</div>
-	</div--!>
 	<!-- Mainly scripts -->
 	<script src="resources/js/jquery-2.1.1.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -116,10 +116,18 @@
 	<!-- JQueryUI -->
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
+
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-
+	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
 	<script src="resources/js/App/App.js"></script>
+	
+	<!-- Steps -->
+    <script src="resources/js/plugins/staps/jquery.steps.min.js"></script>
+    
+    <!-- Jquery Validate -->
+    <script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
+	
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
