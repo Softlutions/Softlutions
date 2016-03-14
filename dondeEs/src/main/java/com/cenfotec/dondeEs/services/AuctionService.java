@@ -2,6 +2,9 @@ package com.cenfotec.dondeEs.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.cenfotec.dondeEs.contracts.AuctionRequest;
+import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.Auction;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +17,28 @@ import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.AuctionRepository;
 import com.cenfotec.dondeEs.repositories.AuctionServiceRepository;
+import com.cenfotec.dondeEs.repositories.ServiceRepository;
 
 @Service
 public class AuctionService implements AuctionServiceInterface{
 
 	@Autowired private AuctionRepository auctionRepository;
 	@Autowired private AuctionServiceRepository auctionServiceRepository;
+	@Autowired private ServiceRepository serviceRepository;
+	@Autowired private SendEmailController sendEmailController;
 	
 	@Override
 	public Boolean saveAuction(Auction auction) {
-		Auction serviceContact =  auctionRepository.save(auction);
-	 	return (serviceContact == null) ? false : true;
+		Auction saveAuction =  auctionRepository.save(auction);
+		List<com.cenfotec.dondeEs.ejb.Service> services = serviceRepository.getByCatalogId(auction.getServiceCatalog().getServiceCatalogId());
+		
+		if(saveAuction != null){
+			services.forEach(s -> {
+				sendEmailController.sendAuctionInvitationEmail(auction, s.getUser().getEmail(), saveAuction.getEvent());
+			});
+		}
+		
+	 	return (saveAuction != null);
 	}
 
 	/***
@@ -66,7 +80,7 @@ public class AuctionService implements AuctionServiceInterface{
 		
 		return auctionsPOJO;		
 	}
-		
+
 	@Override
 	@Transactional
 	public AuctionServicePOJO getAuctionService(int auctionServiceId) {
@@ -117,13 +131,11 @@ public class AuctionService implements AuctionServiceInterface{
 		return auctionservicePOJO;		
 	}
 	
-	
 	/**
 	 * @Author Juan Carlos Sánchez G.
 	 * @return response Respuesta del servidor de la petición que lista todas las subastas existentes.
 	 * @version 1.0
 	 */
-	
 	@Override
 	@Transactional
 	public List<AuctionPOJO> getAllAuctions() {
@@ -197,5 +209,26 @@ public class AuctionService implements AuctionServiceInterface{
 	public Auction findById(int auctionId) {
 		Auction actn = auctionRepository.findOne(auctionId);
 		return actn;
+	}
+	
+	@Override
+	@Transactional
+	public boolean auctionInvitationAnswer(AuctionRequest request){
+		com.cenfotec.dondeEs.ejb.AuctionService auctionService = auctionServiceRepository.findOne(request.getAuctionServiceId());
+		boolean state = false;
+		
+		if(auctionService != null && auctionService.getAcept() == 0){
+			if(!request.isAcept()){
+				auctionServiceRepository.delete(auctionService);
+			}else{
+				auctionService.setAcept((byte) 1);
+				auctionService.setDescription(request.getDescription());
+				auctionService.setPrice(request.getInitialPrice());
+			}
+			
+			state = true;
+		}
+		
+		return state;
 	}
 }

@@ -24,6 +24,7 @@ public class ServiceCatalogImplementation implements ServiceCatalogInterface {
 		listService.stream().forEach(ta-> {
 			ServiceCatalogPOJO servicePOJO = new ServiceCatalogPOJO();
 			BeanUtils.copyProperties(ta, servicePOJO);
+			servicePOJO.setAuctions(null);
 			
 			listPojo.add(servicePOJO);
 		});

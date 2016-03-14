@@ -15,9 +15,7 @@ import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
-import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
-import com.cenfotec.dondeEs.services.UserService;
 
 @RestController
 @RequestMapping(value = "rest/protected/event")

@@ -11,24 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.OfflineUser;
-import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
-import com.cenfotec.dondeEs.services.ServiceContactInterface;
-import com.cenfotec.dondeEs.services.ServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 @RestController
 @RequestMapping(value = "rest/protected/sendEmail")
 public class SendEmailController {
 
+	public static final String APP_DOMAIN = "http://localhost:8080";
 	private static String subject;
 	private static String text;
 	@Autowired
@@ -91,6 +89,30 @@ public class SendEmailController {
 			}
 
 		} catch (Exception ae) {
+			ae.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param auction subasta a la que se desea invitar
+	 * @param to email del usuariod el servicio a invitar
+	 * @param event evento al cual se crea la subasta
+	 * @version 1.0
+	 */
+	public void sendAuctionInvitationEmail(Auction auction, String to, Event event) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(to);
+		
+		String subject = "Invitación a "+auction.getName();
+		mailMessage.setSubject(subject);
+		
+		String msj = APP_DOMAIN+"/dondeEs/app#/getAllAuctionByEvent/?id="+event.getEventId();
+		mailMessage.setText(msj);
+		
+		try{
+			mailSender.send(mailMessage);
+		}catch(Exception ae){
 			ae.printStackTrace();
 		}
 	}
