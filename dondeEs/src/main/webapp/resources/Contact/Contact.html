@@ -1,0 +1,34 @@
+<div class="Container">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<h1 class="m-t-none m-b">Contacto</h1>
+						<form role="form" name="formContact">
+							<div class="form-group">
+								<label class="control-label">Nombre completo</label>
+								<input ng-model="name" type="text" class="form-control" required>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label">Correo</label>
+								<input ng-model="email" type="email" class="form-control" required>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label">Mensaje</label>
+								<textarea ng-model="message" class="form-control" rows="5" required></textarea>
+							</div>
+
+							<div class="form-group">
+								<button type="button" class="btn btn-primary pull-right" 
+									ng-disabled="" ng-click="sendMessage()">Enviar</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
