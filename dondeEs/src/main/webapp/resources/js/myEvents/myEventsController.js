@@ -1,12 +1,12 @@
 'use strict';
 var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps'])
-	.config(['$routeProvider', function($routeProvider) {
-	  $routeProvider.when('/index', {
-	    templateUrl: 'resources/myEvents/index.html',
-	    controller: 'MyEventsCtrl'
-	  });
-	}])
-	
+.config(['$routeProvider', function($routeProvider) {
+  $routeProvider.when('/index', {
+    templateUrl: 'resources/myEvents/index.html',
+    controller: 'MyEventsCtrl'
+  });
+}]);
+
 app.factory('MarkerCreatorService', function () {
     var markerId = 0;
 
@@ -32,7 +32,7 @@ app.factory('MarkerCreatorService', function () {
     function createByCoords(latitude, longitude, successCallback) {
         var marker = create(latitude, longitude);
         invokeSuccessCallback(successCallback, marker);
-    }
+    } 	
 
     function createByAddress(address, successCallback) {
         var geocoder = new google.maps.Geocoder();
@@ -67,9 +67,9 @@ app.factory('MarkerCreatorService', function () {
     };
 
 });
-	
-app.controller('MyEventsCtrl', ['$scope', '$http', '$location','MarkerCreatorService', 
-                                	function($scope, $http, $location, MarkerCreatorService) {
+
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', 
+                                					function($scope,$http,$upload,MarkerCreatorService) { 
 	$scope.listOfEmails = [];
 
 	// Create auction
@@ -79,7 +79,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$location','MarkerCreatorSer
 	
 	$scope.files = {};
 	$scope.eventType = 0;
-	
 	
 	var form = $("#example-advanced-form").show();
 
@@ -319,7 +318,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$location','MarkerCreatorSer
 		console.log($scope.eventType);
 	};
 	
-    MarkerCreatorService.createByCoords(9.6283789, -85.3756947, function (marker) {
+	MarkerCreatorService.createByCoords(9.6283789, -85.3756947, function (marker) {
         $scope.autentiaMarker = marker;
     });
     

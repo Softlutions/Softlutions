@@ -8258,3 +8258,17 @@ textarea {
 #emailLabels{
 	margin: 20px 0px  0px 0px;
 }
+
+/*Conteiner google maps api*/
+.angular-google-map-container {
+     width: 300px;
+    height: 200px;   
+}
+.markerlabel {
+    font-weight: bold;
+    font-size: 13px;
+    border: 1px solid #333;
+    padding: 2px;
+    background: #fff;
+    color: #333;
+}

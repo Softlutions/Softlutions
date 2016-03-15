@@ -1,7 +1,6 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.transaction.Transactional;
 import javax.servlet.ServletContext;
@@ -223,7 +222,7 @@ public class EventController {
 				event.setRegisterDate(new Date());
 				event.setUser(user);
 				event.setPlace(place);
-				
+				System.out.println(event);
 			}
 			
 			Boolean state = eventServiceInterface.saveEvent(event);
@@ -231,6 +230,9 @@ public class EventController {
 			if(state){
 				eventResponse.setCode(200);
 				eventResponse.setCodeMessage("Event created succesfully");
+			}
+			else {
+				eventResponse.setCode(500);
 			}
 			return eventResponse;
 		}
