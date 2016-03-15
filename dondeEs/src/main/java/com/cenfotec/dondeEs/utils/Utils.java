@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class Utils {
 	private static String RESOURCES_PATH = "resources/general-images/";
-	private static String HOST_PATH = "http://localhost:8888";
+	private static String HOST_PATH = "http://localhost:8080";
 	
 	// save uploaded file to new location
 	public static String writeToFile(MultipartFile file, ServletContext servletContext) {
