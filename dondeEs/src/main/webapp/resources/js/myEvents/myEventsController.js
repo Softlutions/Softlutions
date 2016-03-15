@@ -6,17 +6,32 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	    controller: 'MyEventsCtrl'
 	  });
 	}])
-	.controller('MyEventsCtrl', ['$scope', '$http', '$location',function($scope, $http, $location) {
+	.controller('MyEventsCtrl', ['$scope', '$http', '$location', function($scope, $http, $location, toastr) {
 		$scope.listOfEmails = [];
 
 		// Create auction
 		$scope.catalogs = [];
 		$scope.catalogServiceSelected = {};
 		// --------------
+
 		
-		
-		
-		
+		$(document).ready(function() {
+
+		    // show when page load
+		    toastr.info('Page Loaded!');
+
+		    $('#linkButton').click(function() {
+		    	 toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
+
+		    });
+
+		});
 		var form = $("#example-advanced-form").show();
 
 		form.steps({
@@ -194,6 +209,18 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 					
 				});
+			}else{	
+				 	  setTimeout(function() {					
+		                toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
+
+		            }, 1300);
+				 
 			}
 		}
 		

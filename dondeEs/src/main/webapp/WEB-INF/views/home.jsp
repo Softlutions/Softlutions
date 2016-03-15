@@ -120,6 +120,7 @@
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script src="resources/bower_components/toastr/toastr.min.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	
 	<!-- Steps -->
