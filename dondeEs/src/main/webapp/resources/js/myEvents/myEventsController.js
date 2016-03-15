@@ -14,9 +14,6 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		$scope.catalogServiceSelected = {};
 		// --------------
 		
-		
-		
-		
 		var form = $("#example-advanced-form").show();
 
 		form.steps({
