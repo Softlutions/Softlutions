@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +35,18 @@ public class MessageController {
 			response.setCode(500);
 		}
 		
-		return null;
+		return response;
 	}
+	
+
+	@RequestMapping(value ="/getAllMessageByChat/{id}", method = RequestMethod.GET)
+	@Transactional
+	public MessageResponse getAllMessageByChat(@PathVariable("id") int id){
+		MessageResponse response = new MessageResponse();
+		
+		response.setMessages(messageServiceInterface.getAllByChat(id));
+		
+		return response;
+	}
+	
 }
