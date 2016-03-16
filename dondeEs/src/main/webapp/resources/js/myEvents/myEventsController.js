@@ -6,7 +6,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 	    controller: 'MyEventsCtrl'
 	  });
 	}])
-	.controller('MyEventsCtrl', ['$scope', '$http', '$location', function($scope, $http, $location, toastr) {
+	.controller('MyEventsCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
 		$scope.listOfEmails = [];
 
 		// Create auction
@@ -15,23 +15,23 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		// --------------
 
 		
-		$(document).ready(function() {
-
-		    // show when page load
-		    toastr.info('Page Loaded!');
-
-		    $('#linkButton').click(function() {
-		    	 toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
-
-		    });
-
-		});
+//		$(document).ready(function() {
+//
+//		    // show when page load
+//		    toastr.info('Page Loaded!');
+//
+//		    $('#linkButton').click(function() {
+//		    	 toastr.options = {
+//		                    closeButton: true,
+//		                    progressBar: true,
+//		                    showMethod: 'slideDown',
+//		                    timeOut: 4000
+//		                };
+//		                toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
+//
+//		    });
+//
+//		});
 		var form = $("#example-advanced-form").show();
 
 		form.steps({
@@ -144,8 +144,22 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		}
 		
 		$scope.addEmail = function(pemail){
+			if(pemail !=null){
 			$scope.listOfEmails.push(pemail.to);
 			pemail.to = "";
+			}else{	
+			 	  setTimeout(function() {					
+		                toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
+
+		            }, 1300);
+				 
+			}
 		}
 		
 		$scope.catalogsList = function(){
@@ -206,9 +220,10 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			};
 			if($scope.listOfEmails.length != 0){
 				$("#modal-formSendInvitation").modal('hide');
-				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-					
-				});
+				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
+				}) .error(function(response){
+					 toastr.error('Verifique la direccion de correo electronico y su coneccion a internet', 'Error');
+				})
 			}else{	
 				 	  setTimeout(function() {					
 		                toastr.options = {
@@ -217,7 +232,7 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		                    showMethod: 'slideDown',
 		                    timeOut: 4000
 		                };
-		                toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
+		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
 
 		            }, 1300);
 				 

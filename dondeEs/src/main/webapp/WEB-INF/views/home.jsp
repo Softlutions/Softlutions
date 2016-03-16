@@ -25,6 +25,7 @@
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
 <link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -120,7 +121,7 @@
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
-	<script src="resources/bower_components/toastr/toastr.min.js"></script>
+	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	
 	<!-- Steps -->
@@ -140,6 +141,7 @@
 	<script src="resources/js/Commons/Filters.js"></script>
 	<script src="resources/js/Auction/auctionController.js"></script>
 	<script src="resources/js/Auction/ListAuctionsController.js"></script>
+	<script src="resources/js/Chat/ChatController.js"></script>
 	<!-- Morris -->
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>

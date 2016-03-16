@@ -3,6 +3,7 @@ package com.cenfotec.dondeEs.controller;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,5 +33,15 @@ public class ChatController {
 		}
 		
 		return chatResponse;
+	}
+	
+	@RequestMapping(value ="/getChatsByUser/{id}", method = RequestMethod.GET)
+	@Transactional
+	public ChatResponse getChatsByUser(@PathVariable ("id") int id){
+		ChatResponse response = new ChatResponse();
+		
+		response.setChats(chatServiceInterface.getAllByUser(id));
+		
+		return response;
 	}
 }
