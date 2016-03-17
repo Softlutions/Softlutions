@@ -35,16 +35,50 @@ angular
 //							
 //									});
 							
+							
+							//#region CHAT
+							
 								$http({method: 'GET',url:'rest/protected/chat/getChatsByUser/'+$scope.loggedUser.userId, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 									$scope.chats = response.chats;
-								})
+									console.log(response.chats);
+									$scope.messages = response.messages;
 									
+									//Esto tiene   que llenarlo con datos del backend en vez de estar quemados
+									$scope.messages = [
+											{user_id: 6,
+											autor: "Alejandro Bermudez",
+											content: "Hola como estan",
+											time: "20:00 pm"},
+
+											{user_id: 7,
+											autor: "Clara Ramirez",
+											content: "Pura vida?",
+											time: "20:00 pm"},
+											
+											{user_id: 5,
+											autor: "LaTocola",
+											content: "Tuanis Tuanis, vieras que ayer andaba en una entrevista en canal 7.. Vieras que despiche!",
+											time: "20:00 am"},
+									];
+								})
+								
+								//Le pasa el chat del ng-repeat en el ng-click: Osea ng-click="selectChat(chat)"
+								$scope.selectChat = function(chat){
+									$scope.chat = chat;
+									$scope.messages = chat.messages;
+								}
+								
+								
+								//En el send menssage le pasa el id del chat que esta seteando en el $scope.chat = chat;
+								
+								
+							//#endregion CHAT
+								
 							$scope.getAllMessage = function(idChat){
 									$("#messageByChat").show();
 									$scope.chat = {chatId:idChat}
 									$http({method: 'GET',url:'rest/protected/message/getAllMessageByChat/'+idChat, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 										
-										$scope.messages = response.messages;
 										
 										
 									})

@@ -123,6 +123,7 @@
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/js/App/App.js"></script>
+	<script src="resources/js/Commons/directives.js"></script>
 	
 	<!-- Steps -->
     <script src="resources/js/plugins/staps/jquery.steps.min.js"></script>

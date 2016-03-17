@@ -19,7 +19,6 @@
  *  - customValid
  *  - fullScroll
  *  - closeOffCanvas
- *  - clockPicker
  *  - landingScrollspy
  *  - fitHeight
  *  - iboxToolsFullScreen
@@ -541,7 +540,7 @@ function markdownEditor() {
  * Pass all functions into module
  */
 angular
-    .module('inspinia')
+    .module('dondeEs')
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
