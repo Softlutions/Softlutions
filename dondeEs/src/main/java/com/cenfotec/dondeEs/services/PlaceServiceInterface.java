@@ -1,5 +1,7 @@
 package com.cenfotec.dondeEs.services;
 
-public interface PlaceServiceInterface {
+import com.cenfotec.dondeEs.ejb.Place;
 
+public interface PlaceServiceInterface {
+	Place savePlace(Place e);
 }

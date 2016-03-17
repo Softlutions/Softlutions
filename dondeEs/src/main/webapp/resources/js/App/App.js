@@ -3,6 +3,7 @@
 angular.module('dondeEs', [
 	"ngRoute",
 	"dondeEs.index",
+	"dondeEs.update",
 	"dondeEs.serviceByUser",
 	"dondeEs.users",
 	"dondeEs.myEvents",
@@ -11,7 +12,8 @@ angular.module('dondeEs', [
 	"dondeEs.ContractModule",
 	"dondeEs.answerInvitation",
 	"dondeEs.auctionsEvent",
-	"dondeEs.auctions"
+	"dondeEs.auctions",
+	"dondeEs.contact"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/index'});

@@ -4,7 +4,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/auctionsEvent/:id', {
-    templateUrl: 'resources/auctionsEvent.html',
+    templateUrl: 'resources/auction/auctionsEvent.html',
     controller: 'auctionsEventCtrl'
   });
 }])
@@ -15,8 +15,25 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 	$scope.auctionServices = [];
 		
 	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$routeParams.id).success(function(response) {
-		$scope.auctionsEvent = response.auctionList;
-
+		if (response.code == 200) {
+			if (response.auctionList != null && response.auctionList != {}) {
+				$scope.auctionsEvent = response.auctionList;
+			} else {
+		    	toastr.options = {
+		    			closeButton: true,
+	                    progressBar: true,
+	                    showMethod: 'slideDown'
+		        };
+		    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
+			}
+		} else {
+	    	toastr.options = {
+	    			closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown'
+	        };
+	    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+		}
 	});
 	
 	$scope.loadAuctionServices = function (index) {
