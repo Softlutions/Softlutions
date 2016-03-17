@@ -68,10 +68,8 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', function($scope,$http,$upload,MarkerCreatorService, toastr) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', function($scope,$http,$upload,MarkerCreatorService) { 
 	$scope.listOfEmails = [];
-
-	$scope.files = {};
 	
 	// Create auction
 	$scope.catalogs = [];
@@ -279,7 +277,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		                    progressBar: true,
 		                    showMethod: 'slideDown'
 			            };
-						toastr.success('Publicación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se publicó.');
+						toastr.warning('Publicación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se publicó.');
 					}
 					
 				});
@@ -289,7 +287,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
                     progressBar: true,
                     showMethod: 'slideDown'
 	            };
-				toastr.success('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
 		})	
 	}
@@ -301,13 +299,19 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			 		if (response.code == 200) {
 							$scope.events = response.eventList;
+					    	toastr.options = {
+				                    closeButton: true,
+				                    progressBar: true,
+				                    showMethod: 'slideDown'
+					            };
+								toastr.success('Cancelación del evento', 'El evento se canceló con éxito.');
 			 		} else {
 				    	toastr.options = {
 		                    closeButton: true,
 		                    progressBar: true,
 		                    showMethod: 'slideDown'
 				        };
-						toastr.success('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se canceló.')
+						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se canceló.')
 					}
 		 		});
 			} else {
@@ -316,7 +320,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	                    progressBar: true,
 	                    showMethod: 'slideDown'
 		        };
-		    	toastr.success('Cancelación del evento', 'Ocurrió un error al cancelar el evento.');
+		    	toastr.error('Cancelación del evento', 'Ocurrió un error al cancelar el evento.');
 			} 
 		 })
 	 }
@@ -356,13 +360,19 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 										if (response.code == 200) {
 											if (response.eventList.length > 0) {
 												$scope.events = response.eventList;
+										    	toastr.options = {
+									                    closeButton: true,
+									                    progressBar: true,
+									                    showMethod: 'slideDown'
+										        };
+										    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
 											} else {
 										    	toastr.options = {
 									                    closeButton: true,
 									                    progressBar: true,
 									                    showMethod: 'slideDown'
 										        };
-										    	toastr.success('Eventos del usuario', 'No se encontraron eventos.');
+										    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
 											}
 										} else {
 									    	toastr.options = {
@@ -370,7 +380,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 								                    progressBar: true,
 								                    showMethod: 'slideDown'
 									        };
-									    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
+									    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
 										}			
 									});
 									$('#modalCreateEvent').modal('toggle');
@@ -380,8 +390,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 						                    progressBar: true,
 						                    showMethod: 'slideDown'
 							        };
-							    	toastr.success('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+							    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 								}
+								
+								$scope.eventName = "";
+								$scope.eventDescription = "";
+								$scope.eventLargeDescription = "";
+								$scope.eventPlaceName = "";
+								$scope.file = null;
 						}); 
 		}
 	};

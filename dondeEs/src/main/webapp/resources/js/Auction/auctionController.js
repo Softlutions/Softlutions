@@ -10,7 +10,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 }])
 
 .controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window',
-                                  			function($scope,$http,$location,$routeParams, $window, toastr) {	
+                                  			function($scope,$http,$location,$routeParams, $window) {	
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
 		
@@ -24,7 +24,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 	                    progressBar: true,
 	                    showMethod: 'slideDown'
 		        };
-		    	toastr.success('Subastas del evento', 'No se encontraron subastas del evento.');
+		    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 			}
 		} else {
 	    	toastr.options = {
@@ -32,7 +32,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
                     progressBar: true,
                     showMethod: 'slideDown'
 	        };
-	    	toastr.success('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+	    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 		}
 	});
 	

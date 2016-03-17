@@ -6,7 +6,7 @@ angular.module('dondeEs.contact', ['ngRoute'])
 	    controller: 'ContactCtrl'
 	  });
 	}])
-	.controller('ContactCtrl', ['$scope','$http',function($scope,$http,toastr) {
+	.controller('ContactCtrl', ['$scope','$http',function($scope,$http) {
 
 		$scope.sendMessage = function () {
 			var data = {
@@ -30,7 +30,7 @@ angular.module('dondeEs.contact', ['ngRoute'])
 		                    progressBar: true,
 		                    showMethod: 'slideDown'
 			        };
-			    	toastr.success('Contacto', 'Ocurrió un error al enviar el mensaje.');
+			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');
 				}
 			}); 
 		}

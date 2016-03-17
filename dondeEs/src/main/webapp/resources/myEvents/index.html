@@ -307,21 +307,21 @@
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Nombre</label>
 									<div class="col-lg-10">
-										<input ng-model="eventName" type="text" class="form-control" required>
+										<input ng-model="eventName" type="text" class="form-control" ng-maxlength="255" required>
 									</div>
 								</div>
 								
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Descripción</label>
 									<div class="col-lg-10">
-										<input ng-model="eventDescription" type="text" class="form-control" required>
+										<input ng-model="eventDescription" type="text" class="form-control" ng-maxlength="255" required>
 									</div>
 								</div>
 								
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Descripción larga</label>
 									<div class="col-lg-10">
-										<input ng-model="eventLargeDescription" type="text" class="form-control">
+										<input ng-model="eventLargeDescription" type="text" class="form-control" ng-maxlength="255">
 									</div>
 								</div>
 							
@@ -346,7 +346,7 @@
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Nombre del lugar</label>
 									<div class="col-lg-10">
-										<input ng-model="eventPlaceName" type="text" class="form-control" required>
+										<input ng-model="eventPlaceName" type="text" class="form-control" ng-maxlength="255" required>
 									</div>
 								</div>
 								
