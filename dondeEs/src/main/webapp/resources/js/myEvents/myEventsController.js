@@ -148,24 +148,25 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.createAuction = function(){
-		$("#btnCreateAuction").prop("disabled", true);
-		
-		var auction = {
-				name: $('#auctionName').val(),
-				description: $('#auctionDescription').val(),
-				date: new Date(),
-				event: $scope.selectedEvent,
-				serviceCatalog: $scope.catalogServiceSelected
+
+			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
+				toastr.error('Debe ingresar todos los datos!');
+			}else{			
+				var auction = {
+						name: $scope.tempAuction.name,
+						description: $scope.tempAuction.description,
+						date: new Date(),
+						event: $scope.selectedEvent,
+						serviceCatalog: $scope.tempAuction.selected
+				}
+				
+				$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+					$('#modalAuctionEventServices').modal('toggle');
+					$scope.tempAuction = {};
+					toastr.success('Subasta publicada!');
+				})	
+			}
 		}
-		
-		$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-			$('#modalAuctionEventServices').modal('toggle');
-			$("#btnCreateAuction").prop("disabled", false);
-			$('#auctionName').val("");
-			$('#auctionDescription').val("");
-			$scope.catalogServiceSelected = {};
-		})	
-	}
 	
 	$scope.listContracts = function(eventId){
 		$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
