@@ -60,7 +60,7 @@
 										</div>
 										<div class="form-group">
 											<label>Contraseña</label> <input type="password"
-												ng-model="user.password" placeholder="Ingresar contraseña"
+												ng-model="user.password" placeholder="Mínimo 8 caracteres"
 												class="form-control">
 										</div>
 										<div class="form-group">
@@ -77,7 +77,7 @@
 										</div>
 										<div class="form-group">
 											<label>Seleccione un rol</label> <select
-												class="form-control m-b"
+												class="form-control m-b" id="selectRol"
 												ng-options="role as role.name for role in roles track by role.roleId"
 												ng-model="user.role"></select>
 										</div>

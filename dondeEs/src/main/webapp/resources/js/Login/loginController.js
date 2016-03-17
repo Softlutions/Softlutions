@@ -66,13 +66,15 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				$scope.checkLogin();
 		}
 		$scope.forgotPassword = function() {
-			if($scope.user.email != ''){
+			if($scope.user.email != null){
 				$http.post("rest/login/updatePassword", $scope.user)
 				.success(function(response){
 					if(response.code == 200){
-						alert('Password cambiado correctamente!');
+						toastr.success('La contraseña ha sido modificada correctamente', 'Contraseña modificada');
+
 					}else{
-						alert('NO se  poder');
+						toastr.error('La contraseña no ha sido modficiada', 'Error');
+
 					}
 				})
 				.error(function(response){
@@ -80,6 +82,7 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				});
 			}else{
 				$("#errorMsj").css("visibility", "visible");
+				toastr.error('Debe ingresar el correo.', 'Error');
 			}
 		}
 	}]);

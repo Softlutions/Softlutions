@@ -27,16 +27,32 @@ angular.module('dondeEs.users', [ 'ngRoute' ]).config(
 						var userRequest = {
 							user : $scope.user
 						}
-						console.log(userRequest);
-						$http.post("rest/protected/users/create", userRequest)
+						if($scope.user.name != null && $scope.user.email != null && $scope.user.lastName1 !=null && $scope.user.password.length >= 8 && $scope.user.phone != null){
+
+							$http.post("rest/protected/users/create", userRequest)
 								.success(function(response) {
 									if (response.code == 200) {
 										console.log(response);
-										alert("Se registro");
+										$("#modal-form").modal('hide');
+										toastr.success('Ha sido registrado en el sistema', 'Registro exitoso');
+
+										
 									} else {
-										alert("No se registro");
+										toastr.error('Ha ocurrido un error en el registro', 'Registro negado');
 									}
 								});
+						}else{
+							 setTimeout(function() {					
+					                toastr.options = {
+					                    closeButton: true,
+					                    progressBar: true,
+					                    showMethod: 'slideDown',
+					                    timeOut: 4000
+					                };
+					                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+
+					            }, 1300);
+						}
 					}
 
 					// get roles
