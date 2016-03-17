@@ -76,7 +76,7 @@ angular
 			
 			$scope.joinAuction = function(){
 				if($scope.auctionService.description == null || $scope.auctionService.price == null || $scope.auctionService.service == null){
-					toastr.warning('Debe ingresar todos los datos!');
+					toastr.error('Debe ingresar todos los datos!');
 				}else{
 					
 					var newAuctionService = {

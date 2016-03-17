@@ -150,7 +150,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.createAuction = function(){
 
 			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
-				toastr.warning('Debe ingresar todos los datos!');
+				toastr.error('Debe ingresar todos los datos!');
 			}else{			
 				var auction = {
 						name: $scope.tempAuction.name,
