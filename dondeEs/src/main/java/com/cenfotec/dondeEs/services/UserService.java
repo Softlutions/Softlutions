@@ -162,8 +162,7 @@ public class UserService implements UserServiceInterface {
 
 		System.out.println(auctionRepository); // prueba
 
-		// dato de prueba en el parámetro.
-		List<Auction> auctions = auctionRepository.findAllByEventEventId(1);
+		List<Auction> auctions = auctionRepository.findAllByEventEventId(idEvent);
 
 		auctions.stream().forEach(e -> {
 			if (e.getAuctionServices() != null) {
@@ -176,5 +175,16 @@ public class UserService implements UserServiceInterface {
 		});
 
 		return usersPOJO;
+	}
+	
+	/***
+	 * Obtiene un usuario por su id.
+	 * 
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
+	@Override
+	public User findById(int id) {	
+		return userRepository.findByUserId(id);
 	}
 }

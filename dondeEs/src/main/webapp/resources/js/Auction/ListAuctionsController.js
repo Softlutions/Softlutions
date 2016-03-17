@@ -15,6 +15,12 @@ angular
 			$scope.auctionList = [];
 			$scope.showError = true;
 			
+			toastr.options = {
+				closeButton: true,
+				showMethod: 'slideDown',
+				timeOut: 4000
+			};
+			
 			$http.get('rest/protected/auction/getAllAuctions/').success(function(response) {
 				if(response.auctionList.length == 0){
 					$scope.showError = false;
@@ -93,5 +99,23 @@ angular
 				}
 			}
 			
-			
+			$scope.contract = function(auctionService){
+				if(auctionService.acept == 1){
+					$http.get("rest/protected/auctionService/contract/"+auctionService.auctionServicesId).success(function(response){
+						if(response.code == 200){
+							var index = $scope.auctionList.indexOf(auctionService.auction);
+							$scope.auctionList.splice(index, 1);
+							$("#modalAuctionParticipants").modal("toggle");
+							toastr.success("Servicio "+auctionService.service.name+" contratado!");
+						}else{
+							$("#modalAuctionParticipants").modal("toggle");
+							toastr.error("No se pudo contratar el servicio");
+						}
+					}).error(function(response){
+						$("#modalAuctionParticipants").modal("toggle");
+						toastr.error("No se pudo contratar el servicio");
+					});
+				}
+				
+			}
 }]);

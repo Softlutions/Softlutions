@@ -1,7 +1,5 @@
 package com.cenfotec.dondeEs.controller;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,11 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.LoginResponse;
-import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.services.LoginServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
-
 
 /**
  * Handles requests for the application home page.
@@ -31,6 +27,7 @@ public class LoginController {
 	
 	@Autowired private LoginServiceInterface loginService;
 	@Autowired private UserServiceInterface userServiceInterface;
+	
 	/**
 	 * @Author Ernesto Méndez A.
 	 * @param lr Petición que contiene el email y la contraseña del usuarioa logear
@@ -47,10 +44,22 @@ public class LoginController {
 		loginService.checkUser(lr,response,currentSession);
 		
 		return response;
-		
 	}
 	
-	
+	/**
+	 * @author Ernesto Méndez A.
+	 * @param servletRequest sesion actual
+	 * @return resultado de la operacion, si el cierre de sesion fue satisfactorio o no
+	 */
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@Transactional
+	public BaseResponse logout(HttpServletRequest servletRequest){	
+		servletRequest.getSession().invalidate();
+		BaseResponse response = new BaseResponse();
+		response.setCode(200);
+		response.setCodeMessage("successfully logout");
+		return response;
+	}
 	
 	/**
 	 * @author Alejandro Bermúdez Vargas

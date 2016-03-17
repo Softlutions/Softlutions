@@ -43,7 +43,7 @@ public class EventService implements EventServiceInterface {
 	}
 	
 	/***
-	 * Obtiene todo los eventos publicados.
+	 * Obtiene todos los eventos publicados.
 	 * @author Enmanuel García González
 	 * @version 1.0
 	 */
@@ -85,6 +85,7 @@ public class EventService implements EventServiceInterface {
 	/***
 	 * Guarda un evento.
 	 * @author Enmanuel García González
+	 * @return True en caso de efectuarse la inserción o false en caso contrario.
 	 * @version 1.0
 	 */
 	@Override
