@@ -1,6 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
+
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
+import com.cenfotec.dondeEs.contracts.MessageRequest;
 import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
@@ -134,7 +137,9 @@ public class SendEmailController {
 	 */
 	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
 	public void sendEmailContractNotification(@RequestBody ContractNotification contractNotification) {
+		BaseResponse response = new BaseResponse(); 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
 		subject = "Has sido contratado por un promotor";
 		try {
 			int eventId = contractNotification.getEvent().getEventId();
@@ -153,10 +158,70 @@ public class SendEmailController {
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
-
-		} catch (Exception ae) {
-			ae.printStackTrace();
+			
+			response.setCode(200);
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setErrorMessage(e.toString());
+			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Envia al correo del propietario del software un mensaje de contacto ingresado por un usuario.
+	 * @author Enmanuel García González
+	 * @param message
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
+	public void sendMessage(@RequestBody MessageRequest message) {
+		BaseResponse response = new BaseResponse();
+		
+		try {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
+			subject = "Message del usuario";
+			text = "Ha recibido un mensaje del usuario: " + message.getUserName() + "\n" +
+						"Correo: " + message.getUserEmail() + "\n" +
+						"Mensage: " + message.getMessage();
+				
+			mailMessage.setTo("softlutionscr@gmail.com");
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+			
+			response.setCode(200);
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setErrorMessage(e.toString());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Envia un correo a un usuario involucrado en un determinado evento notificando la cancelacion de éste.
+	 * @author Enmanuel García González
+	 * @param message
+	 * @version 1.0
+	 */
+	protected boolean sendNotificationCancelEvent(String userEmail, String userName, String eventName) {		
+		try {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			subject = "Cancelación de evento";
+			text = "Estimado(a) " + userName + "\n" +
+			"El evento " + eventName + " ha sido cancelado y sus actividades asociadas han sido suspendidas." + "\n" +
+			"Para mayor información comuniquese con el propietario del evento.";
+				
+			mailMessage.setTo(userEmail);
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

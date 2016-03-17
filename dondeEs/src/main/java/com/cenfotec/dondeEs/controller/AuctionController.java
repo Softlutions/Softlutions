@@ -1,17 +1,22 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
 import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
+
 import org.springframework.web.bind.annotation.PathVariable;
+
 import com.cenfotec.dondeEs.services.AuctionServiceInterface;
 
 @RestController
@@ -80,13 +85,29 @@ public class AuctionController {
 		return response;
 	}
 	
+	/**
+	 * Obtiene todas las subastas de un determinado evento.
+	 * @author Enmanuel García González
+	 * @param id
+	 * @return subastas con sus respectivos servicios de un evento.
+	 * @version 1.0
+	 */
+	@SuppressWarnings("finally")
 	@RequestMapping(value ="/getAllAuctionByEvent/{id}", method = RequestMethod.GET)
-	public AuctionResponse getAllAuctionByEvent(@PathVariable("id") int id){				
+	public AuctionResponse getAllAuctionByEvent(@PathVariable("id") int id){
 		AuctionResponse response = new AuctionResponse();
-		response.setCode(200);
-		response.setCodeMessage("Auctions by event");
-		response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
-		return response;
+		
+		try {
+			response.setAuctionList(auctionServiceInterface.getAllAuctionByEvent(id));
+			response.setCode(200);
+			response.setCodeMessage("Auctions fetch success");
+			
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setCodeMessage(e.toString());
+			e.printStackTrace();
+
+		} finally { return response; }
 	}
 	
 	@RequestMapping(value ="/getAllAuctionsByServiceCatalog/{id}", method = RequestMethod.GET)
