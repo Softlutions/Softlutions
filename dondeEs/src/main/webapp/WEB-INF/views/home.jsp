@@ -49,7 +49,7 @@
 								<li><a href="#">Contacts</a></li>
 								<li><a href="#">Mailbox</a></li>
 								<li class="divider"></li>
-								<li><a href="#">Logout</a></li>
+								<li ng-click="logout()"><a>Logout</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
@@ -118,8 +118,10 @@
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
+	<script src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script src="resources/bower_components/angular-animate/angular-animate.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
