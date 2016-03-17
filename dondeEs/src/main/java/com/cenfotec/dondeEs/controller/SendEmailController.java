@@ -115,7 +115,8 @@ public class SendEmailController {
 		String subject = "Invitación a "+auction.getName();
 		mailMessage.setSubject(subject);
 		
-		String msj = APP_DOMAIN+"/dondeEs/app#/getAllAuctionByEvent/?id="+event.getEventId();
+		String msj = APP_DOMAIN+"/dondeEs/app#/auctions/?id="
+				+ AES.base64encode(String.valueOf(event.getEventId()));
 		mailMessage.setText(msj);
 		
 		try{

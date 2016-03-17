@@ -94,13 +94,15 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 					serviceCatalog: $scope.catalogServiceSelected
 			}
 			
-			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-				$('#modalAuctionEventServices').modal('toggle');
-				$("#btnCreateAuction").prop("disabled", false);
-				$('#auctionName').val("");
-				$('#auctionDescription').val("");
-				$scope.catalogServiceSelected = {};
-			})	
+			if(Object.keys(auction.serviceCatalog).length != 0)
+				$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+					$('#modalAuctionEventServices').modal('toggle');
+					$("#btnCreateAuction").prop("disabled", false);
+					$('#auctionName').val("");
+					$('#auctionDescription').val("");
+					$scope.catalogServiceSelected = {};
+				})	
+			}
 		}
 		
 		$scope.listContracts = function(eventId){

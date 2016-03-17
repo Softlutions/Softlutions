@@ -25,6 +25,7 @@
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
 <link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -121,6 +122,8 @@
 	<script src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script src="resources/bower_components/angular-animate/angular-animate.js"></script>
+	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	
 	<!-- Steps -->

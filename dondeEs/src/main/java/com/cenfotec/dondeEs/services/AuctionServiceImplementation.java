@@ -46,10 +46,13 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 		userPOJO.setEmail(auctionService.getService().getUser().getEmail());
 		servicePOJO.setUser(userPOJO);
 		
-		// incluir validacion de si ya se habia enviado la notificacion
-		boolean isValid = true;
+		boolean isValid = auctionService.getAcept() == 1 && 
+				auctionService.getAuction().getState() == 1 && 
+				auctionService.getService().getState() == 1;
 		
 		if(isValid){
+			auctionService.getAuction().setState((byte) 0);
+			
 			ServiceContact serviceContact = new ServiceContact();
 			serviceContact.setEvent(auctionService.getAuction().getEvent());
 			serviceContact.setService(auctionService.getService());

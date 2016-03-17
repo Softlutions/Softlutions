@@ -8258,12 +8258,3 @@ textarea {
 #emailLabels{
 	margin: 20px 0px  0px 0px;
 }
-
-.hand-cursor{
-	cursor: pointer;
-}
-
-.hand-cursor:hover{
-	color: #8a6d3b;
-	text-decoration: underline;
-}

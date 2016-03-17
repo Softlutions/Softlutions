@@ -39,26 +39,28 @@
 					<h4 class="modal-title">Servicios de la subasta</h4>
 				</div>
 				<div class="modal-body">		
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Nombre</th>
-									<th>Descripción</th>
-									<th>Precio</th>
-									<th>Fecha de ingreso</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody ng-repeat="service in auctionServices">
-								<tr>
-									<td>{{ service.service.name }}</td>
-									<td>{{ service.description }}</td>
-									<td>{{ service.price }}</td>
-									<td>{{ service.date | date:'dd/MM/yyyy' }}</td>
-									<td class="text text-info hand-cursor" ng-click="contract(service)">Contratar</td>
-								</tr>
-							</tbody>
-						</table>
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Descripción</th>
+								<th>Precio</th>
+								<th>Fecha de ingreso</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="service in auctionServices">
+							<tr>
+								<td>{{ service.service.name }}</td>
+								<td>{{ service.description }}</td>
+								<td>{{ service.price }}</td>
+								<td>{{ service.date | date:'dd/MM/yyyy' }}</td>
+								<td class="text text-info">
+									<button ng-click="contract(service)" class="btn btn-primary btn-xs">Contratar</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" ng-click="displayForm()">Participar</button>
@@ -96,6 +98,6 @@
 					<button type="button" class="btn btn-primary" ng-click="joinAuction()">Participar</button>
 				</div>
 			</div>
-	</div>
+		</div>
 	</div>
 </div>
