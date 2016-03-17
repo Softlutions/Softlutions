@@ -1,6 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 import javax.servlet.ServletContext;
@@ -21,6 +22,7 @@ import com.cenfotec.dondeEs.ejb.Place;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 import com.cenfotec.dondeEs.services.PlaceServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
@@ -137,7 +139,9 @@ public class EventController {
 	@Transactional
 	@RequestMapping(value ="/cancelEvent", method = RequestMethod.PUT)
 	public EventResponse cancelEvent(@RequestBody EventPOJO eventRequest) { 
-		EventResponse response = new EventResponse();	
+		EventResponse response = new EventResponse();
+		SendEmailController sendEmail = new SendEmailController();
+		Boolean resultSendEmail = null;
 		
 		try {
 			if(eventRequest.getEventId() != 0){		
@@ -145,11 +149,24 @@ public class EventController {
 				event.setState((byte) 0);
 				event.setPublishDate(new Date());
 		 						
-				boolean state = eventServiceInterface.saveEvent(event);
+				Boolean state = eventServiceInterface.saveEvent(event);
 				
-				if (state) {
+				if(state){
 					response.setCode(200);
 					response.setErrorMessage("success");
+					
+					List<UserPOJO> servicesProviders = userServiceInterface.getAllServicesProviderAuction(event.getEventId());
+					for (UserPOJO sp : servicesProviders) {
+						String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();  
+						
+						resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName, event.getName());
+						
+						if (!resultSendEmail) {
+							response.setCode(500);
+							response.setErrorMessage("notification cancel event error");
+							break;
+						}
+					}
 				} else {
 					response.setCode(500);
 					response.setErrorMessage("cancel event error");

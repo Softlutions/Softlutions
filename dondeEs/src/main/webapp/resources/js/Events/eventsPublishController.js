@@ -14,11 +14,11 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 	$scope.requestObject = {"eventsPublish": {}};
 	
 	$http.get('rest/protected/event/getAllEventPublish',$scope.requestObject).success(function(response) {
-		console.log(response);
-		if (true) {
+		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
 				$scope.eventsPublish = response.eventList;
 				for (var i=0; i<$scope.eventsPublish.length; i++) {
+					console.log($scope.eventsPublish[i].image);
 					$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 					
 					switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
@@ -38,10 +38,20 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 					} 
 				}
 			} else {
-				// mostrar que no hay eventos
+		    	toastr.options = {
+	                    closeButton: true,
+	                    progressBar: true,
+	                    showMethod: 'slideDown'
+		        };
+		    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
 			}
 		} else {
-			// mostrar que hubo un error
+	    	toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown'
+	        };
+	    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
 		}
 	});
 	

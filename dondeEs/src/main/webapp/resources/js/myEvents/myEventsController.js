@@ -314,11 +314,32 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se canceló.')
 					}
 		 		});
+			} else if (response.errorMessage == "notification cancel event error") {
+		    	toastr.options = {
+		    			closeButton: true,
+	                    progressBar: true,
+	                    showMethod: 'slideDown',
+	                    timeOut: 7000
+		        };
+		    	toastr.warning('Cancelación del evento', 'Ocurrió un error al notificar a los involucrados sin embargo el evento se canceló con éxito.');
+		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+			 		if (response.code == 200) {
+			 			$scope.events = response.eventList;
+			 		} else {
+				    	toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown'
+				        };
+						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla.')
+					}
+		 		});
 			} else {
 		    	toastr.options = {
 		    			closeButton: true,
 	                    progressBar: true,
-	                    showMethod: 'slideDown'
+	                    showMethod: 'slideDown',
+	                    timeOut: 4000
 		        };
 		    	toastr.error('Cancelación del evento', 'Ocurrió un error al cancelar el evento.');
 			} 

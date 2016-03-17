@@ -167,6 +167,12 @@ public class SendEmailController {
 		}
 	}
 	
+	/**
+	 * Envia al correo del propietario del software un mensaje de contacto ingresado por un usuario.
+	 * @author Enmanuel García González
+	 * @param message
+	 * @version 1.0
+	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	public void sendMessage(@RequestBody MessageRequest message) {
 		BaseResponse response = new BaseResponse();
@@ -189,6 +195,33 @@ public class SendEmailController {
 			response.setCode(500);
 			response.setErrorMessage(e.toString());
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Envia un correo a un usuario involucrado en un determinado evento notificando la cancelacion de éste.
+	 * @author Enmanuel García González
+	 * @param message
+	 * @version 1.0
+	 */
+	protected boolean sendNotificationCancelEvent(String userEmail, String userName, String eventName) {		
+		try {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			subject = "Cancelación de evento";
+			text = "Estimado(a) " + userName + "\n" +
+			"El evento " + eventName + " ha sido cancelado y sus actividades asociadas han sido suspendidas." + "\n" +
+			"Para mayor información comuniquese con el propietario del evento.";
+				
+			mailMessage.setTo(userEmail);
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 }

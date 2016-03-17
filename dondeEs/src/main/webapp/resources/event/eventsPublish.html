@@ -11,10 +11,10 @@
 						<span class="month">{{event.month}}</span>
 					</time>
 			  		<img ng-if="event.image == null || event.image == ''" alt="No se pudo cargar la imagen del evento" 
-			  								src="/dondeEs/src/main/webapp/resources/img/imagen-no-disponible.gif"
+			  								src="http://clips.com.mx/EysCommerciaWebV4/App_Themes/Clips/Imagen/NoDisponible.gif"
 			  								data-toggle="collapse" data-target="#demo{{$index}}"/>  
 			  		<img ng-if="event.image != null && event.image != ''" alt="No se pudo cargar la imagen del evento" 
-			  								src="event.image" 
+			  								src="{{event.image}}" 
 			  									data-toggle="collapse" data-target="#demo{{$index}}"/> 
 					<div class="info">
 						<h2 class="title" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.name }}</h2>
