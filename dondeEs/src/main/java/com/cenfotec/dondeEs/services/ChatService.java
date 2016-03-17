@@ -13,6 +13,7 @@ import com.cenfotec.dondeEs.ejb.Chat;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.ChatPOJO;
+import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.repositories.ChatRepository;
 import com.cenfotec.dondeEs.repositories.EventRepository;
 import com.cenfotec.dondeEs.repositories.UserRepository;
@@ -57,6 +58,16 @@ public class ChatService implements ChatServiceInterface {
 			BeanUtils.copyProperties(c, chatPOJO);
 			chatPOJO.setUsers(null);
 			chatPOJO.setMessages(null);
+			if(c.getEvent() != null){
+				EventPOJO eventPOJO = new EventPOJO();
+				BeanUtils.copyProperties(c.getEvent(), eventPOJO);
+				eventPOJO.setChats(null);
+				eventPOJO.setEventParticipants(null);
+				eventPOJO.setUser(null);
+				eventPOJO.setServiceContacts(null);
+				eventPOJO.setNotes(null);
+				chatPOJO.setEvent(eventPOJO);
+			}
 			chatsPOJO.add(chatPOJO);
 		});
 		
