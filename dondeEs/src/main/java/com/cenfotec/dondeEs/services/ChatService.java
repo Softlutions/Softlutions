@@ -73,5 +73,18 @@ public class ChatService implements ChatServiceInterface {
 		
 		return chatsPOJO;
 	}
+
+
+	@Override
+	public void saveChatByEvent(int idEvent) {
+		Chat nchat = new Chat();
+		
+		Event nevent = eventRepository.findOne(idEvent);
+		
+		nchat.setEvent(nevent);
+		
+		saveChat(nchat);
+		
+	}
 	
 }

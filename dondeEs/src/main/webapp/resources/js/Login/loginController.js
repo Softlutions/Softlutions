@@ -70,10 +70,10 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				$http.post("rest/login/updatePassword", $scope.user)
 				.success(function(response){
 					if(response.code == 200){
-						toastr.success('La contraseña ha sido modificada correctamente', 'Contraseña modificada');
+						toastr.success('La contraseña ha sido modificada correctamente');
 
 					}else{
-						toastr.error('La contraseña no ha sido modficiada', 'Error');
+						toastr.error('La contraseña no ha sido modficiada');
 
 					}
 				})

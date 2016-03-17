@@ -9,5 +9,7 @@ public interface ChatServiceInterface {
 
 	Boolean saveChat(Chat chat);
 	
+	void saveChatByEvent(int idEvent);
+	
 	List<ChatPOJO> getAllByUser(int idUser);
 }

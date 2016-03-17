@@ -35,6 +35,18 @@ public class ChatController {
 		return chatResponse;
 	}
 	
+	@RequestMapping(value ="/saveChatEventId/{id}", method = RequestMethod.GET)
+	@Transactional
+	public ChatResponse saveChatEventId(@PathVariable ("id") int id){
+		ChatResponse response = new ChatResponse();
+		
+		chatServiceInterface.saveChatByEvent(id);
+		
+		response.setCode(200);
+		
+		return response;
+	}
+	
 	@RequestMapping(value ="/getChatsByUser/{id}", method = RequestMethod.GET)
 	@Transactional
 	public ChatResponse getChatsByUser(@PathVariable ("id") int id){
