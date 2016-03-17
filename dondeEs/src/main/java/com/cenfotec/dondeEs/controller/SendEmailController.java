@@ -141,7 +141,7 @@ public class SendEmailController {
 			int serviceId = contractNotification.getService().getServiceId();
 
 			ServiceContact serviceContact = serviceContactService.getByServiceServiceIdAndEventEventId(
-					contractNotification.getEvent().getEventId(), contractNotification.getService().getServiceId());
+					contractNotification.getService().getServiceId(), contractNotification.getEvent().getEventId());
 			
 			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
 					.getEmail();

@@ -74,5 +74,14 @@ angular
 				}
 			}
 			
-			
+			$scope.contract = function(auctionService){
+				console.log(auctionService);
+				
+				if(auctionService.acept == 1){
+					$http.get("rest/protected/auctionService/contract/"+auctionService.auctionServicesId).success(function(response){
+						console.log(response);
+					});
+				}
+				
+			}
 }]);

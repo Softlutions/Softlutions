@@ -8,7 +8,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	  });
 	}])
 	.controller('IndexCtrl', ['$scope','$http','$cookies',function($scope,$http,$cookies) {
-		
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.logout = function(){
 			$http.get("rest/login/logout").success(function(response){
 				var sessionCookie = $cookies.getObject("lastSession");
