@@ -94,15 +94,13 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 					serviceCatalog: $scope.catalogServiceSelected
 			}
 			
-			if(Object.keys(auction.serviceCatalog).length != 0)
-				$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-					$('#modalAuctionEventServices').modal('toggle');
-					$("#btnCreateAuction").prop("disabled", false);
-					$('#auctionName').val("");
-					$('#auctionDescription').val("");
-					$scope.catalogServiceSelected = {};
-				})	
-			}
+			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				$('#modalAuctionEventServices').modal('toggle');
+				$("#btnCreateAuction").prop("disabled", false);
+				$('#auctionName').val("");
+				$('#auctionDescription').val("");
+				$scope.catalogServiceSelected = {};
+			})
 		}
 		
 		$scope.listContracts = function(eventId){
@@ -199,9 +197,9 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		$scope.publishEvent = function(eventId){  
 			$scope.requestObject = {"eventId":eventId};
 			$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
-					$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-						$scope.events = response.eventList;
-					});
+				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+					$scope.events = response.eventList;
+				});
 			})
 			
 		}
