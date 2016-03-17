@@ -137,7 +137,9 @@ public class SendEmailController {
 	 */
 	@RequestMapping(value = "/sendEmailContractNotification", method = RequestMethod.POST)
 	public void sendEmailContractNotification(@RequestBody ContractNotification contractNotification) {
+		BaseResponse response = new BaseResponse(); 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
 		subject = "Has sido contratado por un promotor";
 		try {
 			int eventId = contractNotification.getEvent().getEventId();
@@ -156,9 +158,12 @@ public class SendEmailController {
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
-
-		} catch (Exception ae) {
-			ae.printStackTrace();
+			
+			response.setCode(200);
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setErrorMessage(e.toString());
+			e.printStackTrace();
 		}
 	}
 	
@@ -174,16 +179,16 @@ public class SendEmailController {
 						"Correo: " + message.getUserEmail() + "\n" +
 						"Mensage: " + message.getMessage();
 				
-			mailMessage.setTo("egarciag@ucenfotec.ac.cr"); // correo de prueba
+			mailMessage.setTo("softlutionscr@gmail.com");
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
 			
 			response.setCode(200);
-		} catch (Exception ae) {
+		} catch (Exception e) {
 			response.setCode(500);
-			response.setErrorMessage("Ha ocurrido un error interno.");
-			ae.printStackTrace();
+			response.setErrorMessage(e.toString());
+			e.printStackTrace();
 		}
 	}
 }

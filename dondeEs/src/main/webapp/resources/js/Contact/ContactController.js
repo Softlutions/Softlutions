@@ -6,7 +6,7 @@ angular.module('dondeEs.contact', ['ngRoute'])
 	    controller: 'ContactCtrl'
 	  });
 	}])
-	.controller('ContactCtrl', ['$scope','$http',function($scope,$http) {
+	.controller('ContactCtrl', ['$scope','$http',function($scope,$http,toastr) {
 
 		$scope.sendMessage = function () {
 			var data = {
@@ -14,11 +14,24 @@ angular.module('dondeEs.contact', ['ngRoute'])
 				userEmail: $scope.email,
 				message: $scope.message
 			}
-			
-			console.log(data);
-			
+						
 			$http({method: 'POST',url:'rest/protected/sendEmail/sendMessage', data, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
+				if (response.code == 200) {
+			    	toastr.options = {
+			    			closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown'
+			        };
+			    	toastr.success('Contacto', 'El mensaje se envió con éxito.');
+				} else {
+			    	toastr.options = {
+			    			closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown'
+			        };
+			    	toastr.success('Contacto', 'Ocurrió un error al enviar el mensaje.');
+				}
 			}); 
 		}
 		

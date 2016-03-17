@@ -55,7 +55,7 @@
 											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
 										<li ng-show="event.state===1"><a type="button"
 											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar
-												evento</a></li>
+												publicación</a></li>
 									</ul>
 								</div>
 							</td>
@@ -300,21 +300,21 @@
 					<h4 class="modal-title">Crear evento</h4>
 				</div>
 				
-				<form class="form-horizontal">		
+				<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid ? createEvent() : null">		
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Nombre</label>
 									<div class="col-lg-10">
-										<input ng-model="eventName" type="text" class="form-control">
+										<input ng-model="eventName" type="text" class="form-control" required>
 									</div>
 								</div>
 								
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Descripción</label>
 									<div class="col-lg-10">
-										<input ng-model="eventDescription" type="text" class="form-control">
+										<input ng-model="eventDescription" type="text" class="form-control" required>
 									</div>
 								</div>
 								
@@ -346,7 +346,7 @@
 								<div class="form-group">
 									<label class="col-lg-2 control-label">Nombre del lugar</label>
 									<div class="col-lg-10">
-										<input ng-model="eventPlaceName" type="text" class="form-control">
+										<input ng-model="eventPlaceName" type="text" class="form-control" required>
 									</div>
 								</div>
 								
@@ -355,25 +355,24 @@
 						                <markers models="map.markers" coords="'self'" options="'options'" isLabel='true'>
 						                </markers>
 						            </google-map>
-						            <button class="btn btn-primary" ng-click="addCurrentLocation()">Ir a mi localización</button>
+						            <a class="btn btn-primary" ng-click="addCurrentLocation()">Ir a mi localización</a>
 						        </div>                
 						            
 					            <div class="form-group">
 						            <label class="control-label">Buscar lugar</label>
 						            <input class="form-control" type="text" placeholder="San José, Costa Rica" ng-model="address"/>
-						            <button class="btn btn-primary" ng-click="addAddress()">Ir a esta dirección</button>
+						            <a class="btn btn-primary" ng-click="addAddress()">Ir a esta dirección</a>
 						            <label class="has-error" ng-show="resultSearch">La dirección no pudo ser encontrada.</label>    
 					            </div>
 								 						 							
 								<div class="form-group">
 									<label class='control-label'>Imagen</label>
 									<input class="btn btn-primary" type="file" name="inputfile" ngf-pattern="'image/*'"
-    									ngf-accept="'image/*'" ngf-max-size="5MB" ng-file-select="onFileSelect($files)">
+    									ngf-accept="'image/*'" ngf-max-size="10MB" ng-file-select="onFileSelect($files)" required>
 								</div> 
 								
 								<div class="modal-footer">
-									<button type="submit"
-										class="btn btn-primary pull-right" ng-disabled="" ng-click="createEvent()">Crear</button>				
+									<button type="submit" class="btn btn-primary pull-right">Crear</button>											
 								</div> 
 							</div>
 						</div>
