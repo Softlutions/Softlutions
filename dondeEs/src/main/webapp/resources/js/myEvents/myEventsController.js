@@ -12,10 +12,8 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		// Create auction
 		$scope.catalogs = [];
 		$scope.catalogServiceSelected = {};
+		$scope.tempAuction = {};
 		// --------------
-		
-		
-		
 		
 		var form = $("#example-advanced-form").show();
 
@@ -87,23 +85,24 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 		}
 		
 		$scope.createAuction = function(){
-			$("#btnCreateAuction").prop("disabled", true);
-			
-			var auction = {
-					name: $('#auctionName').val(),
-					description: $('#auctionDescription').val(),
-					date: new Date(),
-					event: $scope.selectedEvent,
-					serviceCatalog: $scope.catalogServiceSelected
+
+			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
+				toastr.warning('Debe ingresar todos los datos!');
+			}else{			
+				var auction = {
+						name: $scope.tempAuction.name,
+						description: $scope.tempAuction.description,
+						date: new Date(),
+						event: $scope.selectedEvent,
+						serviceCatalog: $scope.tempAuction.selected
+				}
+				
+				$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+					$('#modalAuctionEventServices').modal('toggle');
+					$scope.tempAuction = {};
+					toastr.success('Subasta publicada!');
+				})	
 			}
-			
-			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-				$('#modalAuctionEventServices').modal('toggle');
-				$("#btnCreateAuction").prop("disabled", false);
-				$('#auctionName').val("");
-				$('#auctionDescription').val("");
-				$scope.catalogServiceSelected = {};
-			})	
 		}
 		
 		$scope.listContracts = function(eventId){
@@ -123,10 +122,6 @@ angular.module('dondeEs.myEvents', ['ngRoute'])
 			$scope.eventId = eventId;
 
 		};
-		
-		$scope.selectCatalog = function(selectedCatalog){
-			$scope.catalogServiceSelected = selectedCatalog;
-		}
 		
 		$scope.addEmail = function(pemail){
 			$scope.listOfEmails.push(pemail.to);
