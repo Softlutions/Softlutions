@@ -14,7 +14,6 @@ angular
 						'$http','$location',
 						function($scope, $http, $location) {
 							$scope.comment;
-							console.log("ID "+$location.search().eventId);
 							$scope.geteventById = function(){
 								$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 									$scope.event = response.eventPOJO;

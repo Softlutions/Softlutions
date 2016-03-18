@@ -24,7 +24,7 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
-<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet"> 
+<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 </head>
 <body>
@@ -103,7 +103,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Mainly scripts -->
 	<script src="resources/js/jquery-2.1.1.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -113,7 +113,7 @@
 	<!-- Custom and plugin javascript -->
 	<script src="resources/js/inspinia.js"></script>
 	<script src="resources/js/plugins/pace/pace.min.js"></script>
-	
+
 	<!-- JQueryUI -->
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
@@ -126,6 +126,7 @@
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/js/App/App.js"></script>
+	<script src="resources/js/Commons/directives.js"></script>
 	
 	<!-- Steps -->
     <script src="resources/js/plugins/staps/jquery.steps.min.js"></script>
@@ -144,6 +145,8 @@
 	<script src="resources/js/Commons/Filters.js"></script>
 	<script src="resources/js/Auction/auctionController.js"></script>
 	<script src="resources/js/Auction/ListAuctionsController.js"></script>
+	<script src="resources/js/Chat/ChatController.js"></script>
+
 	<script src="resources/js/Contact/ContactController.js"></script>
 
 	<!-- Morris -->

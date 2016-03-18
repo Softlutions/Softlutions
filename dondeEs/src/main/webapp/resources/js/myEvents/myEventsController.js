@@ -190,9 +190,23 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.catalogServiceSelected = selectedCatalog;
 	}
 	
-	$scope.addEmail = function(pemail){
-		$scope.listOfEmails.push(pemail.to);
-		pemail.to = "";
+		$scope.addEmail = function(pemail){
+			if(pemail !=null){
+			$scope.listOfEmails.push(pemail.to);
+			pemail.to = "";
+			}else{	
+			 	  setTimeout(function() {					
+		                toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
+
+		            }, 1300);
+				 
+			}
 	}
 	
 	$scope.catalogsList = function(){
@@ -247,18 +261,32 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.listOfEmails.splice($scope.listOfEmails.indexOf(event), 1);
 	}
 	
-	$scope.sendEmail = function(event){
-		var dataCreate = {
-				listSimple:$scope.listOfEmails
-		};
-		if($scope.listOfEmails.length != 0){
-			$("#modal-formSendInvitation").modal('hide');
-			$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-				
-			});
+		$scope.sendEmail = function(event){
+			var dataCreate = {
+					listSimple:$scope.listOfEmails
+			};
+			if($scope.listOfEmails.length != 0){
+				$("#modal-formSendInvitation").modal('hide');
+				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
+					toastr.success('Correo enviado')
+				}) .error(function(response){
+					 toastr.error('Verifique la direccion de correo electronico y su coneccion a internet', 'Error');
+				})
+			}else{	
+				 	  setTimeout(function() {					
+		                toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
+
+		            }, 1300);
+				 
+			}
 		}
-	}
-	
+		
 	$scope.publishEvent = function(eventId){  
 		$scope.requestObject = {"eventId":eventId};
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {

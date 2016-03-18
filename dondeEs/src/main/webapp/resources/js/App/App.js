@@ -13,7 +13,8 @@ angular.module('dondeEs', [
 	"dondeEs.answerInvitation",
 	"dondeEs.auctionsEvent",
 	"dondeEs.auctions",
-	"dondeEs.contact"
+	"dondeEs.contact",
+	"dondeEs.chat"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/index'});
