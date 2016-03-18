@@ -186,7 +186,7 @@ public class SendEmailController {
 						"Correo: " + message.getUserEmail() + "\n" +
 						"Mensage: " + message.getMessage();
 				
-			mailMessage.setTo("softlutionscr@gmail.com");
+			mailMessage.setTo("evaluacionescenfotec@gmail.com");
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);

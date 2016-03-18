@@ -48,6 +48,8 @@
 											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
+
+										<li><a href="/dondeEs/app#/auctionsEvent/{{event.eventId}}">Ver subastas</a></li>
 										<li><a type="button"
 											ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar
@@ -390,8 +392,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer">
-					</div>
+					<div class="modal-footer"></div>
 				</div>
 			</div>
 		</div>
@@ -409,7 +410,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						
+
 						<h4 class="modal-title">Contratos del evento</h4>
 					</div>
 					<div class="modal-body">
