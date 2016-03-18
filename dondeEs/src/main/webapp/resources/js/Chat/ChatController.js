@@ -94,6 +94,7 @@ angular
 													function(response) {
 														$scope.messages = $scope.messages
 																.concat(dataCreate);
+														$scope.objMessage.content=''
 													})
 								} else {
 									setTimeout(

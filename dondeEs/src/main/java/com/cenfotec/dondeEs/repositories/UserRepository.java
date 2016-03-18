@@ -16,4 +16,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	
 	@Query("SELECT s FROM Service as s join s.user as u WHERE u.userId = ?1 ")
 	List<Service> getServicesByUser(int id);
+
+	User findByUserId(int id);
 }

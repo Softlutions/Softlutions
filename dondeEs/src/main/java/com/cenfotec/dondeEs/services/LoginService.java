@@ -26,7 +26,7 @@ public class LoginService implements LoginServiceInterface{
 	@Override
 	@Transactional
 	public void checkUser(LoginRequest lr, LoginResponse response, HttpSession currentSession) {
-		String pass = lr.isCript()? AES.base64decode(lr.getPassword()):lr.getPassword();
+		String pass = lr.isCript()? lr.getPassword():AES.base64encode(lr.getPassword());
 		User loggedUser = loginRepository.findByEmailAndPassword(lr.getEmail(), pass);
 		
 		if(loggedUser == null){
@@ -43,7 +43,7 @@ public class LoginService implements LoginServiceInterface{
 			response.setFirstName(loggedUser.getName());
 			response.setLastName(loggedUser.getLastName1());
 			response.setEmail(loggedUser.getEmail());
-			response.setCriptPass(AES.base64encode(loggedUser.getPassword()));
+			response.setCriptPass(pass);
 			
 			RolePOJO rolePOJO = new RolePOJO();
 			BeanUtils.copyProperties(loggedUser.getRole(), rolePOJO);
@@ -62,5 +62,5 @@ public class LoginService implements LoginServiceInterface{
 			
 			currentSession.setAttribute("idUser", loggedUser.getUserId());
 		}
-	}		
+	}
 }

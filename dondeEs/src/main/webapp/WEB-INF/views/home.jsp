@@ -49,7 +49,7 @@
 								<li><a href="#">Contacts</a></li>
 								<li><a href="#">Mailbox</a></li>
 								<li class="divider"></li>
-								<li><a href="#">Logout</a></li>
+								<li ng-click="logout()"><a>Logout</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
@@ -117,10 +117,13 @@
 	<!-- JQueryUI -->
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
-
 	<script src="resources/bower_components/angular/angular.js"></script>
+	<script src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script src="resources/bower_components/angular-animate/angular-animate.js"></script>
+	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
+	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
@@ -143,8 +146,18 @@
 	<script src="resources/js/Auction/auctionController.js"></script>
 	<script src="resources/js/Auction/ListAuctionsController.js"></script>
 	<script src="resources/js/Chat/ChatController.js"></script>
+
+	<script src="resources/js/Contact/ContactController.js"></script>
+
 	<!-- Morris -->
     <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="resources/js/plugins/morris/morris.js"></script>
+    
+        <!-- Google Maps -->
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
+
+    <!-- angular-google-maps -->
+    <script src="resources/non_bower_components/lodash.underscore.min.js"></script>
+    <script src="resources/non_bower_components/angular-google-maps.min.js"></script>
 </body>
 </html>

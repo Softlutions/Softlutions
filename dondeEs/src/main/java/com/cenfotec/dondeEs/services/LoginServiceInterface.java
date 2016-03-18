@@ -15,5 +15,4 @@ public interface LoginServiceInterface {
 	 * @version 1.0
 	 */
 	public void checkUser(LoginRequest lr, LoginResponse response, HttpSession currentSession);
-
 }

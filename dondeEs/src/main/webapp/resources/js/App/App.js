@@ -3,6 +3,7 @@
 angular.module('dondeEs', [
 	"ngRoute",
 	"dondeEs.index",
+	"dondeEs.update",
 	"dondeEs.serviceByUser",
 	"dondeEs.users",
 	"dondeEs.myEvents",
@@ -12,6 +13,7 @@ angular.module('dondeEs', [
 	"dondeEs.answerInvitation",
 	"dondeEs.auctionsEvent",
 	"dondeEs.auctions",
+	"dondeEs.contact",
 	"dondeEs.chat"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {

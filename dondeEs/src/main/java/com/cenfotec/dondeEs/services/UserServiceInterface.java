@@ -30,4 +30,6 @@ public interface UserServiceInterface {
 	List<UserPOJO> getAll();
 	Boolean updatePassword(LoginRequest ur);
 	List<UserPOJO> getAllServicesProviderAuction(int idEvent);
+	
+	User findById(int id);
 }
