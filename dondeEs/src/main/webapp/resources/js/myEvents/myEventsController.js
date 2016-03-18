@@ -77,60 +77,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	// --------------
 	
 	$scope.eventType = 0;
-	
-	var form = $("#example-advanced-form").show();
-
-	form.steps({
-	    headerTag: "h3",
-	    bodyTag: "fieldset",
-	    transitionEffect: "slideLeft",
-	    onStepChanging: function (event, currentIndex, newIndex)
-	    {
-	        if (currentIndex > newIndex)
-	        {
-	            return true;
-	        }
-	        if (newIndex === 3 && Number($("#age-2").val()) < 18)
-	        {
-	            return false;
-	        }
-	        if (currentIndex < newIndex)
-	        {
-	            form.find(".body:eq(" + newIndex + ") label.error").remove();
-	            form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-	        }
-	        form.validate().settings.ignore = ":disabled,:hidden";
-	        return form.valid();
-	    },
-	    onStepChanged: function (event, currentIndex, priorIndex)
-	    {
-	        if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
-	        {
-	            form.steps("next");
-	        }
-	        if (currentIndex === 2 && priorIndex === 3)
-	        {
-	            form.steps("previous");
-	        }
-	    },
-	    onFinishing: function (event, currentIndex)
-	    {
-	        form.validate().settings.ignore = ":disabled";
-	        return form.valid();
-	    },
-	    onFinished: function (event, currentIndex)
-	    {
-	        alert("Se publico el evento!");
-	    }
-	}).validate({
-	    errorPlacement: function errorPlacement(error, element) { element.before(error); },
-	    rules: {
-	        confirm: {
-	            equalTo: "#password-2"
-	        }
-	    }
-	});
-
+	$scope.globalEventId = 0;
 	
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 	$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
@@ -147,26 +94,101 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.selectedEvent = event;
 	}
 	
+	$scope.loadAuctionServices = function (index) {
+		
+		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;
+		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 10)
+		setTimeout(function(){$('#servicesOfAuction').modal('show')}, 900)
+		
+	}
+	
+	$scope.goToServiceProviderProfile = function () {
+	//	$location.url('/login');  colocar ruta del perfil del prestatario de servicio. 
+	}
+	
+	$scope.finishAuction= function (id){
+		var dataCreate={
+			auctionId:id
+		}
+		$http({method: 'PUT',url:'rest/protected/auction/finishAuction', data:dataCreate}).success(function(response) {
+			console.log(response);
+			$("#finishAuctionId-"+id).text("Finalizada");
+			$("#finishAuctionId-"+id).removeClass("btn-danger");
+			$("#finishAuctionId-"+id).addClass("btn-warning");
+			$("#finishAuctionId-"+id).prop("disabled", true);
+		});
+		
+	}
+	
 	$scope.createAuction = function(){
 
 			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
 				toastr.error('Debe ingresar todos los datos!');
 			}else{			
-				var auction = {
-						name: $scope.tempAuction.name,
-						description: $scope.tempAuction.description,
-						date: new Date(),
-						event: $scope.selectedEvent,
-						serviceCatalog: $scope.tempAuction.selected
+				if($scope.globalEventId !=0){
+					var event = {
+							eventId: $scope.globalEventId
+					}
+					var auction = {
+							name: $scope.tempAuction.name,
+							description: $scope.tempAuction.description,
+							date: new Date(),
+							event: event,
+							serviceCatalog: $scope.tempAuction.selected
+					};
+				}else{
+					var auction = {
+							name: $scope.tempAuction.name,
+							description: $scope.tempAuction.description,
+							date: new Date(),
+							event: $scope.selectedEvent,
+							serviceCatalog: $scope.tempAuction.selected
+					}
 				}
 				
 				$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 					$('#modalAuctionEventServices').modal('toggle');
 					$scope.tempAuction = {};
 					toastr.success('Subasta publicada!');
+					if($scope.globalEventId!=0){
+						setTimeout(function(){$('#modalAuctionEventServices').modal('hide')}, 10)
+						$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
+								if (response.code == 200) {
+									if (response.auctionList != null && response.auctionList != {}) {
+										$scope.auctionsEvent = response.auctionList;
+									} else {
+								    	toastr.options = {
+								    			closeButton: true,
+							                    progressBar: true,
+							                    showMethod: 'slideDown'
+								        };
+								    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
+									}
+								} else {
+							    	toastr.options = {
+							    			closeButton: true,
+						                    progressBar: true,
+						                    showMethod: 'slideDown'
+							        };
+							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+								}
+							});
+				    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
+					}
 				})	
 			}
 		}
+	
+	$scope.prepublishEvent = function(){
+		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 900);
+		$http.get("rest/protected/chat/saveChatEventId/" + $scope.globalEventId).success(function(response){
+			if (response.code == 200) {
+				toastr.success('Nuevo chat administrativo', 'Visita la pagina de chats!');
+				$scope.globalEventId = 0;
+			}
+		});
+		
+	}
 	
 	$scope.listContracts = function(eventId){
 		$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
@@ -180,7 +202,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 				}
 			});
 	}
-
+	
 	 $scope.geteventById = function(eventId){
 		$scope.eventId = eventId;
 
@@ -215,6 +237,12 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 				$scope.catalogs = response.serviceCatalogList;
 			});
 		}
+	}
+	
+	$scope.openCreateAuction = function(){
+		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 10);
+		$scope.catalogsList();
+    	setTimeout(function(){$('#modalAuctionEventServices').modal('show')}, 900);
 	}
 	
 	$scope.selectService = function(selectedService){
@@ -267,6 +295,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			};
 			if($scope.listOfEmails.length != 0){
 				$("#modal-formSendInvitation").modal('hide');
+				
 				$http({method: 'POST',url:'rest/protected/sendEmail/sendEmailInvitation?eventId='+ $scope.eventId, data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
 					toastr.success('Correo enviado')
 				}) .error(function(response){
@@ -405,6 +434,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 							function(evt) {})
 					.success(
 							function(response) {
+								$scope.globalEventId  = response.eventPOJO.eventId;
 								if (response.code == 200) {
 									$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 										if (response.code == 200) {
@@ -415,6 +445,44 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									                    progressBar: true,
 									                    showMethod: 'slideDown'
 										        };
+										    	
+										    	
+										    	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
+								if (response.code == 200) {
+									if (response.auctionList != null && response.auctionList != {}) {
+										$scope.auctionsEvent = response.auctionList;
+									} else {
+								    	toastr.options = {
+								    			closeButton: true,
+							                    progressBar: true,
+							                    showMethod: 'slideDown'
+								        };
+								    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
+									}
+								} else {
+							    	toastr.options = {
+							    			closeButton: true,
+						                    progressBar: true,
+						                    showMethod: 'slideDown'
+							        };
+							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+								}
+							});
+										    	
+										    		
+										    	
+										    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
+										    	$scope.catalogsList();
+										    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
+										    	
+										    	/*
+										    	
+										    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
+										    	$scope.catalogsList();
+										    	setTimeout(function(){$('#modalAuctionEventServices').modal('show')}, 900)
+										    	
+										    	*/
+										    	
 										    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
 											} else {
 										    	toastr.options = {
@@ -433,7 +501,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
 										}			
 									});
-									$('#modalCreateEvent').modal('toggle');
+									
 								} else {
 							    	toastr.options = {
 							    			closeButton: true,

@@ -89,9 +89,9 @@ public class EventService implements EventServiceInterface {
 	 * @version 1.0
 	 */
 	@Override
-	public Boolean saveEvent(Event _event) {
+	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
-		return (event == null) ? false : true;
+		return event.getEventId();
 	}
 
 	@Override
