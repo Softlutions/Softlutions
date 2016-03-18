@@ -120,6 +120,33 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	}
 	
+	
+	$scope.openAuctions = function(){
+		setTimeout(function(){$('#servicesOfAuction').modal('hide')}, 10)
+		$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
+				if (response.code == 200) {
+					if (response.auctionList != null && response.auctionList != {}) {
+						$scope.auctionsEvent = response.auctionList;
+					} else {
+				    	toastr.options = {
+				    			closeButton: true,
+			                    progressBar: true,
+			                    showMethod: 'slideDown'
+				        };
+				    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
+					}
+				} else {
+			    	toastr.options = {
+			    			closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown'
+			        };
+			    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+				}
+			});
+    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900);
+	}
+	
 	$scope.createAuction = function(){
 
 			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
