@@ -14,7 +14,8 @@ angular.module('dondeEs', [
 	"dondeEs.auctionsEvent",
 	"dondeEs.auctions",
 	"dondeEs.contact",
-	"dondeEs.chat"
+	"dondeEs.chat",
+	"dondeEs.eventReminder"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	$routeProvider.otherwise({redirectTo: '/index'});
