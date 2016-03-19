@@ -10,7 +10,7 @@ angular
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 		$scope.chartValues = null;
 		
-		$scope.listContracts = function(idEvent){
+		$scope.listContracts = function(idEvent){s
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+idEvent).success(function(response){
 				$scope.serviceContacts = response.listContracts;
 				
@@ -25,7 +25,6 @@ angular
 				}
 			});
 		}
-		$scope.listContracts(1);
 		
 		$scope.serviceInfo = function(){
 			$http.get("rest/protected/service/getService/1").success(function(response){
@@ -81,7 +80,7 @@ angular
 			var contractsLeft = 0;
 			var contractsOk = 0;
 			var contractsCanceled = 0;
-			
+			console.log("ok");
 			$('#contracts-state-chart').removeClass('hidden');
 			
 			angular.forEach($scope.serviceContacts, function(value){

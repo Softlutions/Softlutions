@@ -226,6 +226,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 				}else{
 					$('#contractTable').removeClass('hidden');
 					$('#errorMessage').addClass('hidden');
+					$scope.refreshChart();
 				}
 			});
 	}
@@ -590,4 +591,42 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
         $scope.map.control.refresh({latitude: marker.latitude,
             longitude: marker.longitude});
     }
+    
+    $scope.refreshChart = function(){
+		var contractsLeft = 0;
+		var contractsOk = 0;
+		var contractsCanceled = 0;
+		console.log("ok");
+		$('#contracts-state-chart').removeClass('hidden');
+		
+		angular.forEach($scope.serviceContacts, function(value){
+			if(value.state == 0)
+				contractsLeft++;
+				
+			if(value.state == 1)
+				contractsOk++;
+			
+			if(value.state == 2)
+				contractsCanceled++;
+		});
+		
+		if($scope.chartValues != null){
+			$scope.chartValues.setData([
+				{ label: "Pendientes", value: contractsLeft },
+				{ label: "Concretados", value: contractsOk },
+				{ label: "Cancelados", value: contractsCanceled }
+			]);
+		}else if(contractsLeft > 0 || contractsOk > 0 || contractsCanceled > 0){
+			$scope.chartValues = Morris.Donut({
+			    element: 'contracts-state-chart',
+			    data: [
+			           { label: "Pendientes", value: contractsLeft },
+			           { label: "Concretados", value: contractsOk },
+			           { label: "Cancelados", value: contractsCanceled }
+	            ],
+			    resize: false,
+			    colors: ['#87d6c6', '#54cdb4','#1ab394'],
+			});
+		}
+	}
 }]);
