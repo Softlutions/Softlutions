@@ -24,6 +24,8 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
+<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -43,41 +45,50 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="profile.html">Profile</a></li>
-								<li><a href="contacts.html">Contacts</a></li>
-								<li><a href="mailbox.html">Mailbox</a></li>
+								<li><a href="#">Profile</a></li>
+								<li><a href="#">Contacts</a></li>
+								<li><a href="#">Mailbox</a></li>
 								<li class="divider"></li>
-								<li><a href="login.html">Logout</a></li>
+								<li ng-click="logout()"><a>Logout</a></li>
 							</ul>
 						</div>
 						<div class="logo-element">IN+</div>
 					</li>
-					<li><a href="index.html"><i class="fa fa-th-large"></i> <span
+					<li><a href="#"><i class="fa fa-th-large"></i> <span
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="/dondeEs/app#/myEvents">Mis eventos</a></li>
+							<li><a href="app#/index">Mis eventos</a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-bar-chart-o"></i> <span
-							class="nav-label">Reportes</span><span class="fa arrow"></span></a>
+					<li><a href="#"><i class="fa fa-user"></i> <span
+							class="nav-label">Usuarios</span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="graph_flot.html">Reporte x</a></li>
-							<li><a href="graph_flot.html">Reporte x</a></li>
+							<li><a href="/dondeEs/app#/users">Lista de usuarios</a></li>
 						</ul></li>
-					<li><a href="mailbox.html"><i class="fa fa-envelope"></i>
-							<span class="nav-label">Notificaciones </span><span
-							class="label label-warning pull-right">n/x</span></a>
+					<li><a href="#"><i class="fa fa-envelope"></i> <span
+							class="nav-label">Notificaciones </span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="mailbox.html">Inbox</a></li>
+							<li><a href="#">Inbox</a></li>
 						</ul></li>
 					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
 							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="ecommerce_products_grid.html">Mis servicios</a></li>
+							<li><a href="app#/serviceByUser">Mis servicios</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-comments-o"></i> <span
+							class="nav-label">Chats </span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="app#/chat">Chat</a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-money"></i> <span
+							class="nav-label">Subastas</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+							<li><a href="app#/auctions">Subastas disponibles</a></li>
 						</ul></li>
 				</ul>
 
 			</div>
 		</nav>
+		
 		<div id="page-wrapper" class="gray-bg">
 			<div class="row border-bottom">
 				<nav class="navbar navbar-static-top white-bg" role="navigation"
@@ -97,12 +108,6 @@
 		</div>
 	</div>
 
-	<!--div ng-view></div>
-	<div class="container">
-		<div>
-			version <strong><span app-version></span></strong>
-		</div>
-	</div--!>
 	<!-- Mainly scripts -->
 	<script src="resources/js/jquery-2.1.1.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -117,9 +122,26 @@
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
+	<script src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-
+	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script src="resources/bower_components/angular-animate/angular-animate.js"></script>
+	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
+	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
+	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/js/App/App.js"></script>
+	<script src="resources/js/Commons/directives.js"></script>
+	
+	<!-- Steps -->
+    <script src="resources/js/plugins/staps/jquery.steps.min.js"></script>
+    
+    <!-- Jquery Validate -->
+    <script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
+
+	<!-- Morris -->
+    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="resources/js/plugins/morris/morris.js"></script>
+    	
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
@@ -130,9 +152,16 @@
 	<script src="resources/js/AnswerContract/AnswerContractController.js"></script>
 	<script src="resources/js/Commons/Filters.js"></script>
 	<script src="resources/js/Auction/auctionController.js"></script>
-	
-	<!-- Morris -->
-    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="resources/js/plugins/morris/morris.js"></script>
+	<script src="resources/js/Auction/ListAuctionsController.js"></script>
+	<script src="resources/js/Chat/ChatController.js"></script>
+
+	<script src="resources/js/Contact/ContactController.js"></script>
+
+        <!-- Google Maps -->
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
+
+    <!-- angular-google-maps -->
+    <script src="resources/non_bower_components/lodash.underscore.min.js"></script>
+    <script src="resources/non_bower_components/angular-google-maps.min.js"></script>
 </body>
 </html>

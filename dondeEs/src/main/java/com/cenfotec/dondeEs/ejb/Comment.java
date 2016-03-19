@@ -26,7 +26,7 @@ public class Comment implements Serializable {
 	private Date date;
 
 	//bi-directional many-to-one association to EventParticipant
-	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="event_participant_id")
 	private EventParticipant eventParticipant;
 

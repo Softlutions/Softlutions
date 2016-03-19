@@ -66,9 +66,20 @@ angular
 										$("#modal-form").modal('hide');
 										$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 											$scope.services = $scope.services.concat(dataCreate);
+										    toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
+
 										});
 									}else{
-										
+										 setTimeout(function() {					
+								                toastr.options = {
+								                    closeButton: true,
+								                    progressBar: true,
+								                    showMethod: 'slideDown',
+								                    timeOut: 4000
+								                };
+								                toastr.error('Todos los campos son requeridos.', 'Error');
+
+								            }, 1300);
 									}
 								};
 						

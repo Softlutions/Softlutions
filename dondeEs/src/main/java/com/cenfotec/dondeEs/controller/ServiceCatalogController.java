@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.ServiceCatalogResponse;
-import com.cenfotec.dondeEs.contracts.ServiceResponse;
 import com.cenfotec.dondeEs.services.ServiceCatalogInterface;
 
 @RestController

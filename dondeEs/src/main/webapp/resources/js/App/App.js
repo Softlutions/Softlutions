@@ -3,6 +3,7 @@
 angular.module('dondeEs', [
 	"ngRoute",
 	"dondeEs.index",
+	"dondeEs.update",
 	"dondeEs.serviceByUser",
 	"dondeEs.users",
 	"dondeEs.myEvents",
@@ -10,10 +11,13 @@ angular.module('dondeEs', [
 	"dondeEs.answerContract",
 	"dondeEs.ContractModule",
 	"dondeEs.answerInvitation",
-	"dondeEs.auctionsEvent"
+	"dondeEs.auctionsEvent",
+	"dondeEs.auctions",
+	"dondeEs.contact",
+	"dondeEs.chat"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
-	$routeProvider.otherwise({redirectTo: '/login'});
+	$routeProvider.otherwise({redirectTo: '/index'});
   
 	$provide.factory('responseHttpInterceptor', function($q) {
 		  return {

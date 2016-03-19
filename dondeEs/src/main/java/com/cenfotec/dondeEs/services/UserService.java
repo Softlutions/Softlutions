@@ -1,17 +1,24 @@
 package com.cenfotec.dondeEs.services;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
@@ -29,6 +36,9 @@ public class UserService implements UserServiceInterface {
 	private RoleRepository roleRepository;
 	@Autowired
 	private AuctionRepository auctionRepository;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	public List<UserPOJO> getAll() {
 		List<User> usersList = userRepository.findAll();
@@ -75,10 +85,12 @@ public class UserService implements UserServiceInterface {
 			if (ta.getServiceCatalog() != null) {
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
-
+				
+				catalogPOJO.setAuctions(null);
 				servicePOJO.setServiceCatalog(catalogPOJO);
 			}
 			servicePOJO.setServiceContacts(null);
+
 			listPojo.add(servicePOJO);
 
 		});
@@ -92,6 +104,39 @@ public class UserService implements UserServiceInterface {
 		user.setRole(roleRepository.findOne(ur.getUser().getRole().getRoleId()));
 		User nuser = userRepository.save(user);
 		return (nuser == null) ? false : true;
+	}
+	
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
+	 * @version 1.0
+	 */
+	public Boolean updatePassword(LoginRequest ur) {
+		User user = userRepository.findByEmail(ur.getEmail());
+		if (user == null)
+			return false;
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		String subject = "Contraseña restablecida!";
+		try {
+			String email = user.getEmail();
+			String password = UUID.randomUUID().toString().substring(0, 7);
+			String encryptPassword = AES.base64encode(password);
+			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password
+					+ ".";
+			user.setPassword(encryptPassword);
+			mailMessage.setTo(email);
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+			User nuser = userRepository.save(user);
+			if(nuser!=null) return true;
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override
@@ -116,8 +161,7 @@ public class UserService implements UserServiceInterface {
 
 		System.out.println(auctionRepository); // prueba
 
-		// dato de prueba en el parámetro.
-		List<Auction> auctions = auctionRepository.findAllByEventEventId(1);
+		List<Auction> auctions = auctionRepository.findAllByEventEventId(idEvent);
 
 		auctions.stream().forEach(e -> {
 			if (e.getAuctionServices() != null) {
@@ -130,5 +174,16 @@ public class UserService implements UserServiceInterface {
 		});
 
 		return usersPOJO;
+	}
+	
+	/***
+	 * Obtiene un usuario por su id.
+	 * 
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
+	@Override
+	public User findById(int id) {	
+		return userRepository.findByUserId(id);
 	}
 }

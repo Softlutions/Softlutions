@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.LoginResponse;
+import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.services.LoginServiceInterface;
-
+import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 /**
  * Handles requests for the application home page.
@@ -25,6 +26,7 @@ import com.cenfotec.dondeEs.services.LoginServiceInterface;
 public class LoginController {
 	
 	@Autowired private LoginServiceInterface loginService;
+	@Autowired private UserServiceInterface userServiceInterface;
 	
 	/**
 	 * @Author Ernesto Méndez A.
@@ -42,6 +44,38 @@ public class LoginController {
 		loginService.checkUser(lr,response,currentSession);
 		
 		return response;
-		
+	}
+	
+	/**
+	 * @author Ernesto Méndez A.
+	 * @param servletRequest sesion actual
+	 * @return resultado de la operacion, si el cierre de sesion fue satisfactorio o no
+	 */
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@Transactional
+	public BaseResponse logout(HttpServletRequest servletRequest){	
+		servletRequest.getSession().invalidate();
+		BaseResponse response = new BaseResponse();
+		response.setCode(200);
+		response.setCodeMessage("successfully logout");
+		return response;
+	}
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @param LoginRequest, Este objeto poosee un atributo email del usuario.
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/updatePassword", method = RequestMethod.POST)
+	public UserResponse updatePassword(@RequestBody LoginRequest lr,HttpServletRequest servletRequest,HttpServletResponse servletResponse){	
+		UserResponse us = new UserResponse();
+		if(userServiceInterface.updatePassword(lr)){
+			us.setCode(200);
+			us.setCodeMessage("Password cambiado exitosamente");
+		}else{
+			us.setCode(401);
+			us.setCodeMessage("No se pudo cambiar la contraseña");
+		}
+		return us;
 	}
 }
