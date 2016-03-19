@@ -37,7 +37,7 @@ public class EventParticipant implements Serializable {
 	private Event event;
 
 	//bi-directional many-to-one association to OfflineUser
-	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="offline_user_id")
 	private OfflineUser offlineUser;
 

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.LoginResponse;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.PermissionPOJO;
 import com.cenfotec.dondeEs.pojo.RolePOJO;
 import com.cenfotec.dondeEs.repositories.LoginRepository;
@@ -25,7 +26,8 @@ public class LoginService implements LoginServiceInterface{
 	@Override
 	@Transactional
 	public void checkUser(LoginRequest lr, LoginResponse response, HttpSession currentSession) {
-		User loggedUser = loginRepository.findByEmailAndPassword(lr.getEmail(), lr.getPassword());
+		String pass = lr.isCript()? lr.getPassword():AES.base64encode(lr.getPassword());
+		User loggedUser = loginRepository.findByEmailAndPassword(lr.getEmail(), pass);
 		
 		if(loggedUser == null){
 			response.setCode(401);
@@ -41,6 +43,7 @@ public class LoginService implements LoginServiceInterface{
 			response.setFirstName(loggedUser.getName());
 			response.setLastName(loggedUser.getLastName1());
 			response.setEmail(loggedUser.getEmail());
+			response.setCriptPass(pass);
 			
 			RolePOJO rolePOJO = new RolePOJO();
 			BeanUtils.copyProperties(loggedUser.getRole(), rolePOJO);
@@ -59,5 +62,5 @@ public class LoginService implements LoginServiceInterface{
 			
 			currentSession.setAttribute("idUser", loggedUser.getUserId());
 		}
-	}		
+	}
 }

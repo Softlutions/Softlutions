@@ -9,9 +9,8 @@ angular
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
 		$scope.chartValues = null;
-		console.log("dawdaw");
 		
-		$scope.listContracts = function(idEvent){
+		$scope.listContracts = function(idEvent){s
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+idEvent).success(function(response){
 				$scope.serviceContacts = response.listContracts;
 				
@@ -22,12 +21,10 @@ angular
 				}else{
 					$('#contractTable').removeClass('hidden');
 					$('#errorMessage').addClass('hidden');
-					console.log($scope.serviceContacts);
 					$scope.refreshChart();
 				}
 			});
 		}
-		$scope.listContracts(1);
 		
 		$scope.serviceInfo = function(){
 			$http.get("rest/protected/service/getService/1").success(function(response){
@@ -80,11 +77,10 @@ angular
 		}
 		
 		$scope.refreshChart = function(){
-			console.log("ok");
-			var contractsLeft = 1;
-			var contractsOk = 2;
+			var contractsLeft = 0;
+			var contractsOk = 0;
 			var contractsCanceled = 0;
-			
+			console.log("ok");
 			$('#contracts-state-chart').removeClass('hidden');
 			
 			angular.forEach($scope.serviceContacts, function(value){
@@ -104,7 +100,7 @@ angular
 					{ label: "Concretados", value: contractsOk },
 					{ label: "Cancelados", value: contractsCanceled }
 				]);
-			}else{
+			}else if(contractsLeft > 0 || contractsOk > 0 || contractsCanceled > 0){
 				$scope.chartValues = Morris.Donut({
 				    element: 'contracts-state-chart',
 				    data: [
@@ -112,7 +108,7 @@ angular
 				           { label: "Concretados", value: contractsOk },
 				           { label: "Cancelados", value: contractsCanceled }
 		            ],
-				    resize: true,
+				    resize: false,
 				    colors: ['#87d6c6', '#54cdb4','#1ab394'],
 				});
 			}

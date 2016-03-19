@@ -39,31 +39,31 @@ public class User implements Serializable {
 	private byte state;
 
 	//bi-directional many-to-one association to Event
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private List<Event> events;
 
 	//bi-directional many-to-one association to EventParticipant
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private List<EventParticipant> eventParticipants;
 
 	//bi-directional many-to-one association to Message
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private List<Message> messages;
 
 	//bi-directional many-to-one association to PasswordHistory
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private List<PasswordHistory> passwordHistories;
 
 	//bi-directional many-to-one association to Service
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private List<Service> services;
 
 	//bi-directional many-to-one association to TermCondition
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private List<TermCondition> termConditions;
 
 	//bi-directional many-to-many association to Chat
-	@ManyToMany(fetch=FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(
 		name="chat_member"
 		, joinColumns={
@@ -74,9 +74,14 @@ public class User implements Serializable {
 			}
 		)
 	private List<Chat> chats;
-	
+
+	//bi-directional many-to-one association to Role
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="role_id")
+	private Role role;
+
 	//bi-directional many-to-many association to User
-	@ManyToMany(fetch=FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(
 		name="favorite"
 		, joinColumns={
@@ -89,18 +94,17 @@ public class User implements Serializable {
 	private List<User> users1;
 
 	//bi-directional many-to-many association to User
-	@ManyToMany(fetch=FetchType.LAZY)
+	@ManyToMany(mappedBy="users1")
 	private List<User> users2;
-
-	//bi-directional many-to-one association to Role
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="role_id")
-	private Role role;
 
 	//bi-directional many-to-one association to UserType
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="type_id")
 	private UserType userType;
+
+	//bi-directional many-to-one association to Notification
+	@OneToMany(mappedBy="user")
+	private List<Notification> notifications;
 
 	public User() {
 	}
@@ -177,14 +181,6 @@ public class User implements Serializable {
 		this.state = state;
 	}
 
-	public List<Chat> getChats() {
-		return this.chats;
-	}
-
-	public void setChats(List<Chat> chats) {
-		this.chats = chats;
-	}
-
 	public List<Event> getEvents() {
 		return this.events;
 	}
@@ -227,22 +223,6 @@ public class User implements Serializable {
 		eventParticipant.setUser(null);
 
 		return eventParticipant;
-	}
-
-	public List<User> getUsers1() {
-		return this.users1;
-	}
-
-	public void setUsers1(List<User> users1) {
-		this.users1 = users1;
-	}
-
-	public List<User> getUsers2() {
-		return this.users2;
-	}
-
-	public void setUsers2(List<User> users2) {
-		this.users2 = users2;
 	}
 
 	public List<Message> getMessages() {
@@ -333,6 +313,14 @@ public class User implements Serializable {
 		return termCondition;
 	}
 
+	public List<Chat> getChats() {
+		return this.chats;
+	}
+
+	public void setChats(List<Chat> chats) {
+		this.chats = chats;
+	}
+
 	public Role getRole() {
 		return this.role;
 	}
@@ -341,12 +329,50 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
+	public List<User> getUsers1() {
+		return this.users1;
+	}
+
+	public void setUsers1(List<User> users1) {
+		this.users1 = users1;
+	}
+
+	public List<User> getUsers2() {
+		return this.users2;
+	}
+
+	public void setUsers2(List<User> users2) {
+		this.users2 = users2;
+	}
+
 	public UserType getUserType() {
 		return this.userType;
 	}
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
+	}
+
+	public List<Notification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
+	public Notification addNotification(Notification notification) {
+		getNotifications().add(notification);
+		notification.setUser(this);
+
+		return notification;
+	}
+
+	public Notification removeNotification(Notification notification) {
+		getNotifications().remove(notification);
+		notification.setUser(null);
+
+		return notification;
 	}
 
 }

@@ -6,10 +6,17 @@ import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 
 public class AuctionResponse extends BaseResponse {
 	
-	List<AuctionPOJO> listAuctions;
-
+	private AuctionPOJO auction;
 	private List<AuctionPOJO> auctionList;
 
+	public AuctionPOJO getAuction() {
+		return auction;
+	}
+
+	public void setAuction(AuctionPOJO auction) {
+		this.auction = auction;
+	}
+	
 	public List<AuctionPOJO> getAuctionList() {
 		return auctionList;
 	}
