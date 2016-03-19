@@ -133,6 +133,10 @@
     
     <!-- Jquery Validate -->
     <script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
+
+	<!-- Morris -->
+    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="resources/js/plugins/morris/morris.js"></script>
 	
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
@@ -149,10 +153,6 @@
 
 	<script src="resources/js/Contact/ContactController.js"></script>
 
-	<!-- Morris -->
-    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="resources/js/plugins/morris/morris.js"></script>
-    
         <!-- Google Maps -->
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 

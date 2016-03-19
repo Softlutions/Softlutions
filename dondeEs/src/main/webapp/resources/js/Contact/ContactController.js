@@ -9,13 +9,13 @@ angular.module('dondeEs.contact', ['ngRoute'])
 	.controller('ContactCtrl', ['$scope','$http',function($scope,$http) {
 
 		$scope.sendMessage = function () {
-			var data = {
+			var dataRequest = {
 				userName: $scope.name,
 				userEmail: $scope.email,
 				message: $scope.message
-			}
+			};
 						
-			$http({method: 'POST',url:'rest/protected/sendEmail/sendMessage', data, headers: {'Content-Type': 'application/json'}})
+			$http({method: 'POST',url:'rest/protected/sendEmail/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
 				if (response.code == 200) {
 			    	toastr.options = {
@@ -32,7 +32,7 @@ angular.module('dondeEs.contact', ['ngRoute'])
 			        };
 			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');
 				}
-			}); 
+			});
 		}
 		
 	}]);
