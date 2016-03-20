@@ -17,7 +17,16 @@ angular.module('dondeEs', [
 	"dondeEs.chat",
 	"dondeEs.eventReminder"
 
-]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
+]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {	
+	// Opciones globales de los popup de notificaciones.
+	toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            showMethod: 'slideDown',
+            timeOut: 4000
+        };
+	// FIN, opciones globales de los popup de notificaciones.
+	
 	$routeProvider.otherwise({redirectTo: '/index'});
   
 	$provide.factory('responseHttpInterceptor', function($q) {

@@ -115,8 +115,6 @@
 											class="btn btn-sm btn-danger pull-right m-t-n-xs"
 											data-dismiss="modal">Cancelar</button>
 									</div>
-
-
 								</form>
 							</div>
 						</div>
@@ -136,26 +134,30 @@
 						<h4 class="modal-title">Estado de invitados</h4>
 					</div>
 					<div class="modal-body">
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Nombre</th>
-									<th>Estado</th>
-									<th>Fecha de envio de la invitación</th>
-								</tr>
-							</thead>
-							<tbody ng-repeat="participant in participants">
-								<tr>
-									<td>{{ ((participant.user != null) ?
-										(participant.user.name+" "+participant.user.lastName1+"
-										"+participant.user.lastName2 ) : (
-										participant.offlineUser.email)) }}</td>
-									<td>{{ ((participant.state == 0) ? "No asistirá" :
-										(participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
-									<td>{{ participant.invitationDate | date:'medium' }}</td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Estado</th>
+											<th>Fecha de envio de la invitación</th>
+										</tr>
+									</thead>
+									<tbody ng-repeat="participant in participants">
+										<tr>
+											<td>{{ ((participant.user != null) ?
+												(participant.user.name+" "+participant.user.lastName1+"
+												"+participant.user.lastName2 ) : (
+												participant.offlineUser.email)) }}</td>
+											<td>{{ ((participant.state == 0) ? "No asistirá" :
+												(participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
+											<td>{{ participant.invitationDate | date:'medium' }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -172,32 +174,35 @@
 							evento</h4>
 					</div>
 					<div class="modal-body">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label class="col-lg-2 control-label">Nombre</label>
-								<div class="col-lg-10">
-									<input type="text" placeholder="Nombre" class="form-control"
-										ng-model="tempAuction.name">
-								</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<form class="form-horizontal">
+									<div class="form-group">
+										<label class="col-lg-2 control-label">Nombre</label>
+										<div class="col-lg-10">
+											<input type="text" placeholder="Nombre" class="form-control"
+												ng-model="tempAuction.name">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-2 control-label">Tipo de servicio a
+											subastar</label>
+										<div class="col-lg-10">
+											<select id="cboAuctionCatalogs" class="form-control"
+												ng-options="c as c.name for c in catalogs"
+												ng-model="tempAuction.selected"></select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-2 control-label">Descripción</label>
+										<div class="col-lg-10">
+											<textarea rows="5" placeholder="Descripción"
+												class="form-control" ng-model="tempAuction.description"></textarea>
+										</div>
+									</div>
+								</form>
 							</div>
-							<div class="form-group">
-								<label class="col-lg-2 control-label">Tipo de servicio a
-									subastar</label>
-								<div class="col-lg-10">
-									<select id="cboAuctionCatalogs" class="form-control"
-										ng-options="c as c.name for c in catalogs"
-										ng-model="tempAuction.selected"></select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-lg-2 control-label">Descripción</label>
-								<div class="col-lg-10">
-									<textarea rows="5" placeholder="Descripción"
-										class="form-control" ng-model="tempAuction.description"></textarea>
-								</div>
-							</div>
-						</form>
-
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary"
@@ -207,12 +212,6 @@
 				</div>
 			</div>
 		</div>
-
-
-
-
-
-
 
 		<div id="modalAuctionsByEvent" class="modal fade" role="dialog">
 			<div class="modal-dialog">
@@ -226,46 +225,41 @@
 						<h4 class="modal-title">Subastas</h4>
 					</div>
 					<div class="modal-body">
-						<div class="col-sm-12">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>Subastas</h5>
-								</div>
-								<div class="ibox-content">
-
-									<table class="table table-hover table-responsive">
-										<thead>
-											<tr>
-												<th>Nombre</th>
-												<th>Descripción</th>
-												<th>Fecha de publicación</th>
-												<th>Opciones</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr ng-repeat="auction in auctionsEvent">
-												<td>{{auction.name}}</td>
-												<td>{{auction.description}}</td>
-												<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
-												<td><a class="btn btn-primary btn-sm"
-													data-toggle="modal" data-target="#modal-form"
-													ng-click="loadAuctionServices($index)">Ver servicios</a></td>
-												<td ng-if="auction.state == 1">
-													<button id="finishAuctionId-{{auction.auctionId}}"
-														class="btn btn-danger btn-sm"
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-hover table-responsive">
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Descripción</th>
+											<th>Fecha de publicación</th>
+											<th>Opciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="auction in auctionsEvent">
+											<td>{{auction.name}}</td>
+											<td>{{auction.description}}</td>
+											<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
+											<td>
+												<div>
+													<a class="btn btn-primary btn-xs"
+														data-toggle="modal" data-target="#modal-form"
+														ng-click="loadAuctionServices($index)">Ver servicios</a>
+													
+													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state == 1"
+														class="btn btn-danger btn-xs"
 														ng-click="finishAuction(auction.auctionId)">Finalizar
-														subasta</button>
-												</td>
-												<td ng-if="auction.state != 1">
-													<button id="finishAuctionId-{{auction.auctionId}}"
-														class="btn btn-warning btn-sm"
+														subasta</button>	
+														
+													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state != 1"
+														class="btn btn-warning btn-xs"
 														ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
-												</td>
-
-											</tr>
-										</tbody>
-									</table>
-								</div>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -277,7 +271,7 @@
 				</div>
 			</div>
 		</div>
-
+		
 		<div id="modalAuctionsByEvent" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 
@@ -290,46 +284,41 @@
 						<h4 class="modal-title">Subastas</h4>
 					</div>
 					<div class="modal-body">
-						<div class="col-sm-12">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>Subastas</h5>
-								</div>
-								<div class="ibox-content">
-
-									<table class="table table-hover table-responsive">
-										<thead>
-											<tr>
-												<th>Nombre</th>
-												<th>Descripción</th>
-												<th>Fecha de publicación</th>
-												<th>Opciones</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr ng-repeat="auction in auctionsEvent">
-												<td>{{auction.name}}</td>
-												<td>{{auction.description}}</td>
-												<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
-												<td><a class="btn btn-primary btn-sm"
-													data-toggle="modal" data-target="#modal-form"
-													ng-click="loadAuctionServices($index)">Ver servicios</a></td>
-												<td ng-if="auction.state == 1">
-													<button id="finishAuctionId-{{auction.auctionId}}"
-														class="btn btn-danger btn-sm"
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-hover table-responsive">
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Descripción</th>
+											<th>Fecha de publicación</th>
+											<th>Opciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="auction in auctionsEvent">
+											<td>{{auction.name}}</td>
+											<td>{{auction.description}}</td>
+											<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
+											<td>
+												<div>
+													<a class="btn btn-primary btn-xs"
+														data-toggle="modal" data-target="#modal-form"
+														ng-click="loadAuctionServices($index)">Ver servicios</a>
+													
+													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state == 1"
+														class="btn btn-danger btn-xs"
 														ng-click="finishAuction(auction.auctionId)">Finalizar
-														subasta</button>
-												</td>
-												<td ng-if="auction.state != 1">
-													<button id="finishAuctionId-{{auction.auctionId}}"
-														class="btn btn-warning btn-sm"
+														subasta</button>	
+														
+													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state != 1"
+														class="btn btn-warning btn-xs"
 														ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
-												</td>
-
-											</tr>
-										</tbody>
-									</table>
-								</div>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -349,46 +338,41 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Servicios</h4>
 						<button class="btn btn-success btn-xs pull-right"
 							ng-click="openAuctions()">Subastas</button>
+						<h4 class="modal-title">Servicios</h4>
 					</div>
 					<div class="modal-body">
-						<div class="col-sm-12">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>Servicios</h5>
-								</div>
-								<div class="ibox-content">
-									<table class="table table-hover table-responsive">
-										<thead>
-											<tr>
-												<th>Descripción de la oferta</th>
-												<th>Precio</th>
-												<th>Fecha de publicación</th>
-												<th>Nombre del servicio</th>
-												<th>Descripción del servicio</th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr ng-repeat="service in auctionServices">
-												<td>{{service.description}}</td>
-												<td>₡{{service.price}}</td>
-												<td>{{service.date | date:'dd-MM-yyyy'}}</td>
-												<td>{{service.service.name}}</td>
-												<td>{{service.service.description}}</td>
-												<td><a data-toggle="modal"
-													class="btn btn-primary btn-sm" data-toggle="modal"
-													data-target="#modal-form"
-													ng-click="goToServiceProviderProfile(service.service.user.userId)">
-														<di>Ver</di>
-														<div>prestatario</div>
-												</a></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-hover table-responsive">
+									<thead>
+										<tr>
+											<th>Descripción de la oferta</th>
+											<th>Precio</th>
+											<th>Fecha de publicación</th>
+											<th>Nombre del servicio</th>
+											<th>Descripción del servicio</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="service in auctionServices">
+											<td>{{service.description}}</td>
+											<td>₡{{service.price}}</td>
+											<td>{{service.date | date:'dd-MM-yyyy'}}</td>
+											<td>{{service.service.name}}</td>
+											<td>{{service.service.description}}</td>
+											<td><a data-toggle="modal"
+												class="btn btn-primary btn-xs" data-toggle="modal"
+												data-target="#modal-form"
+												ng-click="goToServiceProviderProfile(service.service.user.userId)">
+													<di>Ver</di>
+													<div>prestatario</div>
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -396,12 +380,6 @@
 				</div>
 			</div>
 		</div>
-
-
-
-
-
-
 
 		<div id="modalListContacts" class="modal fade" role="dialog">
 			<div class="modal-dialog">
@@ -414,36 +392,40 @@
 						<h4 class="modal-title">Contratos del evento</h4>
 					</div>
 					<div class="modal-body">
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Contrato</th>
-									<th>Estado</th>
-									<th>Comentario</th>
-								</tr>
-							</thead>
-							<tbody ng-repeat="serviceContact in serviceContacts">
-								<tr>
-									<td>{{serviceContact.service.name}}</td>
-									<td>{{(serviceContact.state==0)?
-										"Pendiente":(serviceContact.state==1)?
-										"Concretado":"Cancelado"}}</td>
-									<td>{{serviceContact.comment}}</td>
-
-									<td ng-if="serviceContact.state != 2">
-										<Button
-											id="btnCancelService-{{serviceContact.serviceContractId}}"
-											class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
-									</td>
-									<td ng-if="serviceContact.state == 2">
-										<Button
-											id="btnCancelService-{{serviceContact.serviceContractId}}"
-											class="btn btn-warning" ng-click="cancel(serviceContact)"
-											disabled>Cancelado</Button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Contrato</th>
+											<th>Estado</th>
+											<th>Comentario</th>
+										</tr>
+									</thead>
+									<tbody ng-repeat="serviceContact in serviceContacts">
+										<tr>
+											<td>{{serviceContact.service.name}}</td>
+											<td>{{(serviceContact.state==0)?
+												"Pendiente":(serviceContact.state==1)?
+												"Concretado":"Cancelado"}}</td>
+											<td>{{serviceContact.comment}}</td>
+			
+											<td ng-if="serviceContact.state != 2">
+												<Button
+													id="btnCancelService-{{serviceContact.serviceContractId}}"
+													class="btn btn-danger btn-xs" ng-click="cancel(serviceContact)">Cancelar</Button>
+											</td>
+											<td ng-if="serviceContact.state == 2">
+												<Button
+													id="btnCancelService-{{serviceContact.serviceContractId}}"
+													class="btn btn-warning btn-xs" ng-click="cancel(serviceContact)"
+													disabled>Cancelado</Button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 
 						<!-- Graph morris donut chart -->
 						<div class="ibox">
@@ -457,7 +439,6 @@
 			</div>
 		</div>
 
-
 		<div id="modalCreateEvent" class="modal fade" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -467,7 +448,7 @@
 					</div>
 
 					<form class="form-horizontal" name="formCreateEvent"
-						ng-submit="formCreateEvent.$valid ? createEvent() : null">
+									ng-submit="formCreateEvent.$valid ? createEvent() : null">
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-sm-12">
@@ -491,8 +472,8 @@
 										<label class="col-lg-2 control-label">Descripción
 											larga</label>
 										<div class="col-lg-10">
-											<input ng-model="eventLargeDescription" type="text"
-												class="form-control" ng-maxlength="255">
+											<textarea ng-model="eventLargeDescription" class="form-control" rows="5" 
+															ng-maxlength="255"></textarea>
 										</div>
 									</div>
 
@@ -521,29 +502,39 @@
 									</div>
 
 									<div class="form-group">
-										<google-map center="map.center" zoom="map.zoom"
-											draggable="true" options="map.options" control="map.control">
-										<markers models="map.markers" coords="'self'"
-											options="'options'" isLabel='true'> </markers> </google-map>
-										<a class="btn btn-primary" ng-click="addCurrentLocation()">Ir
-											a mi localización</a>
+										<div class="col-lg-12">
+											<google-map center="map.center" zoom="map.zoom"
+												draggable="true" options="map.options" control="map.control">
+											<markers models="map.markers" coords="'self'"
+												options="'options'" isLabel='true'> </markers> </google-map>
+											<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir
+												a mi localización</a>
+										</div>
 									</div>
 
 									<div class="form-group">
-										<label class="control-label">Buscar lugar</label> <input
-											class="form-control" type="text"
-											placeholder="San José, Costa Rica" ng-model="address" /> <a
-											class="btn btn-primary" ng-click="addAddress()">Ir a esta
-											dirección</a> <label class="has-error" ng-show="resultSearch">La
-											dirección no pudo ser encontrada.</label>
+										<div class="col-lg-12">
+											<label class="control-label">Buscar lugar</label> 
+											<input
+												class="form-control col-xs-12" type="text"
+												placeholder="San José, Costa Rica" ng-model="address" /> 
+												<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta
+												dirección</a> 
+												<label class="has-error" ng-show="resultSearch">La
+												dirección no pudo ser encontrada.</label>
+											</div>
 									</div>
 
 									<div class="form-group">
-										<label class='control-label'>Imagen</label> <input
-											class="btn btn-primary" type="file" name="inputfile"
-											ngf-pattern="'image/*'" ngf-accept="'image/*'"
-											ngf-max-size="10MB" ng-file-select="onFileSelect($files)"
-											required>
+										<div class="col-lg-12">
+											<label class='control-label'>Imagen</label> 
+											<input id="uploadImageEvent"
+												class="btn btn-primary inputUploadImage" type="file" name="inputfile"
+												ngf-pattern="'image/*"
+												ngf-max-size="10MB" ng-file-select="onFileSelect($files)"
+												required>
+												<p>Formatos válidos: .jpg .png .gif</p>
+										</div>
 									</div>
 
 									<div class="modal-footer">
@@ -557,3 +548,4 @@
 			</div>
 		</div>
 	</div>
+</div>

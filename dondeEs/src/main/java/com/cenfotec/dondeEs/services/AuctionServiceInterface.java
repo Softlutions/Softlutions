@@ -9,7 +9,19 @@ import com.cenfotec.dondeEs.ejb.Auction;
 public interface AuctionServiceInterface {
 
 	Boolean saveAuction(Auction auction);
+	
+	/***
+	 * Obtiene todas las subastas de un evento.
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	List<AuctionPOJO> getAllAuctionByEvent(int event_id);
+	
+	/**
+	 * @Author Juan Carlos Sánchez G.
+	 * @return response Respuesta del servidor de la petición que lista todas las subastas existentes.
+	 * @version 1.0
+	 */
 	List<AuctionPOJO> getAllAuctions();
 	List<AuctionPOJO> getAllByAuctionsByServiceCatalog(int serviceCatalog_id);
 	Auction findById (int auctionId);

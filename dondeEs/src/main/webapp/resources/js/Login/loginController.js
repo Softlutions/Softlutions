@@ -38,27 +38,6 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			login();
 		}
 		
-		$scope.forgotPassword = function() {
-			if($scope.user.email != null){
-				$http.post("rest/login/updatePassword", $scope.user)
-				.success(function(response){
-					if(response.code == 200){
-						toastr.success('La contraseña ha sido modificada correctamente');
-
-					}else{
-						toastr.error('La contraseña no ha sido modficiada');
-
-					}
-				})
-				.error(function(response){
-					$("#errorMsj").css("visibility", "visible");
-				});
-			}else{
-				$("#errorMsj").css("visibility", "visible");
-				toastr.error('Debe ingresar el correo.', 'Error');
-			}
-		}
-		
 		function login(){
 			$http.post("rest/login/checkuser/", $scope.loginRequest)
 			.success(function(response){
@@ -96,4 +75,64 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				console.log("error" + response.message);
 			});
 		}
+		
+		
+		
+		//#region Users
+		$scope.forgotPassword = function() {
+			if($scope.user.email != null){
+				$http.post("rest/login/updatePassword", $scope.user)
+				.success(function(response){
+					if(response.code == 200){
+						toastr.success('La nueva contraseña ha sido enviada a su correo', "Contraseña restablecida!");
+						$('#updatePasswordModal').modal('hide');
+					}else{
+						toastr.error('La contraseña no ha sido modficada');
+					}
+				})
+				.error(function(response){
+					$("#errorMsj").css("visibility", "visible");
+				});
+			}else{
+				$("#errorMsj").css("visibility", "visible");
+				toastr.error('Debe ingresar el correo.', 'Error');
+			}
+		}
+		
+		$scope.saveUser = function(user) {
+			var userRequest = {
+				user : $scope.user
+			}
+			if($scope.user.name != null && $scope.user.email != null && $scope.user.lastName1 !=null && $scope.user.password.length >= 8 && $scope.user.phone != null){
+
+				$http.post("rest/login/create",userRequest)
+					.success(function(response) {
+						if (response.code == 200) {
+							console.log(response);
+							$("#createUserForm").modal('hide');
+							toastr.success(response.codeMessage, 'Registro exitoso');
+						} else {
+							toastr.error(response.codeMessage, 'Registro negado');
+						}
+					});
+			}else{
+				 setTimeout(function() {					
+		                toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+
+		            }, 1300);
+			}
+		}
+
+		// get roles
+		$http.get('rest/login/getAll').success(
+				function(response) {
+					$scope.roles = response.listRole;
+				});
+		//#endregion Users
 	}]);

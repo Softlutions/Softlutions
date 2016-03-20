@@ -16,7 +16,6 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 	}
 	
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-	console.log($scope.loggedUser);
 	
 	$scope.accept = function(event){
 		var dataCreate = {
@@ -25,7 +24,7 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 				state : 1
 		};
 		$http({method: 'POST',url:'rest/protected/serviceContact/answerContract', data:dataCreate}).success(function(response) {
-			console.log(response);
+
 		});
 	}
 } ]);

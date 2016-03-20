@@ -99,12 +99,6 @@ angular
 								} else {
 									setTimeout(
 											function() {
-												toastr.options = {
-													closeButton : true,
-													progressBar : true,
-													showMethod : 'slideDown',
-													timeOut : 4000
-												};
 												toastr
 														.error(
 																'No puede enviar mensajes en blanco',

@@ -82,12 +82,6 @@ public class EventService implements EventServiceInterface {
 		return eventRepository.findByEventId(idEvent);
 	}
 	
-	/***
-	 * Guarda un evento.
-	 * @author Enmanuel García González
-	 * @return True en caso de efectuarse la inserción o false en caso contrario.
-	 * @version 1.0
-	 */
 	@Override
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
