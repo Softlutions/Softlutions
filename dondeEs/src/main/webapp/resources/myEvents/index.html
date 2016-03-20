@@ -467,7 +467,7 @@
 					</div>
 
 					<form class="form-horizontal" name="formCreateEvent"
-						ng-submit="formCreateEvent.$valid ? createEvent() : null">
+									ng-submit="formCreateEvent.$valid ? createEvent() : null">
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-sm-12">
@@ -491,8 +491,8 @@
 										<label class="col-lg-2 control-label">Descripción
 											larga</label>
 										<div class="col-lg-10">
-											<input ng-model="eventLargeDescription" type="text"
-												class="form-control" ng-maxlength="255">
+											<textarea ng-model="eventLargeDescription" class="form-control" rows="5" 
+															ng-maxlength="255"></textarea>
 										</div>
 									</div>
 
@@ -521,29 +521,39 @@
 									</div>
 
 									<div class="form-group">
-										<google-map center="map.center" zoom="map.zoom"
-											draggable="true" options="map.options" control="map.control">
-										<markers models="map.markers" coords="'self'"
-											options="'options'" isLabel='true'> </markers> </google-map>
-										<a class="btn btn-primary" ng-click="addCurrentLocation()">Ir
-											a mi localización</a>
+										<div class="col-lg-12">
+											<google-map center="map.center" zoom="map.zoom"
+												draggable="true" options="map.options" control="map.control">
+											<markers models="map.markers" coords="'self'"
+												options="'options'" isLabel='true'> </markers> </google-map>
+											<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir
+												a mi localización</a>
+										</div>
 									</div>
 
 									<div class="form-group">
-										<label class="control-label">Buscar lugar</label> <input
-											class="form-control" type="text"
-											placeholder="San José, Costa Rica" ng-model="address" /> <a
-											class="btn btn-primary" ng-click="addAddress()">Ir a esta
-											dirección</a> <label class="has-error" ng-show="resultSearch">La
-											dirección no pudo ser encontrada.</label>
+										<div class="col-lg-12">
+											<label class="control-label">Buscar lugar</label> 
+											<input
+												class="form-control col-xs-12" type="text"
+												placeholder="San José, Costa Rica" ng-model="address" /> 
+												<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta
+												dirección</a> 
+												<label class="has-error" ng-show="resultSearch">La
+												dirección no pudo ser encontrada.</label>
+											</div>
 									</div>
 
 									<div class="form-group">
-										<label class='control-label'>Imagen</label> <input
-											class="btn btn-primary" type="file" name="inputfile"
-											ngf-pattern="'image/*'" ngf-accept="'image/*'"
-											ngf-max-size="10MB" ng-file-select="onFileSelect($files)"
-											required>
+										<div class="col-lg-12">
+											<label class='control-label'>Imagen</label> 
+											<input id="uploadImageEvent"
+												class="btn btn-primary inputUploadImage" type="file" name="inputfile"
+												ngf-pattern="'image/*"
+												ngf-max-size="10MB" ng-file-select="onFileSelect($files)"
+												required>
+												<p>Formatos válidos: .jpg .png .gif</p>
+										</div>
 									</div>
 
 									<div class="modal-footer">

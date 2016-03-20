@@ -8261,7 +8261,7 @@ textarea {
 
 /*Conteiner google maps api*/
 .angular-google-map-container {
-     width: 300px;
+     width: 100%;
     height: 200px;   
 }
 .markerlabel {
@@ -8376,3 +8376,7 @@ textarea {
 } 
 
 /* END REMINDER EVENT */
+
+.inputUploadImage{
+	width: 100%;
+}
