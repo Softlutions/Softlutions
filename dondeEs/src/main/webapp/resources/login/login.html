@@ -20,39 +20,99 @@
 
 					<label class="pull-left"> <input id="chkRememberMe"
 						type="checkbox" value="remember-me"> Recordarme
-					</label> <a  class="pull-right" data-toggle="modal"
-						data-target="#modal-form">¿Olvidó su contraseña?</a> <span
+					</label> <a class="pull-right" data-toggle="modal"
+						data-target="#updatePasswordModal">¿Olvidó su contraseña?</a> <span
 						class="clearfix"></span>
 				</form>
 
-				<a href="#" class="pull-right">Registrarse</a>
+				<a class="pull-right" data-toggle="modal" data-target="#createUserForm">Registrarse</a>
 			</div>
 		</div>
 	</div>
-</div>
-<div id="modal-form" class="modal fade" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-12 b-r">
-						<h3 class="m-t-none m-b">Cambiar contraseña</h3>
-						<form role="form" ng-submit="forgotPassword()" ng-init="user">
-							<div class="form-group">
-								<label>Ingrese su correo por favor</label> <input type="email"
-									ng-model="user.email" required placeholder="Ingresar email"
-									class="form-control">
-							</div>
-							<div>
-								<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-									type="submit">
-									<strong>Cambiar contraseña</strong>
-								</button>
-								<button type="button"
-									class="btn btn-sm btn-danger pull-right m-t-n-xs"
-									data-dismiss="modal">Cancelar</button>
-							</div>
-						</form>
+	<div id="updatePasswordModal" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Cambiar contraseña</h3>
+							<form role="form" ng-submit="forgotPassword()" ng-init="user">
+								<div class="form-group">
+									<label>Ingrese su correo por favor</label> <input type="email"
+										ng-model="user.email" required placeholder="Ingresar email"
+										class="form-control">
+								</div>
+								<div>
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit">
+										<strong>Cambiar contraseña</strong>
+									</button>
+									<button type="button"
+										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="createUserForm" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Registrar usuario</h3>
+							<form role="form" ng-submit="saveUser(user)" ng-init="user">
+								<div class="form-group">
+									<label>Nombre</label> <input type="text" ng-model="user.name"
+										placeholder="Ingresar nombre" required class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Primer apellido</label> <input type="text"
+										ng-model="user.lastName1"
+										placeholder="Ingresar primer apellido" required
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Segundo apellido</label> <input type="text"
+										ng-model="user.lastName2"
+										placeholder="Ingresar segundo apellido" required
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Email</label> <input type="email" ng-model="user.email"
+										required placeholder="Ingresar email" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Contraseña</label> <input type="password"
+										ng-model="user.password" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Teléfono</label> <input type="text"
+										ng-model="user.phone" required placeholder="Ingresar teléfono"
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Seleccione un rol</label> <select
+										class="form-control m-b" id="selectRol" required
+										ng-options="role as role.name for role in roles track by role.roleId"
+										ng-model="user.role"></select>
+								</div>
+								<div>
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit">
+										<strong>Guardar</strong>
+									</button>
+									<button type="button"
+										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
