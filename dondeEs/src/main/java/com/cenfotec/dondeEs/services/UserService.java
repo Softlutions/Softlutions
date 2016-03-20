@@ -98,12 +98,12 @@ public class UserService implements UserServiceInterface {
 		return listPojo;
 	}
 
-	public Boolean saveUser(UserRequest ur) {
+	public int saveUser(UserRequest ur) {
 		User user = new User();
 		BeanUtils.copyProperties(ur.getUser(), user);
 		user.setRole(roleRepository.findOne(ur.getUser().getRole().getRoleId()));
 		User nuser = userRepository.save(user);
-		return (nuser == null) ? false : true;
+		return nuser.getUserId();
 	}
 	
 	
@@ -185,5 +185,19 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public User findById(int id) {	
 		return userRepository.findByUserId(id);
+	}
+	
+	@Override
+	@Transactional
+	public Boolean changeUserState(int userId, boolean state){
+		boolean changed = false;
+		User user = userRepository.findOne(userId);
+		
+		if(user != null){
+			user.setState((byte) (state? 1:0));
+			changed = true;
+		}
+		
+		return changed;
 	}
 }
