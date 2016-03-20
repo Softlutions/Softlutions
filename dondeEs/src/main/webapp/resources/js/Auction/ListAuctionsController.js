@@ -15,12 +15,6 @@ angular
 			$scope.auctionList = [];
 			$scope.showError = true;
 			
-			toastr.options = {
-				closeButton: true,
-				showMethod: 'slideDown',
-				timeOut: 4000
-			};
-			
 			$http.get('rest/protected/auction/getAllAuctions/').success(function(response) {
 				if(response.auctionList.length == 0){
 					$scope.showError = false;

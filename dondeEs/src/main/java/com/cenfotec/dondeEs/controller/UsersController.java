@@ -59,7 +59,11 @@ public class UsersController {
 			us.setCode(200);
 			us.setCodeMessage("User created succesfully");
 			us.setUserId(userId);
+		}else{
+			us.setCode(400);
+			us.setCodeMessage("El usuario ya existe en la base de datos!");
 		}
+		
 		return us;
 	}
 }

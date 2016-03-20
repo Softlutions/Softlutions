@@ -24,6 +24,7 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/custom-style.css" rel="stylesheet">
+<link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 </head>
 <body class="gray-bg">
 	<div id="wrapper">
@@ -48,13 +49,14 @@
 	<!-- Custom and plugin javascript -->
 	<script src="resources/js/inspinia.js"></script>
 	<script src="resources/js/plugins/pace/pace.min.js"></script>
-
+	<script src="resources/bower_components/toastr/toastr.js"></script>
 
 	<!-- JQueryUI -->
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
-	<script src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
+	<script
+		src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/js/Login/loginController.js"></script>
 </body>

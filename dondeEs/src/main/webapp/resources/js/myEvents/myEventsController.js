@@ -128,19 +128,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					if (response.auctionList != null && response.auctionList != {}) {
 						$scope.auctionsEvent = response.auctionList;
 					} else {
-				    	toastr.options = {
-				    			closeButton: true,
-			                    progressBar: true,
-			                    showMethod: 'slideDown'
-				        };
 				    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 					}
 				} else {
-			    	toastr.options = {
-			    			closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-			        };
 			    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 				}
 			});
@@ -184,19 +174,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									if (response.auctionList != null && response.auctionList != {}) {
 										$scope.auctionsEvent = response.auctionList;
 									} else {
-								    	toastr.options = {
-								    			closeButton: true,
-							                    progressBar: true,
-							                    showMethod: 'slideDown'
-								        };
 								    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 									}
 								} else {
-							    	toastr.options = {
-							    			closeButton: true,
-						                    progressBar: true,
-						                    showMethod: 'slideDown'
-							        };
 							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 								}
 							});
@@ -245,13 +225,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			$scope.listOfEmails.push(pemail.to);
 			pemail.to = "";
 			}else{	
-			 	  setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
+			 	  setTimeout(function() {	
 		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
 
 		            }, 1300);
@@ -330,13 +304,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					 toastr.error('Verifique la direccion de correo electronico y su coneccion a internet', 'Error');
 				})
 			}else{	
-				 	  setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
+				 	  setTimeout(function() {	
 		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
 
 		            }, 1300);
@@ -351,28 +319,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 					if (response.code == 200) {
 						$scope.events = response.eventList;
-					    	toastr.options = {
-			                    closeButton: true,
-			                    progressBar: true,
-			                    showMethod: 'slideDown'
-				            };
-							toastr.success('Publicación del evento', 'El evento se publicó con éxito.');
+						toastr.success('Publicación del evento', 'El evento se publicó con éxito.');
 					} else {
-				    	toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-			            };
 						toastr.warning('Publicación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se publicó.');
 					}
 					
 				});
 			} else {
-		    	toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown'
-	            };
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
 		})	
@@ -400,26 +353,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			 		if (response.code == 200) {
 							$scope.events = response.eventList;
-					    	toastr.options = {
-				                    closeButton: true,
-				                    progressBar: true,
-				                    showMethod: 'slideDown'
-					            };
 								toastr.success('Cancelación del evento', 'El evento se canceló con éxito.');
 			 		} else {
-				    	toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-				        };
 						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se canceló.')
 					}
 		 		});
 			} else if (response.errorMessage == "notification cancel event error") {
 		    	toastr.options = {
-		    			closeButton: true,
-	                    progressBar: true,
-	                    showMethod: 'slideDown',
 	                    timeOut: 7000
 		        };
 		    	toastr.warning('Cancelación del evento', 'Ocurrió un error al notificar a los involucrados sin embargo el evento se canceló con éxito.');
@@ -427,21 +367,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			 		if (response.code == 200) {
 			 			$scope.events = response.eventList;
 			 		} else {
-				    	toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-				        };
 						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla.')
 					}
 		 		});
 			} else {
-		    	toastr.options = {
-		    			closeButton: true,
-	                    progressBar: true,
-	                    showMethod: 'slideDown',
-	                    timeOut: 4000
-		        };
 		    	toastr.error('Cancelación del evento', 'Ocurrió un error al cancelar el evento.');
 			} 
 		 })
@@ -452,7 +381,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	});
 	
 	$scope.onFileSelect = function($files) {
-		$scope.file = $files[0];
+	    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+	    if (regex.test($files[0].name.toLowerCase())) {
+	    	$scope.file = $files[0];
+	    } else {
+	    	$('#uploadImageEvent').val("");
+	    	toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
+	     }
+	
 	};
 	
 	$scope.createEvent = function() {
@@ -483,11 +419,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 										if (response.code == 200) {
 											if (response.eventList.length > 0) {
 												$scope.events = response.eventList;
-										    	toastr.options = {
-									                    closeButton: true,
-									                    progressBar: true,
-									                    showMethod: 'slideDown'
-										        };
 										    	
 										    	
 										    	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
@@ -495,71 +426,47 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									if (response.auctionList != null && response.auctionList != {}) {
 										$scope.auctionsEvent = response.auctionList;
 									} else {
-								    	toastr.options = {
-								    			closeButton: true,
-							                    progressBar: true,
-							                    showMethod: 'slideDown'
-								        };
 								    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 									}
 								} else {
-							    	toastr.options = {
-							    			closeButton: true,
-						                    progressBar: true,
-						                    showMethod: 'slideDown'
-							        };
 							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 								}
 							});
-										    	
-										    		
-										    	
-										    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
-										    	$scope.catalogsList();
-										    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
-										    	
-										    	/*
-										    	
-										    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
-										    	$scope.catalogsList();
-										    	setTimeout(function(){$('#modalAuctionEventServices').modal('show')}, 900)
-										    	
-										    	*/
-										    	
-										    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
-											} else {
-										    	toastr.options = {
-									                    closeButton: true,
-									                    progressBar: true,
-									                    showMethod: 'slideDown'
-										        };
-										    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
-											}
-										} else {
-									    	toastr.options = {
-								                    closeButton: true,
-								                    progressBar: true,
-								                    showMethod: 'slideDown'
-									        };
-									    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
-										}			
-									});
-									
-								} else {
-							    	toastr.options = {
-							    			closeButton: true,
-						                    progressBar: true,
-						                    showMethod: 'slideDown'
-							        };
-							    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
-								}
-								
-								$scope.eventName = "";
-								$scope.eventDescription = "";
-								$scope.eventLargeDescription = "";
-								$scope.eventPlaceName = "";
-								$scope.file = null;
-						}); 
+										    											    	
+					    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
+					    	$scope.catalogsList();
+					    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
+					    	
+					    	/*
+					    	
+					    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
+					    	$scope.catalogsList();
+					    	setTimeout(function(){$('#modalAuctionEventServices').modal('show')}, 900)
+					    	
+					    	*/
+					    	
+					    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
+						} else {
+					    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
+						}
+					} else {
+				    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
+					}			
+				});
+				
+			} else {
+		    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+			}
+			
+			$scope.eventName = "";
+			$scope.eventDescription = "";
+			$scope.eventLargeDescription = "";
+			$scope.eventPlaceName = "";
+			$scope.file = null;
+			setTimeout(function cleanInputImageEvent(){
+				$('#uploadImageEvent').val("");
+			}, 2000);	
+	}); 
 		}
 	};
 	

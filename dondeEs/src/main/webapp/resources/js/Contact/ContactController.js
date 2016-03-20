@@ -18,18 +18,8 @@ angular.module('dondeEs.contact', ['ngRoute'])
 			$http({method: 'POST',url:'rest/protected/sendEmail/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
 				if (response.code == 200) {
-			    	toastr.options = {
-			    			closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-			        };
 			    	toastr.success('Contacto', 'El mensaje se envió con éxito.');
 				} else {
-			    	toastr.options = {
-			    			closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-			        };
 			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');
 				}
 			});
