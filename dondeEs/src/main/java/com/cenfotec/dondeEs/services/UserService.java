@@ -85,7 +85,7 @@ public class UserService implements UserServiceInterface {
 			if (ta.getServiceCatalog() != null) {
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
-				
+
 				catalogPOJO.setAuctions(null);
 				servicePOJO.setServiceCatalog(catalogPOJO);
 			}
@@ -106,6 +106,27 @@ public class UserService implements UserServiceInterface {
 		return (nuser == null) ? false : true;
 	}
 	
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @param UserRequest 
+	 * @version 1.0
+	 */
+	public Boolean createUser(UserRequest ur) {
+		if (userRepository.findByEmail(ur.getUser().getEmail()) == null) return saveUser(ur);
+		return false;
+	}
+
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException
+	 *                no se encuentra la direccion de correo
+	 * @exception MessagingException
+	 *                No encuentra el server.
+	 * @param LoginRequest,
+	 *            tiene un atributo email del usuario
+	 * @version 1.0
+	 */
 	public Boolean updatePassword(LoginRequest ur) {
 		User user = userRepository.findByEmail(ur.getEmail());
 		if (user == null)
@@ -116,15 +137,15 @@ public class UserService implements UserServiceInterface {
 			String email = user.getEmail();
 			String password = UUID.randomUUID().toString().substring(0, 7);
 			String encryptPassword = AES.base64encode(password);
-			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password
-					+ ".";
+			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password;
 			user.setPassword(encryptPassword);
 			mailMessage.setTo(email);
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
 			User nuser = userRepository.save(user);
-			if(nuser!=null) return true;
+			if (nuser != null)
+				return true;
 			return false;
 		} catch (Exception e) {
 			return false;
@@ -139,6 +160,13 @@ public class UserService implements UserServiceInterface {
 		return user;
 	}
 
+	/***
+	 * Obtiene el usuario de cada servicio ofertado en todas las subastas de un
+	 * determinado evento.
+	 * 
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	@Override
 	@Transactional
 	public List<UserPOJO> getAllServicesProviderAuction(int idEvent) {
@@ -160,9 +188,15 @@ public class UserService implements UserServiceInterface {
 
 		return usersPOJO;
 	}
-	
+
+	/***
+	 * Obtiene un usuario por su id.
+	 * 
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	@Override
-	public User findById(int id) {	
+	public User findById(int id) {
 		return userRepository.findByUserId(id);
 	}
 }
