@@ -448,6 +448,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			$scope.eventLargeDescription = "";
 			$scope.eventPlaceName = "";
 			$scope.file = null;
+			setTimeout(function cleanInputImageEvent(){
+				$('#uploadImageEvent').val("");
+			}, 2000);	
 	}); 
 		}
 	};
