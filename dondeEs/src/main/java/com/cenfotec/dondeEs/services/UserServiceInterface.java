@@ -15,6 +15,7 @@ public interface UserServiceInterface {
 	
 	/**
 	 * @param idUser Id del usuario
+	 *            Id del usuario
 	 * @return Lista de los servicios asociados al usuario
 	 * @version 1.0
 	 */
@@ -56,4 +57,5 @@ public interface UserServiceInterface {
 	 * @version 1.0
 	 */
 	User findById(int id);
+	Boolean createUser(UserRequest ur);
 }
