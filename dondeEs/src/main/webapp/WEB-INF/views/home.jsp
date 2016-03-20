@@ -154,8 +154,8 @@
 	<script src="resources/js/Auction/auctionController.js"></script>
 	<script src="resources/js/Auction/ListAuctionsController.js"></script>
 	<script src="resources/js/Chat/ChatController.js"></script>
-
 	<script src="resources/js/Contact/ContactController.js"></script>
+	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 
         <!-- Google Maps -->
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>

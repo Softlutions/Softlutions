@@ -106,14 +106,6 @@ public class UserService implements UserServiceInterface {
 		return (nuser == null) ? false : true;
 	}
 	
-	
-	/**
-	 * @author Alejandro Bermúdez Vargas
-	 * @exception AddressException no se encuentra la direccion de correo
-	 * @exception MessagingException No encuentra el server.
-	 * @param LoginRequest, tiene un atributo email del usuario
-	 * @version 1.0
-	 */
 	public Boolean updatePassword(LoginRequest ur) {
 		User user = userRepository.findByEmail(ur.getEmail());
 		if (user == null)
@@ -147,13 +139,6 @@ public class UserService implements UserServiceInterface {
 		return user;
 	}
 
-	/***
-	 * Obtiene el usuario de cada servicio ofertado en todas las subastas de un
-	 * determinado evento.
-	 * 
-	 * @author Enmanuel García González
-	 * @version 1.0
-	 */
 	@Override
 	@Transactional
 	public List<UserPOJO> getAllServicesProviderAuction(int idEvent) {
@@ -176,12 +161,6 @@ public class UserService implements UserServiceInterface {
 		return usersPOJO;
 	}
 	
-	/***
-	 * Obtiene un usuario por su id.
-	 * 
-	 * @author Enmanuel García González
-	 * @version 1.0
-	 */
 	@Override
 	public User findById(int id) {	
 		return userRepository.findByUserId(id);
