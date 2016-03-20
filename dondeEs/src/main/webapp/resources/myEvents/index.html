@@ -55,11 +55,15 @@
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
 										<li class="divider"></li>
-										<li ng-show="event.state===0"><a type="button"
-											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
 										<li ng-show="event.state===1"><a type="button"
-											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar
-												publicación</a></li>
+											ng-click="prepublishEventById(event.eventId)" class="text-danger">Prepublicar</a></li>
+										<li ng-show="event.state===2"><a type="button"
+											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
+										<li ng-show="event.state===3"><a type="button"
+											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar</a></li>
+										<li ng-show="event.state===0"><a type="button"
+											disabled class="text-danger">Cancelado</a></li>
+
 									</ul>
 								</div>
 							</td>

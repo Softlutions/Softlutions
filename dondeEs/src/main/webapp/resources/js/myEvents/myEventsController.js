@@ -197,6 +197,15 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	}
 	
+	$scope.prepublishEventById = function(eventId){
+		$http.get("rest/protected/chat/saveChatEventId/" + eventId).success(function(response){
+			if (response.code == 200) {
+				toastr.success('Nuevo chat administrativo', 'Ingrese la pagina de chats!');
+			}
+		});
+
+	}
+	
 	$scope.listContracts = function(eventId){
 		$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
