@@ -26,6 +26,12 @@ angular
 									console.log(response.listService);
 								});
 							
+								 $scope.list = $scope.$parent.personList;
+								 
+								  $scope.config = {
+								    itemsPerPage: 5,
+								    fillLastPage: true
+								    }
 								
 								
 								  $scope.init = function() {
