@@ -54,8 +54,6 @@ angular
 				}
 			}
 			
-			
-			
 			$scope.listParticipants = function(auction){
 				$scope.selectedAuction = auction;
 				$scope.auctionServices = auction.auctionServices;
