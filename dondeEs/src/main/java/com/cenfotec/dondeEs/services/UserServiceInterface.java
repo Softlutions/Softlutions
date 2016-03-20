@@ -10,16 +10,18 @@ import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public interface UserServiceInterface {
-	
+
 	/**
-	 * @param idUser Id del usuario
+	 * @param idUser
+	 *            Id del usuario
 	 * @return Lista de los servicios asociados al usuario
 	 * @version 1.0
 	 */
 	List<ServicePOJO> getAllService(int idUser);
-	
-	public Boolean saveUser(UserRequest	 ur);
-	
+
+	Boolean saveUser(UserRequest ur);
+	Boolean createUser(UserRequest ur);
+
 	User findByEmail(String email);
 
 	/**
@@ -28,8 +30,10 @@ public interface UserServiceInterface {
 	 * @version 1.0
 	 */
 	List<UserPOJO> getAll();
+
 	Boolean updatePassword(LoginRequest ur);
+
 	List<UserPOJO> getAllServicesProviderAuction(int idEvent);
-	
+
 	User findById(int id);
 }
