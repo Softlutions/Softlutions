@@ -83,6 +83,10 @@ public class ChatService implements ChatServiceInterface {
 		
 		nchat.setEvent(nevent);
 		
+		nevent.setState((byte)2);
+		
+		eventRepository.save(nevent);
+		
 		saveChat(nchat);
 		
 	}

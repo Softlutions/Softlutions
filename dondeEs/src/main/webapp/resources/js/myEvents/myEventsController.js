@@ -200,8 +200,18 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.prepublishEventById = function(eventId){
 		$http.get("rest/protected/chat/saveChatEventId/" + eventId).success(function(response){
 			if (response.code == 200) {
-				toastr.success('Nuevo chat administrativo', 'Ingrese la pagina de chats!');
-			}
+				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+					if (response.code == 200) {
+						$scope.events = response.eventList;
+						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+					} else {
+						toastr.warning('Prepublicación del evento');
+					}
+					
+				});
+			} else {
+				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+			} 
 		});
 
 	}
