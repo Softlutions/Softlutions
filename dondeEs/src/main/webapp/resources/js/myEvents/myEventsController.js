@@ -73,7 +73,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	// Create auction
 	$scope.catalogs = [];
 	$scope.catalogServiceSelected = {};
-	
+	console.log($scope.$parent.permissions);
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
 	

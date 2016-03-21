@@ -15,40 +15,23 @@ import com.cenfotec.dondeEs.repositories.ServiceRepository;
 public class ServiceImplementation implements ServiceInterface {
 	@Autowired
 	private ServiceRepository serviceRepository;
-	
+
 	@Override
 	public Boolean saveService(Service pservice) {
-		Service nservice =  serviceRepository.save(pservice);
-	 	return (nservice == null) ? false : true;
+		Service nservice = serviceRepository.save(pservice);
+		return (nservice == null) ? false : true;
 	}
-	
+	 
 	@Override
-	public List<com.cenfotec.dondeEs.ejb.Service> getAll(){
+	public List<ServicePOJO> getAll() {
 		List<com.cenfotec.dondeEs.ejb.Service> listService = serviceRepository.findAll();
-		return listService;
-	}
-	
-	@Override
-	@Transactional
-	public ServicePOJO getService(int idEvent){
-		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idEvent);
-		ServicePOJO servicePOJO = new ServicePOJO();
-		BeanUtils.copyProperties(nservice, servicePOJO);
-		return servicePOJO;
-	}
-	
-	@Override
-	@Transactional
-	public List<ServicePOJO> getByCatalog(int catalogId){
-		List<Service> serviceList = serviceRepository.getByCatalogId(catalogId);
 		List<ServicePOJO> servicePOJOList = new ArrayList<>();
-		
-		serviceList.forEach(s -> {
+		listService.forEach(s -> {
 			ServicePOJO service = new ServicePOJO();
 			service.setServiceId(s.getServiceId());
 			service.setName(s.getName());
 			service.setDescription(s.getDescription());
-			
+
 			UserPOJO userPOJO = new UserPOJO();
 			userPOJO.setUserId(s.getUser().getUserId());
 			userPOJO.setName(s.getUser().getName());
@@ -56,15 +39,49 @@ public class ServiceImplementation implements ServiceInterface {
 			userPOJO.setLastName2(s.getUser().getLastName2());
 			userPOJO.setEmail(s.getUser().getEmail());
 			service.setUser(userPOJO);
-			
 			servicePOJOList.add(service);
 		});
-		
+
 		return servicePOJOList;
 	}
-	
+
+	@Override
 	@Transactional
-	public ServicePOJO getServiceById(int idService){
+	public ServicePOJO getService(int idEvent) {
+		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idEvent);
+		ServicePOJO servicePOJO = new ServicePOJO();
+		BeanUtils.copyProperties(nservice, servicePOJO);
+		return servicePOJO;
+	}
+
+	@Override
+	@Transactional
+	public List<ServicePOJO> getByCatalog(int catalogId) {
+		List<Service> serviceList = serviceRepository.getByCatalogId(catalogId);
+		List<ServicePOJO> servicePOJOList = new ArrayList<>();
+
+		serviceList.forEach(s -> {
+			ServicePOJO service = new ServicePOJO();
+			service.setServiceId(s.getServiceId());
+			service.setName(s.getName());
+			service.setDescription(s.getDescription());
+
+			UserPOJO userPOJO = new UserPOJO();
+			userPOJO.setUserId(s.getUser().getUserId());
+			userPOJO.setName(s.getUser().getName());
+			userPOJO.setLastName1(s.getUser().getLastName1());
+			userPOJO.setLastName2(s.getUser().getLastName2());
+			userPOJO.setEmail(s.getUser().getEmail());
+			service.setUser(userPOJO);
+
+			servicePOJOList.add(service);
+		});
+
+		return servicePOJOList;
+	}
+
+	@Transactional
+	public ServicePOJO getServiceById(int idService) {
 		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idService);
 		ServicePOJO servicePOJO = new ServicePOJO();
 		BeanUtils.copyProperties(nservice, servicePOJO);
@@ -73,9 +90,10 @@ public class ServiceImplementation implements ServiceInterface {
 		servicePOJO.setUser(userPOJO);
 		return servicePOJO;
 	}
+
 	@Override
 	@Transactional
-	public List<ServicePOJO> getByProvider(int idUser){
+	public List<ServicePOJO> getByProvider(int idUser) {
 		List<Service> service = serviceRepository.getService(idUser);
 		List<ServicePOJO> servicePOJOList = new ArrayList<ServicePOJO>();
 		service.stream().forEach(ta -> {
@@ -84,9 +102,8 @@ public class ServiceImplementation implements ServiceInterface {
 			servicePOJO.setServiceContacts(null);
 			servicePOJOList.add(servicePOJO);
 		});
-		
+
 		return servicePOJOList;
 	}
 
-	
 }

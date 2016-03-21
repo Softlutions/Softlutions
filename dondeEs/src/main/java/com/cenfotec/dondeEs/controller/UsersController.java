@@ -54,11 +54,10 @@ public class UsersController {
 	@RequestMapping(value ="/create", method = RequestMethod.POST)
 	public UserResponse create(@RequestBody UserRequest ur){	
 		UserResponse us = new UserResponse();
-		int userId= userServiceInterface.saveUser(ur);
-		if(userId > 0){
+		Boolean userId= userServiceInterface.createUser(ur);
+		if(userId){
 			us.setCode(200);
 			us.setCodeMessage("User created succesfully");
-			us.setUserId(userId);
 		}else{
 			us.setCode(400);
 			us.setCodeMessage("El usuario ya existe en la base de datos!");
