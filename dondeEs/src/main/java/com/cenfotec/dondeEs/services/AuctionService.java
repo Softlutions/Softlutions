@@ -7,12 +7,14 @@ import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.Auction;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 import com.cenfotec.dondeEs.pojo.AuctionServicePOJO;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
+import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.AuctionRepository;
@@ -131,78 +133,38 @@ public class AuctionService implements AuctionServiceInterface{
 		return auctionservicePOJO;		
 	}
 	
+	
 	/**
 	 * @Author Juan Carlos Sánchez G.
-	 * @return response Respuesta del servidor de la petición que lista todas las subastas existentes.
+	 * @return response Respuesta del servidor de la petición que lista todas las subastas.
 	 * @version 1.0
 	 */
 	@Override
 	@Transactional
 	public List<AuctionPOJO> getAllAuctions() {
-		List<Auction> auctions = auctionRepository.findAllByState((byte) 1);	
+		List<Auction> auctions = auctionRepository.findAll();	
 		List<AuctionPOJO> auctionsPOJO = new ArrayList<AuctionPOJO>();
+		Date date = new Date();
 		auctions.stream().forEach(e -> {
 			AuctionPOJO auctionPOJO = new AuctionPOJO();
-			BeanUtils.copyProperties(e, auctionPOJO);
+			if(e.getState()==1 && e.getDate().compareTo(date)!=1){
+				e.setState((byte) 2);			
+			}
+			auctionPOJO.setAuctionId(e.getAuctionId());
+			auctionPOJO.setDate(e.getDate());
+			auctionPOJO.setDescription(e.getDescription());
+			auctionPOJO.setName(e.getName());
+			auctionPOJO.setState(e.getState());
 			
-			if (e.getAuctionServices() != null) {
-				List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
-				
-				e.getAuctionServices().stream().forEach(as -> {
-					AuctionServicePOJO asp = new AuctionServicePOJO();
-					BeanUtils.copyProperties(as, asp);
-					
-					asp.setService(new ServicePOJO()); 
-					BeanUtils.copyProperties(as.getService(), asp.getService());
-					asp.getService().setServiceContacts(null);
-					asp.getService().setServiceCatalog(null);
-					
-					asp.getService().setUser(new UserPOJO()); 
-					asp.getService().getUser().setUserId(as.getService().getUser().getUserId());
-					
-					auctionServicesPOJO.add(asp);
-				});
-				
-				auctionPOJO.setAuctionServices(auctionServicesPOJO);
-			} 			
+			ServiceCatalogPOJO serviceCatalogPOJO = new ServiceCatalogPOJO();
+			serviceCatalogPOJO.setServiceCatalogId(e.getServiceCatalog().getServiceCatalogId());
+			serviceCatalogPOJO.setName(e.getServiceCatalog().getName());
+			auctionPOJO.setServiceCatalog(serviceCatalogPOJO);
+			
 			auctionsPOJO.add(auctionPOJO); 
 		});
 		
 		return auctionsPOJO;		
-	}
-
-	@Override
-	public List<AuctionPOJO> getAllByAuctionsByServiceCatalog(int serviceCataloId) {
-		List<Auction> auctions = auctionRepository.findAllByServiceCatalogServiceCatalogIdAndState(serviceCataloId,(byte) 1);	
-		List<AuctionPOJO> auctionsPOJO = new ArrayList<AuctionPOJO>();
-		auctions.stream().forEach(e -> {
-			AuctionPOJO auctionPOJO = new AuctionPOJO();
-			BeanUtils.copyProperties(e, auctionPOJO);
-			
-			if (e.getAuctionServices() != null) {
-				List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
-				
-				e.getAuctionServices().stream().forEach(as -> {
-					AuctionServicePOJO asp = new AuctionServicePOJO();
-					BeanUtils.copyProperties(as, asp);
-					
-					asp.setService(new ServicePOJO()); 
-					BeanUtils.copyProperties(as.getService(), asp.getService());
-					asp.getService().setServiceContacts(null);
-					asp.getService().setServiceCatalog(null);
-					
-					asp.getService().setUser(new UserPOJO()); 
-					asp.getService().getUser().setUserId(as.getService().getUser().getUserId());
-					
-					auctionServicesPOJO.add(asp);
-				});
-				
-				auctionPOJO.setAuctionServices(auctionServicesPOJO);
-			} 			
-			auctionsPOJO.add(auctionPOJO); 
-		});
-		
-		return auctionsPOJO;
 	}
 
 	@Override
@@ -231,4 +193,5 @@ public class AuctionService implements AuctionServiceInterface{
 		
 		return state;
 	}
+
 }

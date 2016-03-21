@@ -26,6 +26,7 @@
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
 <link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
+<link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 </head>
 <body>
 	<div id="wrapper">
@@ -66,24 +67,16 @@
 						</ul></li>
 					<li><a href="#"><i class="fa fa-envelope"></i> <span
 							class="nav-label">Notificaciones </span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="#">Inbox</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
-							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/serviceByUser">Mis servicios</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-comments-o"></i> <span
+					</li>
+					<li><a href="app#/serviceByUser"><i class="fa fa-shopping-cart"></i> <span
+							class="nav-label">Servicios</span></a>
+					</li>
+					<li><a href="app#/chat"><i class="fa fa-comments-o"></i> <span
 							class="nav-label">Chats </span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/chat">Chat</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-money"></i> <span
-							class="nav-label">Subastas</span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/auctions">Subastas disponibles</a></li>
-						</ul></li>
+					</li>
+					<li><a href="app#/auctions"><i class="fa fa-money"></i> <span
+							class="nav-label">Subastas</span></a>
+					</li>
 				</ul>
 
 			</div>
@@ -129,6 +122,9 @@
 	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
+	<script src="resources/bower_components/moment/min/moment.min.js"></script>
+	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
+	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 	

@@ -91,6 +91,12 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.auctionEventServices = function(event){
+		$(function () {
+            $('#datetimepicker').datetimepicker({
+            	locale: 'es',
+                format: 'LLLL'
+            });
+        });
 		$scope.selectedEvent = event;
 	}
 	
@@ -160,6 +166,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 							name: $scope.tempAuction.name,
 							description: $scope.tempAuction.description,
 							date: new Date(),
+							state: 1,
 							event: event,
 							serviceCatalog: $scope.tempAuction.selected
 					};
@@ -168,6 +175,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 							name: $scope.tempAuction.name,
 							description: $scope.tempAuction.description,
 							date: new Date(),
+							state: 1,
 							event: $scope.selectedEvent,
 							serviceCatalog: $scope.tempAuction.selected
 					}

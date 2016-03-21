@@ -11,7 +11,7 @@ public interface AuctionServiceInterface {
 	Boolean saveAuction(Auction auction);
 	List<AuctionPOJO> getAllAuctionByEvent(int event_id);
 	List<AuctionPOJO> getAllAuctions();
-	List<AuctionPOJO> getAllByAuctionsByServiceCatalog(int serviceCatalog_id);
+
 	Auction findById (int auctionId);
 	
 	/**
@@ -29,4 +29,5 @@ public interface AuctionServiceInterface {
 	 * @version 1.0
 	 */
 	boolean auctionInvitationAnswer(AuctionRequest request);
+
 }

@@ -31,9 +31,12 @@ public class ServiceImplementation implements ServiceInterface {
 	@Override
 	@Transactional
 	public ServicePOJO getService(int idEvent){
-		com.cenfotec.dondeEs.ejb.Service nservice = serviceRepository.findOne(idEvent);
+		Service nservice = serviceRepository.findOne(idEvent);
 		ServicePOJO servicePOJO = new ServicePOJO();
-		BeanUtils.copyProperties(nservice, servicePOJO);
+		servicePOJO.setDescription(nservice.getDescription());
+		servicePOJO.setName(nservice.getName());
+		servicePOJO.setServiceId(nservice.getServiceId());
+		servicePOJO.setState(nservice.getState());
 		return servicePOJO;
 	}
 	
