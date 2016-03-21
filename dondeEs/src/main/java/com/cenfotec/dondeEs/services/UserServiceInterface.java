@@ -21,7 +21,7 @@ public interface UserServiceInterface {
 	 */
 	List<ServicePOJO> getAllService(int idUser);
 	
-	public Boolean saveUser(UserRequest	 ur);
+	public int saveUser(UserRequest	 ur);
 	
 	User findByEmail(String email);
 
@@ -57,5 +57,14 @@ public interface UserServiceInterface {
 	 * @version 1.0
 	 */
 	User findById(int id);
+	
+	/**
+	 * @author Ernesto Méndez A.
+	 * @param userId el usuario a modificar
+	 * @param state el nuevo estado del usuario
+	 * @return si la operacion fue exitosa
+	 * @version 1.0
+	 */
+	Boolean changeUserState(int userId, boolean state);
 	Boolean createUser(UserRequest ur);
 }

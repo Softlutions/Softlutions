@@ -1,6 +1,7 @@
 package com.cenfotec.dondeEs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,18 +31,39 @@ public class UsersController {
 		return response;
 	}
 	
+	/**
+	 * @author Ernesto Méndez A.
+	 * @return resultado de la operacion
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/changeState/{userId}/state/{state}", method = RequestMethod.GET)
+	public UserResponse changeState(@PathVariable("userId") int userId, @PathVariable("state") boolean state){	
+		UserResponse response = new UserResponse();
+		
+		if(userServiceInterface.changeUserState(userId, state)){
+			response.setCode(200);
+			response.setCodeMessage("success");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("internal error");
+		}
+		
+		return response;
+	}
+	
 	@RequestMapping(value ="/create", method = RequestMethod.POST)
 	public UserResponse create(@RequestBody UserRequest ur){	
 		UserResponse us = new UserResponse();
-		ur.getUser().setState(true);
-		Boolean state = userServiceInterface.createUser(ur);
-		if(state){
+		int userId= userServiceInterface.saveUser(ur);
+		if(userId > 0){
 			us.setCode(200);
 			us.setCodeMessage("User created succesfully");
-			return us;
+			us.setUserId(userId);
+		}else{
+			us.setCode(400);
+			us.setCodeMessage("El usuario ya existe en la base de datos!");
 		}
-		us.setCode(400);
-		us.setCodeMessage("El usuario ya existe en la base de datos!");
+		
 		return us;
 	}
 }

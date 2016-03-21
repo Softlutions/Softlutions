@@ -331,6 +331,21 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		})	
 	}
 	
+	$scope.cancel = function(serviceContact){
+		$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
+			if(response.code == 200){
+				serviceContact.state = 2;
+
+				$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
+				$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
+				$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
+				$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
+				
+				$scope.refreshChart();
+			}
+		});
+	}
+	
 	$scope.cancelEvent = function(eventId){  
 	 	$scope.requestObject = {"eventId":eventId};
 	 	$http.put('rest/protected/event/cancelEvent',$scope.requestObject).success(function(response) {
@@ -503,7 +518,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		var contractsLeft = 0;
 		var contractsOk = 0;
 		var contractsCanceled = 0;
-		console.log("ok");
+		
 		$('#contracts-state-chart').removeClass('hidden');
 		
 		angular.forEach($scope.serviceContacts, function(value){

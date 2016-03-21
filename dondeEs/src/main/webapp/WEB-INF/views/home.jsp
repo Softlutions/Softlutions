@@ -56,6 +56,7 @@
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/index">Mis eventos</a></li>
+							<li><a href="app#/eventsPublish">Eventos publicados</a></li>
 						</ul></li>
 					<li><a href="#"><i class="fa fa-user"></i> <span
 							class="nav-label">Usuarios</span><span class="fa arrow"></span></a>
