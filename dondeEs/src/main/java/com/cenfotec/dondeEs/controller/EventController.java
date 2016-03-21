@@ -1,5 +1,6 @@
 package com.cenfotec.dondeEs.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -291,5 +293,64 @@ public class EventController {
 		} finally {
 			return eventResponse;
 		}
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param event
+	 * @param file
+	 * @return
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
+	public BaseResponse edit(@RequestParam("name") String name, @RequestParam("description") String description,
+			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
+			@RequestParam("placeName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
+			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("owner") int userId,
+			@RequestParam("file") MultipartFile file, @RequestParam("eventId") int eventId,
+			@RequestParam("publishDate") String publishDate) {
+		BaseResponse response = new BaseResponse();
+		Event event = new Event();
+		event.setEventId(eventId);
+		event.setName(name);
+		event.setDescription(description);
+		event.setLargeDescription(largeDescription);
+		event.setPrivate_((byte) eventType);
+		
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+		try{
+			event.setPublishDate(format.parse(publishDate));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		User user = userServiceInterface.findById(userId);
+		event.setUser(user);
+		
+		Place place = new Place();
+		place.setName(placeName);
+		place.setLatitude(placeLatitude);
+		place.setLongitude(placeLongitude);
+		place = placeServiceInterface.savePlace(place);
+		event.setPlace(place);
+		
+		String resultFileName = Utils.writeToFile(file, servletContext);
+
+		if (!resultFileName.equals("")) {
+			event.setImage(resultFileName);
+			
+			if(eventServiceInterface.editEvent(event)){
+				response.setCode(200);
+				response.setCodeMessage("success");
+			}else{
+				response.setCode(500);
+				response.setCodeMessage("internal error");
+			}
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("no image");
+		}
+		
+		return response;
 	}
 }
