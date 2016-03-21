@@ -68,13 +68,17 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', function($scope,$http,$upload,MarkerCreatorService) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', function($scope,$http,$upload,MarkerCreatorService,$filter) { 
 	$scope.listOfEmails = [];
 	
 	// Create auction
 	$scope.catalogs = [];
 	$scope.catalogServiceSelected = {};
 	// --------------
+	
+	// edit event
+	$scope.eventInEdition = null;
+	//-----------
 	
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
@@ -350,6 +354,21 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		})	
 	}
 	
+	$scope.cancel = function(serviceContact){
+		$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
+			if(response.code == 200){
+				serviceContact.state = 2;
+
+				$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
+				$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
+				$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
+				$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
+				
+				$scope.refreshChart();
+			}
+		});
+	}
+	
 	$scope.cancelEvent = function(eventId){  
 	 	$scope.requestObject = {"eventId":eventId};
 	 	$http.put('rest/protected/event/cancelEvent',$scope.requestObject).success(function(response) {
@@ -474,6 +493,87 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		}
 	};
 	
+	$scope.resetCreateEvent = function(){
+		$("#modalEventTitle").text("Modificar evento");
+		$("#btnModalEventSubmit").text("Guardar cambios");
+		$scope.eventName = "";
+		$scope.eventDescription = "";
+		$scope.eventLargeDescription = "";
+		$scope.eventPlaceName = "";
+		$scope.address = "";
+		$scope.eventType = 0;
+		$scope.eventDate = null;
+		$scope.file = null;
+		$('#uploadImageEvent').val("");
+		//console.log("reset");
+	}
+	
+	$scope.editEvent = function(event){
+		//console.log(event);
+		$scope.eventInEdition = event;
+		$scope.addCurrentLocation();
+		
+		$scope.eventName = event.name;
+		$scope.eventDescription = event.description;
+		$scope.eventLargeDescription = event.largeDescription;
+		$scope.eventType = event.private_;
+		$scope.eventPlaceName = event.place.name;
+		$scope.map.center.latitude = event.place.latitude;
+		$scope.map.center.longitude = event.place.longitude;
+		$scope.file = event.image;
+		
+		//$("#modalEventDate").dateFormat = "dd/MM/yyyy";
+		
+		//$scope.eventDate = $filter("date")(event.publishDate, "mediumDate");
+		
+		$scope.address = event.place.name;
+		$scope.addAddress();
+		
+		$("#modalEventTitle").text("Modificar evento");
+		$("#btnModalEventSubmit").text("Guardar cambios");
+		$("#modalCreateEvent").modal("toggle");
+	}
+	
+	$scope.saveEventChanges = function(){
+		var event = {
+			'eventId':$scope.eventInEdition.eventId,
+			'name':$scope.eventName,
+			'description':$scope.eventDescription,
+			'largeDescription':$scope.eventLargeDescription,
+			'eventType':$scope.eventType,
+			'publishDate':$scope.eventDate,
+			'placeName':$scope.eventPlaceName,
+			'placeLatitude':$scope.map.center.latitude,
+			'placeLongitude':$scope.map.center.longitude,
+			'owner':$scope.loggedUser.userId
+		};
+		
+		$scope.eventInEdition.name = event.name;
+		$scope.eventInEdition.description = event.description;
+		$scope.eventInEdition.largeDescription = event.largeDescription;
+		$scope.eventInEdition.private_ = event.eventType;
+		$scope.eventInEdition.place.name = event.placeName;
+		$scope.eventInEdition.place.latitude = event.placeLatitude;
+		$scope.eventInEdition.place.longitude = event.placeLongitude;
+		
+		//console.log("data: ", event);
+		
+		$upload.upload({url:'rest/protected/event/editEvent', data:event, file:$scope.file})
+		.progress(function(evt) {})
+		.success(function(response) {
+			//console.log("response: ", response);
+			$scope.eventInEdition = null;
+			$("#modalCreateEvent").modal("toggle");
+			toastr.success('Eventos del usuario', 'El evento se modificó con éxito.');
+		})
+		.error(function(msj) {
+			//console.log("cathedError: ", msj);
+			toastr.error('Eventos del usuario', 'Ocurrió un error al modificar el evento.');
+		});
+	}
+	
+	//--------------------------------------------------------------------------
+	
 	MarkerCreatorService.createByCoords(9.6283789, -85.3756947, function (marker) {
         $scope.autentiaMarker = marker;
     });
@@ -522,7 +622,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		var contractsLeft = 0;
 		var contractsOk = 0;
 		var contractsCanceled = 0;
-		console.log("ok");
+		
 		$('#contracts-state-chart').removeClass('hidden');
 		
 		angular.forEach($scope.serviceContacts, function(value){

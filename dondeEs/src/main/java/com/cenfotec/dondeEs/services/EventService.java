@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -50,7 +51,7 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public List<EventPOJO> getAllEventPublish() {			
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		eventRepository.findAllByState((byte) 1).stream().forEach(e -> {
+		eventRepository.findAllByState((byte) 3).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
@@ -86,6 +87,17 @@ public class EventService implements EventServiceInterface {
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
 		return event.getEventId();
+	}
+	
+	@Override
+	@Transactional
+	public boolean editEvent(Event e){
+		boolean changed = false;
+		
+		if(eventRepository.save(e) != null)
+			changed = true;
+		
+		return changed;
 	}
 
 	@Override
