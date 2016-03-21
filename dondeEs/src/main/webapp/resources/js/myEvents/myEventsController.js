@@ -545,8 +545,12 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			//console.log("response: ", response);
 			$scope.eventInEdition = null;
 			$("#modalCreateEvent").modal("toggle");
+			toastr.success('Eventos del usuario', 'El evento se modificó con éxito.');
 		})
-		.error(function(msj) {console.log("cathedError: ", msj);});
+		.error(function(msj) {
+			//console.log("cathedError: ", msj);
+			toastr.error('Eventos del usuario', 'Ocurrió un error al modificar el evento.');
+		});
 	}
 	
 	//--------------------------------------------------------------------------

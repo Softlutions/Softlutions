@@ -56,9 +56,9 @@
 												participantes de evento</a></li>
 										<li class="divider"></li>
 										<li><a type="button" ng-click="editEvent(event)">Modificar</a></li>
-										<li ng-show="event.state===0"><a type="button"
+										<li ng-show="event.state===0 || event.state===1"><a type="button"
 											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
-										<li ng-show="event.state===1"><a type="button"
+										<li ng-show="event.state===3"><a type="button"
 											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar
 												publicación</a></li>
 									</ul>

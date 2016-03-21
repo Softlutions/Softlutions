@@ -88,7 +88,7 @@ public class EventController {
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 2.0
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/publishEvent", method = RequestMethod.PUT)
@@ -98,7 +98,7 @@ public class EventController {
 		try {
 			if (eventRequest.getEventId() != 0) {
 				Event event = eventServiceInterface.getEventById(eventRequest.getEventId());
-				event.setState((byte) 1);
+				event.setState((byte) 3);
 				event.setPublishDate(new Date());
 
 				int eventId = eventServiceInterface.saveEvent(event);
@@ -148,7 +148,7 @@ public class EventController {
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 2.0
 	 */
 	@SuppressWarnings("finally")
 	@Transactional
@@ -171,17 +171,20 @@ public class EventController {
 					response.setErrorMessage("success");
 
 					List<UserPOJO> servicesProviders = userServiceInterface
-							.getAllServicesProviderAuction(event.getEventId());
-					for (UserPOJO sp : servicesProviders) {
-						String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();
-
-						resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName,
-								event.getName());
-
-						if (!resultSendEmail) {
-							response.setCode(500);
-							response.setErrorMessage("notification cancel event error");
-							break;
+										.getAllServicesProviderAuction(event.getEventId());
+					
+					if (!servicesProviders.isEmpty()) {
+						for (UserPOJO sp : servicesProviders) {
+							String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();
+	
+							resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName,
+									event.getName());
+	
+							if (!resultSendEmail) {
+								response.setCode(500);
+								response.setErrorMessage("notification cancel event error");
+								break;
+							}
 						}
 					}
 				} else {
@@ -238,7 +241,7 @@ public class EventController {
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 2.0
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
@@ -267,7 +270,7 @@ public class EventController {
 				event.setDescription(description);
 				event.setLargeDescription(largeDescription);
 				event.setImage(resultFileName);
-				event.setState((byte) 0);
+				event.setState((byte) 1);
 				event.setPrivate_((byte) eventType);
 				event.setRegisterDate(new Date());
 				event.setUser(user);
@@ -321,7 +324,7 @@ public class EventController {
 		try{
 			event.setPublishDate(format.parse(publishDate));
 		}catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		User user = userServiceInterface.findById(userId);

@@ -51,7 +51,7 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public List<EventPOJO> getAllEventPublish() {			
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		eventRepository.findAllByState((byte) 1).stream().forEach(e -> {
+		eventRepository.findAllByState((byte) 3).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
