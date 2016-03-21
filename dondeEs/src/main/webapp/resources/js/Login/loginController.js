@@ -64,8 +64,17 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 						expireDate.setDate(expireDate.getDate() + 7);
 						$cookies.putObject("lastSession", session, {expires: expireDate});
 					}
-					
-					window.location.href = "/dondeEs/app#/index";
+					switch (responseUser.role.roleId) {
+						case 1:
+							window.location.href = "/dondeEs/app#/users";
+							break;
+						case 2:
+							window.location.href = "/dondeEs/app#/serviceByUser";
+							break;
+						case 3:
+							window.location.href = "/dondeEs/app#/index";
+							break;
+					}
 				}else{
 					$("#errorMsj").css("visibility", "visible");
 				}

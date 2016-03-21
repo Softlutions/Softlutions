@@ -1,9 +1,8 @@
 <div class="container">
-	
-			<div class="ibox float-e-margins col-md-8">
+			<div class="ibox float-e-margins col-md-12">
 				<div class="ibox-title">
-					<h5>Mis servicios</h5>
-					<a data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
+					<h5>{{$parent.permissions.isAdmin?  'Servicios':'Mis servicios'}}</h5>
+					<a  ng-if="!$parent.permissions.isAdmin" data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
 					data-target="#modal-form">Registrar servicio</a>
 					<div class="ibox-content ">
 
@@ -28,7 +27,6 @@
 								</tr>
 							</tbody>
 						</table>
-						<at-pagination at-list="list" at-config="config"></at-pagination>
 					</div>
 				</div>
 			</div>
