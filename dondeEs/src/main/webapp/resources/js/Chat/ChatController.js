@@ -59,6 +59,7 @@ angular
 								$interval(function() {
 									$scope.loadMessage();
 						          }, 500);
+								
 							}
 							
 							$scope.loadMessage=function (){
