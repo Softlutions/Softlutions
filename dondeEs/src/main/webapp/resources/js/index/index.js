@@ -74,11 +74,9 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 		switch ($scope.loggedUser.role.roleId) {
 		case 1:
 			$scope.permissions.isAdmin = true;
-			window.location.href = "app#/users";
 			break;
 		case 2:
 			$scope.permissions.isPrestatario = true;
-			window.location.href = "app#/serviceByUser";
 			break;
 		case 3:
 			$scope.permissions.isPromotor = true;

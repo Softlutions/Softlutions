@@ -2,7 +2,7 @@
 	<div class="col-lg-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-				<h5>Mis eventos</h5>
+				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
 				<button ng-if="!$parent.permissions.isAdmin" class="btn btn-primary btn-xs pull-right"
 					data-toggle="modal" data-target="#modalCreateEvent">Crear
 					evento</button>
@@ -44,18 +44,18 @@
 										<li><a ng-click="listParticipants(event.eventId)"
 											data-toggle="modal" data-target="#modalParticipants">Listar
 												participantes</a></li>
-										<li><a
+										<li ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
 
 										<li><a href="/dondeEs/app#/auctionsEvent/{{event.eventId}}">Ver subastas</a></li>
-										<li><a type="button"
+										<li ng-if="!$parent.permissions.isAdmin"><a type="button"
 											ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
 										<li class="divider"></li>
-										<li ng-show="event.state===0"><a type="button"
+										<li ng-show="event.state===0" ng-if="!$parent.permissions.isAdmin"><a type="button"
 											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
 										<li ng-show="event.state===1"><a type="button"
 											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar
@@ -411,7 +411,7 @@
 											<td>{{serviceContact.comment}}</td>
 			
 											<td ng-if="serviceContact.state != 2">
-												<Button
+												<Button ng-if="!$parent.permissions.isAdmin"
 													id="btnCancelService-{{serviceContact.serviceContractId}}"
 													class="btn btn-danger btn-xs" ng-click="cancel(serviceContact)">Cancelar</Button>
 											</td>

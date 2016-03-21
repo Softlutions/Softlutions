@@ -78,9 +78,17 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.globalEventId = 0;
 	
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-	$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-		$scope.events = response.eventList;
-	});
+	
+	if(!$scope.$parent.permissions.isAdmin){
+		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+			$scope.events = response.eventList;
+		});
+	}else{
+		$http.get('rest/protected/event/getAllEventPublish').success(function(response) {
+			$scope.events = response.eventList;
+		});
+	}
+	
 	
 	$scope.listParticipants = function(eventId){
 		$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+eventId).success(function(response) {
