@@ -201,6 +201,25 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	}
 	
+	$scope.prepublishEventById = function(eventId){
+		$http.get("rest/protected/chat/saveChatEventId/" + eventId).success(function(response){
+			if (response.code == 200) {
+				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+					if (response.code == 200) {
+						$scope.events = response.eventList;
+						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+					} else {
+						toastr.warning('Prepublicación del evento');
+					}
+					
+				});
+			} else {
+				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+			} 
+		});
+
+	}
+	
 	$scope.listContracts = function(eventId){
 		$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
