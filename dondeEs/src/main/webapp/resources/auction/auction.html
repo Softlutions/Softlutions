@@ -101,7 +101,7 @@
 								<td>{{ service.description }}</td>
 								<td>{{ service.price | currency:"₡":0}}</td>
 								<td class="text text-info">
-									<button ng-click="contract(service)"
+									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
 										class="btn btn-primary btn-xs">Contratar</button>
 								</td>
 							</tr>
@@ -112,7 +112,7 @@
 					<p>No hay participantes registrados.</p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
+					<button  ng-if="$parent.permissions.isPrestatario" type="button" class="btn btn-primary"
 						ng-click="displayForm()">Participar</button>
 				</div>
 			</div>
@@ -159,8 +159,8 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
-						ng-click="joinAuction()">Participar</button>
+					<button  type="button" class="btn btn-primary"
+						ng-click="joinAuction()">$parent.permissions.isPrestatario ? 'Si' : 'No'</button>
 				</div>
 			</div>
 		</div>
