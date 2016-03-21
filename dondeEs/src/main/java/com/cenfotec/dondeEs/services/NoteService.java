@@ -21,6 +21,6 @@ public class NoteService implements NoteServiceInterface {
 
 	@Override
 	public List<Note> getAllNoteByEvent(int idEvent) {
-		return  noteRepository.findByEventId(idEvent);
+		return  noteRepository.findAllByEventEventId(idEvent);
 	}
 }

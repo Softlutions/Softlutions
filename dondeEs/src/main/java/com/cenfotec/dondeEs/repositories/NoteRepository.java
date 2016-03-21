@@ -10,5 +10,5 @@ public interface NoteRepository  extends CrudRepository<Note, Integer> {
 
 	List<Note> findAll();
 
-	List<Note> findNotesByEventId(intidEvent);
+	List<Note> findAllByEventEventId(int idEvent);
 }
