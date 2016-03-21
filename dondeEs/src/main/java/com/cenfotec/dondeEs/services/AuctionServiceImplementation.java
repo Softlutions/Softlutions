@@ -63,4 +63,5 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 		
 		return isValid;
 	}
+	
 }

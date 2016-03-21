@@ -12,51 +12,67 @@ angular
 			$scope.auctionService = {};
 			$scope.selectedAuction = {};
 			$scope.catalogs = [];
-			$scope.auctionList = [];
+			$scope.auctionList =[];
+			$scope.pendingAuctionList =[];
 			$scope.showError = true;
+			$scope.showErrorPending = true;
+			$scope.selectedCatalogId = "";
 			
-			$http.get('rest/protected/auction/getAllAuctions/').success(function(response) {
-				if(response.auctionList.length == 0){
-					$scope.showError = false;
-				}else{
-					$scope.auctionList = response.auctionList;
-				}
+			toastr.options = {
+				closeButton: true,
+				showMethod: 'slideDown',
+				timeOut: 4000
+			};
+			
+			angular.element(document).ready(function(){
+				getAllAuctions();
+				$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
+					var allAuctions = {
+							serviceCatalogId:null,
+							name:"Todas las categorias"
+					}
+					$scope.catalogs.push(allAuctions);
+					$scope.catalogs.push.apply($scope.catalogs,response.serviceCatalogList);
+				});
 			})
 			
-			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
-				$scope.catalogs = response.serviceCatalogList;
-				var allAuctions = {
-						serviceCatalogId:0,
-						name:"Todas las categorias"
-				}
-				$scope.catalogs.push(allAuctions);
-			});
+			function getAllAuctions(){				
+				$http.get('rest/protected/auction/getAllAuctions').success(function(response) {
+					response.auctionList.forEach(function(auction){
+						if(auction.state==1){
+							$scope.auctionList.push(auction);
+						}if(auction.state==2){
+							$scope.pendingAuctionList.push(auction);
+						}
+					});
+					if($scope.auctionList.length == 0){
+						$scope.showError = false;
+					}else{
+						$scope.showError = true;
+					}
+					if($scope.pendingAuctionList.length == 0){
+						$scope.showErrorPending = false;
+					}else{
+						$scope.showErrorPending = true;
+					}
+				});		
+			}
 			
 			$scope.getAuctionsByCatalog = function(selectedCatalog){
 				if(selectedCatalog.serviceCatalogId == 0){
-					$http.get('rest/protected/auction/getAllAuctions/').success(function(response) {
-						if(response.auctionList.length == 0){
-							$scope.showError = false;
-						}else{
-							$scope.auctionList = response.auctionList;
-							$scope.showError = true;
-						}
-					});
+					$scope.selectedCatalogId = "";
+					console.log($scope.auctionList);
+					
 				}else{
-					$http.get('rest/protected/auction/getAllAuctionsByServiceCatalog/'+selectedCatalog.serviceCatalogId).success(function(response) {
-						if(response.auctionList.length == 0){
-							$scope.showError = false;
-						}else{
-							$scope.auctionList = response.auctionList;
-							$scope.showError = true;
-						}
-					});
-				}
+					$scope.selectedCatalogId = selectedCatalog.serviceCatalogId;
+					
+				}	
 			}
-			
+
 			$scope.listParticipants = function(auction){
 				$scope.selectedAuction = auction;
 				$scope.auctionServices = auction.auctionServices;
+				$scope.listForm = true;
 			}
 			
 			$scope.displayForm = function(){
@@ -89,7 +105,6 @@ angular
 						toastr.success('Se ha incorporado a la subasta!')
 					})
 					$scope.listForm = true;
-					('#modalAuctionParticipants').toggle();
 				}
 			}
 			
@@ -112,4 +127,6 @@ angular
 				}
 				
 			}
+
+
 }]);

@@ -54,4 +54,6 @@ public class AuctionServiceController {
 		
 		return response;
 	}
+	
+	
 }
