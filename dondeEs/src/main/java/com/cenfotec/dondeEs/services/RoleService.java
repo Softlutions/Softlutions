@@ -19,7 +19,7 @@ public class RoleService implements RoleServiceInterface {
 	@Override
 	public List<RolePOJO> getAll() {
 		List<RolePOJO> listRolePOJOS = new ArrayList<>();
-		roleRepository.findAll().stream().forEach(r -> {
+		roleRepository.findByNameNotLike("Administrador").stream().forEach(r -> {
 			RolePOJO rolePOJO = new RolePOJO();
 			rolePOJO.setUsers(null);
 			rolePOJO.setPermissions(null);
@@ -39,6 +39,6 @@ public class RoleService implements RoleServiceInterface {
 
 	@Override
 	public void deleteRole(Role role) {
-		roleRepository.delete(role);
+		roleRepository.delete(role);	
 	}
 }

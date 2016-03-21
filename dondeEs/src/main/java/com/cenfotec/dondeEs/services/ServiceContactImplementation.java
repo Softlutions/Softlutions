@@ -56,6 +56,7 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 	}
 
 	@Override
+	@Transactional
 	public Boolean cancelServiceContact(int contractID, ServiceContact service) {
 		ServiceContact serviceContact = null;
 		

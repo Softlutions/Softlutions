@@ -68,13 +68,17 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', function($scope,$http,$upload,MarkerCreatorService) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', function($scope,$http,$upload,MarkerCreatorService,$filter) { 
 	$scope.listOfEmails = [];
 	
 	// Create auction
 	$scope.catalogs = [];
 	$scope.catalogServiceSelected = {};
 	// --------------
+	
+	// edit event
+	$scope.eventInEdition = null;
+	//-----------
 	
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
@@ -134,19 +138,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					if (response.auctionList != null && response.auctionList != {}) {
 						$scope.auctionsEvent = response.auctionList;
 					} else {
-				    	toastr.options = {
-				    			closeButton: true,
-			                    progressBar: true,
-			                    showMethod: 'slideDown'
-				        };
 				    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 					}
 				} else {
-			    	toastr.options = {
-			    			closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-			        };
 			    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 				}
 			});
@@ -192,19 +186,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									if (response.auctionList != null && response.auctionList != {}) {
 										$scope.auctionsEvent = response.auctionList;
 									} else {
-								    	toastr.options = {
-								    			closeButton: true,
-							                    progressBar: true,
-							                    showMethod: 'slideDown'
-								        };
 								    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 									}
 								} else {
-							    	toastr.options = {
-							    			closeButton: true,
-						                    progressBar: true,
-						                    showMethod: 'slideDown'
-							        };
 							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 								}
 							});
@@ -223,6 +207,25 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			}
 		});
 		
+	}
+	
+	$scope.prepublishEventById = function(eventId){
+		$http.get("rest/protected/chat/saveChatEventId/" + eventId).success(function(response){
+			if (response.code == 200) {
+				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+					if (response.code == 200) {
+						$scope.events = response.eventList;
+						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+					} else {
+						toastr.warning('Prepublicación del evento');
+					}
+					
+				});
+			} else {
+				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+			} 
+		});
+
 	}
 	
 	$scope.listContracts = function(eventId){
@@ -253,13 +256,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			$scope.listOfEmails.push(pemail.to);
 			pemail.to = "";
 			}else{	
-			 	  setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
+			 	  setTimeout(function() {	
 		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
 
 		            }, 1300);
@@ -338,13 +335,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					 toastr.error('Verifique la direccion de correo electronico y su coneccion a internet', 'Error');
 				})
 			}else{	
-				 	  setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
+				 	  setTimeout(function() {	
 		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
 
 		            }, 1300);
@@ -359,31 +350,31 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 					if (response.code == 200) {
 						$scope.events = response.eventList;
-					    	toastr.options = {
-			                    closeButton: true,
-			                    progressBar: true,
-			                    showMethod: 'slideDown'
-				            };
-							toastr.success('Publicación del evento', 'El evento se publicó con éxito.');
+						toastr.success('Publicación del evento', 'El evento se publicó con éxito.');
 					} else {
-				    	toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-			            };
 						toastr.warning('Publicación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se publicó.');
 					}
 					
 				});
 			} else {
-		    	toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown'
-	            };
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
 		})	
+	}
+	
+	$scope.cancel = function(serviceContact){
+		$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
+			if(response.code == 200){
+				serviceContact.state = 2;
+
+				$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
+				$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
+				$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
+				$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
+				
+				$scope.refreshChart();
+			}
+		});
 	}
 	
 	$scope.cancelEvent = function(eventId){  
@@ -393,26 +384,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			 		if (response.code == 200) {
 							$scope.events = response.eventList;
-					    	toastr.options = {
-				                    closeButton: true,
-				                    progressBar: true,
-				                    showMethod: 'slideDown'
-					            };
 								toastr.success('Cancelación del evento', 'El evento se canceló con éxito.');
 			 		} else {
-				    	toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-				        };
 						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se canceló.')
 					}
 		 		});
 			} else if (response.errorMessage == "notification cancel event error") {
 		    	toastr.options = {
-		    			closeButton: true,
-	                    progressBar: true,
-	                    showMethod: 'slideDown',
 	                    timeOut: 7000
 		        };
 		    	toastr.warning('Cancelación del evento', 'Ocurrió un error al notificar a los involucrados sin embargo el evento se canceló con éxito.');
@@ -420,21 +398,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			 		if (response.code == 200) {
 			 			$scope.events = response.eventList;
 			 		} else {
-				    	toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown'
-				        };
 						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla.')
 					}
 		 		});
 			} else {
-		    	toastr.options = {
-		    			closeButton: true,
-	                    progressBar: true,
-	                    showMethod: 'slideDown',
-	                    timeOut: 4000
-		        };
 		    	toastr.error('Cancelación del evento', 'Ocurrió un error al cancelar el evento.');
 			} 
 		 })
@@ -445,7 +412,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	});
 	
 	$scope.onFileSelect = function($files) {
-		$scope.file = $files[0];
+	    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+	    if (regex.test($files[0].name.toLowerCase())) {
+	    	$scope.file = $files[0];
+	    } else {
+	    	$('#uploadImageEvent').val("");
+	    	toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
+	     }
+	
 	};
 	
 	$scope.createEvent = function() {
@@ -476,11 +450,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 										if (response.code == 200) {
 											if (response.eventList.length > 0) {
 												$scope.events = response.eventList;
-										    	toastr.options = {
-									                    closeButton: true,
-									                    progressBar: true,
-									                    showMethod: 'slideDown'
-										        };
 										    	
 										    	
 										    	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
@@ -488,73 +457,130 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									if (response.auctionList != null && response.auctionList != {}) {
 										$scope.auctionsEvent = response.auctionList;
 									} else {
-								    	toastr.options = {
-								    			closeButton: true,
-							                    progressBar: true,
-							                    showMethod: 'slideDown'
-								        };
 								    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 									}
 								} else {
-							    	toastr.options = {
-							    			closeButton: true,
-						                    progressBar: true,
-						                    showMethod: 'slideDown'
-							        };
 							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 								}
 							});
-										    	
-										    		
-										    	
-										    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
-										    	$scope.catalogsList();
-										    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
-										    	
-										    	/*
-										    	
-										    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
-										    	$scope.catalogsList();
-										    	setTimeout(function(){$('#modalAuctionEventServices').modal('show')}, 900)
-										    	
-										    	*/
-										    	
-										    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
-											} else {
-										    	toastr.options = {
-									                    closeButton: true,
-									                    progressBar: true,
-									                    showMethod: 'slideDown'
-										        };
-										    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
-											}
-										} else {
-									    	toastr.options = {
-								                    closeButton: true,
-								                    progressBar: true,
-								                    showMethod: 'slideDown'
-									        };
-									    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
-										}			
-									});
-									
-								} else {
-							    	toastr.options = {
-							    			closeButton: true,
-						                    progressBar: true,
-						                    showMethod: 'slideDown'
-							        };
-							    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
-								}
-								
-								$scope.eventName = "";
-								$scope.eventDescription = "";
-								$scope.eventLargeDescription = "";
-								$scope.eventPlaceName = "";
-								$scope.file = null;
-						}); 
+										    											    	
+					    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
+					    	$scope.catalogsList();
+					    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
+					    	
+					    	/*
+					    	
+					    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
+					    	$scope.catalogsList();
+					    	setTimeout(function(){$('#modalAuctionEventServices').modal('show')}, 900)
+					    	
+					    	*/
+					    	
+					    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
+						} else {
+					    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
+						}
+					} else {
+				    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
+					}			
+				});
+				
+			} else {
+		    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+			}
+			
+			$scope.eventName = "";
+			$scope.eventDescription = "";
+			$scope.eventLargeDescription = "";
+			$scope.eventPlaceName = "";
+			$scope.file = null;
+			setTimeout(function cleanInputImageEvent(){
+				$('#uploadImageEvent').val("");
+			}, 2000);	
+	}); 
 		}
 	};
+	
+	$scope.resetCreateEvent = function(){
+		$("#modalEventTitle").text("Modificar evento");
+		$("#btnModalEventSubmit").text("Guardar cambios");
+		$scope.eventName = "";
+		$scope.eventDescription = "";
+		$scope.eventLargeDescription = "";
+		$scope.eventPlaceName = "";
+		$scope.address = "";
+		$scope.eventType = 0;
+		$scope.eventDate = null;
+		$scope.file = null;
+		$('#uploadImageEvent').val("");
+		//console.log("reset");
+	}
+	
+	$scope.editEvent = function(event){
+		//console.log(event);
+		$scope.eventInEdition = event;
+		$scope.addCurrentLocation();
+		
+		$scope.eventName = event.name;
+		$scope.eventDescription = event.description;
+		$scope.eventLargeDescription = event.largeDescription;
+		$scope.eventType = event.private_;
+		$scope.eventPlaceName = event.place.name;
+		$scope.map.center.latitude = event.place.latitude;
+		$scope.map.center.longitude = event.place.longitude;
+		$scope.file = event.image;
+		
+		//$("#modalEventDate").dateFormat = "dd/MM/yyyy";
+		
+		//$scope.eventDate = $filter("date")(event.publishDate, "mediumDate");
+		
+		$scope.address = event.place.name;
+		$scope.addAddress();
+		
+		$("#modalEventTitle").text("Modificar evento");
+		$("#btnModalEventSubmit").text("Guardar cambios");
+		$("#modalCreateEvent").modal("toggle");
+	}
+	
+	$scope.saveEventChanges = function(){
+		var event = {
+			'eventId':$scope.eventInEdition.eventId,
+			'name':$scope.eventName,
+			'description':$scope.eventDescription,
+			'largeDescription':$scope.eventLargeDescription,
+			'eventType':$scope.eventType,
+			'publishDate':$scope.eventDate,
+			'placeName':$scope.eventPlaceName,
+			'placeLatitude':$scope.map.center.latitude,
+			'placeLongitude':$scope.map.center.longitude,
+			'owner':$scope.loggedUser.userId
+		};
+		
+		$scope.eventInEdition.name = event.name;
+		$scope.eventInEdition.description = event.description;
+		$scope.eventInEdition.largeDescription = event.largeDescription;
+		$scope.eventInEdition.private_ = event.eventType;
+		$scope.eventInEdition.place.name = event.placeName;
+		$scope.eventInEdition.place.latitude = event.placeLatitude;
+		$scope.eventInEdition.place.longitude = event.placeLongitude;
+		
+		//console.log("data: ", event);
+		
+		$upload.upload({url:'rest/protected/event/editEvent', data:event, file:$scope.file})
+		.progress(function(evt) {})
+		.success(function(response) {
+			//console.log("response: ", response);
+			$scope.eventInEdition = null;
+			$("#modalCreateEvent").modal("toggle");
+			toastr.success('Eventos del usuario', 'El evento se modificó con éxito.');
+		})
+		.error(function(msj) {
+			//console.log("cathedError: ", msj);
+			toastr.error('Eventos del usuario', 'Ocurrió un error al modificar el evento.');
+		});
+	}
+	
+	//--------------------------------------------------------------------------
 	
 	MarkerCreatorService.createByCoords(9.6283789, -85.3756947, function (marker) {
         $scope.autentiaMarker = marker;
@@ -604,7 +630,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		var contractsLeft = 0;
 		var contractsOk = 0;
 		var contractsCanceled = 0;
-		console.log("ok");
+		
 		$('#contracts-state-chart').removeClass('hidden');
 		
 		angular.forEach($scope.serviceContacts, function(value){

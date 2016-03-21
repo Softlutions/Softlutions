@@ -43,11 +43,6 @@ public class AuctionService implements AuctionServiceInterface{
 	 	return (saveAuction != null);
 	}
 
-	/***
-	 * Obtiene todas las subastas de un evento.
-	 * @author Enmanuel García González
-	 * @version 1.0
-	 */
 	@Override
 	@Transactional
 	public List<AuctionPOJO> getAllAuctionByEvent(int event_id) {
