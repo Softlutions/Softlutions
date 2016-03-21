@@ -57,23 +57,8 @@ angular.module('dondeEs', [
 			}
 	    }
 	});
-}])
-.constant('CONFIG', {
-	TEMPLATE_DIR:"templates/",
-	ROL_CURRENT_USER: 1
-})
- 
-.constant('ROLES', {
-	ADMIN: {
-		ROL:1,
-		PATH:"/admin"
-	},
-	REGISTERED: {
-		ROL:2,
-		PATH:"/user"
-	},
-	GUEST: {
-		ROL:3,
-		PATH:"/guest"
-	}
-})
+}]).run(function($rootScope, $location) {
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    	$rootScope.hola  = "Hola";
+      });
+    });

@@ -30,12 +30,12 @@
 	rel="stylesheet">
 </head>
 <body>
-	<div id="wrapper">
+	<div id="wrapper"  ng-controller="IndexCtrl">
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
-						<div class="dropdown profile-element" ng-controller="IndexCtrl">
+						<div class="dropdown profile-element">
 							<span> <img alt="image" class="img-circle"
 								src="http://lorempixel.com/32/32" />
 							</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -52,38 +52,32 @@
 						</div>
 						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
 					</li>
-					<li><a href="#"><i class="fa fa-th-large"></i> <span
+					<li ng-if="permissions.gestionarEventosPropios"><a href="#"><i class="fa fa-th-large"></i> <span
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/index">Mis eventos</a></li>
+							<li><a href="app#/index">Mis eventos </a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-user"></i> <span
-							class="nav-label">Usuarios</span><span class="fa arrow"></span></a>
+					<li ng-if="permissions.gestionarUsuarios"><a href="#"><i class="fa fa-user"></i> <span
+							class="nav-label">Usuarios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="/dondeEs/app#/users">Lista de usuarios</a></li>
+							<li><a href="/dondeEs/app#/users">Lista de usuarios </a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-envelope"></i> <span
-							class="nav-label">Notificaciones </span></a>
+					<li ng-if="permissions.gestionarServicios"><a href="#"><i class="fa fa-shopping-cart"></i> <span
+							class="nav-label">Servicios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="#">Inbox</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
-							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/serviceByUser">Mis servicios</a></li>
+							<li><a href="app#/serviceByUser">Mis servicios </a></li>
 						</ul></li>
 					<li><a href="#"><i class="fa fa-comments-o"></i> <span
-							class="nav-label">Chats </span></a>
+							class="nav-label">Chats </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/chat">Chat</a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-money"></i> <span
-							class="nav-label">Subastas</span><span class="fa arrow"></span></a>
+					<li ng-if="permissions.gestionarSubastas"><a href="#"><i class="fa fa-money"></i> <span
+							class="nav-label">Subastas </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
 						</ul></li>
 				</ul>
-
 			</div>
 		</nav>
 		<div id="page-wrapper" class="gray-bg">

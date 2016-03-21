@@ -108,6 +108,7 @@ public class UserService implements UserServiceInterface {
 	 * @version 1.0
 	 */
 	public Boolean createUser(UserRequest ur) {
+		ur.getUser().setPassword(AES.base64encode(ur.getUser().getPassword()));
 		if (userRepository.findByEmail(ur.getUser().getEmail()) == null) return saveUser(ur) > 0;
 		return false;
 	}

@@ -70,11 +70,9 @@ app.factory('MarkerCreatorService', function () {
 
 app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', function($scope,$http,$upload,MarkerCreatorService) { 
 	$scope.listOfEmails = [];
-	
 	// Create auction
 	$scope.catalogs = [];
 	$scope.catalogServiceSelected = {};
-	// --------------
 	
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
