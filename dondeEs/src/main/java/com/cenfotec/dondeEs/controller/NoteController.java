@@ -37,13 +37,14 @@ public class NoteController {
 	}
 	
 	/**
+	 * Actualiza la información de un determinado evento.
 	 * @author Enmanuel García González 
 	 * @param note
 	 * @return 
 	 * @version 1.0
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/createNote", method= RequestMethod.PUT )
+	@RequestMapping(value = "/updateNote", method= RequestMethod.PUT )
 	public NoteResponse updateNote(@RequestBody Note note){
 		NoteResponse response = new NoteResponse();
 		
@@ -62,7 +63,9 @@ public class NoteController {
 			
 		} finally { return response; }
 	}
+	
 	/**
+	 * Obtiene todas las notas de recordatorio de un determinado evento.
 	 * @author Enmanuel García González 
 	 * @param id
 	 * @return
@@ -74,7 +77,7 @@ public class NoteController {
 		
 		try {
 			response.setCode(200);
-			response.setCodeMessage("Notes by event");
+			response.setCodeMessage("Fetch all notes by event");
 			response.setNotes(noteServiceInterface.getAllNoteByEvent(id));
 			
 		} catch (Exception e) {
