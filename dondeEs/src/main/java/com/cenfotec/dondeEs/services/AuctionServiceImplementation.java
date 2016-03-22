@@ -50,8 +50,8 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 		userPOJO.setEmail(auctionService.getService().getUser().getEmail());
 		servicePOJO.setUser(userPOJO);
 		
-		boolean isValid = auctionService.getAcept() == 1 &&
-				auctionService.getAuction().getState() == 1 && 
+		boolean isValid = (auctionService.getAuction().getState() == 1 || 
+				auctionService.getAuction().getState() == 2) && 
 				auctionService.getService().getState() == 1;
 		
 		if(isValid){

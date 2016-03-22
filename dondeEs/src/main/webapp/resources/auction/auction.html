@@ -92,7 +92,6 @@
 								<th>Nombre</th>
 								<th>Descripción</th>
 								<th>Precio</th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody ng-repeat="service in auctionServices">
@@ -100,10 +99,6 @@
 								<td>{{ service.service.name }}</td>
 								<td>{{ service.description }}</td>
 								<td>{{ service.price | currency:"₡":0}}</td>
-								<td class="text text-info">
-									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
-										class="btn btn-primary btn-xs">Contratar</button>
-								</td>
 							</tr>
 						</tbody>
 					</table>

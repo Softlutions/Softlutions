@@ -45,7 +45,22 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 			$("#finishAuctionId-"+id).addClass("btn-warning");
 			$("#finishAuctionId-"+id).prop("disabled", true);
 		});
+	}
+	
+	$scope.contract = function(auctionService){
+		$http.get("rest/protected/auctionService/contract/"+auctionService.auctionServicesId).success(function(response){
+			if(response.code == 200){
+				var index = $scope.auctionsEvent.indexOf(auctionService.auction);
+				$scope.auctionsEvent.splice(index, 1);
+				toastr.success("Servicio "+auctionService.service.name+" contratado!");
+			}else if(response.code == 400){
+				toastr.warning("El servicio ya fue contratado");
+			}
+		}).error(function(response){
+			toastr.error("Error", "No se pudo contratar el servicio");
+		});
 		
+		$("#modal-form").modal("toggle");
 	}
 	
 }]);
