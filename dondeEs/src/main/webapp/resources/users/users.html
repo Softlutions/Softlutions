@@ -7,7 +7,7 @@
 				data-toggle="modal" data-target="#modal-form">Registrar usuario</a>
 		</div>
 		<div class="ibox-content">
-			<table class="table table-hover">
+			<table class="table table-hover table-responsive">
 				<thead>
 					<tr>
 						<th>#</th>
@@ -19,15 +19,15 @@
 						<th>Estado</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody ng-init="check = false">
 					<tr ng-repeat="user in users">
 						<td>{{$index+1}}</td>
-						<td>{{user.name+' '+user.lastName1+' '+user.lastName2}}</td>
+						<td>{{user.name}} {{user.lastName1}} {{user.lastName2}}</td>
 						<td>{{user.email}}</td>
 						<td>{{user.phone}}</td>
 						<td>{{user.role.name}}</td>
 						<td>{{user.userType.name}}</td>
-						<td>{{user.state = 1? 'Activo':'Inactivo'}}</td>
+						<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
 					</tr>
 				</tbody>
 			</table>

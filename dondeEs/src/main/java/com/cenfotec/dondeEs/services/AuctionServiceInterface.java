@@ -23,7 +23,7 @@ public interface AuctionServiceInterface {
 	 * @version 1.0
 	 */
 	List<AuctionPOJO> getAllAuctions();
-	List<AuctionPOJO> getAllByAuctionsByServiceCatalog(int serviceCatalog_id);
+
 	Auction findById (int auctionId);
 	
 	/**
@@ -41,4 +41,5 @@ public interface AuctionServiceInterface {
 	 * @version 1.0
 	 */
 	boolean auctionInvitationAnswer(AuctionRequest request);
+
 }

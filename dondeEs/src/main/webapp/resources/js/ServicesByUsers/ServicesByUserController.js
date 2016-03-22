@@ -21,11 +21,23 @@ angular
 						
 								
 								$scope.requestObject = {"pageNumber": 0,"pageSize": 0,"direction": "","sortBy": [""],"searchColumn": "string","searchTerm": "","user": {}};
-								$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
-									$scope.services = response.listService;
-									console.log(response.listService);
-								});
+
+								if(!$scope.$parent.permissions.isAdmin){
+									$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
+										$scope.services = response.listService;
+									});
+								}else{
+									$http.get('rest/protected/service/getAllService').success(function(response) {
+										$scope.services = response.serviceLists;
+									});
+								}
 							
+								 $scope.list = $scope.$parent.personList;
+								 
+								  $scope.config = {
+								    itemsPerPage: 5,
+								    fillLastPage: true
+								    }
 								
 								
 								  $scope.init = function() {
@@ -48,12 +60,8 @@ angular
 								    $scope.saveService = function(event){
 								    	console.log($scope.requestObject);
 									$scope.onError = false;
-								    if(document.getElementById('inlineCheckbox1').checked){
 								    	$scope.objService.state = 1
-								    }
-								    else{
-								    	$scope.objService.state = 0
-								    }
+								 
 								    
 									dataCreate={
 											serviceCatalog :$scope.requestObject,

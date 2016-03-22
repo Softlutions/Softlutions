@@ -24,21 +24,20 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
-<link href="resources/css/plugins/steps/jquery.steps.css"
-	rel="stylesheet">
-<link href="resources/bower_components/toastr/toastr.css"
-	rel="stylesheet">
+<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
+<link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 </head>
 <body>
-	<div id="wrapper">
+	<div id="wrapper" ng-controller="IndexCtrl">
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
-						<div class="dropdown profile-element" ng-controller="IndexCtrl">
+						<div class="dropdown profile-element">
 							<span> <img alt="image" class="img-circle"
 								src="http://lorempixel.com/32/32" />
-							</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+							</span> <a data-toggle="dropdown" class="dropdown-toggle">
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
 											{{loggedUser.lastName}}</strong>
@@ -52,39 +51,32 @@
 						</div>
 						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
 					</li>
-					<li><a href="#"><i class="fa fa-th-large"></i> <span
+					<li ng-show="permissions.gestionarEventosPropios"><a href="#"><i class="fa fa-th-large"></i> <span
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/index">Mis eventos</a></li>
-							<li><a href="app#/eventsPublish">Eventos publicados</a></li>
+							<li><a href="app#/index">{{permissions.isAdmin?  'Eventos publicados':'Mis eventos'}} </a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-user"></i> <span
-							class="nav-label">Usuarios</span><span class="fa arrow"></span></a>
+					<li ng-show="permissions.gestionarUsuarios"><a href="#"><i class="fa fa-user"></i> <span
+							class="nav-label">Usuarios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="/dondeEs/app#/users">Lista de usuarios</a></li>
+							<li><a href="/dondeEs/app#/users">Lista de usuarios </a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-envelope"></i> <span
-							class="nav-label">Notificaciones </span></a>
+					<li ng-show="permissions.gestionarServicios"><a href="#"><i class="fa fa-shopping-cart"></i> <span
+							class="nav-label">Servicios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="#">Inbox</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
-							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/serviceByUser">Mis servicios</a></li>
+							<li><a href="app#/serviceByUser">{{permissions.isAdmin?  'Servicios':'Mis servicios'}} </a></li>
 						</ul></li>
 					<li><a href="#"><i class="fa fa-comments-o"></i> <span
-							class="nav-label">Chats </span></a>
+							class="nav-label">Chats </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/chat">Chat</a></li>
 						</ul></li>
-					<li><a href="#"><i class="fa fa-money"></i> <span
-							class="nav-label">Subastas</span><span class="fa arrow"></span></a>
+					<li ng-show="permissions.gestionarSubastas"><a href="#"><i class="fa fa-money"></i> <span
+							class="nav-label">Subastas </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
 						</ul></li>
 				</ul>
-
 			</div>
 		</nav>
 		<div id="page-wrapper" class="gray-bg">
@@ -92,8 +84,7 @@
 				<nav class="navbar navbar-static-top white-bg" role="navigation"
 					style="margin-bottom: 0">
 					<div class="navbar-header">
-						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
-							href="#"><i class="fa fa-bars"></i> </a>
+						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 
 				</nav>
@@ -137,6 +128,9 @@
 		src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
+	<script src="resources/bower_components/moment/min/moment.min.js"></script>
+	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
+	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 

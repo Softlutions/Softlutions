@@ -18,4 +18,11 @@ public interface EventServiceInterface {
 	int saveEvent(Event e);
 	EventPOJO eventById(int idEvent);
 	List<EventPOJO> getAllEventPublish();
+	
+	/**
+	 * @auctor Ernesto Mendez A.
+	 * @param e Eventoa modificar
+	 * @return retorna true si la operacion fue exitosa, false si no
+	 */
+	boolean editEvent(Event e);
 }

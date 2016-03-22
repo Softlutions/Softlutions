@@ -26,48 +26,18 @@
 <link href="resources/css/custom-style.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 </head>
-<body>
+<body class="gray-bg">
 	<div id="wrapper">
-		<nav class="navbar-default navbar-static-side" role="navigation">
-			<div class="sidebar-collapse">
-				<ul class="nav metismenu" id="side-menu">
-					<li class="nav-header">
-						<div class="dropdown profile-element">
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
-								class="clear"> <span class="block m-t-xs"> <strong
-										class="font-bold">{{loggedUser.name+'
-											'+loggedUser.lastName1}}</strong>
-								</span> <span class="text-muted text-xs block"><b class="caret"></b></span>
-							</span>
-							</a>
-							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="#">Cerrar sesión</a></li>
-							</ul>
-						</div>
-						<div class="logo-element">IN+</div>
-					</li>
-					<li class="active"><a href="index.html"><i
-							class="fa fa-th-large"></i> <span class="nav-label">Página
-								principal</span></a></li>
-				</ul>
+		<div class="row border-bottom">
+			<nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0"></nav>
+		</div>
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<div class="row">
+				<div ng-view></div>
 			</div>
-		</nav>
-		<div id="page-wrapper" class="gray-bg">
-			<div class="row border-bottom">
-				<nav class="navbar navbar-static-top white-bg" role="navigation"
-					style="margin-bottom: 0"></nav>
-			</div>
-			<div class="wrapper wrapper-content animated fadeInRight">
-				<div class="row">
-					<div ng-view></div>
-				</div>
-			</div>
-			<div class="footer">
-				<div class="pull-right"></div>
-				<div>
-					<strong>Copyright</strong> Softlutions &copy; 2016
-				</div>
-			</div>
+		</div>
+		<div class="footer">
+			<strong>Copyright</strong> Softlutions &copy; 2016
 		</div>
 	</div>
 	<!-- Mainly scripts -->

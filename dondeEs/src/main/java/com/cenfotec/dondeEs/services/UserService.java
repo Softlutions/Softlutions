@@ -77,11 +77,7 @@ public class UserService implements UserServiceInterface {
 		listService.stream().forEach(ta -> {
 			ServicePOJO servicePOJO = new ServicePOJO();
 			BeanUtils.copyProperties(ta, servicePOJO);
-			// if(ta.getUser()!=null){
-			// UserPOJO userPOJO = new UserPOJO();
-			// BeanUtils.copyProperties(ta.getUser(), userPOJO);
-			// servicePOJO.setUser(userPOJO);
-			// }
+
 			if (ta.getServiceCatalog() != null) {
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
@@ -98,14 +94,13 @@ public class UserService implements UserServiceInterface {
 		return listPojo;
 	}
 
-	public Boolean saveUser(UserRequest ur) {
+	public int saveUser(UserRequest ur) {
 		User user = new User();
 		BeanUtils.copyProperties(ur.getUser(), user);
 		user.setRole(roleRepository.findOne(ur.getUser().getRole().getRoleId()));
 		User nuser = userRepository.save(user);
-		return (nuser == null) ? false : true;
+		return nuser.getUserId();
 	}
-	
 	
 	/**
 	 * @author Alejandro Bermúdez Vargas
@@ -113,18 +108,16 @@ public class UserService implements UserServiceInterface {
 	 * @version 1.0
 	 */
 	public Boolean createUser(UserRequest ur) {
-		if (userRepository.findByEmail(ur.getUser().getEmail()) == null) return saveUser(ur);
+		ur.getUser().setPassword(AES.base64encode(ur.getUser().getPassword()));
+		if (userRepository.findByEmail(ur.getUser().getEmail()) == null) return saveUser(ur) > 0;
 		return false;
 	}
 
 	/**
 	 * @author Alejandro Bermúdez Vargas
-	 * @exception AddressException
-	 *                no se encuentra la direccion de correo
-	 * @exception MessagingException
-	 *                No encuentra el server.
-	 * @param LoginRequest,
-	 *            tiene un atributo email del usuario
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
 	 * @version 1.0
 	 */
 	public Boolean updatePassword(LoginRequest ur) {
@@ -171,9 +164,6 @@ public class UserService implements UserServiceInterface {
 	@Transactional
 	public List<UserPOJO> getAllServicesProviderAuction(int idEvent) {
 		List<UserPOJO> usersPOJO = new ArrayList<UserPOJO>();
-
-		System.out.println(auctionRepository); // prueba
-
 		List<Auction> auctions = auctionRepository.findAllByEventEventId(idEvent);
 
 		auctions.stream().forEach(e -> {
@@ -198,5 +188,19 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public User findById(int id) {
 		return userRepository.findByUserId(id);
+	}
+	
+	@Override
+	@Transactional
+	public Boolean changeUserState(int userId, boolean state){
+		boolean changed = false;
+		User user = userRepository.findOne(userId);
+		
+		if(user != null){
+			user.setState((byte) (state? 1:0));
+			changed = true;
+		}
+		
+		return changed;
 	}
 }
