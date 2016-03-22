@@ -1,11 +1,10 @@
-<div class="container">
-	<div class="col-lg-11">
+<div class="container" ng-if="eventForm == false">
+	<div class="col-xs-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
 				<button ng-if="!$parent.permissions.isAdmin" class="btn btn-primary btn-xs pull-right"
-					data-toggle="modal" data-target="#modalCreateEvent">Crear
-					evento</button>
+					ng-click="showEventForm()">Crear evento</button>
 				<button ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
 					class="btn btn-success btn-xs pull-right"
 					data-target="#modalCreateEvent">Asistente de creación</button>
@@ -449,104 +448,93 @@
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
 
-		<!-- events modal -->
-		<div id="modalCreateEvent" class="modal fade" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title" id="modalEventTitle">Crear evento</h4>
-					</div>
-					
-					<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid ? (eventInEdition == null ? createEvent() : saveEventChanges()) : null">
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-sm-12">
-									<div class="form-group">
-										<label class="col-lg-2 control-label">Nombre</label>
-										<div class="col-lg-10">
-											<input ng-model="eventName" type="text" class="form-control" ng-maxlength="255" required>
-										</div>
-									</div>
-									
-									<div class=form-group>
-										<label class="col-lg-2 control-label">Fecha:</label>
-										<div class="col-lg-10">
-											<input id="modalEventDate" type="date" min="2000-01-01" max="2100-12-31" class="form-control" ng-model="eventDate" required/>
-										</div>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-lg-2 control-label">Descripción</label>
-										<div class="col-lg-10">
-											<input ng-model="eventDescription" type="text" class="form-control" ng-maxlength="255" required>
-										</div>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-lg-2 control-label">Descripción larga</label>
-										<div class="col-lg-10">
-											<textarea ng-model="eventLargeDescription" class="form-control" rows="5" ng-maxlength="255"></textarea>
-										</div>
-									</div>
-
-									<div class="form-group">
-										<label class="col-lg-2 control-label">Tipo de evento</label>
-										<div class="col-lg-10">
-											<div class="radio-inline">
-												<label> <input type="radio" ng-model="eventType" ng-value="0" checked> Público </label>
-											</div>
-											<div class="radio-inline">
-												<label> <input type="radio" ng-model="eventType" ng-value="1"> Privado </label>
-											</div>
-										</div>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-lg-2 control-label">Nombre del lugar</label>
-										<div class="col-lg-10">
-											<input ng-model="eventPlaceName" type="text" class="form-control" ng-maxlength="255" required>
-										</div>
-									</div>
-									
-									<div class="form-group">
-										<div class="col-lg-12">
-											<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" control="map.control">
-											<markers models="map.markers" coords="'self'" options="'options'" isLabel='true'> </markers> </google-map>
-											<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir a mi localización</a>
-										</div>
-									</div>
-									
-									<div class="form-group">
-										<div class="col-lg-12">
-											<label class="control-label">Buscar lugar</label> 
-											<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="address" /> 
-												<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta dirección</a> 
-												<label class="has-error" ng-show="resultSearch">La dirección no pudo ser encontrada.</label>
-											</div>
-									</div>
-									
-									<div class="form-group">
-										<div class="col-lg-12">
-											<label class='control-label'>Imagen</label> 
-											<img ng-src="{{file}}" class="img-responsive img-rounded center-block" width="150px" height="100px"/>
-											<input id="uploadImageEvent" class="btn btn-primary inputUploadImage" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="10MB" ng-file-select="onFileSelect($files)" required>
-											<p>Formatos válidos: .jpg .png .gif</p>
-										</div>
-									</div>
-									
-									<div class="modal-footer">
-										<button id="btnModalEventSubmit" type="submit" class="btn btn-primary pull-right">Crear</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-					
+<div class="container" ng-if="eventForm == true">
+	<div class="col-xs-11">
+		<div class="form-group">
+			<h1 class="modal-title" id="modalEventTitle">Crear evento</h1>
+		</div>
+	
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid ? (eventInEdition == null ? createEvent() : saveEventChanges()) : null">
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Nombre</label>
+				<div class="col-lg-10">
+					<input ng-model="eventName" type="text" class="form-control" ng-maxlength="255" required>
 				</div>
 			</div>
-		</div>
-		<!-- end events modal -->
+			
+			<div class=form-group>
+				<label class="col-lg-2 control-label">Fecha:</label>
+				<div class="col-lg-10">
+					<input id="modalEventDate" type="date" min="2000-01-01" max="2100-12-31" class="form-control" ng-model="eventDate" required/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Descripción</label>
+				<div class="col-lg-10">
+					<input ng-model="eventDescription" type="text" class="form-control" ng-maxlength="255" required>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Descripción larga</label>
+				<div class="col-lg-10">
+					<textarea ng-model="eventLargeDescription" class="form-control" rows="5" ng-maxlength="255"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Tipo de evento</label>
+				<div class="col-lg-10">
+					<div class="radio-inline">
+						<label> <input type="radio" ng-model="eventType" ng-value="0" checked> Público </label>
+					</div>
+					<div class="radio-inline">
+						<label> <input type="radio" ng-model="eventType" ng-value="1"> Privado </label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Nombre del lugar</label>
+				<div class="col-lg-10">
+					<input ng-model="eventPlaceName" type="text" class="form-control" ng-maxlength="255" required>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-lg-12">
+					<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" control="map.control">
+					<markers models="map.markers" coords="'self'" options="'options'" isLabel='true'> </markers> </google-map>
+					<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir a mi localización</a>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-lg-12">
+					<label class="control-label">Buscar lugar</label> 
+					<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="address" /> 
+						<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta dirección</a> 
+						<label class="has-error" ng-show="resultSearch">La dirección no pudo ser encontrada.</label>
+					</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-lg-12">
+					<label class='control-label'>Imagen</label> 
+					<img ng-src="{{file}}" class="img-responsive img-rounded center-block" width="150px" height="100px"/>
+					<input id="uploadImageEvent" class="btn btn-primary inputUploadImage" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="10MB" ng-file-select="onFileSelect($files)" required>
+					<p>Formatos válidos: .jpg .png .gif</p>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<button id="btnModalEventSubmit" type="submit" class="btn btn-primary pull-right">Crear</button>
+				<a class="btn btn-warning pull-right" ng-click="hiddenEventForm()">Cancelar</a>
+			</div>
+		</form>
 	</div>
 </div>

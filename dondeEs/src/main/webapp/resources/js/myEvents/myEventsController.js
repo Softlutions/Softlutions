@@ -69,6 +69,16 @@ app.factory('MarkerCreatorService', function () {
 });
 
 app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', function($scope,$http,$upload,MarkerCreatorService,$filter) { 
+	$scope.eventForm = false;
+	
+	$scope.showEventForm = function () {
+		$scope.eventForm  = true;
+	}
+	
+	$scope.hiddenEventForm = function () {
+		$scope.eventForm  = false;
+	}
+	
 	$scope.listOfEmails = [];
 	// Create auction
 	$scope.catalogs = [];
@@ -483,11 +493,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					    	*/
 					    	
 					    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
+					    	$scope.hiddenEventForm();
 						} else {
 					    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
 						}
 					} else {
 				    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
+				    	$scope.hiddenEventForm();
 					}			
 				});
 				
