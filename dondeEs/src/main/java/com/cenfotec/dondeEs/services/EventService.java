@@ -43,11 +43,6 @@ public class EventService implements EventServiceInterface {
 		return eventsPOJO;
 	}
 	
-	/***
-	 * Obtiene todos los eventos publicados.
-	 * @author Enmanuel García González
-	 * @version 1.0
-	 */
 	@Override
 	public List<EventPOJO> getAllEventPublish() {			
 		List<EventPOJO> eventsPOJO = new ArrayList<>();

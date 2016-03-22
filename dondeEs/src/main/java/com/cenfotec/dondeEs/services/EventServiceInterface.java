@@ -17,6 +17,12 @@ public interface EventServiceInterface {
 	 */
 	int saveEvent(Event e);
 	EventPOJO eventById(int idEvent);
+	
+	/***
+	 * Obtiene todos los eventos publicados.
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	List<EventPOJO> getAllEventPublish();
 	
 	/**
