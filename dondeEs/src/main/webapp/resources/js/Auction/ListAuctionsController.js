@@ -69,12 +69,13 @@ angular
 				}	
 			}
 
-			$scope.listParticipants = function(auction){
-				$scope.selectedAuction = auction;
-				$scope.auctionServices = auction.auctionServices;
-				$scope.listForm = true;
+			$scope.listParticipants = function(auction){				
+				 				$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+auction.auctionId).success(function(response) {
+				 					$scope.auctionServices = response.auctionServiceList;
+				 					$scope.selectedAuction = auction;
+				 					$scope.listForm = true;
+				 				});	
 			}
-			
 			$scope.displayForm = function(){
 				$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 				$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
@@ -90,7 +91,7 @@ angular
 				}else{
 					
 					var newAuctionService = {
-							acept : 0,
+							acept : 1,
 							date : new Date(),
 							description : $scope.auctionService.description,
 							price : $scope.auctionService.price,
