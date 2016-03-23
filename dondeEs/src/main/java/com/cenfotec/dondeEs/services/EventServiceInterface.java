@@ -2,6 +2,10 @@ package com.cenfotec.dondeEs.services;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 
@@ -30,5 +34,5 @@ public interface EventServiceInterface {
 	 * @param e Eventoa modificar
 	 * @return retorna true si la operacion fue exitosa, false si no
 	 */
-	boolean editEvent(Event e);
+	boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext);
 }

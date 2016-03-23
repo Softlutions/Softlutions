@@ -3,10 +3,13 @@ package com.cenfotec.dondeEs.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -15,14 +18,15 @@ import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.EventRepository;
+import com.cenfotec.dondeEs.utils.Utils;
 
 @Service
 public class EventService implements EventServiceInterface {
 	@Autowired
 	private EventRepository eventRepository;
+	@Autowired
+	private PlaceServiceInterface placeServiceInterface;
 
-	
-	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -86,11 +90,33 @@ public class EventService implements EventServiceInterface {
 	
 	@Override
 	@Transactional
-	public boolean editEvent(Event e){
+	public boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext){
 		boolean changed = false;
 		
-		if(eventRepository.save(e) != null)
+		Event event = eventRepository.findOne(e.getEventId());
+		
+		if(event != null){
+			event.setName(e.getName());
+			event.setDescription(e.getDescription());
+			event.setLargeDescription(e.getLargeDescription());
+			event.setPrivate_(e.getPrivate_());
+			
+			if(e.getPublishDate() != null)
+				event.setPublishDate(e.getPublishDate());
+			
+			Place place = placeServiceInterface.findById(event.getPlace().getPlaceId());
+			place.setLatitude(e.getPlace().getLatitude());
+			place.setLongitude(e.getPlace().getLongitude());
+			place.setName(e.getPlace().getName());
+			
+			// VALIDAR QUE LA IMAGEN NO EXISTA YA (en contenido)
+			if(imgFile != null){
+				String resultFileName = Utils.writeToFile(imgFile, servletContext);
+				event.setImage(resultFileName);
+			}
+			
 			changed = true;
+		}
 		
 		return changed;
 	}

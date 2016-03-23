@@ -33,11 +33,11 @@ public class Event implements Serializable {
 	@Column(name="private")
 	private byte private_;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="publish_date")
 	private Date publishDate;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="register_date")
 	private Date registerDate;
 

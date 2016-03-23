@@ -451,38 +451,38 @@
 	</div>
 </div>
 
-<div class="container" ng-if="eventForm == true">
+<div class="container" ng-show="eventForm == true">
 	<div class="col-xs-11">
 		<div class="form-group">
-			<h1 class="modal-title" id="modalEventTitle">Crear evento</h1>
+			<h1 class="modal-title" id="eventFormTitle">Crear evento</h1>
 		</div>
 	
-		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid ? (eventInEdition == null ? createEvent() : saveEventChanges()) : null">
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
 			<div class="form-group">
 				<label class="col-lg-2 control-label">Nombre</label>
 				<div class="col-lg-10">
-					<input ng-model="eventName" type="text" class="form-control" ng-maxlength="255" required>
+					<input ng-model="tempEvent.name" type="text" class="form-control" maxlength="50" ng-maxlength="50" required/>
 				</div>
 			</div>
 			
 			<div class=form-group>
-				<label class="col-lg-2 control-label">Fecha:</label>
+				<label class="col-lg-2 control-label">Fecha del evento</label>
 				<div class="col-lg-10">
-					<input id="modalEventDate" type="date" min="2000-01-01" max="2100-12-31" class="form-control" ng-model="eventDate" required/>
+					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-init="tempEvent.date = Date()" ng-model="tempEvent.date" id='eventDatePicker' required/>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-lg-2 control-label">Descripción</label>
 				<div class="col-lg-10">
-					<input ng-model="eventDescription" type="text" class="form-control" ng-maxlength="255" required>
+					<input ng-model="tempEvent.desc" type="text" class="form-control" maxlength="150" ng-maxlength="150" required/>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-lg-2 control-label">Descripción larga</label>
 				<div class="col-lg-10">
-					<textarea ng-model="eventLargeDescription" class="form-control" rows="5" ng-maxlength="255"></textarea>
+					<textarea ng-model="tempEvent.largeDesc" placeholder="(opcional)" class="form-control" rows="5" maxlength="255" ng-maxlength="255"></textarea>
 				</div>
 			</div>
 
@@ -490,18 +490,18 @@
 				<label class="col-lg-2 control-label">Tipo de evento</label>
 				<div class="col-lg-10">
 					<div class="radio-inline">
-						<label> <input type="radio" ng-model="eventType" ng-value="0" checked> Público </label>
+						<label> <input type="radio" ng-model="tempEvent.type" ng-value="0" checked> Público </label>
 					</div>
 					<div class="radio-inline">
-						<label> <input type="radio" ng-model="eventType" ng-value="1"> Privado </label>
+						<label> <input type="radio" ng-model="tempEvent.type" ng-value="1"> Privado </label>
 					</div>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-lg-2 control-label">Nombre del lugar</label>
+				<label class="col-lg-2 control-label">Lugar del evento</label>
 				<div class="col-lg-10">
-					<input ng-model="eventPlaceName" type="text" class="form-control" ng-maxlength="255" required>
+					<input ng-model="tempEvent.placeName" placeholder="ej: Parque central" type="text" class="form-control" maxlength="60" ng-maxlength="60" required>
 				</div>
 			</div>
 			
@@ -516,7 +516,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<label class="control-label">Buscar lugar</label> 
-					<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="address" /> 
+					<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="tempEvent.address" /> 
 						<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta dirección</a> 
 						<label class="has-error" ng-show="resultSearch">La dirección no pudo ser encontrada.</label>
 					</div>
@@ -524,16 +524,17 @@
 			
 			<div class="form-group">
 				<div class="col-lg-12">
-					<label class='control-label'>Imagen</label> 
-					<img ng-src="{{file}}" class="img-responsive img-rounded center-block" width="150px" height="100px"/>
-					<input id="uploadImageEvent" class="btn btn-primary inputUploadImage" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="10MB" ng-file-select="onFileSelect($files)" required>
-					<p>Formatos válidos: .jpg .png .gif</p>
+					<label class='control-label'>Imagen principal</label> 
+					<img ng-src="{{tempEvent.file}}" class="img-responsive img-rounded center-block" width="175px" height="125px"/>
+					<input id="uploadImageEvent" class="btn btn-primary col-lg-4" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
+					<input ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="btn btn-warning col-lg-4" value="Quitar imagen" type="button"/>
+					<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<button id="btnModalEventSubmit" type="submit" class="btn btn-primary pull-right">Crear</button>
-				<a class="btn btn-warning pull-right" ng-click="hiddenEventForm()">Cancelar</a>
+				<button id="btnEventFormSubmit" type="submit" class="btn btn-primary pull-right">Crear</button>
+				<a class="btn btn-danger pull-right" ng-click="hiddenEventForm()">Cancelar</a>
 			</div>
 		</form>
 	</div>
