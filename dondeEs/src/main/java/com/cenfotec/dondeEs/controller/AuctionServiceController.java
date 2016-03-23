@@ -55,5 +55,10 @@ public class AuctionServiceController {
 		return response;
 	}
 	
-	
+	@RequestMapping(value ="/getAllAuctionServicesByAuctionId/{AuctionId}", method = RequestMethod.GET)
+		public AuctionServiceResponse getAllAuctionServicesByAuctionId(@PathVariable("AuctionId") int AuctionId){				
+	 		AuctionServiceResponse response = new AuctionServiceResponse();
+	 		response.setAuctionServiceList(auctionServiceImpInterface.getAllAuctionServicesByAuctionId(AuctionId));
+	 		return response;
+	 	}	
 }

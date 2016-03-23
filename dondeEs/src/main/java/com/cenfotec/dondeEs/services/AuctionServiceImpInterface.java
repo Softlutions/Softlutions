@@ -1,6 +1,9 @@
 package com.cenfotec.dondeEs.services;
 
+import java.util.List;
+
 import com.cenfotec.dondeEs.ejb.AuctionService;
+import com.cenfotec.dondeEs.pojo.AuctionServicePOJO;
 
 public interface AuctionServiceImpInterface {
 
@@ -12,4 +15,6 @@ public interface AuctionServiceImpInterface {
 	 * @return si se contrato el servicio correctamente
 	 */
 	Boolean contract(int auctionServiceId);
+	
+	List<AuctionServicePOJO> getAllAuctionServicesByAuctionId(int AuctionId);
 }

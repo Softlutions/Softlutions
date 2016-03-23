@@ -92,7 +92,6 @@
 								<th>Nombre</th>
 								<th>Descripción</th>
 								<th>Precio</th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody ng-repeat="service in auctionServices">
@@ -100,10 +99,6 @@
 								<td>{{ service.service.name }}</td>
 								<td>{{ service.description }}</td>
 								<td>{{ service.price | currency:"₡":0}}</td>
-								<td class="text text-info">
-									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
-										class="btn btn-primary btn-xs">Contratar</button>
-								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -141,13 +136,7 @@
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Precio</label>
-							
-							<div class="col-lg-10">
-								<input type="text" class="form-control" data-mask="₡ 999,999,999" placeholder="" ng-model="auctionService.price">
-							</div>
-						</div>
+						
 						
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Precio</label>
@@ -160,7 +149,7 @@
 				</div>
 				<div class="modal-footer">
 					<button  type="button" class="btn btn-primary"
-						ng-click="joinAuction()">$parent.permissions.isPrestatario ? 'Si' : 'No'</button>
+						ng-click="joinAuction()">{{$parent.permissions.isPrestatario ? 'Participar' : 'No'}}</button>
 				</div>
 			</div>
 		</div>
