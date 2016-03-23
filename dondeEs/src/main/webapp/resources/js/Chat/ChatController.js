@@ -20,6 +20,7 @@ angular
 							$scope.currentInterval;
 							$scope.eventNameByChat;
 							$scope.showError = true;
+							$scope.messages= {};
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
 							

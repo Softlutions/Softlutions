@@ -17,6 +17,7 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			password : ""
 		};
 		$scope.confirmPassword;
+		$("#selectTypeUser").hide();
 		$scope.checkLogin = function() {
 			if($scope.user.email != '' && $scope.user.password != ''){
 				$scope.loginRequest.email = $scope.user.email;
@@ -149,4 +150,19 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 					$scope.roles = response.listRole;
 				});
 		//#endregion Users
+		$scope.showSubModal1=function(){
+			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5)
+			setTimeout(function(){$('#createUserForm').modal('show')}, 900)
+		}
+		
+		$scope.showMainModal=function(){
+			setTimeout(function(){$('#createCompanyForm').modal('hide')}, 5)
+			setTimeout(function(){$('#selectTypeUser').modal('show')}, 900)
+		}
+		
+		$scope.showSubModal2=function(){
+			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5)
+			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900)
+		}
+
 	}]);

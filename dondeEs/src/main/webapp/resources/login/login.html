@@ -1,10 +1,12 @@
 <div class="container">
 	<div class="row">
-		<img class="img-responsive img-rounded center-block" src="resources/img/dondeEsLogo.jpg" width="90px" height="85px"/>
-				
+		<img class="img-responsive img-rounded center-block"
+			src="resources/img/dondeEsLogo.jpg" width="90px" height="85px" />
+
 		<div class="col-sm-6 col-md-4 col-md-offset-4">
 			<div id="errorMsj" class="bg-danger">
-				<h3 class="text-danger text-center">Correo o contraseña incorrectos</h3>
+				<h3 class="text-danger text-center">Correo o contraseña
+					incorrectos</h3>
 			</div>
 
 			<h1 class="text-center login-title">Iniciar sesión</h1>
@@ -12,24 +14,23 @@
 				<form class="form-signin" onSummit="return false">
 					<input name="login" autocomplete="on" type="text"
 						class="form-control" placeholder="Correo" autofocus
-						ng-model="user.email">
-					
-					<input name="password"
+						ng-model="user.email"> <input name="password"
 						autocomplete="on" type="password" class="form-control"
 						placeholder="Contraseña" ng-model="user.password">
-					
+
 					<button class="btn btn-lg btn-primary btn-block"
 						ng-click="checkLogin()">Ingresar</button>
-					
+
 					<label class="pull-left"> <input id="chkRememberMe"
 						type="checkbox" value="remember-me"> Recordarme
-					
+
 					</label> <a class="pull-right" data-toggle="modal"
 						data-target="#updatePasswordModal">¿Olvidó su contraseña?</a> <span
 						class="clearfix"></span>
 				</form>
 
-				<a class="pull-right" data-toggle="modal" data-target="#createCompanyForm">Registrarse</a>
+				<a class="pull-right" data-toggle="modal"
+					data-target="#selectTypeUser">Registrarse</a>
 			</div>
 		</div>
 	</div>
@@ -58,6 +59,42 @@
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="selectTypeUser" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Seleccione un tipo de registro</h3>
+							<table class="table table-hover">
+								<thead>
+
+								</thead>
+								<tbody>
+									<tr>
+									<td> 
+											<a data-toggle="modal"
+										ng-click="showSubModal1()"> Usuario</a> 
+									</td>
+									<td> 
+										<a class="pull-right" data-toggle="modal"
+										ng-click="showSubModal2()">Compañía</a> 
+									</td>
+									</tr>
+								</tbody>
+							</table>
+							<div>
+								<button type="button"
+								class="btn btn-sm btn-danger pull-right m-t-n-xs"
+								data-dismiss="modal">Cancelar
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -133,8 +170,9 @@
 							<h3 class="m-t-none m-b">Registrar compañía</h3>
 							<form role="form" ng-submit="saveUser(user)" ng-init="user">
 								<div class="form-group">
-									<label>Nombre de la compañía</label> <input type="text" ng-model="user.name"
-										placeholder="Ingresar nombre" required class="form-control">
+									<label>Nombre de la compañía</label> <input type="text"
+										ng-model="user.name" placeholder="Ingresar nombre" required
+										class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Email</label> <input type="email" ng-model="user.email"
@@ -147,7 +185,7 @@
 								</div>
 								<div class="form-group">
 									<label>Confrimar contraseña</label> <input type="password"
-										 required ng-model="confirmPassword"
+										required ng-model="confirmPassword"
 										placeholder="Confirme su contraseña" class="form-control">
 								</div>
 								<div class="form-group">
