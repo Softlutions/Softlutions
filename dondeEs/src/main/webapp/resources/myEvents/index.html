@@ -1,13 +1,24 @@
-<div class="container" ng-if="eventForm == false">
+<div class="container" ng-show="eventForm == false">
 	<div class="col-xs-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
-				<button ng-if="!$parent.permissions.isAdmin" class="btn btn-primary btn-xs pull-right"
-					ng-click="showEventForm()">Crear evento</button>
-				<button ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
-					class="btn btn-success btn-xs pull-right"
-					data-target="#modalCreateEvent">Asistente de creación</button>
+			
+				<div class="btn-group pull-right">
+					<button data-toggle="dropdown"
+						class="btn btn-primary btn-xs dropdown-toggle">
+						Crear evento <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a ng-if="!$parent.permissions.isAdmin"
+										ng-click="showEventForm()">Sin asistente</a>
+						</li>
+						<li><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
+										ng-click="showEventForm()">Con asistente</a>
+						</li>
+					</ul>
+				</div>
+					
 				<div class="form-group">
 					<input type="text" ng-model="search.name"
 						placeholder="Buscar evento" class="form-control">
@@ -451,11 +462,12 @@
 	</div>
 </div>
 
-<div class="container" ng-if="eventForm == true">
+<div class="container" ng-show="eventForm == true">
 	<div class="col-xs-11">
 		<div class="form-group">
-			<h1 class="modal-title" id="modalEventTitle">Crear evento</h1>
-		</div>
+			<a class="btn btn-primary pull-right" ng-click="hiddenEventForm()">Volver</a>
+			<h1>Crear evento</h1>	
+		</div>		
 	
 		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid ? (eventInEdition == null ? createEvent() : saveEventChanges()) : null">
 			<div class="form-group">
@@ -508,7 +520,8 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" control="map.control">
-					<markers models="map.markers" coords="'self'" options="'options'" isLabel='true'> </markers> </google-map>
+						<markers models="map.markers" coords="'self'" options="'options'" isLabel='true'> </markers> 
+					</google-map>
 					<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir a mi localización</a>
 				</div>
 			</div>
@@ -516,9 +529,8 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<label class="control-label">Buscar lugar</label> 
-					<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="address" /> 
+					<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="address"> 
 						<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta dirección</a> 
-						<label class="has-error" ng-show="resultSearch">La dirección no pudo ser encontrada.</label>
 					</div>
 			</div>
 			
@@ -533,7 +545,7 @@
 			
 			<div class="form-group">
 				<button id="btnModalEventSubmit" type="submit" class="btn btn-primary pull-right">Crear</button>
-				<a class="btn btn-warning pull-right" ng-click="hiddenEventForm()">Cancelar</a>
+				<a class="btn btn-danger pull-right" ng-click="hiddenEventForm()">Cancelar</a>
 			</div>
 		</form>
 	</div>
