@@ -13,6 +13,17 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
                                   			function($scope,$http,$location,$routeParams, $window) {	
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
+	
+	$scope.serviceList = false;
+	$scope.address = '';
+	
+	$scope.showServiceList = function () {
+		$scope.serviceList  = true;
+	}
+	
+	$scope.hideServiceList = function () {
+		$scope.serviceList  = false;
+	}
 		
 	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$routeParams.id).success(function(response) {
 		if (response.code == 200) {
