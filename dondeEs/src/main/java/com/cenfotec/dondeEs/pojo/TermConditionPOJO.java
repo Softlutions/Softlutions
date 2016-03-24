@@ -1,19 +1,7 @@
 package com.cenfotec.dondeEs.pojo;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.cenfotec.dondeEs.ejb.User;
 
 public class TermConditionPOJO { 
 	private int termConditionsId;
