@@ -1,5 +1,6 @@
 package com.cenfotec.dondeEs.services;
 
+
 import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.Event;
@@ -18,6 +19,14 @@ public interface EventServiceInterface {
 	int saveEvent(Event e);
 	EventPOJO eventById(int idEvent);
 	List<EventPOJO> getAllEventPublish();
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param nameUser criterio de busqueda
+	 * @param name criterio de busqueda
+	 * @param namePlace criterio de busqueda
+	 * @return lista segun el o los criterios
+	 */
+	List<EventPOJO> getAllByParam(String nameUser, String name, String namePlace, byte state);
 	
 	/**
 	 * @auctor Ernesto Mendez A.

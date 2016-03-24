@@ -9,7 +9,7 @@
 					data-target="#modal-form">Registrar servicio</a>
 			</div>
 			<div class="ibox-content ">
-				<table class="table table-hover">
+				<table class="table table-hover" ng-table="servicesTable">
 					<thead>
 						<tr>
 							<th>Nombre</th>
@@ -18,10 +18,9 @@
 							<th>Estado</th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="service in services">
+					<tbody ng-repeat="service in $data">
 						<tr>
-							<td class="hidden">{{service.serviceId}}</td>
-							<td>{{service.name}}</td>
+							<td sortable="'name'">{{service.name}}</td>
 							<td>{{service.description}}</td>
 							<td>{{service.serviceCatalog.name}}</td>
 							<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>

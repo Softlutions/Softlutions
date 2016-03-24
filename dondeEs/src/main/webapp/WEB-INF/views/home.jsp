@@ -139,7 +139,7 @@
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
-
+	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
 	<!-- Morris -->
 	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="resources/js/plugins/morris/morris.js"></script>
