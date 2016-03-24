@@ -65,9 +65,7 @@
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
 										<li class="divider"></li>
-										<li ng-show="event.state===0" ng-if="!$parent.permissions.isAdmin"><a type="button"
-											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
-											<li><a type="button" ng-click="editEvent(event)">Modificar</a></li>
+										<li><a type="button" ng-show="event.state!==0" ng-click="editEvent(event)">Modificar</a></li>
 										<li ng-show="event.state===1"><a type="button"
 											ng-click="prepublishEventById(event.eventId)" class="text-danger">Prepublicar</a></li>
 										<li ng-show="event.state===2"><a type="button"

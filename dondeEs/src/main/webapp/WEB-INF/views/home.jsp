@@ -46,7 +46,7 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li ng-click="logout()"><a>Logout</a></li>
+								<li ng-click="logout()"><a>Cerrar sesión</a></li>
 							</ul>
 						</div>
 						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
