@@ -3,6 +3,7 @@ package com.cenfotec.dondeEs.services;
 import java.util.List;
 
 import com.cenfotec.dondeEs.ejb.Note;
+import com.cenfotec.dondeEs.pojo.NotePOJO;
 
 public interface NoteServiceInterface {
 
@@ -12,7 +13,7 @@ public interface NoteServiceInterface {
 	 * @param id
 	 * @return
 	 */
-	List<Note> getAllNoteByEvent(int id);
+	List<NotePOJO> getAllNoteByEvent(int id);
 
 	Boolean saveNote(Note note);
 }

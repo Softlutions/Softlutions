@@ -1,100 +1,56 @@
-<div class="container">
-	<div class="row">
-		<section class="content">
-			<h1>Table Filter</h1>
-			<div class="col-md-8 col-md-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body">
-					
-						<div class="pull-right">
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary btn-filter" ng-click="showEventReminderBy('Concluido')">Pagado</button>
-								<button type="button" class="btn btn-warning btn-filter" ng-click="showEventReminderBy('Pendiente')">Pendiente</button>
-								<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin Comenzar</button>
-								<button type="button" class="btn btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="pull-left">
+			<a class="btn btn-primary pull-right" href="app#/index">Volver</a>
+		</div>
+	</div>
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="pull-left">
+					<h1>Notas del evento</h1>
+				</div>
+				<div class="pull-right">
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary btn-filter" ng-click="showEventReminderBy('Concluido')">Concluido</button>
+						<button type="button" class="btn btn-warning btn-filter" ng-click="showEventReminderBy('Pendiente')">Pendiente</button>
+						<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin Comenzar</button>
+						<button type="button" class="btn btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="chat-message-form">
+							<div class="input-group">
+								<input type="text" ng-model="objNote.content"
+										placeholder="Contenido de la nota"  class="form-control"><span class="input-group-btn" required>
+									<button type="button" class="btn btn-primary" ng-click="createNote(event)">+</button>
+								</span>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="chat-message-form">
-									<div class="input-group">
-										<input type="text" ng-model="objNote.content"
-												placeholder="Ingresar nombre"  class="form-control"><span class="input-group-btn" required>
-											<button type="button" class="btn btn-primary" ng-click="createNote(event)">+</button>
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-12">
 						<div class="table-container">
-							<table class="table table-filter">
-								<tbody>
-									<tr data-status="Concluido">
+						<div ng-hide="notesList.length">
+							<p>No hay notas para este evento</p>
+						</div>
+							<table class="table table-filter" ng-show="notesList.length">
+								<tbody ng-repeat="note in notesList">
+									<tr data-status="{{note.state}}">
 										<td>
 											<div class="media">
 												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right Concluido">(Concluido)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="Pendiente">
-										<td>
-											<div class="media">
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right Pendiente">(Pendiente)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="SinComenzar">
-										<td>
-											<div class="media">
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right SinComenzar">(SinComenzar)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="Concluido" class="selected">
-										<td>
-											<div class="media">
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right Concluido">(Concluido)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="Pendiente">
-										<td>
-											<div class="media">
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right Pendiente">(Pendiente)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
+													<div class="media-body">
+														<span class="media-meta pull-right">{{note.date | date:'dd-MM-yyyy'}}</span>
+														<h4 class="title">
+															<span class="pull-right {{note.state}}">({{note.state}})</span>
+														</h4>										
+														<p class="summary">{{note.content}}</p>
+													</div>
 												</div>
 											</div>
 										</td>
@@ -105,7 +61,6 @@
 					</div>
 				</div>
 			</div>
-		</section>
-		
+		</div>
 	</div>
 </div>
