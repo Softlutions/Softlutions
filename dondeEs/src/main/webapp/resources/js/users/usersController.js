@@ -1,21 +1,46 @@
 'use strict';
 
-angular.module('dondeEs.users', [ 'ngRoute' ]).config(['$routeProvider', function($routeProvider) {
+angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/users', {
 			templateUrl : 'resources/users/users.html',
 			controller : 'UsersCtrl'
 		});
-	}]).controller('UsersCtrl', ['$scope', '$http', function($scope, $http) {
+	}]).controller('UsersCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
 	$scope.users = [];
 
 	// list Users
 	$http.get("rest/protected/users/getAll").success(function(response){
-		if(response.code == 200)
+		if(response.code == 200){
 			$scope.users = response.listUser;
+
+			// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
+			var params = {
+				page: 1,	// PAGINA INICIAL
+				count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
+				sorting: {name: "asc"}
+			};
+			
+			var settings = {
+				total: $scope.users.length,	
+				counts: [],	
+				getData: function($defer, params){
+					var fromIndex = (params.page() - 1) * params.count();
+					var toIndex = params.page() * params.count();
+					
+					var subList = $scope.users.slice(fromIndex, toIndex);
+					var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
+					$defer.resolve(sortedList);
+				}
+			};
+			
+			$scope.usersTable = new ngTableParams(params, settings);
+		}
+			
 	}).error(function(response){
+		toastr.error("No se pudo cargar los datos");
 		console.log("error" + response.message);
 	});
-	 
+	
 	// change user state
 	$scope.userState = function(userId, check){
 		$http.get('rest/protected/users/changeState/'+userId+'/state/'+check).success(function(response) {
