@@ -14,7 +14,7 @@
 					<div class="btn-group">
 						<button type="button" class="btn btn-primary btn-filter" ng-click="showEventReminderBy('Concluido')">Concluido</button>
 						<button type="button" class="btn btn-warning btn-filter" ng-click="showEventReminderBy('Pendiente')">Pendiente</button>
-						<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin Comenzar</button>
+						<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin comenzar</button>
 						<button type="button" class="btn btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
 					</div>
 				</div>
@@ -47,7 +47,8 @@
 													<div class="media-body">
 														<span class="media-meta pull-right">{{note.date | date:'dd-MM-yyyy'}}</span>
 														<h4 class="title">
-															<span class="pull-right {{note.state}}">({{note.state}})</span>
+															<span ng-if="note.state == 'SinComenzar'" class="pull-right {{note.state}}">(Sin comenzar)</span>
+															<span ng-if="note.state != 'SinComenzar'" class="pull-right {{note.state}}">({{note.state}})</span>
 														</h4>										
 														<p class="summary">{{note.content}}</p>
 													</div>
