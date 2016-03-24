@@ -44,7 +44,7 @@ app.factory('MarkerCreatorService', function () {
                 var marker = create(latitude, longitude);
                 invokeSuccessCallback(successCallback, marker);
             } else {
-                console.log("Google Maps no pudo encontrar la dirección.");
+            	toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
             }
         });
     }
@@ -56,7 +56,7 @@ app.factory('MarkerCreatorService', function () {
                 invokeSuccessCallback(successCallback, marker);
             });
         } else {
-        	console.log("Google Maps no pudo encontrar su dirección.");
+        	toastr.error('Google Maps no pudo encontrar su dirección.');
         }
     }
 
@@ -69,6 +69,8 @@ app.factory('MarkerCreatorService', function () {
 });
 
 app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', function($scope,$http,$upload,MarkerCreatorService,$filter) { 
+	$scope.eventForm = false;
+	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
 	
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
@@ -128,8 +130,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	
 	$scope.loadAuctionServices = function (index) {
 		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;
-		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 10)
-		setTimeout(function(){$('#servicesOfAuction').modal('show')}, 900)
+		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 10);
+		setTimeout(function(){$('#servicesOfAuction').modal('show')}, 900);
 		
 	}
 	
@@ -212,9 +214,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 							    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 								}
 							});
-				    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
+				    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900);
 					}
-				})	
+				});	
 			}
 		}
 	
@@ -372,7 +374,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			} else {
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
-		})	
+		});	
 	}
 	
 	$scope.cancel = function(serviceContact){
@@ -417,7 +419,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			} else {
 		    	toastr.error('Cancelación del evento', 'Ocurrió un error al cancelar el evento.');
 			} 
-		 })
+		 });
 	 }
 	
 	$http.get('rest/protected/service/getServiceByProvider/'+$scope.loggedUser.userId ).success(function(response) {
@@ -603,8 +605,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.resetCreateEvent();
 	}
 	
-	//--------------------------------------------------------------------------
-	
 	function initMap(latitude, longitude){
 		MarkerCreatorService.createByCoords(latitude, longitude, function (marker) {
 	        $scope.autentiaMarker = marker;
@@ -630,24 +630,24 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
     $scope.addCurrentLocation = function () {
         MarkerCreatorService.createByCurrentLocation(function (marker) {
             marker.options.labelContent = 'Usted está aquí.';
-            $scope.map.markers.push(marker);
             refresh(marker);
+            $scope.map.markers.push(marker);
         });
     };
     
     $scope.addAddress = function() {
-        var address = $scope.tempEvent.address;
-        if (address !== '') {
-            MarkerCreatorService.createByAddress(address, function(marker) {
+        if ($scope.address !== '') {
+            MarkerCreatorService.createByAddress($scope.address, function(marker) {
+            	refresh(marker);
                 $scope.map.markers.push(marker);
-                refresh(marker);
             });
         }
     };
 
     function refresh(marker) {
+    	$scope.map.markers.length = 0;
         $scope.map.control.refresh({latitude: marker.latitude,
-            longitude: marker.longitude});
+            							longitude: marker.longitude});
     }
     
     $scope.refreshChart = function(){
