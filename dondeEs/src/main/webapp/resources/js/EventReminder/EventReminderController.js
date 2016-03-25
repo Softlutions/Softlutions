@@ -8,8 +8,24 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 	}])
 	.controller('EventReminderCtrl', ['$scope','$http','$routeParams', function($scope,$http,$routeParams) {
 		$scope.notesList;
-		getNotes();
-		$scope.objNote ={}
+		getAllEventRemider();
+		$scope.objNote = {}
+		$scope.objEventReminderEdit = {};
+		
+		$scope.eventReminderStateList = [
+			{
+				id: 0,
+				name: "Sin comenzar"		
+			}, 
+			{
+				id: 1,
+				name: "Pediente"		
+			}, 
+			{
+				id: 2,
+				name: "Concluido"		
+			}
+		]
 		
 		$scope.event = {
 				eventId: $routeParams.id
@@ -22,20 +38,52 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 				event: $scope.event
 			}
 			if($scope.objNote.content != null){
-				$http({method: 'POST',url:'rest/protected/note/createNote', data:$scope.dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				$http({method: 'POST',url:'rest/protected/note/saveNote', data:$scope.dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 					if (response.code == 200) {
-						getNotes();
+						getAllEventRemider();
 						toastr.success("Notas del evento", "La nota fué creada con éxito");
 					} else {
 						toastr.success("Notas del evento", "Ocurrió un problema al crear la nota");
 					}					
 				});
 			}else{
-				toastr.error('Debe escribir algo en la nota');
+				toastr.error("Notas del evento", 'Debe escribir algo en la nota');
 			}
 		}
 		
-		function getNotes() {
+		$scope.uploadEventReminderData = function (id, content, state) {
+			$scope.objEventReminderEdit.id = id;
+			$scope.objEventReminderEdit.content = content;
+			if (state == "SinComenzar") {
+				$scope.objEventReminderEdit.state = 0;
+			} else if (state == "Pendiente") {
+				$scope.objEventReminderEdit.state = 1;
+			} else if (state == "Concluido") {
+				$scope.objEventReminderEdit.state = 2;
+			}
+		}
+		
+		$scope.editEventReminder = function () {
+			var dataEdit = {
+				noteId: $scope.objEventReminderEdit.id,
+				content: $scope.objEventReminderEdit.content,
+				state: $scope.objEventReminderEdit.state,
+				event: $scope.event
+			}
+			
+			console.log(dataEdit);
+			
+			$http({method: 'POST',url:'rest/protected/note/saveNote', data:dataEdit, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				if (response.code == 200) {
+					getAllEventRemider();
+					toastr.success("Notas del evento", "La nota fué modificada con éxito");
+				} else {
+					toastr.success("Notas del evento", "Ocurrió un problema al modificar la nota");
+				}				
+			}); 
+		}
+		
+		function getAllEventRemider() {
 			$http.get("rest/protected/note/getAllNoteByEvent/"+$routeParams.id).success(function(response){
 				if (response.code == 200) {
 					if (response.notes.length > 0) {
@@ -44,8 +92,8 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 								response.notes[i].state = "SinComenzar";
 							} else if (response.notes[i].state == 1) {
 								response.notes[i].state = "Pendiente";
-							} else if (response.notes.state[i] == 2) {
-								response.notes.state[i] = "Concluido";
+							} else if (response.notes[i].state == 2) {
+								response.notes[i].state = "Concluido";
 							}
 						}
 						$scope.notesList = response.notes;

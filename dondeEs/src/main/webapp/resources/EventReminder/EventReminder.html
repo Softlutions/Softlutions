@@ -24,7 +24,7 @@
 						<div class="chat-message-form">
 							<div class="input-group">
 								<input type="text" ng-model="objNote.content"
-										placeholder="Contenido de la nota"  class="form-control"><span class="input-group-btn" required>
+										placeholder="Contenido de la nueva nota"  class="form-control"><span class="input-group-btn" required>
 									<button type="button" class="btn btn-primary" ng-click="createNote(event)">+</button>
 								</span>
 							</div>
@@ -45,10 +45,14 @@
 											<div class="media">
 												<div class="media-body">
 													<div class="media-body">
-														<span class="media-meta pull-right">{{note.date | date:'dd-MM-yyyy'}}</span>
-														<h4 class="title">
-															<span ng-if="note.state == 'SinComenzar'" class="pull-right {{note.state}}">(Sin comenzar)</span>
-															<span ng-if="note.state != 'SinComenzar'" class="pull-right {{note.state}}">({{note.state}})</span>
+														<span class="glyphicon glyphicon-pencil pull-right editEventReminder" aria-hidden="true" 
+																	ng-click="uploadEventReminderData(note.noteId, note.content, note.state)"
+																	data-toggle="modal" data-target="#modal-form"
+																	></span>
+														<span class="media-meta pull-right">Fecha de creación: {{note.date | date:'dd-MM-yyyy'}}</span>
+														<h4 class="title pull-right">
+															<span ng-if="note.state == 'SinComenzar'" class="{{note.state}}">(Sin comenzar)</span>
+															<span ng-if="note.state != 'SinComenzar'" class="{{note.state}}">({{note.state}})</span>					
 														</h4>										
 														<p class="summary">{{note.content}}</p>
 													</div>
@@ -63,5 +67,51 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="modal-form" class="modal fade" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-12 b-r">
+								<h3 class="m-t-none m-b">Modificar recordatorio de evento</h3>
+								<form name="formEditEvent" ng-submit="formEditEvent.$valid ? editEventReminder() : null">
+									<div class="form-group">
+										<div class="input-group">
+											<label class="font-noraml"><strong>Estado</strong></label>
+
+											<select class="form-control m-b"
+												style="width: 525px; height: 34px; background: white"
+												tabindex="3" class="form-control" ng-model="objEventReminderEdit.state"
+												ng-options="ert.id as ert.name for ert in eventReminderStateList" required>
+											</select>
+										</div>
+									</div>
+								
+									<div class="form-group">
+										<label class="font-noraml"><strong>Contenido</strong></label> <input
+											type="text" class="form-control" ng-model="objEventReminderEdit.content" required/>
+									</div>
+
+									<div class="form-group">
+										<button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit">
+											<strong>Guardar</strong>
+										</button>
+
+									</div>
+
+									<div class="form-group">
+										<button type="button"
+											class="btn btn-sm btn-danger pull-right m-t-n-xs"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+		
 	</div>
 </div>
