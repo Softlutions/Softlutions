@@ -59,16 +59,17 @@
 									<div class="form-group">
 										<label class="font-noraml"><strong>Nombre</strong></label> <input
 											type="text" id="nombre" class="form-control"
-											placeholder="Nombre" ng-model="objService.name" /> <span
-											ng-show="onError && createRentForm.name.$error.required"
+											placeholder="Nombre" ng-model="objService.name" required />
+										<span ng-show="onError && createRentForm.name.$error.required"
 											class="help-inline">Required </span>
 									</div>
 
 									<div class="form-group">
 										<label class="font-noraml"><strong>Descripción</strong></label>
 										<input type="text" id="descripcion" class="form-control"
-											placeholder="Descripcion" ng-model="objService.description" />
-										<span ng-show="onError && createRentForm.name.$error.required"
+											placeholder="Descripcion" ng-model="objService.description"
+											required /> <span
+											ng-show="onError && createRentForm.name.$error.required"
 											class="help-inline">Required </span>
 									</div>
 

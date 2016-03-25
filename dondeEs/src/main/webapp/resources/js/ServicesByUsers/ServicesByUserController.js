@@ -28,7 +28,7 @@ angular
 													var params = {
 														page: 1,	// PAGINA INICIAL
 													count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-														sorting: {name: "asc"}
+														sorting: {name: "des"}
 													};
 													
 													var settings = {
@@ -89,12 +89,13 @@ angular
 											state: $scope.objService.state,
 											user:$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"))
 									}		
-									if($scope.objService.name != null && $scope.objService.description != null){
+									if($scope.objService.name != null && $scope.objService.name != "" && $scope.objService.description != null && $scope.objService.description != ""){
 										$scope.objService = {};
 										$("#modal-form").modal('hide');
 										
 										$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-											$scope.services = $scope.services.concat(dataCreate);
+											$scope.services.push(dataCreate);
+											$scope.servicesTable.reload();
 											$scope.serviceModal = {};
 											toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
 
