@@ -8380,3 +8380,15 @@ textarea {
 .inputUploadImage{
 	width: 100%;
 }
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 100%;
+    text-align: center;
+    padding: 25px;
+    margin: 10px auto;
+}
+.dragover {
+    border: 5px dashed green;
+}

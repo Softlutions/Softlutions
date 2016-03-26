@@ -4,6 +4,22 @@
             <h1>Eventos publicados</h1>
         </div>
         <div class="ibox-content">
+        	
+        	<div>
+        		<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
+	        	<div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" 
+	        	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
+	        		<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
+	        		
+	        		<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px" 
+	        		title="{{img.name}} {{img.size / 1024 | number:2}}Kb"/>
+	        	</div>
+	        	
+	        	<input id="btnPublish" type="button" ng-click="upload(previewFiles)" class="btn btn-primary pull-right" value="Publicar"/>
+	        	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-warning pull-right" value="Limpiar"/>
+	        	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
+        	</div>
+        	
         	<ul class="event-list collapseDiv" ng-repeat="event in eventsPublish">
 				<li>
 					<time datetime="event.publishDate" data-toggle="collapse" data-target="#demo{{$index}}">
@@ -34,9 +50,21 @@
 					</div>
 				</li>
 				<div id="demo{{$index}}" class="collapse">
-					<img src="..." alt="..." class="img-thumbnail">
-					<p>Aquí estará el detalle del evento</p>
+		            <div class="row">
+				        <div class="col-lg-10 col-lg-offset-1">
+				            <slick class="slick_demo_2" infinite="true" slides-to-show="3" slides-to-scroll="1" center-mode="true"
+				                   responsive="[ { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true } }, { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } } ]" >
+				                <div ng-repeat="img in images">
+				                    <div class="ibox-content">
+				                        <img ng-src="{{img.image}}" class=" img-rounded center-block" width="150px" height="100px"/>
+				                    </div>
+				                </div>
+				                
+				            </slick>
+				        </div>
+				    </div>
 				</div> 
+				
 			</ul>
         </div>
     </div>

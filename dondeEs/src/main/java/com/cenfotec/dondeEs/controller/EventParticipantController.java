@@ -14,6 +14,7 @@ import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.ejb.Comment;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.logic.AES;
+import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.services.CommentServiceInterface;
 
 @RestController
@@ -85,6 +86,23 @@ public class EventParticipantController {
 		} else {
 			response.setCodeMessage("Something is wrong");
 		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/getEventParticipantByUserAndEvent/{userId}/{eventId}", method = RequestMethod.GET)
+	public EventParticipantResponse getEventParticipantByUserAndEvent(@PathVariable("userId") int userId, @PathVariable("eventId") int eventId) {
+		EventParticipantResponse response = new EventParticipantResponse();
+		EventParticipantPOJO participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
+		
+		if(participant != null){
+			response.setCode(200);
+			response.setCodeMessage("success");
+			response.setEventParticipant(participant);
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Participant not found!");
+		}
+		
 		return response;
 	}
 }
