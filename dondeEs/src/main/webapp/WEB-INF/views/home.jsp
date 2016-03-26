@@ -24,9 +24,9 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
-<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 <link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper" ng-controller="IndexCtrl">
@@ -139,7 +139,10 @@
 	<script src="resources/bower_components/moment/min/moment.min.js"></script>
 	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
 	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
+	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>	
+	<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
+	
+	
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 
