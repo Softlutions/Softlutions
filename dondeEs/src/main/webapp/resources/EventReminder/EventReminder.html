@@ -49,7 +49,7 @@
 																	ng-click="uploadEventReminderData(note.noteId, note.content, note.state)"
 																	data-toggle="modal" data-target="#modal-form"
 																	></span>
-														<span class="media-meta pull-right">Fecha de creación: {{note.date | date:'dd-MM-yyyy'}}</span>
+														<span class="media-meta pull-right">{{note.date | date:'dd-MM-yyyy'}}</span>
 														<h4 class="title pull-right">
 															<span ng-if="note.state == 'SinComenzar'" class="{{note.state}}">(Sin comenzar)</span>
 															<span ng-if="note.state != 'SinComenzar'" class="{{note.state}}">({{note.state}})</span>					
