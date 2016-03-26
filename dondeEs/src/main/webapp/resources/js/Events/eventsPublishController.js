@@ -19,7 +19,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
 				$scope.eventsPublish = response.eventList;
-				console.log($scope.eventsPublish);
+				
 				for (var i=0; i<$scope.eventsPublish.length; i++) {
 					$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 					
@@ -55,7 +55,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 	
 	// *************
 	
-	$scope.eventId = 1;
+	$scope.eventId = 6;
 	
 	// *************
 	
@@ -126,6 +126,82 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
             }
     	}else if($scope.eventParticipant.eventParticipantId == 0){
     		toastr.error('Este usuario no puede subir imágenes a este evento');
+    	}
+    }
+    
+    //----------------------------------------------------------------------
+    
+    $scope.eventImages = [];
+    $scope.selectedImgs = [];
+    $scope.enableImgSelect = false;
+    
+    $scope.enableSelect = function(){
+    	$scope.enableImgSelect = !$scope.enableImgSelect;
+    	
+    	if($scope.enableImgSelect){
+    		$("#btnImgSelect").val("Cancelar");
+    	}else{
+    		$("#btnImgSelect").val("Seleccionar");
+    		
+    		$scope.selectedImgs.forEach(function(entry){
+    			$("#eventImg-"+entry.eventImageId).removeClass("selectedImg");
+    		});
+    		
+    	    $scope.selectedImgs = [];
+    	}
+    }
+    
+    $scope.selectImg = function(img){
+    	if($scope.enableImgSelect){
+    		var index = $scope.selectedImgs.indexOf(img);
+    		
+    		if(index >= 0){
+    			$scope.selectedImgs.splice(index, 1);
+    			$("#eventImg-"+img.eventImageId).removeClass("selectedImg");
+    		}else{
+    			$scope.selectedImgs.push(img);
+    			$("#eventImg-"+img.eventImageId).addClass("selectedImg");
+    		}
+    	}
+    }
+    
+    $scope.loadImgs = function(event){
+    	$scope.eventImages = [];
+    	
+    	$http.get("rest/protected/eventImage/getAllByEventId/"+event.eventId).success(function(response){
+    		if(response.code == 200)
+    			$scope.eventImages = response.images;
+    	});
+    }
+    
+    $scope.deleteImgs = function(){
+    	var deleted = 0;
+    	
+    	for(var i=0;i<$scope.selectedImgs.length;i++){
+    		var img = $scope.selectedImgs[i];
+    		
+    		$http({method: "DELETE", url:"rest/protected/eventImage/deleteEventImage/"+img.eventImageId}).then(function(response){
+        		if(response.status == 200){
+        			$scope.eventImages.splice($scope.eventImages.indexOf(img), 1);
+        			deleted++;
+        		}
+            	
+            	if(deleted == $scope.selectedImgs.length){
+            		toastr.success('Imágenes eliminadas');
+            		var temp = $scope.eventImages;
+            		$scope.eventImages = [];
+            		$scope.enableSelect();
+            		
+            		$timeout(function(){
+            			$scope.eventImages = temp;
+            		});
+            	}else if(i == $scope.selectedImgs.length-1){
+            		toastr.error('No se pudo eliminar algunas imágenes');
+            	}
+            	
+        	}, function(msj){
+        		console.log("catchedError: ", msj);
+        	});
     	}
     }
 }]);

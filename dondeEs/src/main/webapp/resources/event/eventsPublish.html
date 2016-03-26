@@ -4,7 +4,8 @@
             <h1>Eventos publicados</h1>
         </div>
         <div class="ibox-content">
-        	
+        	<input id="btnPublish" type="button" ng-click="upload(previewFiles)" class="btn btn-primary pull-right" value="Publicar"/>
+	        	
         	<div>
         		<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
 	        	<div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" 
@@ -15,7 +16,6 @@
 	        		title="{{img.name}} {{img.size / 1024 | number:2}}Kb"/>
 	        	</div>
 	        	
-	        	<input id="btnPublish" type="button" ng-click="upload(previewFiles)" class="btn btn-primary pull-right" value="Publicar"/>
 	        	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-warning pull-right" value="Limpiar"/>
 	        	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
         	</div>
@@ -44,26 +44,31 @@
 					</div>
 					<div class="social" data-toggle="collapse" data-target="#demo{{$index}}">
 						<ul>
-							<li><span>ver más</span></li>
+							<li ng-click="loadImgs(event)"><span>ver más</span></li>
 							<li><span class="fa fa-chevron-down pull-right"></span></li>
 						</ul>
 					</div>
 				</li>
+				
 				<div id="demo{{$index}}" class="collapse">
 		            <div class="row">
 				        <div class="col-lg-10 col-lg-offset-1">
-				            <slick class="slick_demo_2" infinite="true" slides-to-show="3" slides-to-scroll="1" center-mode="true"
-				                   responsive="[ { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true } }, { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } } ]" >
-				                <div ng-repeat="img in images">
-				                    <div class="ibox-content">
-				                        <img ng-src="{{img.image}}" class=" img-rounded center-block" width="150px" height="100px"/>
+							<slick ng-if="eventImages.length > 0" class="slick_demo_2" infinite="true" slides-to-show="3" slides-to-scroll="1" center-mode="true"
+			                   responsive="[ { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true } }, { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } } ]" >
+				                
+				                <div ng-repeat="img in eventImages">
+				                	<div class="ibox-content">
+					                	<img id="eventImg-{{img.eventImageId}}" ng-src="{{img.image}}" ng-click="selectImg(img)" class="img-rounded" width="150px" height="100px"/>
 				                    </div>
 				                </div>
-				                
 				            </slick>
+				            
+				            <input id="btnImgSelect" type="button" ng-click="enableSelect()" class="btn btn-primary pull-right" value="Seleccionar"/>
+	        				<input ng-show="selectedImgs.length > 0" type="button" ng-click="deleteImgs()" class="btn btn-danger pull-right" value="Eliminar"/>
+	        				
 				        </div>
 				    </div>
-				</div> 
+				</div>
 				
 			</ul>
         </div>

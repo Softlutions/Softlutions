@@ -8392,3 +8392,11 @@ textarea {
 .dragover {
     border: 5px dashed green;
 }
+
+.selectedImg {
+	-ms-transform: rotate(5deg);
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}

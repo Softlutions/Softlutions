@@ -66,7 +66,7 @@
 								<td>{{service.service.name}}</td>
 								<td>{{service.service.description}}</td>
 								<td class="text text-info">
-									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
+									<button id="auctionParticipant-{{service.auctionServicesId}}" ng-if="!$parent.permissions.isAdmin" ng-click="contract(service)"
 										class="btn btn-primary btn-xs">Contratar</button>
 								</td>	
 							</tr>

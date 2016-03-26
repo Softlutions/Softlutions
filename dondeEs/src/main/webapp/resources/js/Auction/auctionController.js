@@ -9,8 +9,8 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
   });
 }])
 
-.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window',
-                                  			function($scope,$http,$location,$routeParams, $window) {	
+.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window', '$timeout', 
+                                  			function($scope,$http,$location,$routeParams, $window, $timeout) {	
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
 	
@@ -39,6 +39,16 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 	
 	$scope.loadAuctionServices = function (index) {
 		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;
+		
+		$timeout(function(){
+			$scope.auctionServices.forEach(function(entry){
+				if($scope.auctionsEvent[index].state == 0)
+					$("#auctionParticipant-"+entry.auctionServicesId).attr("disabled", true);
+				
+				if(entry.acept = 1)
+					$("#auctionParticipant-"+entry.auctionServicesId).text("Contratado");
+			});
+		});
 	}
 	
 	$scope.goToServiceProviderProfile = function () {
@@ -50,7 +60,6 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 			auctionId:id
 		}
 		$http({method: 'PUT',url:'rest/protected/auction/finishAuction', data:dataCreate}).success(function(response) {
-			console.log(response);
 			$("#finishAuctionId-"+id).text("Finalizada");
 			$("#finishAuctionId-"+id).removeClass("btn-danger");
 			$("#finishAuctionId-"+id).addClass("btn-warning");
