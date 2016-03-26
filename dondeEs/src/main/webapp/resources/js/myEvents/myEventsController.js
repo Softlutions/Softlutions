@@ -102,12 +102,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.auctionEventServices = function(event){
-		$(function () {
-            $('#datetimepicker').datetimepicker({
-            	locale: 'es',
-                format: 'LLLL'
-            });
+
+        $('#datetimepicker').datetimepicker({
+        	locale: 'es',
+            format: 'LLLL',
+            minDate: new Date(),
+            maxDate: event.registerDate
         });
+
 		$scope.selectedEvent = event;
 	}
 	
@@ -158,6 +160,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
 				toastr.error('Debe ingresar todos los datos!');
 			}else{			
+				var date = new Date($('#datetimepicker').data("DateTimePicker").date());
 				if($scope.globalEventId !=0){
 					var event = {
 							eventId: $scope.globalEventId
@@ -165,7 +168,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					var auction = {
 							name: $scope.tempAuction.name,
 							description: $scope.tempAuction.description,
-							date: new Date(),
+							date: date,
 							state: 1,
 							event: event,
 							serviceCatalog: $scope.tempAuction.selected
@@ -174,7 +177,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					var auction = {
 							name: $scope.tempAuction.name,
 							description: $scope.tempAuction.description,
-							date: new Date(),
+							date: date,
 							state: 1,
 							event: $scope.selectedEvent,
 							serviceCatalog: $scope.tempAuction.selected

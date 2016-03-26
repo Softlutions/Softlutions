@@ -8,20 +8,44 @@ angular
 			});
 		} ])
 		.controller('AuctionsCtrl',['$scope','$http',function($scope, $http) {
-			$scope.listForm = true;
+			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+			$scope.loggedUserServiceCatalogs = [];
 			$scope.auctionService = {};
 			$scope.selectedAuction = {};
 			$scope.catalogs = [];
 			$scope.auctionList =[];
-			$scope.pendingAuctionList =[];
-			$scope.showError = true;
-			$scope.showErrorPending = true;
 			$scope.selectedCatalogId = "";
+			$scope.step = 0;
 			
 			toastr.options = {
 				closeButton: true,
 				showMethod: 'slideDown',
 				timeOut: 4000
+			};
+			
+			$http.get('rest/protected/service/getServiceCatalogIdByProvider/'+$scope.loggedUser.userId).success(function(response) {
+				if(response.serviceLists.length != 0){	
+					var x;
+					for(x = 0 ; x < response.serviceLists.length ; x++){
+						$scope.loggedUserServiceCatalogs.push(response.serviceLists[x].serviceCatalog.serviceCatalogId);
+					}
+				}
+			});
+			
+			$scope.validateService = function(serviceCatalogId){
+				var existe = $scope.loggedUserServiceCatalogs.indexOf(serviceCatalogId);
+				if(existe >= 0)
+					return true;
+				else
+					return false;
+			};
+			
+			$scope.validatelistItem = function(auction,index){
+				$scope.selectedAuction = auction;
+				if($scope.validateService(auction.serviceCatalog.serviceCatalogId))
+					$("#liParticipate-"+index).show();
+				else
+					$("#liParticipate-"+index).hide();
 			};
 			
 			angular.element(document).ready(function(){
@@ -41,8 +65,6 @@ angular
 					response.auctionList.forEach(function(auction){
 						if(auction.state==1){
 							$scope.auctionList.push(auction);
-						}if(auction.state==2){
-							$scope.pendingAuctionList.push(auction);
 						}
 					});
 					if($scope.auctionList.length == 0){
@@ -50,18 +72,12 @@ angular
 					}else{
 						$scope.showError = true;
 					}
-					if($scope.pendingAuctionList.length == 0){
-						$scope.showErrorPending = false;
-					}else{
-						$scope.showErrorPending = true;
-					}
 				});		
 			}
 			
 			$scope.getAuctionsByCatalog = function(selectedCatalog){
 				if(selectedCatalog.serviceCatalogId == 0){
 					$scope.selectedCatalogId = "";
-					console.log($scope.auctionList);
 					
 				}else{
 					$scope.selectedCatalogId = selectedCatalog.serviceCatalogId;
@@ -69,20 +85,23 @@ angular
 				}	
 			}
 
-			$scope.listParticipants = function(auction){				
-				 				$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+auction.auctionId).success(function(response) {
-				 					$scope.auctionServices = response.auctionServiceList;
-				 					$scope.selectedAuction = auction;
-				 					$scope.listForm = true;
-				 				});	
-			}
-			$scope.displayForm = function(){
-				$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-				$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
-					$scope.services = response.listService;
+			$scope.listParticipants = function(auction){	
+				console.log(auction);
+ 				$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+auction.auctionId).success(function(response) {
+ 					$scope.auctionServices = response.auctionServiceList;
+ 					$scope.selectedAuction = auction;
+ 					$scope.step = 1;
+ 					if($scope.validateService(auction.serviceCatalog.serviceCatalogId))
+ 						$("#btnParticipate").removeAttr("disabled");
+ 					else
+ 						$("#btnParticipate").attr("disabled","true");
+ 				});	
+			}	
+			
+			$scope.loadServices = function(){
+				$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.selectedAuction.serviceCatalog.serviceCatalogId ).success(function(response) {
+					$scope.services = response.serviceLists;	
 				});	
-				$scope.listForm = false;
-				
 			}
 			
 			$scope.joinAuction = function(){
@@ -102,10 +121,9 @@ angular
 					$http({method: 'POST',url:'rest/protected/auctionService/createAuctionService', data:newAuctionService, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 						$scope.auctionServices.push(newAuctionService);
 						$scope.auctionService = {};
-						$scope.listForm = true;
-						toastr.success('Se ha incorporado a la subasta!')
+						toastr.success('Se ha incorporado a la subasta!');
+						$("#registerModal").modal("toggle");
 					})
-					$scope.listForm = true;
 				}
 			}
 			

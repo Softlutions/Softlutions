@@ -1,6 +1,6 @@
 <div class="container">
-	<div class="col-lg-11">
-		<div class="table-responsive">
+	<div ng-show="step == 0" class="col-lg-11">
+		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h4>Subastas disponibles</h4>
 				<select class="form-control m-b"				
@@ -24,10 +24,17 @@
 							<td>{{auction.description}}</td>
 							<td>{{auction.date | date:"dd/MM/yyyy ' | ' h:mma"}}</td>
 							<td>
-								<button ng-click="listParticipants(auction)"
-									class="btn btn-primary btn-xs" data-toggle="modal"
-									data-target="#modalAuctionParticipants">Listar
-									particiantes</button>
+								<div class="btn-group">
+									<button data-toggle="dropdown"
+										class="btn btn-primary btn-xs dropdown-toggle" ng-click="validatelistItem(auction,$index)">
+										Acción <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li><a ng-click="listParticipants(auction)">Ver particiantes</a></li>
+										<li><a id="liParticipate-{{$index}}" ng-if="$parent.permissions.isPrestatario" 
+											   data-toggle="modal" data-target="#registerModal">Participar</a></li>
+									</ul>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -39,85 +46,42 @@
 		</div>
 	</div>
 	
-		<div class="col-lg-11">
-		<div class="table-responsive">
+	<div ng-show="step == 1" class="col-lg-11">
+		<button type="button" class="btn btn-warning btn-xs pull-left" ng-click="step = 0">Volver</button>
+		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-				<h4>Subastas pendientes</h4>
-				
+			<button type="button" class="btn btn-primary btn-xs pull-right" id="btnParticipate" ng-click="loadServices()"
+					ng-if="$parent.permissions.isPrestatario" data-toggle="modal" data-target="#registerModal">Participar</button>
+				<h4>Participantes de la subasta</h4>
 			</div>
-			<div ng-show="pendingAuctionList.length" class="ibox-content">
+			<div class="ibox-content" ng-show="auctionServices.length" >
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th class="col-lg-3">Nombre</th>
-							<th class="col-lg-5">Descripción</th>
-							<th class="col-lg-2">Fecha de finalización</th>
+							<th>Nombre</th>
+							<th>Descripción</th>
+							<th>Precio</th>
 							<th></th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="pendingAuction in pendingAuctionList | filter : {serviceCatalog : {serviceCatalogId: selectedCatalog.serviceCatalogId}} : true">
+					<tbody ng-repeat="service in auctionServices">
 						<tr>
-							<td>{{pendingAuction.name}}</td>
-							<td>{{pendingAuction.description}}</td>
-							<td>{{pendingAuction.date | date:"dd/MM/yyyy ' | ' h:mma"}}</td>
-							<td>
-								<button ng-click="listParticipants(pendingAuction)"
-									class="btn btn-primary btn-xs" data-toggle="modal"
-									data-target="#modalAuctionParticipants">Listar
-									participantes</button>
-							</td>
+							<td>{{ service.service.name }}</td>
+							<td>{{ service.description }}</td>
+							<td>{{ service.price | currency:"₡":0}}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div ng-hide="pendingAuctionList.length" class="ibox-content">
-				<p>No hay subastas disponibles.</p>
+			<div class="ibox-content" ng-hide="auctionServices.length" >
+				<p>No hay participantes registrados.</p>
 			</div>
 		</div>
 	</div>
 
-	<div id="modalAuctionParticipants" class="modal fade" role="dialog">
+	<div id="registerModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
-
-			<!-- Modal content-->
-			<div class="modal-content" ng-show="listForm">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Servicios de la subasta</h4>
-				</div>
-				<div class="modal-body" ng_if="auctionServices.length != 0">
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th>Nombre</th>
-								<th>Descripción</th>
-								<th>Precio</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody ng-repeat="service in auctionServices">
-							<tr>
-								<td>{{ service.service.name }}</td>
-								<td>{{ service.description }}</td>
-								<td>{{ service.price | currency:"₡":0}}</td>
-								<td class="text text-info">
-									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
-										class="btn btn-primary btn-xs">Contratar</button>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-body" ng_if="auctionServices.length == 0">
-					<p>No hay participantes registrados.</p>
-				</div>
-				<div class="modal-footer">
-					<button  ng-if="$parent.permissions.isPrestatario" type="button" class="btn btn-primary"
-						ng-click="displayForm()">Participar</button>
-				</div>
-			</div>
-
-			<div class="modal-content" ng-hide="listForm">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Participar en subasta</h4>
@@ -129,20 +93,19 @@
 							<div class="col-lg-10">
 								<select class="form-control m-b"
 									ng-options="service as service.name for service in services track by service.serviceId"
-									ng-model="auctionService.service"></select>
+									ng-model="auctionService.service">
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Descripción</label>
 							<div class="col-lg-10">
-								<textarea rows="5" style="resize: none"
-									placeholder="Descripción" class="form-control"
-									ng-model="auctionService.description"></textarea>
+								<textarea rows="5" placeholder="Descripción" class="form-control"
+									ng-model="auctionService.description">
+								</textarea>
 							</div>
 						</div>
-						
-						
-						
+		
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Precio</label>
 							<div class="col-lg-10">

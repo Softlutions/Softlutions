@@ -15,7 +15,8 @@ angular.module('dondeEs', [
 	"dondeEs.auctions",
 	"dondeEs.contact",
 	"dondeEs.chat",
-	"dondeEs.eventReminder"
+	"dondeEs.eventReminder",
+	"dondeEs.EventParticipant"
 
 ]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {	
 	// Opciones globales de los popup de notificaciones.

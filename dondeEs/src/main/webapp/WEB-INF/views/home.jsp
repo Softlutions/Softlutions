@@ -158,6 +158,7 @@
 	<script src="resources/js/Chat/ChatController.js"></script>
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
+	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
 
 	<!-- Google Maps -->
 	<script
