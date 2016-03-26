@@ -26,7 +26,7 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 				name: "Concluido"		
 			}
 		]
-		
+
 		$scope.event = {
 				eventId: $routeParams.id
 		}
@@ -37,14 +37,16 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 				content: $scope.objNote.content,
 				event: $scope.event
 			}
-			if($scope.objNote.content != null){
-				$http({method: 'POST',url:'rest/protected/note/saveNote', data:$scope.dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+
+			if($scope.objNote.content != null && $scope.objNote.content != "" && $scope.objNote.content != undefined){
+				$http({method: 'POST',url:'rest/protected/note/createNote', data:$scope.dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 					if (response.code == 200) {
 						getAllEventRemider();
 						toastr.success("Notas del evento", "La nota fué creada con éxito");
 					} else {
 						toastr.success("Notas del evento", "Ocurrió un problema al crear la nota");
-					}					
+					}	
+					$scope.objNote.content=''
 				});
 			}else{
 				toastr.error("Notas del evento", 'Debe escribir algo en la nota');

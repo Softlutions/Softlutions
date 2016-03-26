@@ -46,9 +46,15 @@ public class EventService implements EventServiceInterface {
 		});
 		return eventsPOJO;
 	}
-	
+
+	/***
+	 * Obtiene todos los eventos publicados.
+	 * 
+	 * @author Enmanuel García González
+	 * @version 1.0
+	 */
 	@Override
-	public List<EventPOJO> getAllEventPublish() {			
+	public List<EventPOJO> getAllEventPublish() {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
 		eventRepository.findAllByState((byte) 3).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
@@ -73,7 +79,7 @@ public class EventService implements EventServiceInterface {
 			eventPOJO.setUser(userPOJO);
 			eventsPOJO.add(eventPOJO);
 		});
-		
+
 		return eventsPOJO;
 	}
 
@@ -81,13 +87,13 @@ public class EventService implements EventServiceInterface {
 	public Event getEventById(int idEvent) {
 		return eventRepository.findByEventId(idEvent);
 	}
-	
+
 	@Override
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
 		return event.getEventId();
 	}
-	
+
 	@Override
 	@Transactional
 	public boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext){
@@ -124,7 +130,7 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public EventPOJO eventById(int idEvent) {
 
-		//Event
+		// Event
 		Event event = eventRepository.findOne(idEvent);
 		EventPOJO eventPOJO = new EventPOJO();
 		eventPOJO.setEventId(event.getEventId());
@@ -136,8 +142,8 @@ public class EventService implements EventServiceInterface {
 		eventPOJO.setPublishDate(event.getPublishDate());
 		eventPOJO.setRegisterDate(event.getRegisterDate());
 		eventPOJO.setState(event.getState());
-		
-		if(event.getPlace() != null){
+
+		if (event.getPlace() != null) {
 			Place place = event.getPlace();
 			PlacePOJO placePOJO = new PlacePOJO();
 			placePOJO.setPlaceId(place.getPlaceId());
@@ -146,8 +152,8 @@ public class EventService implements EventServiceInterface {
 			placePOJO.setName(place.getName());
 			eventPOJO.setPlace(placePOJO);
 		}
-		if(event.getUser() != null){
-			User user  = event.getUser();
+		if (event.getUser() != null) {
+			User user = event.getUser();
 			UserPOJO userPOJO = new UserPOJO();
 			userPOJO.setUserId(user.getUserId());
 			userPOJO.setEmail(user.getEmail());
@@ -157,10 +163,57 @@ public class EventService implements EventServiceInterface {
 			userPOJO.setName(user.getName());
 			userPOJO.setPassword(user.getPassword());
 			userPOJO.setPhone(user.getPhone());
-			if(user.getState()==1) userPOJO.setState(true);
-			if(user.getState()==0) userPOJO.setState(false);
+			if (user.getState() == 1)
+				userPOJO.setState(true);
+			if (user.getState() == 0)
+				userPOJO.setState(false);
 			eventPOJO.setUser(userPOJO);
 		}
 		return eventPOJO;
 	}
+
+	@Override
+	public List<EventPOJO> getAllByParam(String nameUser, String name, String namePlace, byte state) {
+		List<Event> listEvent = eventRepository.finByParams(state, nameUser, name, namePlace);
+		List<EventPOJO> listEventPOJO = new ArrayList<EventPOJO>();
+		listEvent.stream().forEach(e -> {
+			EventPOJO eventPOJO = new EventPOJO();
+			BeanUtils.copyProperties(e, eventPOJO);
+			eventPOJO.setChats(null);
+			eventPOJO.setEventParticipants(null);
+			eventPOJO.setServiceContacts(null);
+			eventPOJO.setNotes(null);
+
+			if (e.getPlace() != null) {
+				Place place = e.getPlace();
+				PlacePOJO placePOJO = new PlacePOJO();
+				placePOJO.setPlaceId(place.getPlaceId());
+				placePOJO.setLatitude(place.getLatitude());
+				placePOJO.setLongitude(place.getLongitude());
+				placePOJO.setName(place.getName());
+				eventPOJO.setPlace(placePOJO);
+			}
+			if (e.getUser() != null) {
+				User user = e.getUser();
+				UserPOJO userPOJO = new UserPOJO();
+				userPOJO.setUserId(user.getUserId());
+				userPOJO.setEmail(user.getEmail());
+				userPOJO.setImage(user.getImage());
+				userPOJO.setLastName1(user.getLastName1());
+				userPOJO.setLastName2(user.getLastName2());
+				userPOJO.setName(user.getName());
+				userPOJO.setPassword(user.getPassword());
+				userPOJO.setPhone(user.getPhone());
+				if (user.getState() == 1)
+					userPOJO.setState(true);
+				if (user.getState() == 0)
+					userPOJO.setState(false);
+				eventPOJO.setUser(userPOJO);
+				;
+				listEventPOJO.add(eventPOJO);
+			}
+		});
+		return listEventPOJO;
+	}
+
 }
