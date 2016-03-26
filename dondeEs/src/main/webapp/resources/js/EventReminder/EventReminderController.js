@@ -39,7 +39,7 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 			}
 
 			if($scope.objNote.content != null && $scope.objNote.content != "" && $scope.objNote.content != undefined){
-				$http({method: 'POST',url:'rest/protected/note/createNote', data:$scope.dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				$http({method: 'POST',url:'rest/protected/note/saveNote', data:$scope.dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 					if (response.code == 200) {
 						getAllEventRemider();
 						toastr.success("Notas del evento", "La nota fué creada con éxito");
