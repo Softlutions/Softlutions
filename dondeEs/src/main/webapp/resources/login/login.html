@@ -10,26 +10,32 @@
 
 			<h1 class="text-center login-title">Iniciar sesión</h1>
 			<div id="loginDiv" class="account-wall">
-				<form class="form-signin" onSummit="return false">
+				<form class="form-signin" name="formLogin" onSummit="return false" 
+								ng-submit="formLogin.$valid ? checkLogin() : null">
+								
 					<input name="login" autocomplete="on" type="text"
-						class="form-control" placeholder="Correo" autofocus
-						ng-model="user.email"> <input name="password"
-						autocomplete="on" type="password" class="form-control"
-						placeholder="Contraseña" ng-model="user.password">
+								class="form-control" placeholder="Correo" autofocus
+									ng-model="user.email" required> 
+									
+					<input name="password"
+								autocomplete="on" type="password" class="form-control"
+									placeholder="Contraseña" ng-model="user.password" required>
 
-					<button class="btn btn-lg btn-primary btn-block"
-						ng-click="checkLogin()">Ingresar</button>
-
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+					
 					<label class="pull-left"> <input id="chkRememberMe"
-						type="checkbox" value="remember-me"> Recordarme
+								type="checkbox" value="remember-me"> Recordarme
 
-					</label> <a class="pull-right" data-toggle="modal"
-						data-target="#updatePasswordModal">¿Olvidó su contraseña?</a> <span
-						class="clearfix"></span>
+					</label> 
+					
+					<a class="pull-right" data-toggle="modal"
+						data-target="#updatePasswordModal">¿Olvidó su contraseña?</a> 
+					
+					<span class="clearfix"></span>
 				</form>
 
 				<a class="pull-right" data-toggle="modal"
-					data-target="#selectTypeUser">Registrarse</a>
+						data-target="#selectTypeUser">Registrarse</a>
 			</div>
 		</div>
 	</div>

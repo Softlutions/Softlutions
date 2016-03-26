@@ -19,33 +19,17 @@ public class NoteController {
 
 	@Autowired NoteServiceInterface noteServiceInterface;
 	
-	@RequestMapping(value = "/createNote", method= RequestMethod.POST )
-	public NoteResponse createNote(@RequestBody Note note){
-	
-		NoteResponse response = new NoteResponse();
-		
-		note.setDate(new Date());
-		Boolean state = noteServiceInterface.saveNote(note);
-		
-		if(state){
-			response.setCode(200);
-		}else{
-			response.setCode(500);
-		}
-		
-		return response;
-	}
-	
 	/**
-	 * Actualiza la información de un determinado evento.
+	 * Actualiza una nota de un determinado evento o la crea en caso de que aún
+	 * no exista.
 	 * @author Enmanuel García González 
 	 * @param note
 	 * @return 
 	 * @version 1.0
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/updateNote", method= RequestMethod.PUT )
-	public NoteResponse updateNote(@RequestBody Note note){
+	@RequestMapping(value = "/saveNote", method= RequestMethod.POST )
+	public NoteResponse saveNote(@RequestBody Note note){	
 		NoteResponse response = new NoteResponse();
 		
 		try {
@@ -57,11 +41,10 @@ public class NoteController {
 			}else{
 				response.setCode(500);
 			}
-			
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setCode(500);
-			
-		} finally { return response; }
+		} finally { return response; }	
 	}
 	
 	/**
@@ -81,9 +64,9 @@ public class NoteController {
 			response.setNotes(noteServiceInterface.getAllNoteByEvent(id));
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setCode(500);
 			
-		} finally { return response; }
-		
+		} finally { return response; }	
 	}
 }

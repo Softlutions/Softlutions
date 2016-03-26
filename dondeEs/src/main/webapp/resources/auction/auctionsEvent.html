@@ -1,11 +1,16 @@
 <div class="col-sm-12" ng-show="serviceList == false">
+	<div class="pull-left">
+		<a class="btn btn-primary pull-right" href="app#/index">Volver</a>
+	</div>
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
 			<h5>Subastas del evento</h5>
 		</div>
 		<div class="ibox-content">
-
-			<table class="table table-hover table-responsive">
+			<div ng-hide="auctionsEvent.length">
+				<p>No hay subastas para este evento</p>
+			</div>
+			<table class="table table-hover table-responsive" ng-show="auctionsEvent.length">
 				<thead>
 					<tr>
 						<th>Nombre</th>
@@ -39,41 +44,44 @@
 	</div>
 </div>
 					
-	<div class="col-sm-12" ng-show="serviceList == true">
-		<button ng-click="hideServiceList()" class="btn btn-primary">Volver</button>
+<div class="col-sm-12" ng-show="serviceList == true">
+	<button ng-click="hideServiceList()" class="btn btn-primary">Volver</button>
+	<div class="ibox float-e-margins">
 		<div class="ibox float-e-margins">
-			<div class="ibox float-e-margins">
-				<div class="ibox-title">
-					<h5>Oferta de servicios</h5>
+			<div class="ibox-title">
+				<h5>Oferta de servicios</h5>
+			</div>
+			<div class="ibox-content">
+				<div ng-hide="auctionServices.length">
+					<p>No hay servicios para esta subasta</p>
 				</div>
-				<div class="ibox-content">
-					<table class="table table-hover table-responsive">
-						<thead>
-							<tr>
-								<th>Descripción de la oferta</th>
-								<th>Precio</th>
-								<th>Fecha de publicación</th>
-								<th>Nombre del servicio</th>
-								<th>Descripción del servicio</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="service in auctionServices">
-								<td>{{service.description}}</td>
-								<td>₡{{service.price}}</td>
-								<td>{{service.date | date:'dd-MM-yyyy'}}</td>
-								<td>{{service.service.name}}</td>
-								<td>{{service.service.description}}</td>
-								<td class="text text-info">
-									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
-										class="btn btn-primary btn-xs">Contratar</button>
-								</td>	
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				<table class="table table-hover table-responsive" ng-show="auctionServices.length">
+					<thead>
+						<tr>
+							<th>Descripción de la oferta</th>
+							<th>Precio</th>
+							<th>Fecha de publicación</th>
+							<th>Nombre del servicio</th>
+							<th>Descripción del servicio</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="service in auctionServices">
+							<td>{{service.description}}</td>
+							<td>₡{{service.price}}</td>
+							<td>{{service.date | date:'dd-MM-yyyy'}}</td>
+							<td>{{service.service.name}}</td>
+							<td>{{service.service.description}}</td>
+							<td class="text text-info">
+								<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
+									class="btn btn-primary btn-xs">Contratar</button>
+							</td>	
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
+</div>
 

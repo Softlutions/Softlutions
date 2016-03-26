@@ -8374,6 +8374,10 @@ textarea {
 .table-filter .media .summary {
 	font-size: 14px;
 } 
+.editEventReminder{
+	color: #337ab7;
+	margin: 0 0 0 1.5em;
+}
 
 /* END REMINDER EVENT */
 
