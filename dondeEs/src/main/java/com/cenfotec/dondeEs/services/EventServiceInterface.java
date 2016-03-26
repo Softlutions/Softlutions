@@ -1,5 +1,6 @@
 package com.cenfotec.dondeEs.services;
 
+
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -28,6 +29,14 @@ public interface EventServiceInterface {
 	 * @version 1.0
 	 */
 	List<EventPOJO> getAllEventPublish();
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param nameUser criterio de busqueda
+	 * @param name criterio de busqueda
+	 * @param namePlace criterio de busqueda
+	 * @return lista segun el o los criterios
+	 */
+	List<EventPOJO> getAllByParam(String nameUser, String name, String namePlace, byte state);
 	
 	/**
 	 * @auctor Ernesto Mendez A.

@@ -5,11 +5,11 @@
 				<h5>{{$parent.permissions.isAdmin? 'Servicios':'Mis
 					servicios'}}</h5>
 				<a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
-					class="btn btn-primary btn-xs pull-right" data-toggle="modal"
-					data-target="#modal-form">Registrar servicio</a>
+					class="btn btn-primary btn-xs pull-right" data-target="#modal-form">Registrar
+					servicio</a>
 			</div>
 			<div class="ibox-content ">
-				<table class="table table-hover">
+				<table class="table table-hover" ng-table="servicesTable">
 					<thead>
 						<tr>
 							<th>Nombre</th>
@@ -18,10 +18,9 @@
 							<th>Estado</th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="service in services">
+					<tbody ng-repeat="service in $data">
 						<tr>
-							<td class="hidden">{{service.serviceId}}</td>
-							<td>{{service.name}}</td>
+							<td sortable="'name'">{{service.name}}</td>
 							<td>{{service.description}}</td>
 							<td>{{service.serviceCatalog.name}}</td>
 							<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
@@ -60,17 +59,17 @@
 									<div class="form-group">
 										<label class="font-noraml"><strong>Nombre</strong></label> <input
 											type="text" id="nombre" class="form-control"
-											placeholder="Nombre" ng-model="objService.name" /> <span
-											ng-show="onError && createRentForm.name.$error.required"
+											placeholder="Nombre" ng-model="objService.name" required />
+										<span ng-show="onError && createRentForm.name.$error.required"
 											class="help-inline">Required </span>
 									</div>
 
 									<div class="form-group">
 										<label class="font-noraml"><strong>Descripción</strong></label>
-										<input type="text" id="descripcion" class="form-control"
-											placeholder="Descripcion" ng-model="objService.description" />
-										<span ng-show="onError && createRentForm.name.$error.required"
-											class="help-inline">Required </span>
+
+										<textarea rows="5" style="resize: none"
+											placeholder="Descripción" class="form-control"
+											ng-model="objService.description" required></textarea>
 									</div>
 
 									<div class="form-group">
