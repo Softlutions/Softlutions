@@ -249,7 +249,7 @@ public class EventController {
 			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
 			@RequestParam("eventPlaceName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
 			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("loggedUser") int userId,
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam("publishDate") String publishDate, @RequestParam("file") MultipartFile file) {
 		EventResponse eventResponse = new EventResponse();
 		Event event = new Event();
 		Place place;
@@ -265,7 +265,15 @@ public class EventController {
 				place = placeServiceInterface.savePlace(place);
 
 				User user = userServiceInterface.findById(userId);
-
+				
+				publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+				
+				try{
+					SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+					Date date = format.parse(publishDate);
+					event.setPublishDate(date);
+				}catch(Exception e){ e.printStackTrace(); }
+				
 				event.setName(name);
 				event.setDescription(description);
 				event.setLargeDescription(largeDescription);
@@ -310,9 +318,10 @@ public class EventController {
 			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
 			@RequestParam("placeName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
 			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("owner") int userId,
-			@RequestParam("file") MultipartFile file, @RequestParam("eventId") int eventId,
-			@RequestParam("publishDate") String publishDate) {
+			@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("eventId") int eventId,
+			@RequestParam("publishDate") String publishDate, @RequestParam("placeId") int placeId) {
 		BaseResponse response = new BaseResponse();
+		
 		Event event = new Event();
 		event.setEventId(eventId);
 		event.setName(name);
@@ -320,38 +329,27 @@ public class EventController {
 		event.setLargeDescription(largeDescription);
 		event.setPrivate_((byte) eventType);
 		
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+		publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+		
 		try{
-			event.setPublishDate(format.parse(publishDate));
-		}catch(Exception e){
-			//e.printStackTrace();
-		}
-		
-		User user = userServiceInterface.findById(userId);
-		event.setUser(user);
-		
+			SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+			Date date = format.parse(publishDate);
+			event.setPublishDate(date);
+		}catch(Exception e){ e.printStackTrace(); }
+
 		Place place = new Place();
+		place.setPlaceId(placeId);
 		place.setName(placeName);
 		place.setLatitude(placeLatitude);
 		place.setLongitude(placeLongitude);
-		place = placeServiceInterface.savePlace(place);
 		event.setPlace(place);
 		
-		String resultFileName = Utils.writeToFile(file, servletContext);
-
-		if (!resultFileName.equals("")) {
-			event.setImage(resultFileName);
-			
-			if(eventServiceInterface.editEvent(event)){
-				response.setCode(200);
-				response.setCodeMessage("success");
-			}else{
-				response.setCode(500);
-				response.setCodeMessage("internal error");
-			}
+		if(eventServiceInterface.editEvent(event, file, servletContext)){
+			response.setCode(200);
+			response.setCodeMessage("success");
 		}else{
 			response.setCode(500);
-			response.setCodeMessage("no image");
+			response.setCodeMessage("internal error");
 		}
 		
 		return response;
