@@ -28,7 +28,7 @@ angular
 													var params = {
 														page: 1,	// PAGINA INICIAL
 													count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-														sorting: {name: "des"}
+														sorting: {name: "asc"}
 													};
 													
 													var settings = {

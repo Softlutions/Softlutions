@@ -18,6 +18,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 	$scope.searchByPlace;
 	$scope.searchByEvent;
 	$scope.isOpen = true;
+	$scope.showError = true;
 	$http.get('rest/protected/event/getAllEventPublish',$scope.requestObject).success(function(response) {
 		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
@@ -65,6 +66,11 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 			$scope.eventsPublish = response.eventList;
 			
 		});
+		if($scope.eventsPublish.length==0){
+			$scope.showError = false;
+		}else{
+			$scope.showError = true;
+		}
 	}
 	$scope.openDivSearch = function(){
 		if($scope.isOpen == true){
