@@ -83,4 +83,17 @@ public class EventImageService implements EventImageServiceInterface {
 		
 		return images;
 	}
+
+	@Override
+	public Boolean deleteImage(int imageId) {
+		EventImage eventImage = eventImageRepository.findOne(imageId);
+		boolean isDeleted = false;
+		
+		if(eventImage != null){
+			eventImageRepository.delete(eventImage);
+			isDeleted = true;
+		}
+		
+		return isDeleted;
+	}
 }

@@ -14,17 +14,13 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 	
 	$scope.eventsPublish = [];
 	$scope.requestObject = {"eventsPublish": {}};
-	$scope.images = [{image:"resources/general-images/1458450822405.jpg"},
-	                 {image:"resources/general-images/1458503134177.jpg"},
-	                 {image:"resources/general-images/1458535068164.jpg"},
-	                 {image:"resources/general-images/1458786313856.jpg"}];
 	
 	$http.get('rest/protected/event/getAllEventPublish',$scope.requestObject).success(function(response) {
 		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
 				$scope.eventsPublish = response.eventList;
 				console.log($scope.eventsPublish);
-				/*for (var i=0; i<$scope.eventsPublish.length; i++) {
+				for (var i=0; i<$scope.eventsPublish.length; i++) {
 					$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 					
 					switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
@@ -41,8 +37,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 					    case '11': $scope.eventsPublish[i].month = "NOV"; break;
 					    case '12': $scope.eventsPublish[i].month = "DEC"; break;
 					    default: $scope.eventsPublish[i].month = "NONE";
-					} 
-				}*/
+					}
+				}
 			} else {
 		    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
 			}
@@ -131,6 +127,5 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
     	}else if($scope.eventParticipant.eventParticipantId == 0){
     		toastr.error('Este usuario no puede subir imágenes a este evento');
     	}
-    	
     }
 }]);
