@@ -12,5 +12,7 @@ public interface EventParticipantServiceInterface {
 	
 	EventParticipant findById(int id);
 
+	EventParticipantPOJO findByUserAndEvent(int userId, int eventId);
+
 
 }

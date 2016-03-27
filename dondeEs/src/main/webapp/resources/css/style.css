@@ -8380,3 +8380,6 @@ textarea {
 .inputUploadImage{
 	width: 100%;
 }
+.containerComment{
+	width: 100% !important;
+}
