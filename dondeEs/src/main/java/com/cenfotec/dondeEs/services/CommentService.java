@@ -10,14 +10,17 @@ import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.pojo.OfflineUserPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.CommentRepository;
+import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 
 @Service
 public class CommentService implements CommentServiceInterface {
 	
 	@Autowired private CommentRepository commentRepository;
-
+	@Autowired private EventParticipantRepository eventParticipantRepository;
+	
 	@Override
 	public Boolean saveComment(Comment comment) {
+		comment.setEventParticipant(eventParticipantRepository.findOne(comment.getEventParticipant().getEventParticipantId()));
 		Comment ncomment = commentRepository.save(comment);
 		return (ncomment == null)? false : true;
 	}

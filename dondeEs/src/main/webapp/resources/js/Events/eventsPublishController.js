@@ -85,7 +85,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 			var eventComment = {
 					content: $scope.comment,
 					date: new Date(),
-					eventParticipant: {eventParticipantId:8}
+					eventParticipant: $scope.eventParticipant
 			}
 			console.log(eventComment);
 			$http({method: 'POST',url:'rest/protected/comment/createComment', data:eventComment, headers: {'Content-Type': 'application/json'}}).success(function(response) {
