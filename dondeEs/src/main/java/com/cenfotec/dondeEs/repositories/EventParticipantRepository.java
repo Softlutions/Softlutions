@@ -13,4 +13,6 @@ public interface EventParticipantRepository extends CrudRepository<EventParticip
 	List<EventParticipant> findEventParticipantByEventId(int EventId);
 	
 	EventParticipant findByEventParticipantId(int id);
+
+	EventParticipant findByUserUserIdAndEventEventId(int userId, int eventId);
 }

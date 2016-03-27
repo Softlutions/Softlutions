@@ -8,8 +8,6 @@ import com.cenfotec.dondeEs.ejb.ServiceCatalog;
 
 public interface ServiceCatalogRepository extends CrudRepository<ServiceCatalog, Integer> {
 
-	List<ServiceCatalog> findAll(); 
-	
-	
-	
+	List<ServiceCatalog> findAll();
+
 }

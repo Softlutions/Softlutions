@@ -1,0 +1,33 @@
+<div class="col-sm-12">
+	<div class="ibox float-e-margins">
+		<div class="ibox-title">
+			<h5>Participantes del evento</h5>
+		</div>
+		<div class="ibox-content">
+
+			<table ng-show="participants.length" class="table table-hover table-responsive">
+				<thead>
+					<tr>
+						<th>Nombre</th>
+						<th>Estado</th>
+						<th>Fecha de envio de la invitación</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat="participant in participants">
+					<tr>
+						<td>{{ ((participant.user != null) ?
+							(participant.user.name+" "+participant.user.lastName1+"
+							"+participant.user.lastName2 ) : (
+							participant.offlineUser.email)) }}</td>
+						<td>{{ ((participant.state == 0) ? "No asistirá" :
+							(participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
+						<td>{{ participant.invitationDate | date:'medium' }}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div ng-hide="participants.length">
+				<p>No hay participantes para este evento</p>
+			</div>
+		</div>
+	</div>
+</div>

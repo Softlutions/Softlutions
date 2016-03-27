@@ -1,7 +1,7 @@
-<div id="" class="col-lg-12">
-	<div class="ibox float-e-margins">
-		<div class="ibox-title">
-			<h1>Eventos publicados</h1>
+<div ng-show="step == 0" class="col-lg-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h1>Eventos publicados</h1>
 			<div ibox-tools></div>
 		</div>
 		<div class="ibox-content">
@@ -58,14 +58,10 @@
 						<p class="desc" data-toggle="collapse"
 							data-target="#demo{{$index}}">{{ event.description }}</p>
 						<ul>
-							<li style="width: 34%;" data-toggle="modal"
-								data-target="#modal-form">Comentarios <span
-								class="fa fa-envelope"></span></li>
-							<li style="width: 33%;"
-								ng-click="goToEventPromoterProfile(event.user.userId)">Promotor
-								{{ event.user.name }} {{ event.user.lastName1 }} <span
-								class="fa fa-male"></span></a>
-							</li>
+							<li style="width:34%;" ng-click="showComments(event)" >Comentarios  
+																				<span class="fa fa-envelope"></span></li>
+							<li style="width:33%;" ng-click="goToEventPromoterProfile(event.user.userId)">Promotor {{ event.user.name }} {{ event.user.lastName1 }}
+								 <span class="fa fa-male"></span></a></li>
 						</ul>
 					</div>
 					<div class="social" data-toggle="collapse"
@@ -87,66 +83,47 @@
 	</div>
 </div>
 
-<div id="modal-form" class="modal fade" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-body">
+<div ng-show="step == 1" class="col-lg-12">
+	<button type="button" class="btn btn-warning btn-xs pull-left" ng-click="step = 0">Volver</button>
+	<div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h4>Comentarios</h4>
+        </div>
+        <div class="ibox-content">
+        	
+	        	<div class="containerComment" id="commentDiv">
+	        	<form>
+		        	<div class="form-group">
+		        		<textarea class="form-control" rows="5" placeholder="Escriba su comentario aquí..." ng-model="comment"></textarea>
+		        	</div>
+	        		<button class="btn btn-primary" ng-click="commentEvent()">Comentar</button>
+	        		</form>
+	        	</div>
+	        	
+	        	
+        	
+			<div class="containerComment">
 				<div class="row">
-					<div class="col-sm-12">
-						<h3 class="m-t-none m-b">Comentarios</h3>
-						<div class="ibox float-e-margins">
-							<div class="ibox-content">
-								<div class="containerComment">
-									<div class="row">
-										<div class="col-xs-8">
-											<div class="panel panel-white post panel-shadow">
-												<div class="post-heading">
-													<div class="pull-left image">
-														<img src="http://bootdey.com/img/Content/user_1.jpg"
-															class="img-circle avatar" alt="user profile image">
-													</div>
-													<div class="pull-left meta">
-														<div class="title h5">
-															<a href="#"><b>Ryan Haywood</b></a> made a post.
-														</div>
-														<h6 class="text-muted time">1 minute ago</h6>
-													</div>
-												</div>
-												<div class="post-description">
-													<p>Bootdey is a gallery of free snippets resources
-														templates and utilities for bootstrap css hmtl js
-														framework. Codes for developers and web designers</p>
-												</div>
-											</div>
-										</div>
-										<div class="col-xs-8">
-											<div class="panel panel-white post panel-shadow">
-												<div class="post-heading">
-													<div class="pull-left image">
-														<img src="http://bootdey.com/img/Content/user_1.jpg"
-															class="img-circle avatar" alt="user profile image">
-													</div>
-													<div class="pull-left meta">
-														<div class="title h5">
-															<a href="#"><b>Ryan Haywood</b></a> made a post.
-														</div>
-														<h6 class="text-muted time">1 minute ago</h6>
-													</div>
-												</div>
-												<div class="post-description">
-													<p>Bootdey is a gallery of free snippets resources
-														templates and utilities for bootstrap css hmtl js
-														framework. Codes for developers and web designers</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+					<div class="col-lg-12">
+			            <div class="panel panel-white post panel-shadow" ng-repeat="comment in commentList | orderBy : 'date' : true">
+			                <div class="post-heading">
+			                    <div class="pull-left image">
+			                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+			                    </div>
+			                    <div class="pull-left meta">
+			                        <div class="title h5">
+			                            <a href="#"><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : comment.eventParticipant.user.name}}</b></a>
+			                        </div>
+			                        <h6 class="text-muted time" >{{setDate(comment.date)}}</h6>
+			                    </div>
+			                </div> 
+			                <div class="post-description"> 
+			                    <p>{{comment.content}}</p>
+			                </div>
+			            </div>
+		            </div>
+		        </div>
 			</div>
-		</div>
-	</div>
+        </div>
+    </div>
 </div>

@@ -51,8 +51,7 @@
 										<li><a ng-click="listContracts(event.eventId)"
 											data-toggle="modal" data-target="#modalListContacts">Listar
 												contratos</a></li>
-										<li><a ng-click="listParticipants(event.eventId)"
-											data-toggle="modal" data-target="#modalParticipants">Listar
+										<li><a href="/dondeEs/app#/eventParticipants/{{event.eventId}}">Listar
 												participantes</a></li>
 										<li ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
@@ -150,28 +149,7 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-sm-12">
-								<table class="table table-hover">
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Estado</th>
-											<th>Fecha de envio de la invitación</th>
-										</tr>
-									</thead>
-									<tbody ng-repeat="participant in participants">
-										<tr>
-											<td>{{ ((participant.user != null) ?
-												(participant.user.name+" "+participant.user.lastName1+"
-												"+participant.user.lastName2 ) : (
-												participant.offlineUser.email)) }}</td>
-											<td>{{ ((participant.state == 0) ? "No asistirá" :
-												(participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
-											<td>{{ participant.invitationDate | date:'medium' }}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+							
 						</div>
 					</div>
 				</div>

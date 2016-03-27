@@ -7,6 +7,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.cenfotec.dondeEs.ejb.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.ServiceRepository;
@@ -106,6 +108,36 @@ public class ServiceImplementation implements ServiceInterface {
 			servicePOJOList.add(servicePOJO);
 		});
 
+		return servicePOJOList;
+	}
+
+	@Override
+	public List<ServicePOJO> getAllServiceByUserAndServiceCatalog(int userId, int serviceCatalogId) {
+		List<Service> serviceList = serviceRepository.findAllByUserUserIdAndServiceCatalogServiceCatalogId(userId,serviceCatalogId);
+		List<ServicePOJO> servicePOJOList = new ArrayList<ServicePOJO>();
+		serviceList.stream().forEach(s -> {
+			ServicePOJO servicePOJO = new ServicePOJO();
+			servicePOJO.setServiceId(s.getServiceId());
+			servicePOJO.setName(s.getName());
+			servicePOJO.setDescription(s.getDescription());
+			servicePOJO.setState(s.getState());
+			
+			servicePOJOList.add(servicePOJO);
+		});
+		return servicePOJOList;
+	}
+
+	@Override
+	public List<ServicePOJO> getServiceCatalogIdByProvider(int userId) {
+		List<Service> serviceList = serviceRepository.findAllByUserUserId(userId);
+		List<ServicePOJO> servicePOJOList = new ArrayList<ServicePOJO>();
+		serviceList.stream().forEach(s -> {
+			ServicePOJO servicePOJO = new ServicePOJO();
+			ServiceCatalogPOJO serviceCatalogPOJO = new ServiceCatalogPOJO();
+			serviceCatalogPOJO.setServiceCatalogId(s.getServiceCatalog().getServiceCatalogId());
+			servicePOJO.setServiceCatalog(serviceCatalogPOJO);
+			servicePOJOList.add(servicePOJO);
+		});
 		return servicePOJOList;
 	}
 

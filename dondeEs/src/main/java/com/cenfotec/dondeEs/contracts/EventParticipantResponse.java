@@ -10,7 +10,7 @@ public class EventParticipantResponse extends BaseResponse{
 
 	List<EventParticipant> listEventParticipant;
 	
-	EventParticipant eventParticipant;
+	EventParticipantPOJO eventParticipant;
 
 	public List<EventParticipantPOJO> getEventParticipantsList() {
 		return eventParticipantsList;
@@ -28,11 +28,11 @@ public class EventParticipantResponse extends BaseResponse{
 		this.listEventParticipant = listEventParticipant;
 	}
 
-	public EventParticipant getEventParticipant() {
+	public EventParticipantPOJO getEventParticipant() {
 		return eventParticipant;
 	}
 
-	public void setEventParticipant(EventParticipant eventParticipant) {
+	public void setEventParticipant(EventParticipantPOJO eventParticipant) {
 		this.eventParticipant = eventParticipant;
 	}
 }

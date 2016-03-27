@@ -16,6 +16,7 @@
 							<th>Descripción</th>
 							<th>Categoría</th>
 							<th>Estado</th>
+						<th></th>
 						</tr>
 					</thead>
 					<tbody ng-repeat="service in $data">
@@ -24,7 +25,10 @@
 							<td>{{service.description}}</td>
 							<td>{{service.serviceCatalog.name}}</td>
 							<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
-
+						<td>
+							<button class="btn btn-primary btn-xs" data-toggle="modal" ng-click="loadInfo(service)"
+									data-target="#modal-form">Modificar</button>
+						</td>
 						</tr>
 					</tbody>
 				</table>
@@ -71,24 +75,41 @@
 											placeholder="Descripción" class="form-control"
 											ng-model="objService.description" required></textarea>
 									</div>
-
+								<div ng-show="creating">
 									<div class="form-group">
 										<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
 											type="submit" ng-click="saveService($event)">
 											<strong>Guardar</strong>
 										</button>
-
+								
 									</div>
-
+									
 									<div class="form-group">
-										<button type="button"
+											<button type="button"
 											class="btn btn-sm btn-danger pull-right m-t-n-xs"
 											data-dismiss="modal">Cancelar</button>
 									</div>
+								</div>
+								<div ng_hide="creating">
+									<div class="form-group">
+										<label class="font-noraml"><strong>Estado</strong></label>
+										
+										<select class="form-control m-b" ng-model="objService.state" id="updateSelect">
+											<option value="1">Activo</option>
+      										<option value="0">Suspendido</option>
 
-
-								</form>
-							</div>
+										</select>
+									
+									</div>
+									<div class="form-group">
+										<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+												ng-click="updateService($event,$index)">
+											<strong>Guardar</strong>
+										</button>
+									</div>
+								</div>	
+									
+							</form>
 						</div>
 					</div>
 				</div>
