@@ -4,21 +4,13 @@ package com.cenfotec.dondeEs.services;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
-import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.pojo.OfflineUserPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.cenfotec.dondeEs.ejb.EventParticipant;
 
 import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 

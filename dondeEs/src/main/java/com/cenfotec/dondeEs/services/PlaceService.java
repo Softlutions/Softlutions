@@ -11,6 +11,11 @@ public class PlaceService implements PlaceServiceInterface {
 	@Autowired private PlaceRepository placeRepository;
 	
 	@Override
+	public Place findById(int id){
+		return placeRepository.findOne(id);
+	}
+	
+	@Override
 	public Place savePlace(Place _place) {
 		Place place = placeRepository.save(_place);
 		return place;

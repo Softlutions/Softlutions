@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.cenfotec.dondeEs.ejb.ServiceCatalog;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
-import com.cenfotec.dondeEs.pojo.ServicePOJO;
 import com.cenfotec.dondeEs.repositories.ServiceCatalogRepository;
 
 @Service

@@ -171,15 +171,15 @@ public class EventController {
 					response.setErrorMessage("success");
 
 					List<UserPOJO> servicesProviders = userServiceInterface
-										.getAllServicesProviderAuction(event.getEventId());
-					
+							.getAllServicesProviderAuction(event.getEventId());
+
 					if (!servicesProviders.isEmpty()) {
 						for (UserPOJO sp : servicesProviders) {
 							String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();
-	
+
 							resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName,
 									event.getName());
-	
+
 							if (!resultSendEmail) {
 								response.setCode(500);
 								response.setErrorMessage("notification cancel event error");
@@ -249,7 +249,7 @@ public class EventController {
 			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
 			@RequestParam("eventPlaceName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
 			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("loggedUser") int userId,
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam("publishDate") String publishDate, @RequestParam("file") MultipartFile file) {
 		EventResponse eventResponse = new EventResponse();
 		Event event = new Event();
 		Place place;
@@ -265,7 +265,15 @@ public class EventController {
 				place = placeServiceInterface.savePlace(place);
 
 				User user = userServiceInterface.findById(userId);
-
+				
+				publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+				
+				try{
+					SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+					Date date = format.parse(publishDate);
+					event.setPublishDate(date);
+				}catch(Exception e){ e.printStackTrace(); }
+				
 				event.setName(name);
 				event.setDescription(description);
 				event.setLargeDescription(largeDescription);
@@ -297,7 +305,7 @@ public class EventController {
 			return eventResponse;
 		}
 	}
-	
+
 	/**
 	 * @author Ernesto Mendez A.
 	 * @param event
@@ -310,9 +318,10 @@ public class EventController {
 			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
 			@RequestParam("placeName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
 			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("owner") int userId,
-			@RequestParam("file") MultipartFile file, @RequestParam("eventId") int eventId,
-			@RequestParam("publishDate") String publishDate) {
+			@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("eventId") int eventId,
+			@RequestParam("publishDate") String publishDate, @RequestParam("placeId") int placeId) {
 		BaseResponse response = new BaseResponse();
+		
 		Event event = new Event();
 		event.setEventId(eventId);
 		event.setName(name);
@@ -320,40 +329,45 @@ public class EventController {
 		event.setLargeDescription(largeDescription);
 		event.setPrivate_((byte) eventType);
 		
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+		publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+		
 		try{
-			event.setPublishDate(format.parse(publishDate));
-		}catch(Exception e){
-			//e.printStackTrace();
-		}
-		
-		User user = userServiceInterface.findById(userId);
-		event.setUser(user);
-		
+			SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+			Date date = format.parse(publishDate);
+			event.setPublishDate(date);
+		}catch(Exception e){ e.printStackTrace(); }
+
 		Place place = new Place();
+		place.setPlaceId(placeId);
 		place.setName(placeName);
 		place.setLatitude(placeLatitude);
 		place.setLongitude(placeLongitude);
-		place = placeServiceInterface.savePlace(place);
 		event.setPlace(place);
 		
-		String resultFileName = Utils.writeToFile(file, servletContext);
-
-		if (!resultFileName.equals("")) {
-			event.setImage(resultFileName);
-			
-			if(eventServiceInterface.editEvent(event)){
-				response.setCode(200);
-				response.setCodeMessage("success");
-			}else{
-				response.setCode(500);
-				response.setCodeMessage("internal error");
-			}
+		if(eventServiceInterface.editEvent(event, file, servletContext)){
+			response.setCode(200);
+			response.setCodeMessage("success");
 		}else{
 			response.setCode(500);
-			response.setCodeMessage("no image");
+			response.setCodeMessage("internal error");
 		}
 		
 		return response;
+	}
+
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param nameUser criterio a consultar
+	 * @param namePlace criterio a consultar
+	 * @param name criterio a consultar
+	 * @param publishDate criterio a consultar
+	 * @return lista de eventos basados en los criterios
+	 */
+	@RequestMapping(value="/getEventByParams/{nameUser}/{name}/{namePlace}", method= RequestMethod.GET)
+	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name, @PathVariable("namePlace")String namePlace){
+		EventResponse e = new EventResponse();
+		e.setEventList(eventServiceInterface.getAllByParam(nameUser, name, namePlace, (byte)3));
+		e.setCode(200);
+		return e;
 	}
 }

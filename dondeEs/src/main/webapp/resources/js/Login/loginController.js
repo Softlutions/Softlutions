@@ -16,7 +16,8 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			email : "",
 			password : ""
 		};
-		
+		$scope.confirmPassword;
+		$("#selectTypeUser").hide();
 		$scope.checkLogin = function() {
 			if($scope.user.email != '' && $scope.user.password != ''){
 				$scope.loginRequest.email = $scope.user.email;
@@ -108,17 +109,22 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			}
 		}
 		
+		
 		$scope.saveUser = function(user) {
 			var userRequest = {
 				user : $scope.user
 			}
-			if($scope.user.name != null && $scope.user.email != null && $scope.user.lastName1 !=null && $scope.user.password.length >= 8 && $scope.user.phone != null){
+			
+			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password == $scope.confirmPassword ){
 
 				$http.post("rest/login/create",userRequest)
 					.success(function(response) {
 						if (response.code == 200) {
 							console.log(response);
 							$("#createUserForm").modal('hide');
+							$("#createCompanyForm").modal('hide');
+							$scope.user={};
+							$scope.confirmPassword='';
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
 							toastr.error(response.codeMessage, 'Registro negado');
@@ -144,4 +150,19 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 					$scope.roles = response.listRole;
 				});
 		//#endregion Users
+		$scope.showSubModal1=function(){
+			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5)
+			setTimeout(function(){$('#createUserForm').modal('show')}, 900)
+		}
+		
+		$scope.showMainModal=function(){
+			setTimeout(function(){$('#createCompanyForm').modal('hide')}, 5)
+			setTimeout(function(){$('#selectTypeUser').modal('show')}, 900)
+		}
+		
+		$scope.showSubModal2=function(){
+			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5)
+			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900)
+		}
+
 	}]);

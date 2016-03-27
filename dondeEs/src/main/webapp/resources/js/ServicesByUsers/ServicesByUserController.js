@@ -1,7 +1,6 @@
 'use strict';
 angular
-		.module('dondeEs.serviceByUser', ['ngRoute'])
-		.config([ '$routeProvider', function($routeProvider) {
+		.module('dondeEs.serviceByUser',['ngRoute', 'ngTable']).config(['$routeProvider', function($routeProvider) {
 			$routeProvider.when('/serviceByUser', {
 				templateUrl : 'resources/ServicesByUser/ServiceByUser.html',
 				controller : 'ServicesByUserCtrl'
@@ -11,36 +10,56 @@ angular
 				'ServicesByUserCtrl',
 				[
 						'$scope',
-						'$http',
-						function($scope, $http) {
+						'$http','ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
 								$scope.users = [];
 								$scope.services = [];
 								$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 								$scope.requestObject = {};
 								$scope.objService={};
 								$scope.creating = true;
-						
-								
+								$scope.showError = true;
+								$scope.serviceModal = {};
 								$scope.requestObject = {"pageNumber": 0,"pageSize": 0,"direction": "","sortBy": [""],"searchColumn": "string","searchTerm": "","user": {}};
 
 								if(!$scope.$parent.permissions.isAdmin){
 									$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
 										$scope.services = response.listService;
+
+													// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
+													var params = {
+														page: 1,	// PAGINA INICIAL
+													count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
+														sorting: {name: "asc"}
+													};
+													
+													var settings = {
+														total: $scope.services.length,	
+														counts: [],	
+														getData: function($defer, params){
+															var fromIndex = (params.page() - 1) * params.count();
+															var toIndex = params.page() * params.count();
+															
+															var subList = $scope.services.slice(fromIndex, toIndex);
+															var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
+															$defer.resolve(sortedList);
+													}
+													};
+													
+													$scope.servicesTable = new ngTableParams(params, settings);
+												
 									});
+						
 								}else{
 									$http.get('rest/protected/service/getAllService').success(function(response) {
 										$scope.services = response.serviceLists;
 									});
+									
+									if($scope.services.length==0){
+										$scope.showError = false;
+									}else{
+										$scope.showError = true;
+									}
 								}
-							
-								 $scope.list = $scope.$parent.personList;
-								 
-								  $scope.config = {
-								    itemsPerPage: 5,
-								    fillLastPage: true
-								    }
-								
-								
 								  $scope.init = function() {
 								    	
 								    	$http.get('rest/protected/serviceCatalog/getAllCatalogService')

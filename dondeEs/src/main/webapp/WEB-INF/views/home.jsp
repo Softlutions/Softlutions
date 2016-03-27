@@ -46,7 +46,7 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li ng-click="logout()"><a>Logout</a></li>
+								<li ng-click="logout()"><a>Cerrar sesión</a></li>
 							</ul>
 						</div>
 						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
@@ -55,27 +55,35 @@
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/index">{{permissions.isAdmin?  'Eventos publicados':'Mis eventos'}} </a></li>
-						</ul></li>
+						</ul>
+					</li>
 					<li ng-show="permissions.gestionarUsuarios"><a href="#"><i class="fa fa-user"></i> <span
 							class="nav-label">Usuarios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="/dondeEs/app#/users">Lista de usuarios </a></li>
-						</ul></li>
+						</ul>
+					</li>
 					<li ng-show="permissions.gestionarServicios"><a href="#"><i class="fa fa-shopping-cart"></i> <span
 							class="nav-label">Servicios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/serviceByUser">{{permissions.isAdmin?  'Servicios':'Mis servicios'}} </a></li>
-						</ul></li>
+						</ul>
+					</li>
 					<li><a href="#"><i class="fa fa-comments-o"></i> <span
 							class="nav-label">Chats </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/chat">Chat</a></li>
-						</ul></li>
+						</ul>
+					</li>
 					<li ng-show="permissions.gestionarSubastas"><a href="#"><i class="fa fa-money"></i> <span
 							class="nav-label">Subastas </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
-						</ul></li>
+						</ul>
+					</li>
+					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
+					<span class="nav-label">Contacto</span></a>
+					</li>
 				</ul>
 			</div>
 		</nav>
@@ -131,6 +139,7 @@
 	<script src="resources/bower_components/moment/min/moment.min.js"></script>
 	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
 	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 
@@ -139,7 +148,7 @@
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
-
+	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
 	<!-- Morris -->
 	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="resources/js/plugins/morris/morris.js"></script>
