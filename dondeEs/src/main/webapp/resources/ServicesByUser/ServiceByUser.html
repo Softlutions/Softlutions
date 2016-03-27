@@ -75,7 +75,7 @@
 											placeholder="Descripción" class="form-control"
 											ng-model="objService.description" required></textarea>
 									</div>
-
+								<div ng-show="creating">
 									<div class="form-group">
 										<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
 											type="submit" ng-click="saveService($event)">

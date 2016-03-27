@@ -78,7 +78,7 @@ angular
 								    
 								    $scope.init();
 								    $scope.saveService = function(event){
-									    	
+								    	$scope.creating = true;
 										$scope.onError = false;
 									    $scope.objService.state = 1
 									 									    

@@ -8,15 +8,15 @@ angular
 		});
 	} ])
 	.controller('AuctionsCtrl',['$scope','$http',function($scope, $http) {
-		$scope.listForm = true;
+		$scope.selectedCatalogId = "";
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUserServiceCatalogs = [];
 		$scope.auctionService = {};
 		$scope.selectedAuction = {};
 		$scope.catalogs = [];
 		$scope.auctionList =[];
-		$scope.pendingAuctionList =[];
-		$scope.showError = true;
-		$scope.showErrorPending = true;
 		$scope.selectedCatalogId = "";
+		$scope.step = 0;
 		
 		toastr.options = {
 			closeButton: true,
@@ -34,21 +34,7 @@ angular
 				$scope.catalogs.push(allAuctions);
 				$scope.catalogs.push.apply($scope.catalogs,response.serviceCatalogList);
 			});
-			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-			$scope.loggedUserServiceCatalogs = [];
-			$scope.auctionService = {};
-			$scope.selectedAuction = {};
-			$scope.catalogs = [];
-			$scope.auctionList =[];
-			$scope.selectedCatalogId = "";
-			$scope.step = 0;
-			
-			toastr.options = {
-				closeButton: true,
-				showMethod: 'slideDown',
-				timeOut: 4000
-			};
-			
+
 			$http.get('rest/protected/service/getServiceCatalogIdByProvider/'+$scope.loggedUser.userId).success(function(response) {
 				if(response.serviceLists.length != 0){	
 					var x;
@@ -57,6 +43,7 @@ angular
 					}
 				}
 			});
+		});
 			
 			$scope.validateService = function(serviceCatalogId){
 				var existe = $scope.loggedUserServiceCatalogs.indexOf(serviceCatalogId);
@@ -99,7 +86,7 @@ angular
 						$scope.showError = true;
 					}
 				});		
-			}
+			};
 			
 			$scope.getAuctionsByCatalog = function(selectedCatalog){
 				if(selectedCatalog.serviceCatalogId == 0){
@@ -109,7 +96,7 @@ angular
 					$scope.selectedCatalogId = selectedCatalog.serviceCatalogId;
 					
 				}	
-			}
+			};
 
 			$scope.listParticipants = function(auction){	
 				console.log(auction);
@@ -122,13 +109,13 @@ angular
  					else
  						$("#btnParticipate").attr("disabled","true");
  				});	
-			}	
+			};	
 			
 			$scope.loadServices = function(){
 				$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.selectedAuction.serviceCatalog.serviceCatalogId ).success(function(response) {
 					$scope.services = response.serviceLists;	
 				});	
-			}
+			};
 			
 			$scope.joinAuction = function(){
 				if($scope.auctionService.description == null || $scope.auctionService.price == null || $scope.auctionService.service == null){
@@ -149,9 +136,9 @@ angular
 						$scope.auctionService = {};
 						toastr.success('Se ha incorporado a la subasta!');
 						$("#registerModal").modal("toggle");
-					})
+					});
 				}
-			}
+			};
 			
 			$scope.contract = function(auctionService){
 				if(auctionService.acept == 1){
@@ -164,9 +151,11 @@ angular
 						}else{
 							$("#modalAuctionParticipants").modal("toggle");
 							toastr.error("No se pudo contratar el servicio");
+						}
+
+					});
 				}
-			});		
-		}
+		};
 		
 		$scope.getAuctionsByCatalog = function(selectedCatalog){
 			if(selectedCatalog.serviceCatalogId == 0){
@@ -177,7 +166,7 @@ angular
 				$scope.selectedCatalogId = selectedCatalog.serviceCatalogId;
 				
 			}	
-		}
+		};
 
 		$scope.listParticipants = function(auction){				
 			 				$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+auction.auctionId).success(function(response) {
@@ -193,7 +182,7 @@ angular
 			});	
 			$scope.listForm = false;
 			
-		}
+		};
 		
 		$scope.joinAuction = function(){
 			if($scope.auctionService.description == null || $scope.auctionService.price == null || $scope.auctionService.service == null){
@@ -214,8 +203,9 @@ angular
 					$scope.auctionService = {};
 					$scope.listForm = true;
 					toastr.success('Se ha incorporado a la subasta!')
-				})
+				});
 				$scope.listForm = true;
 			}
-		}
+		};
+			
 }]);
