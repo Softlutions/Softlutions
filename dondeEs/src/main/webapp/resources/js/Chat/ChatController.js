@@ -18,6 +18,9 @@ angular
 							$scope.objMessage = {};
 							$scope.chatCurrent;
 							$scope.currentInterval;
+							$scope.eventNameByChat;
+							$scope.showError = true;
+							$scope.messages= {};
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
 							
@@ -31,6 +34,7 @@ angular
 										}
 									}).success(function(response) {
 								$scope.chats = response.chats;
+						
 							})
 							
 							$scope.stop = function(){
@@ -42,7 +46,10 @@ angular
 								
 								$scope.currentInterval =$interval($scope.loadMessage($scope.chatCurrent), 5000);
 							}
-							
+							$scope.getEventName= function(eventName){
+								$scope.eventNameByChat = eventName;
+								console.log("asassss " + $scope.eventNameByChat )
+							}
 							$scope.getAllMessage = function(idChat) {
 								
 								
@@ -82,8 +89,14 @@ angular
 //									$timeout($scope.loadMessage(idChat), 50000);
 //									$interval($scope.loadMessage(idChat), 5000);
 								})
+								if($scope.messages.length == 0){
+									$scope.showError = false;
+								}else{
+									$scope.showError = true;
+								}
 							}
 
+							
 							$scope.sendMessage = function(event) {
 
 								var dataCreate = {

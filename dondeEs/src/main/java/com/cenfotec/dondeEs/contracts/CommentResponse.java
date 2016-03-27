@@ -1,18 +1,26 @@
 package com.cenfotec.dondeEs.contracts;
 
 import java.util.List;
-
 import com.cenfotec.dondeEs.pojo.CommentPOJO;
 
-public class CommentResponse extends BaseResponse {
+public class CommentResponse extends BaseResponse{
 
-	List<CommentPOJO> comments;
-
-	public List<CommentPOJO> getComments() {
-		return comments;
+	private CommentPOJO comment;
+	private List<CommentPOJO> commentList;
+	
+	public CommentPOJO getComment() {
+		return comment;
 	}
-
-	public void setComments(List<CommentPOJO> comments) {
-		this.comments = comments;
+	
+	public void setComment(CommentPOJO comment) {
+		this.comment = comment;
+	}
+	
+	public List<CommentPOJO> getCommentList() {
+		return commentList;
+	}
+	
+	public void setCommentList(List<CommentPOJO> commentList) {
+		this.commentList = commentList;
 	}
 }

@@ -2,11 +2,16 @@
 angular
 	.module('dondeEs.EventParticipant', ['ngRoute'])
 	.config([ '$routeProvider', function($routeProvider) {
-		$routeProvider.when('/Contracts', {
-			templateUrl : 'resources/listContracts/eventParticipant.html',
+		$routeProvider.when('/eventParticipants/:id', {
+			templateUrl : 'resources/EventParticipants/eventParticipantsList.html',
 			controller : 'EventParticipantCtrl'
 		});
 	} ])
-	.controller('EventParticipant',['$scope','$http',function($scope, $http) {
+	.controller('EventParticipantCtrl',['$scope','$http','$routeParams',function($scope, $http, $routeParams) {
+		
+		$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+$routeParams.id).success(function(response) {
+			$scope.participants = response.eventParticipantsList;
+		});
+		
 		
 	}]);

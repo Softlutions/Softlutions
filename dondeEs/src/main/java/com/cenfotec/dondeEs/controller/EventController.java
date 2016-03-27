@@ -171,15 +171,15 @@ public class EventController {
 					response.setErrorMessage("success");
 
 					List<UserPOJO> servicesProviders = userServiceInterface
-										.getAllServicesProviderAuction(event.getEventId());
-					
+							.getAllServicesProviderAuction(event.getEventId());
+
 					if (!servicesProviders.isEmpty()) {
 						for (UserPOJO sp : servicesProviders) {
 							String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();
-	
+
 							resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName,
 									event.getName());
-	
+
 							if (!resultSendEmail) {
 								response.setCode(500);
 								response.setErrorMessage("notification cancel event error");
@@ -305,7 +305,7 @@ public class EventController {
 			return eventResponse;
 		}
 	}
-	
+
 	/**
 	 * @author Ernesto Mendez A.
 	 * @param event
@@ -353,5 +353,21 @@ public class EventController {
 		}
 		
 		return response;
+	}
+
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param nameUser criterio a consultar
+	 * @param namePlace criterio a consultar
+	 * @param name criterio a consultar
+	 * @param publishDate criterio a consultar
+	 * @return lista de eventos basados en los criterios
+	 */
+	@RequestMapping(value="/getEventByParams/{nameUser}/{name}/{namePlace}", method= RequestMethod.GET)
+	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name, @PathVariable("namePlace")String namePlace){
+		EventResponse e = new EventResponse();
+		e.setEventList(eventServiceInterface.getAllByParam(nameUser, name, namePlace, (byte)3));
+		e.setCode(200);
+		return e;
 	}
 }

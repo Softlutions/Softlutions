@@ -88,7 +88,7 @@ public class EventParticipantController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/getEventParticipantByUserAndEvent/{userId}/{eventId}", method = RequestMethod.GET)
 	public EventParticipantResponse getEventParticipantByUserAndEvent(@PathVariable("userId") int userId, @PathVariable("eventId") int eventId) {
 		EventParticipantResponse response = new EventParticipantResponse();

@@ -10,6 +10,7 @@ import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.pojo.OfflineUserPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+
 import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 
 @Service

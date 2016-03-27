@@ -45,7 +45,7 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li ng-click="logout()"><a>Logout</a></li>
+								<li ng-click="logout()"><a>Cerrar sesión</a></li>
 							</ul>
 						</div>
 						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
@@ -149,7 +149,7 @@
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
-
+	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
 	<!-- Morris -->
 	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="resources/js/plugins/morris/morris.js"></script>
@@ -168,6 +168,7 @@
 	<script src="resources/js/Chat/ChatController.js"></script>
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
+	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
 
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>

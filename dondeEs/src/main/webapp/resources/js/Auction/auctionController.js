@@ -29,8 +29,6 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 		if (response.code == 200) {
 			if (response.auctionList != null && response.auctionList != {}) {
 				$scope.auctionsEvent = response.auctionList;
-			} else {
-		    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
 			}
 		} else {
 	    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
