@@ -65,6 +65,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 						user["userId"] = response.userId;
 						$scope.users.push(user);
 						$("#modal-form").modal('hide');
+						$scope.usersTable.reload();
 						toastr.success('Ha sido registrado en el sistema', 'Registro exitoso');
 					} else {
 						toastr.error('Ha ocurrido un error en el registro', 'Registro negado');

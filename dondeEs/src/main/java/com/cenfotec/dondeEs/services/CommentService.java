@@ -2,27 +2,51 @@ package com.cenfotec.dondeEs.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.cenfotec.dondeEs.ejb.Comment;
 import com.cenfotec.dondeEs.pojo.CommentPOJO;
+import com.cenfotec.dondeEs.repositories.CommentRepository;
+import com.cenfotec.dondeEs.utils.Utils;
+
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.pojo.OfflineUserPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
-import com.cenfotec.dondeEs.repositories.CommentRepository;
 import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 
 @Service
 public class CommentService implements CommentServiceInterface {
-	
-	@Autowired private CommentRepository commentRepository;
+
 	@Autowired private EventParticipantRepository eventParticipantRepository;
+	@Autowired private CommentRepository commentRepository;
+	@Autowired private ServletContext servletContext;
+	
+	@Override
+	public Boolean saveComment(Comment comment, MultipartFile file) {
+		String image = null;
+		Comment ncomment = null;
+		
+		if(file != null)
+			image = Utils.writeToFile(file, servletContext);
+		
+		if(image != null){
+			comment.setImage(image);
+			ncomment = commentRepository.save(comment);
+		}
+		
+		return (ncomment == null);
+	}
 	
 	@Override
 	public Boolean saveComment(Comment comment) {
 		comment.setEventParticipant(eventParticipantRepository.findOne(comment.getEventParticipant().getEventParticipantId()));
 		Comment ncomment = commentRepository.save(comment);
-		return (ncomment == null)? false : true;
+		return (ncomment == null);
 	}
 	
 	@Override

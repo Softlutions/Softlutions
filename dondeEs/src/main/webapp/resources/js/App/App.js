@@ -2,6 +2,7 @@
 
 angular.module('dondeEs', [
 	"ngRoute",
+	"slick",
 	"dondeEs.index",
 	"dondeEs.update",
 	"dondeEs.serviceByUser",

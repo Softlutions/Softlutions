@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.eventsPublish', ['ngRoute'])
+angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/eventsPublish', {
@@ -9,8 +9,9 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
   });
 }])
 
-.controller('eventsPublishCtrl', ['$scope','$http',function($scope,$http) {	
+.controller('eventsPublishCtrl', ['$scope','$http','Upload','$timeout',function($scope,$http,Upload,$timeout) {
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+
 	$scope.eventsPublish = [];
 	$scope.requestObject = {"eventsPublish": {}};
 
@@ -28,8 +29,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
 				$scope.eventsPublish = response.eventList;
+				
 				for (var i=0; i<$scope.eventsPublish.length; i++) {
-					
 					$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 					
 					switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
@@ -45,8 +46,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 					    case '10': $scope.eventsPublish[i].month = "OCT"; break;
 					    case '11': $scope.eventsPublish[i].month = "NOV"; break;
 					    case '12': $scope.eventsPublish[i].month = "DIC"; break;
-					    default: $scope.eventsPublish[i].month = "NONE";
-					} 
+					    default: $scope.eventsPublish[i].month = "N/A";
+					}
 				}
 			} else {
 		    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
@@ -135,7 +136,6 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 			
 			if(response.code == 200){
 				$scope.eventParticipant = response.eventParticipant;
-				console.log($scope.eventParticipant);
 			}else{
 				$("#commentDiv").hide();
 			}
@@ -150,6 +150,162 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 		return m.fromNow();
 	}
 	
+	//----------------------------------------------------------------------
+	
+	// *************
+	
+	$scope.eventId = 6;
+	
+	// *************
+	
+	$scope.files = [];
+	$scope.sending = false;
+	$scope.previewFiles = [];
+	$scope.progressPercentaje = 0;
+	$scope.eventParticipant = 0;
+	
+	$http.get("rest/protected/eventParticipant/getEventParticipantByUserAndEvent/"+$scope.loggedUser.userId+"/"+$scope.eventId).success(function(response){
+		if(response.code == 200){
+			$scope.eventParticipant = response.eventParticipant;
+		}else{
+			$("#btnPublish").attr("disabled", true);
+			toastr.error('Para subir imágenes a este evento primero debes indicar que vas a participar');
+		}
+	});
+	
+	$scope.$watch('files', function() {
+		for(var i=0;i<$scope.files.length;i++) {
+			var reader = new FileReader();
+			var file = $scope.files[i];
+			
+	        reader.onload = function(e) {
+	        	var data = {
+	        		index:$scope.previewFiles.length,
+	        		name:file.name,
+	        		size:file.size,
+	        		originalFile:file,
+	        		thumbnail:e.target.result
+	        	};
+	        	$scope.previewFiles.push(data);
+	        };
+	        
+	        reader.readAsDataURL(file);
+		}
+    });
+	
+    $scope.upload = function(files) {
+    	if(files.length > 0 && !$scope.sending && $scope.eventParticipant.eventParticipantId > 0){
+    		$scope.sending = true;
+        	var uploaded = 0;
+        	
+    		for(var i=0;i<files.length;i++) {
+    			var file = files[i].originalFile;
+    			
+    			if(!file.$error) {
+    				Upload.upload({
+    					url: 'rest/protected/eventImage/saveImage',
+    					data: {
+    						"eventParticipantId": $scope.eventParticipant.eventParticipantId,
+    						"file": file
+    					}
+    				}).then(function(resp) {
+    					if(resp.status == 200)
+    						uploaded++;
+    					
+    					if(uploaded == files.length){
+    		        		$scope.sending = false;
+    		        		toastr.success('Imagenes publicadas');
+    		        	}else if(i == files.length-1){
+    		        		toastr.warning('Algunas imágenes no se pudieron publicar');
+    		        	}
+    				}, null, function(evt) {
+    					$scope.progressPercentaje = parseInt(100.0 * evt.loaded / evt.total);
+    				});
+    			}
+            }
+    	}else if($scope.eventParticipant.eventParticipantId == 0){
+    		toastr.error('Este usuario no puede subir imágenes a este evento');
+    	}
+    }
+    
+    //----------------------------------------------------------------------
+    
+    $scope.eventImages = [];
+    $scope.selectedImgs = [];
+    $scope.enableImgSelect = false;
+    
+    $scope.enableSelect = function(){
+    	$scope.enableImgSelect = !$scope.enableImgSelect;
+    	
+    	if($scope.enableImgSelect){
+    		$("#btnImgSelect").val("Cancelar");
+    	}else{
+    		$("#btnImgSelect").val("Seleccionar");
+    		
+    		$scope.selectedImgs.forEach(function(entry){
+    			$("#eventImg-"+entry.eventImageId).removeClass("selectedImg");
+    		});
+    		
+    	    $scope.selectedImgs = [];
+    	}
+    }
+    
+    $scope.selectImg = function(img){
+    	if($scope.enableImgSelect){
+    		var index = $scope.selectedImgs.indexOf(img);
+    		
+    		if(index >= 0){
+    			$scope.selectedImgs.splice(index, 1);
+    			$("#eventImg-"+img.eventImageId).removeClass("selectedImg");
+    		}else{
+    			$scope.selectedImgs.push(img);
+    			$("#eventImg-"+img.eventImageId).addClass("selectedImg");
+    		}
+    	}
+    }
+    
+    $scope.loadImgs = function(event){
+    	$scope.eventImages = [];
+    	
+    	$http.get("rest/protected/eventImage/getAllByEventId/"+event.eventId).success(function(response){
+    		if(response.code == 200)
+    			$scope.eventImages = response.images;
+    	});
+    }
+    
+    $scope.deleteImgs = function(){
+    	var deleted = 0;
+    	
+    	for(var i=0;i<$scope.selectedImgs.length;i++){
+    		var img = $scope.selectedImgs[i];
+    		
+    		$http({method: "DELETE", url:"rest/protected/eventImage/deleteEventImage/"+img.eventImageId}).then(function(response){
+        		if(response.status == 200){
+        			$scope.eventImages.splice($scope.eventImages.indexOf(img), 1);
+        			deleted++;
+        		}
+            	
+            	if(deleted == $scope.selectedImgs.length){
+            		toastr.success('Imágenes eliminadas');
+            		var temp = $scope.eventImages;
+            		$scope.eventImages = [];
+            		$scope.enableSelect();
+            		
+            		$timeout(function(){
+            			$scope.eventImages = temp;
+            		});
+            	}else if(i == $scope.selectedImgs.length-1){
+            		toastr.error('No se pudo eliminar algunas imágenes');
+            	}
+            	
+        	}, function(msj){
+        		console.log("catchedError: ", msj);
+        	});
+    	}
+    }
+    
+    //----------------------------------------------------------------------
+    
 	$scope.validateUser = function(){
 		return true;
 	};
@@ -161,7 +317,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 					date: new Date(),
 					eventParticipant: $scope.eventParticipant
 			}
-			console.log(eventComment);
+			
 			$http({method: 'POST',url:'rest/protected/comment/createComment', data:eventComment, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 				if(response.code==200){
 					$scope.commentList.push(eventComment);
@@ -170,5 +326,4 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 			});
 		}		
 	};
-	
 }]);

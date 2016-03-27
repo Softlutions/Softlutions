@@ -2,14 +2,12 @@
     <div class="ibox float-e-margins">
         <div class="ibox-title">
             <h1>Eventos publicados</h1>
-			<div ibox-tools></div>
-		</div>
-		<div class="ibox-content">
+        </div>
+        <div class="ibox-content">
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="input-group">
-						<button type="button" class="btn btn-primary"
-							ng-click="openDivSearch()">Criterio</button>
+						<button type="button" class="btn btn-primary" ng-click="openDivSearch()">Criterio</button>
 					</div>
 					<div id="itemsSearch" class="ibox-content">
 						<form role="form" class="form-inline">
@@ -36,44 +34,58 @@
 						</form>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 		<div class="ibox-content">
-
 			<ul class="event-list collapseDiv" ng-repeat="event in eventsPublish">
-				<li><time datetime="event.publishDate" data-toggle="collapse"
-						data-target="#demo{{$index}}">
+				<li>
+					<time datetime="event.publishDate" data-toggle="collapse" data-target="#demo{{$index}}">
 						<span class="day">{{event.day}}</span> <span class="month">{{event.month}}</span>
-					</time> <img ng-if="event.image == null || event.image == ''"
+					</time> 
+					<img ng-if="event.image == null || event.image == ''"
 					alt="No se pudo cargar la imagen del evento"
 					src="http://clips.com.mx/EysCommerciaWebV4/App_Themes/Clips/Imagen/NoDisponible.gif"
-					data-toggle="collapse" data-target="#demo{{$index}}" /> <img
-					ng-if="event.image != null && event.image != ''"
+					data-toggle="collapse" data-target="#demo{{$index}}" /> 
+					<img ng-if="event.image != null && event.image != ''"
 					alt="No se pudo cargar la imagen del evento" src="{{event.image}}"
 					data-toggle="collapse" data-target="#demo{{$index}}" />
+					
 					<div class="info">
-						<h2 class="title" data-toggle="collapse"
-							data-target="#demo{{$index}}">{{ event.name }}</h2>
-						<p class="desc" data-toggle="collapse"
-							data-target="#demo{{$index}}">{{ event.description }}</p>
+						<h2 class="title" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.name }}</h2>
+						<p class="desc" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.description }}</p>
 						<ul>
 							<li style="width:34%;" ng-click="showComments(event)" >Comentarios  
-																				<span class="fa fa-envelope"></span></li>
+								<span class="fa fa-envelope"></span>
+							</li>
 							<li style="width:33%;" ng-click="goToEventPromoterProfile(event.user.userId)">Promotor {{ event.user.name }} {{ event.user.lastName1 }}
-								 <span class="fa fa-male"></span></a></li>
+								<span class="fa fa-male"></span>
+							</li>
 						</ul>
 					</div>
-					<div class="social" data-toggle="collapse"
-						data-target="#demo{{$index}}">
+					<div class="social" data-toggle="collapse" data-target="#demo{{$index}}">
 						<ul>
-							<li><span>ver más</span></li>
+							<li ng-click="loadImgs(event)"><span>ver más</span></li>
 							<li><span class="fa fa-chevron-down pull-right"></span></li>
 						</ul>
-					</div></li>
+					</div>
+				</li>
+				
 				<div id="demo{{$index}}" class="collapse">
-					<img src="..." alt="..." class="img-thumbnail">
-					<p>Aquí estará el detalle del evento</p>
+		            <div class="row">
+				        <div class="col-lg-10 col-lg-offset-1">
+							<slick ng-if="eventImages.length > 0" class="slick_demo_2" infinite="true" slides-to-show="3" slides-to-scroll="1" center-mode="true"
+			                   responsive="[ { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true } }, { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } } ]" >
+				                
+				                <div ng-repeat="img in eventImages">
+				                	<div class="ibox-content">
+					                	<img id="eventImg-{{img.eventImageId}}" ng-src="{{img.image}}" ng-click="selectImg(img)" class="img-rounded" width="150px" height="100px"/>
+				                    </div>
+				                </div>
+				            </slick>
+				            <input id="btnImgSelect" type="button" ng-click="enableSelect()" class="btn btn-primary pull-right" value="Seleccionar"/>
+	        				<input ng-show="selectedImgs.length > 0" type="button" ng-click="deleteImgs()" class="btn btn-danger pull-right" value="Eliminar"/>
+				        </div>
+				    </div>
 				</div>
 			</ul>
 		</div>
@@ -90,18 +102,29 @@
             <h4>Comentarios</h4>
         </div>
         <div class="ibox-content">
-        	
-	        	<div class="containerComment" id="commentDiv">
+        	<div class="containerComment" id="commentDiv">
+        		<div>
+	        		<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
+		        	<div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" 
+		        	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
+		        		<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
+		        		
+		        		<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px" 
+		        		title="{{img.name}} {{img.size / 1024 | number:2}}Kb"/>
+		        	</div>
+		        	
+		        	<input id="btnPublish" type="button" ng-click="upload(previewFiles)" class="btn btn-primary pull-right" value="Publicar"/>
+		        	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-warning pull-right" value="Limpiar"/>
+		        	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
+	        	</div>
+	        	
 	        	<form>
 		        	<div class="form-group">
 		        		<textarea class="form-control" rows="5" placeholder="Escriba su comentario aquí..." ng-model="comment"></textarea>
 		        	</div>
 	        		<button class="btn btn-primary" ng-click="commentEvent()">Comentar</button>
-	        		</form>
-	        	</div>
-	        	
-	        	
-        	
+        		</form>
+        	</div>
 			<div class="containerComment">
 				<div class="row">
 					<div class="col-lg-12">

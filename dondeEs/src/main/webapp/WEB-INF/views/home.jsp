@@ -15,12 +15,11 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
-<link
-	href="resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css"
-	rel="stylesheet">
-<link href="resources/font-awesome/css/font-awesome.css"
-	rel="stylesheet">
+<link href="resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+<link href="resources/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="resources/css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="resources/css/plugins/slick/slick.css" rel="stylesheet">
+<link href="resources/css/plugins/slick/slick-theme.css" rel="stylesheet">
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
@@ -125,16 +124,18 @@
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
-	<script
-		src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
+	<script	src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-	<script
-		src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
-	<script
-		src="resources/bower_components/angular-animate/angular-animate.js"></script>
-	<script
-		src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
+	<script	src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script	src="resources/bower_components/angular-animate/angular-animate.js"></script>
+	<script	src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
+	
+	<script src="resources/bower_components/ng-file-upload/ng-file-upload-shim.js"></script>
+	<script src="resources/bower_components/ng-file-upload/ng-file-upload.js"></script>
+	
+	<script src="resources/non_bower_components/slick.min.js"></script>
+	<script src="resources/non_bower_components/angular-slick.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
 	<script src="resources/bower_components/moment/min/moment.min.js"></script>
 	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
@@ -170,8 +171,7 @@
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
 
 	<!-- Google Maps -->
-	<script
-		src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
+	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 
 	<!-- angular-google-maps -->
 	<script src="resources/non_bower_components/lodash.underscore.min.js"></script>
