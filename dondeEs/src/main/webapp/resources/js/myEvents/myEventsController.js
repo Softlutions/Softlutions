@@ -472,6 +472,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			.success(
 				function(response) {
 					$scope.globalEventId  = response.eventPOJO.eventId;
+					
 					if (response.code == 200) {
 						$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 							if (response.code == 200) {

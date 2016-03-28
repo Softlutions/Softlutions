@@ -1,5 +1,5 @@
-<div class="" ng-show="false">
-	<div class="col-xs-11">
+<div class="" ng-show="eventForm == false && eventsWizard == false">
+	<div class="col-xs-12">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
@@ -51,7 +51,8 @@
 										<li><a ng-click="listContracts(event.eventId)"
 											data-toggle="modal" data-target="#modalListContacts">Listar
 												contratos</a></li>
-										<li><a href="/dondeEs/app#/eventParticipants/{{event.eventId}}">Listar
+										<li><a ng-click="listParticipants(event.eventId)"
+											data-toggle="modal" data-target="#modalParticipants">Listar
 												participantes</a></li>
 										<li ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
@@ -63,7 +64,6 @@
 											ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
-										<li><a type="button" href="app#/eventReminder/{{event.eventId}}">Notas</a></li>
 										<li class="divider"></li>
 										<li><a type="button" ng-show="event.state!==0" ng-click="editEvent(event)">Modificar</a></li>
 										<li ng-show="event.state===1"><a type="button"
@@ -73,7 +73,7 @@
 										<li ng-show="event.state===3"><a type="button"
 											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar</a></li>
 										<li ng-show="event.state===0"><a type="button"
-											disabled class="text-danger">Cancelado</a></li>  
+											disabled class="text-danger">Cancelado</a></li>
 									</ul>
 								</div>
 							</td>
@@ -149,7 +149,28 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							
+							<div class="col-sm-12">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Estado</th>
+											<th>Fecha de envio de la invitación</th>
+										</tr>
+									</thead>
+									<tbody ng-repeat="participant in participants">
+										<tr>
+											<td>{{ ((participant.user != null) ?
+												(participant.user.name+" "+participant.user.lastName1+"
+												"+participant.user.lastName2 ) : (
+												participant.offlineUser.email)) }}</td>
+											<td>{{ ((participant.state == 0) ? "No asistirá" :
+												(participant.state == 1) ? "Pendiente" : "Asistirá")}}</td>
+											<td>{{ participant.invitationDate | date:'medium' }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -362,7 +383,7 @@
 											<td>{{service.service.name}}</td>
 											<td>{{service.service.description}}</td>
 											<td><a data-toggle="modal"
-												class="btn btn-p ng-if="true"rimary btn-xs" data-toggle="modal"
+												class="btn btn-primary btn-xs" data-toggle="modal"
 												data-target="#modal-form"
 												ng-click="goToServiceProviderProfile(service.service.user.userId)">
 													<di>Ver</di>
@@ -530,7 +551,7 @@
 </div>
 
 <!-- ASISTENTE DE CREACIÓN -->
-<wizard on-finish="finishedWizard()"> 
+<wizard on-finish="finishedWizard()" ng-if="eventsWizard == true"> 
 <wz-step wz-title="Crear evento" class="container" title="Starting">
 <div class="firstStep col-md-12">
  <br>
@@ -651,6 +672,7 @@
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
 			<h5>Subastas del evento</h5>
+			<a class="btn btn-primary btn-xs pull-right" href="#">Volver a mis eventos</a>
 		</div>
 		<div class="ibox-content">
 
@@ -726,5 +748,3 @@
 	</div>
 </wz-step> 
 </wizard>
-
-
