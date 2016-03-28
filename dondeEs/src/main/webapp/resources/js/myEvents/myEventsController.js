@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps'])
+var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps', 'mgo-angular-wizard'])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/index', {
     templateUrl: 'resources/myEvents/index.html',
@@ -68,7 +68,7 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', function($scope,$http,$upload,MarkerCreatorService,$filter) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler) { 
 	$scope.eventForm = false;
 	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
