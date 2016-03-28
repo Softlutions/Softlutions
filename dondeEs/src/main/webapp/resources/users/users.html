@@ -3,11 +3,11 @@
 	<div class="ibox float-e-margins col-lg-11">
 		<div class="ibox-title">
 			<h5>Usuarios registrados</h5>
-			<a data-toggle="modal" class="btn btn-primary btn-xs pull-right" data-toggle="modal"
-					data-target="#modal-form">Registrar usuario</a>
+			<a data-toggle="modal" class="btn btn-primary btn-xs pull-right"
+				data-toggle="modal" data-target="#modal-form">Registrar usuario</a>
 		</div>
 		<div class="ibox-content">
-			<table class="table table-hover">
+			<table class="table table-hover table-responsive" ng-table="usersTable">
 				<thead>
 					<tr>
 						<th>#</th>
@@ -19,80 +19,74 @@
 						<th>Estado</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr ng-repeat="user in users">
+				<tbody ng-init="check = false">
+					<tr ng-repeat="user in $data">
 						<td>{{$index+1}}</td>
-						<td>{{user.name+' '+user.lastName1+' '+user.lastName2}}</td>
+						<td sortable="'name'">{{user.name}} {{user.lastName1}} {{user.lastName2}}</td>
 						<td>{{user.email}}</td>
 						<td>{{user.phone}}</td>
 						<td>{{user.role.name}}</td>
 						<td>{{user.userType.name}}</td>
-						<td>{{user.state = 1? 'Activo':'Inactivo'}}</td>
+						<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
 					</tr>
 				</tbody>
 			</table>
-			<div id="modal-form" class="modal fade" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-sm-12 b-r">
-									<h3 class="m-t-none m-b">Registrar usuario</h3>
-									<form role="form" ng-submit="saveUser(user)" ng-init="user">
-										<div class="form-group">
-											<label>Nombre</label> <input type="text" ng-model="user.name"
-												placeholder="Ingresar nombre" required class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Primer apellido</label> <input type="text"
-												ng-model="user.lastName1"
-												placeholder="Ingresar primer apellido" required class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Segundo apellido</label> <input type="text"
-												ng-model="user.lastName2"
-												placeholder="Ingresar segundo apellido" required class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Email</label> <input type="email"
-												ng-model="user.email" required placeholder="Ingresar email"
-												class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Contraseña</label> <input type="password"
-												ng-model="user.password" required placeholder="Mínimo 8 caracteres"
-												class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Teléfono</label> <input type="text"
-												ng-model="user.phone" required placeholder="Ingresar teléfono"
-												class="form-control">
-										</div>
-										<div class="form-group">
-											<div class="i-checks">
-												<label> <input type="checkbox" ng-model="user.state"
-													value=""> <i></i> Activo
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label>Seleccione un rol</label> <select
-												class="form-control m-b" id="selectRol" required 
-												ng-options="role as role.name for role in roles track by role.roleId"
-												ng-model="user.role"></select>
-										</div>
-										<div>
-											<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-												type="submit">
-												<strong>Guardar</strong>
-											</button>
-											<button type="button"
-												class="btn btn-sm btn-danger pull-right m-t-n-xs"
-												data-dismiss="modal">Cancelar</button>
-										</div>
-									</form>
+		</div>
+	</div>
+	<div id="modal-form" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Registrar usuario</h3>
+							<form role="form" ng-submit="saveUser(user)" ng-init="user">
+								<div class="form-group">
+									<label>Nombre</label> <input type="text" ng-model="user.name"
+										placeholder="Ingresar nombre" required class="form-control">
 								</div>
-							</div>
+								<div class="form-group">
+									<label>Primer apellido</label> <input type="text"
+										ng-model="user.lastName1"
+										placeholder="Ingresar primer apellido" required
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Segundo apellido</label> <input type="text"
+										ng-model="user.lastName2"
+										placeholder="Ingresar segundo apellido" required
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Email</label> <input type="email" ng-model="user.email"
+										required placeholder="Ingresar email" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Contraseña</label> <input type="password"
+										ng-model="user.password" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Teléfono</label> <input type="text"
+										ng-model="user.phone" required placeholder="Ingresar teléfono"
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Seleccione un rol</label> <select
+										class="form-control m-b" id="selectRol" required
+										ng-options="role as role.name for role in roles track by role.roleId"
+										ng-model="user.role"></select>
+								</div>
+								<div>
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit">
+										<strong>Guardar</strong>
+									</button>
+									<button type="button"
+										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

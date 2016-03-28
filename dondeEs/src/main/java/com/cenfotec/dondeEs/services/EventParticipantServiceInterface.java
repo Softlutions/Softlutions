@@ -11,6 +11,6 @@ public interface EventParticipantServiceInterface {
 	Boolean saveParticipant(EventParticipant eventParticipant);
 	
 	EventParticipant findById(int id);
-
-
+	
+	EventParticipantPOJO findByUserAndEvent(int userId, int eventId);
 }

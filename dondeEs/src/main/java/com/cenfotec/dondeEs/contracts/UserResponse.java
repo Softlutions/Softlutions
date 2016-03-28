@@ -6,9 +6,19 @@ import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
 
 public class UserResponse extends BaseResponse {
+	private int userId;
+	
 	private List<UserPOJO> listUser;
 
 	private List<ServicePOJO> listService;
+	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	
 	public List<ServicePOJO> getListService() {
 		return listService;

@@ -3,9 +3,13 @@ package com.cenfotec.dondeEs.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -14,14 +18,15 @@ import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.EventRepository;
+import com.cenfotec.dondeEs.utils.Utils;
 
 @Service
 public class EventService implements EventServiceInterface {
 	@Autowired
 	private EventRepository eventRepository;
+	@Autowired
+	private PlaceServiceInterface placeServiceInterface;
 
-	
-	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -41,16 +46,17 @@ public class EventService implements EventServiceInterface {
 		});
 		return eventsPOJO;
 	}
-	
+
 	/***
 	 * Obtiene todos los eventos publicados.
+	 * 
 	 * @author Enmanuel García González
 	 * @version 1.0
 	 */
 	@Override
-	public List<EventPOJO> getAllEventPublish() {			
+	public List<EventPOJO> getAllEventPublish() {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		eventRepository.findAllByState((byte) 1).stream().forEach(e -> {
+		eventRepository.findAllByState((byte) 3).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
@@ -73,7 +79,7 @@ public class EventService implements EventServiceInterface {
 			eventPOJO.setUser(userPOJO);
 			eventsPOJO.add(eventPOJO);
 		});
-		
+
 		return eventsPOJO;
 	}
 
@@ -81,13 +87,7 @@ public class EventService implements EventServiceInterface {
 	public Event getEventById(int idEvent) {
 		return eventRepository.findByEventId(idEvent);
 	}
-	
-	/***
-	 * Guarda un evento.
-	 * @author Enmanuel García González
-	 * @return True en caso de efectuarse la inserción o false en caso contrario.
-	 * @version 1.0
-	 */
+
 	@Override
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
@@ -95,9 +95,42 @@ public class EventService implements EventServiceInterface {
 	}
 
 	@Override
+	@Transactional
+	public boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext){
+		boolean changed = false;
+		
+		Event event = eventRepository.findOne(e.getEventId());
+		
+		if(event != null){
+			event.setName(e.getName());
+			event.setDescription(e.getDescription());
+			event.setLargeDescription(e.getLargeDescription());
+			event.setPrivate_(e.getPrivate_());
+			
+			if(e.getPublishDate() != null)
+				event.setPublishDate(e.getPublishDate());
+			
+			Place place = placeServiceInterface.findById(event.getPlace().getPlaceId());
+			place.setLatitude(e.getPlace().getLatitude());
+			place.setLongitude(e.getPlace().getLongitude());
+			place.setName(e.getPlace().getName());
+			
+			// VALIDAR QUE LA IMAGEN NO EXISTA YA (en contenido)
+			if(imgFile != null){
+				String resultFileName = Utils.writeToFile(imgFile, servletContext);
+				event.setImage(resultFileName);
+			}
+			
+			changed = true;
+		}
+		
+		return changed;
+	}
+
+	@Override
 	public EventPOJO eventById(int idEvent) {
 
-		//Event
+		// Event
 		Event event = eventRepository.findOne(idEvent);
 		EventPOJO eventPOJO = new EventPOJO();
 		eventPOJO.setEventId(event.getEventId());
@@ -109,8 +142,8 @@ public class EventService implements EventServiceInterface {
 		eventPOJO.setPublishDate(event.getPublishDate());
 		eventPOJO.setRegisterDate(event.getRegisterDate());
 		eventPOJO.setState(event.getState());
-		
-		if(event.getPlace() != null){
+
+		if (event.getPlace() != null) {
 			Place place = event.getPlace();
 			PlacePOJO placePOJO = new PlacePOJO();
 			placePOJO.setPlaceId(place.getPlaceId());
@@ -119,8 +152,8 @@ public class EventService implements EventServiceInterface {
 			placePOJO.setName(place.getName());
 			eventPOJO.setPlace(placePOJO);
 		}
-		if(event.getUser() != null){
-			User user  = event.getUser();
+		if (event.getUser() != null) {
+			User user = event.getUser();
 			UserPOJO userPOJO = new UserPOJO();
 			userPOJO.setUserId(user.getUserId());
 			userPOJO.setEmail(user.getEmail());
@@ -130,10 +163,57 @@ public class EventService implements EventServiceInterface {
 			userPOJO.setName(user.getName());
 			userPOJO.setPassword(user.getPassword());
 			userPOJO.setPhone(user.getPhone());
-			if(user.getState()==1) userPOJO.setState(true);
-			if(user.getState()==0) userPOJO.setState(false);
+			if (user.getState() == 1)
+				userPOJO.setState(true);
+			if (user.getState() == 0)
+				userPOJO.setState(false);
 			eventPOJO.setUser(userPOJO);
 		}
 		return eventPOJO;
 	}
+
+	@Override
+	public List<EventPOJO> getAllByParam(String nameUser, String name, String namePlace, byte state) {
+		List<Event> listEvent = eventRepository.finByParams(state, nameUser, name, namePlace);
+		List<EventPOJO> listEventPOJO = new ArrayList<EventPOJO>();
+		listEvent.stream().forEach(e -> {
+			EventPOJO eventPOJO = new EventPOJO();
+			BeanUtils.copyProperties(e, eventPOJO);
+			eventPOJO.setChats(null);
+			eventPOJO.setEventParticipants(null);
+			eventPOJO.setServiceContacts(null);
+			eventPOJO.setNotes(null);
+
+			if (e.getPlace() != null) {
+				Place place = e.getPlace();
+				PlacePOJO placePOJO = new PlacePOJO();
+				placePOJO.setPlaceId(place.getPlaceId());
+				placePOJO.setLatitude(place.getLatitude());
+				placePOJO.setLongitude(place.getLongitude());
+				placePOJO.setName(place.getName());
+				eventPOJO.setPlace(placePOJO);
+			}
+			if (e.getUser() != null) {
+				User user = e.getUser();
+				UserPOJO userPOJO = new UserPOJO();
+				userPOJO.setUserId(user.getUserId());
+				userPOJO.setEmail(user.getEmail());
+				userPOJO.setImage(user.getImage());
+				userPOJO.setLastName1(user.getLastName1());
+				userPOJO.setLastName2(user.getLastName2());
+				userPOJO.setName(user.getName());
+				userPOJO.setPassword(user.getPassword());
+				userPOJO.setPhone(user.getPhone());
+				if (user.getState() == 1)
+					userPOJO.setState(true);
+				if (user.getState() == 0)
+					userPOJO.setState(false);
+				eventPOJO.setUser(userPOJO);
+				;
+				listEventPOJO.add(eventPOJO);
+			}
+		});
+		return listEventPOJO;
+	}
+
 }

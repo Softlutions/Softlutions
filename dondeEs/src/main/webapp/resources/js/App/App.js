@@ -2,6 +2,7 @@
 
 angular.module('dondeEs', [
 	"ngRoute",
+	"slick",
 	"dondeEs.index",
 	"dondeEs.update",
 	"dondeEs.serviceByUser",
@@ -14,9 +15,20 @@ angular.module('dondeEs', [
 	"dondeEs.auctionsEvent",
 	"dondeEs.auctions",
 	"dondeEs.contact",
-	"dondeEs.chat"
+	"dondeEs.chat",
+	"dondeEs.eventReminder",
+	"dondeEs.EventParticipant"
 
-]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
+]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {	
+	// Opciones globales de los popup de notificaciones.
+	toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            showMethod: 'slideDown',
+            timeOut: 4000
+        };
+	// FIN, opciones globales de los popup de notificaciones.
+	
 	$routeProvider.otherwise({redirectTo: '/index'});
   
 	$provide.factory('responseHttpInterceptor', function($q) {
@@ -47,23 +59,8 @@ angular.module('dondeEs', [
 			}
 	    }
 	});
-}])
-.constant('CONFIG', {
-	TEMPLATE_DIR:"templates/",
-	ROL_CURRENT_USER: 1
-})
- 
-.constant('ROLES', {
-	ADMIN: {
-		ROL:1,
-		PATH:"/admin"
-	},
-	REGISTERED: {
-		ROL:2,
-		PATH:"/user"
-	},
-	GUEST: {
-		ROL:3,
-		PATH:"/guest"
-	}
-})
+}]).run(function($rootScope, $location) {
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    	$rootScope.hola  = "Hola";
+      });
+    });
