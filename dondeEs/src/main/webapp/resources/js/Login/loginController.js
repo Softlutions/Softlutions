@@ -115,34 +115,41 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				user : $scope.user
 			}
 			
-			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password == $scope.confirmPassword ){
-
-				$http.post("rest/login/create",userRequest)
-					.success(function(response) {
-						if (response.code == 200) {
-							console.log(response);
-							$("#createUserForm").modal('hide');
-							$("#createCompanyForm").modal('hide');
-							$scope.user={};
-							$scope.confirmPassword='';
-							toastr.success(response.codeMessage, 'Registro exitoso');
-						} else {
-							toastr.error(response.codeMessage, 'Registro negado');
-						}
-					});
+		if(!$scope.user.password == $scope.confirmPassword){
+				toastr.error(response.codeMessage, 'Sus contraseñas no coinciden');
 			}else{
-				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+				if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8){
+					
+					$http.post("rest/login/create",userRequest)
+						.success(function(response) {
+							if (response.code == 200) {
+								console.log(response);
+								$("#createUserForm").modal('hide');
+								$("#createCompanyForm").modal('hide');
+								$scope.user = undefined;
+								$scope.confirmPassword='';
+								
+								toastr.success(response.codeMessage, 'Registro exitoso');
+							} else {
+								toastr.error(response.codeMessage, 'Registro negado');
+							}
+						});
+				}else{
+					 setTimeout(function() {					
+			                toastr.options = {
+			                    closeButton: true,
+			                    progressBar: true,
+			                    showMethod: 'slideDown',
+			                    timeOut: 4000
+			                };
+			                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
 
-		            }, 1300);
+			            }, 1300);
+				}
 			}
-		}
+			}
+			
+			
 
 		// get roles
 		$http.get('rest/login/getAll').success(

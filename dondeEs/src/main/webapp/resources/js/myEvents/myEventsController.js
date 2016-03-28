@@ -68,9 +68,10 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', function($scope,$http,$upload,MarkerCreatorService,$filter) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler) { 
 	$scope.eventForm = false;
 	$scope.address = '';
+	$scope.eventsWizard = false;
 	$scope.HOURS_BEFORE_EVENT = 12;
 	
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
@@ -263,10 +264,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			pemail.to = "";
 			}else{	
 			 	  setTimeout(function() {	
-		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
-
-		            }, 1300);
-				 
+		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');      
+			 	  }, 1300);
 			}
 	}
 	
@@ -353,7 +352,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					} else {
 						toastr.warning('Publicación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se publicó.');
 					}
-					
 				});
 			} else {
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
@@ -668,6 +666,72 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		}
 	}
     
+    //#REGION ASISTENTE DE CREACION
+    $scope.createEvent = function() {
+		$scope.upload = $upload
+			.upload(
+				{
+					url : 'rest/protected/event/createEvent',
+					data : {
+						'name':$scope.tempEvent.name,
+						'description':$scope.tempEvent.desc,
+						'largeDescription':$scope.tempEvent.largeDesc,
+						'eventType':$scope.tempEvent.type,
+						'eventPlaceName':$scope.tempEvent.placeName,
+						'placeLatitude':$scope.map.center.latitude,
+						'placeLongitude':$scope.map.center.longitude, 
+						'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
+						'loggedUser':$scope.loggedUser.userId,
+					},
+					file : $scope.tempEvent.originalFile,
+				})
+			.progress(
+				function(evt) {})
+			.success(
+				function(response) {
+					$scope.globalEventId  = response.eventPOJO.eventId;
+					if (response.code == 200) {
+						$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+							if (response.code == 200) {
+								if (response.eventList.length > 0) {
+									$scope.events = response.eventList;
+									
+							    	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
+										if (response.code == 200) {
+											if (response.auctionList != null && response.auctionList != {}) {
+												$scope.auctionsEvent = response.auctionList;
+												WizardHandler.wizard().next();
+											} else {
+										    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
+											}
+										} else {
+									    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+										}
+									});
+							    	
+							    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
+							    	$scope.hiddenEventForm();
+								} else {
+							    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
+								}
+							} else {
+						    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
+						    	$scope.hiddenEventForm();
+							}			
+						});
+						
+					} else {
+				    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+					}
+					
+					$scope.resetCreateEvent();
+				})
+			.error(function(msj){
+				console.log(msj);
+			});
+	};
+    
+    
     $scope.auctionsEvent = [];
 	$scope.auctionServices = [];
 	
@@ -682,7 +746,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.serviceList  = false;
 	}
 		
-	$http.get('rest/protected/auction/getAllAuctionByEvent/'+1).success(function(response) {
+	$http.get('rest/protected/auction/getAllAuctionByEvent/'+3).success(function(response) {
 		if (response.code == 200) {
 			if (response.auctionList != null && response.auctionList != {}) {
 				$scope.auctionsEvent = response.auctionList;
@@ -701,7 +765,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.goToServiceProviderProfile = function () {
 	//	$location.url('/login');  colocar ruta del perfil del prestatario de servicio. 
 	}
-	
 	$scope.finishAuction= function (id){
 		var dataCreate={
 			auctionId:id
@@ -730,5 +793,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 		$("#modal-form").modal("toggle");
 	}
+	  //#ENDREGION ASISTENTE DE CREACION
+	
     
 }]);

@@ -1,6 +1,8 @@
 package com.cenfotec.dondeEs.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.QueryParam;
 
@@ -23,7 +25,9 @@ import com.cenfotec.dondeEs.ejb.OfflineUser;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
+import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
+import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.ServiceInterface;
@@ -224,5 +228,34 @@ public class SendEmailController {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	/**
+	 * Envia un correo a un usuario involucrado en un determinado evento notificando el pago de este.
+	 * @author Alejandro Bermudez Vargas
+	 * @param message
+	 * @version 1.0
+	 */
+	protected boolean sendNotificationPayEvent(ArrayList<UserPOJO> users, EventPOJO event) {
+		if(users==null) return false;
+		for (UserPOJO user : users) {
+			try {
+				SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+				subject = "Pago de evento";
+				text = "Le notificamos que ya casi todo esta listo para que el evento "+ event.getName() + "Se toda una realidad!";
+				mailMessage.setTo(user.getEmail());
+				mailMessage.setText(text);
+				mailMessage.setSubject(subject);
+				mailSender.send(mailMessage);
+				
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+		}
+		return false;
 	}
 }

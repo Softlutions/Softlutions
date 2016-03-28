@@ -95,7 +95,7 @@
   left: calc(43%);
   width: 14px;
   height: 14px;
-  background-color: #e6e6e6;
+  background-color: #1ab394;
   border-radius: 100%;
   content: '';
   transition: 0.25s;
@@ -159,7 +159,7 @@
 }
 
 .steps-indicator li.current a:before {
-  background-color: #808080;
+  background-color: #a40000;
 }
 
 .steps-indicator li.done a:before {
