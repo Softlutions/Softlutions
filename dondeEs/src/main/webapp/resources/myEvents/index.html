@@ -362,7 +362,7 @@
 											<td>{{service.service.name}}</td>
 											<td>{{service.service.description}}</td>
 											<td><a data-toggle="modal"
-												class="btn btn-primary btn-xs" data-toggle="modal"
+												class="btn btn-p ng-if="true"rimary btn-xs" data-toggle="modal"
 												data-target="#modal-form"
 												ng-click="goToServiceProviderProfile(service.service.user.userId)">
 													<di>Ver</di>
@@ -530,7 +530,7 @@
 </div>
 
 <!-- ASISTENTE DE CREACIÓN -->
-<wizard on-finish="finishedWizard()" ng-if="true"> 
+<wizard on-finish="finishedWizard()"> 
 <wz-step wz-title="Crear evento" class="container" title="Starting">
 <div class="firstStep col-md-12">
  <br>

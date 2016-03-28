@@ -23,7 +23,6 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
-<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 <link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
@@ -127,7 +126,6 @@
 	<script src="resources/bower_components/angular/angular.js"></script>
 	<script	src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-	<script	src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
 	<script	src="resources/bower_components/angular-animate/angular-animate.js"></script>
 	<script	src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
@@ -142,11 +140,11 @@
 	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
 	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
+		<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 
-	<!-- Steps -->
-	<script src="resources/js/plugins/staps/jquery.steps.min.js"></script>
+
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
@@ -170,7 +168,7 @@
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
-	<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
+	
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 
