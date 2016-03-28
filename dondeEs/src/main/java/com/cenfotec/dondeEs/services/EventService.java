@@ -3,9 +3,13 @@ package com.cenfotec.dondeEs.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -14,14 +18,15 @@ import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
 import com.cenfotec.dondeEs.repositories.EventRepository;
+import com.cenfotec.dondeEs.utils.Utils;
 
 @Service
 public class EventService implements EventServiceInterface {
 	@Autowired
 	private EventRepository eventRepository;
+	@Autowired
+	private PlaceServiceInterface placeServiceInterface;
 
-	
-	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -42,15 +47,10 @@ public class EventService implements EventServiceInterface {
 		return eventsPOJO;
 	}
 	
-	/***
-	 * Obtiene todos los eventos publicados.
-	 * @author Enmanuel García González
-	 * @version 1.0
-	 */
 	@Override
 	public List<EventPOJO> getAllEventPublish() {			
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		eventRepository.findAllByState((byte) 1).stream().forEach(e -> {
+		eventRepository.findAllByState((byte) 3).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
@@ -82,16 +82,43 @@ public class EventService implements EventServiceInterface {
 		return eventRepository.findByEventId(idEvent);
 	}
 	
-	/***
-	 * Guarda un evento.
-	 * @author Enmanuel García González
-	 * @return True en caso de efectuarse la inserción o false en caso contrario.
-	 * @version 1.0
-	 */
 	@Override
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
 		return event.getEventId();
+	}
+	
+	@Override
+	@Transactional
+	public boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext){
+		boolean changed = false;
+		
+		Event event = eventRepository.findOne(e.getEventId());
+		
+		if(event != null){
+			event.setName(e.getName());
+			event.setDescription(e.getDescription());
+			event.setLargeDescription(e.getLargeDescription());
+			event.setPrivate_(e.getPrivate_());
+			
+			if(e.getPublishDate() != null)
+				event.setPublishDate(e.getPublishDate());
+			
+			Place place = placeServiceInterface.findById(event.getPlace().getPlaceId());
+			place.setLatitude(e.getPlace().getLatitude());
+			place.setLongitude(e.getPlace().getLongitude());
+			place.setName(e.getPlace().getName());
+			
+			// VALIDAR QUE LA IMAGEN NO EXISTA YA (en contenido)
+			if(imgFile != null){
+				String resultFileName = Utils.writeToFile(imgFile, servletContext);
+				event.setImage(resultFileName);
+			}
+			
+			changed = true;
+		}
+		
+		return changed;
 	}
 
 	@Override

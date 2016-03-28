@@ -20,7 +20,7 @@ public class ServiceController {
 	@RequestMapping(value ="/getAllService", method = RequestMethod.GET)
 	public ServiceResponse getAllService(){
 		ServiceResponse response = new ServiceResponse();
-		response.setServiceList(serviceInterface.getAll());
+		response.setServiceLists(serviceInterface.getAll());
 		return response;
 	}
 	

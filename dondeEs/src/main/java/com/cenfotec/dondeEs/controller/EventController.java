@@ -1,5 +1,6 @@
 package com.cenfotec.dondeEs.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -86,7 +88,7 @@ public class EventController {
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 2.0
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/publishEvent", method = RequestMethod.PUT)
@@ -96,7 +98,7 @@ public class EventController {
 		try {
 			if (eventRequest.getEventId() != 0) {
 				Event event = eventServiceInterface.getEventById(eventRequest.getEventId());
-				event.setState((byte) 1);
+				event.setState((byte) 3);
 				event.setPublishDate(new Date());
 
 				int eventId = eventServiceInterface.saveEvent(event);
@@ -146,7 +148,7 @@ public class EventController {
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 2.0
 	 */
 	@SuppressWarnings("finally")
 	@Transactional
@@ -169,17 +171,20 @@ public class EventController {
 					response.setErrorMessage("success");
 
 					List<UserPOJO> servicesProviders = userServiceInterface
-							.getAllServicesProviderAuction(event.getEventId());
-					for (UserPOJO sp : servicesProviders) {
-						String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();
-
-						resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName,
-								event.getName());
-
-						if (!resultSendEmail) {
-							response.setCode(500);
-							response.setErrorMessage("notification cancel event error");
-							break;
+										.getAllServicesProviderAuction(event.getEventId());
+					
+					if (!servicesProviders.isEmpty()) {
+						for (UserPOJO sp : servicesProviders) {
+							String fullName = sp.getName() + " " + sp.getLastName1() + " " + sp.getLastName2();
+	
+							resultSendEmail = sendEmail.sendNotificationCancelEvent(sp.getEmail(), fullName,
+									event.getName());
+	
+							if (!resultSendEmail) {
+								response.setCode(500);
+								response.setErrorMessage("notification cancel event error");
+								break;
+							}
 						}
 					}
 				} else {
@@ -236,7 +241,7 @@ public class EventController {
 	 * @author Enmanuel García González
 	 * @param eventRequest
 	 * @return
-	 * @version 1.0
+	 * @version 2.0
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
@@ -244,7 +249,7 @@ public class EventController {
 			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
 			@RequestParam("eventPlaceName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
 			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("loggedUser") int userId,
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam("publishDate") String publishDate, @RequestParam("file") MultipartFile file) {
 		EventResponse eventResponse = new EventResponse();
 		Event event = new Event();
 		Place place;
@@ -260,12 +265,20 @@ public class EventController {
 				place = placeServiceInterface.savePlace(place);
 
 				User user = userServiceInterface.findById(userId);
-
+				
+				publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+				
+				try{
+					SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+					Date date = format.parse(publishDate);
+					event.setPublishDate(date);
+				}catch(Exception e){ e.printStackTrace(); }
+				
 				event.setName(name);
 				event.setDescription(description);
 				event.setLargeDescription(largeDescription);
 				event.setImage(resultFileName);
-				event.setState((byte) 0);
+				event.setState((byte) 1);
 				event.setPrivate_((byte) eventType);
 				event.setRegisterDate(new Date());
 				event.setUser(user);
@@ -291,5 +304,54 @@ public class EventController {
 		} finally {
 			return eventResponse;
 		}
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param event
+	 * @param file
+	 * @return
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
+	public BaseResponse edit(@RequestParam("name") String name, @RequestParam("description") String description,
+			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
+			@RequestParam("placeName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
+			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("owner") int userId,
+			@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("eventId") int eventId,
+			@RequestParam("publishDate") String publishDate, @RequestParam("placeId") int placeId) {
+		BaseResponse response = new BaseResponse();
+		
+		Event event = new Event();
+		event.setEventId(eventId);
+		event.setName(name);
+		event.setDescription(description);
+		event.setLargeDescription(largeDescription);
+		event.setPrivate_((byte) eventType);
+		
+		publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+		
+		try{
+			SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+			Date date = format.parse(publishDate);
+			event.setPublishDate(date);
+		}catch(Exception e){ e.printStackTrace(); }
+
+		Place place = new Place();
+		place.setPlaceId(placeId);
+		place.setName(placeName);
+		place.setLatitude(placeLatitude);
+		place.setLongitude(placeLongitude);
+		event.setPlace(place);
+		
+		if(eventServiceInterface.editEvent(event, file, servletContext)){
+			response.setCode(200);
+			response.setCodeMessage("success");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("internal error");
+		}
+		
+		return response;
 	}
 }

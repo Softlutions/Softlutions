@@ -9,4 +9,6 @@ import com.cenfotec.dondeEs.ejb.Note;
 public interface NoteRepository  extends CrudRepository<Note, Integer> {
 
 	List<Note> findAll();
+
+	List<Note> findAllByEventEventId(int idEvent);
 }

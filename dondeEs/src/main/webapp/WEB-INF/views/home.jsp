@@ -24,19 +24,20 @@
 <link href="resources/css/animate.css" rel="stylesheet">
 <link href="resources/css/style.css" rel="stylesheet">
 <link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
-<link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
+<link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
 </head>
 <body>
-	<div id="wrapper">
+	<div id="wrapper" ng-controller="IndexCtrl">
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
-						<div class="dropdown profile-element" ng-controller="IndexCtrl">
+						<div class="dropdown profile-element">
 							<span> <img alt="image" class="img-circle"
 								src="http://lorempixel.com/32/32" />
-							</span> <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+							</span> <a data-toggle="dropdown" class="dropdown-toggle">
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
 											{{loggedUser.lastName}}</strong>
@@ -45,54 +46,56 @@
 							</span>
 							</a>
 							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li><a href="#">Profile</a></li>
-								<li><a href="#">Contacts</a></li>
-								<li><a href="#">Mailbox</a></li>
-								<li class="divider"></li>
-								<li ng-click="logout()"><a>Logout</a></li>
+								<li ng-click="logout()"><a>Cerrar sesión</a></li>
 							</ul>
 						</div>
-						<div class="logo-element">IN+</div>
+						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
 					</li>
-					<li><a href="#"><i class="fa fa-th-large"></i> <span
+					<li ng-show="permissions.gestionarEventosPropios"><a href="#"><i class="fa fa-th-large"></i> <span
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/index">Mis eventos</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-user"></i> <span
-							class="nav-label">Usuarios</span><span class="fa arrow"></span></a>
+							<li><a href="app#/index">{{permissions.isAdmin?  'Eventos publicados':'Mis eventos'}} </a></li>
+						</ul>
+					</li>
+					<li ng-show="permissions.gestionarUsuarios"><a href="#"><i class="fa fa-user"></i> <span
+							class="nav-label">Usuarios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="/dondeEs/app#/users">Lista de usuarios</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-envelope"></i> <span
-							class="nav-label">Notificaciones </span></a>
+							<li><a href="/dondeEs/app#/users">Lista de usuarios </a></li>
+						</ul>
+					</li>
+					<li ng-show="permissions.gestionarServicios"><a href="#"><i class="fa fa-shopping-cart"></i> <span
+							class="nav-label">Servicios </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
-							<li><a href="#">Inbox</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-shopping-cart"></i> <span
-							class="nav-label">Servicios</span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/serviceByUser">Mis servicios</a></li>
-						</ul></li>
+							<li><a href="app#/serviceByUser">{{permissions.isAdmin?  'Servicios':'Mis servicios'}} </a></li>
+						</ul>
+					</li>
 					<li><a href="#"><i class="fa fa-comments-o"></i> <span
-							class="nav-label">Chats </span></a>
+							class="nav-label">Chats </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/chat">Chat</a></li>
-						</ul></li>
-					<li><a href="#"><i class="fa fa-money"></i> <span
-							class="nav-label">Subastas</span><span class="fa arrow"></span></a>
+						</ul>
+					</li>
+					<li ng-show="permissions.gestionarSubastas"><a href="#"><i class="fa fa-money"></i> <span
+							class="nav-label">Subastas </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
-						</ul></li>
+						</ul>
+					</li>
+					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
+					<span class="nav-label">Contacto</span></a>
+					</li>
 				</ul>
-
 			</div>
 		</nav>
-		
 		<div id="page-wrapper" class="gray-bg">
 			<div class="row border-bottom">
 				<nav class="navbar navbar-static-top white-bg" role="navigation"
-					style="margin-bottom: 0"></nav>
+					style="margin-bottom: 0">
+					<div class="navbar-header">
+						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
+					</div>
+
+				</nav>
 			</div>
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row">
@@ -122,26 +125,37 @@
 	<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 
 	<script src="resources/bower_components/angular/angular.js"></script>
-	<script src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
+	<script
+		src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
-	<script src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
-	<script src="resources/bower_components/angular-animate/angular-animate.js"></script>
-	<script src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
+	<script
+		src="resources/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+	<script
+		src="resources/bower_components/angular-animate/angular-animate.js"></script>
+	<script
+		src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
 	<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
 	<script src="resources/bower_components/toastr/toastr.js"></script>
+	<script src="resources/bower_components/moment/min/moment.min.js"></script>
+	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
+	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>	
+	<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
+	
+	
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
-	
+
 	<!-- Steps -->
-    <script src="resources/js/plugins/staps/jquery.steps.min.js"></script>
-    
-    <!-- Jquery Validate -->
-    <script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
+	<script src="resources/js/plugins/staps/jquery.steps.min.js"></script>
+
+	<!-- Jquery Validate -->
+	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
 
 	<!-- Morris -->
-    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="resources/js/plugins/morris/morris.js"></script>
-    	
+	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
+	<script src="resources/js/plugins/morris/morris.js"></script>
+
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
@@ -154,14 +168,15 @@
 	<script src="resources/js/Auction/auctionController.js"></script>
 	<script src="resources/js/Auction/ListAuctionsController.js"></script>
 	<script src="resources/js/Chat/ChatController.js"></script>
-
 	<script src="resources/js/Contact/ContactController.js"></script>
+	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 
-        <!-- Google Maps -->
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
+	<!-- Google Maps -->
+	<script
+		src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 
-    <!-- angular-google-maps -->
-    <script src="resources/non_bower_components/lodash.underscore.min.js"></script>
-    <script src="resources/non_bower_components/angular-google-maps.min.js"></script>
+	<!-- angular-google-maps -->
+	<script src="resources/non_bower_components/lodash.underscore.min.js"></script>
+	<script src="resources/non_bower_components/angular-google-maps.min.js"></script>
 </body>
 </html>

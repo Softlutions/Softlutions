@@ -1,0 +1,111 @@
+<div class="container">
+	<div class="row">
+		<section class="content">
+			<h1>Table Filter</h1>
+			<div class="col-md-8 col-md-offset-2">
+				<div class="panel panel-default">
+					<div class="panel-body">
+					
+						<div class="pull-right">
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary btn-filter" ng-click="showEventReminderBy('Concluido')">Pagado</button>
+								<button type="button" class="btn btn-warning btn-filter" ng-click="showEventReminderBy('Pendiente')">Pendiente</button>
+								<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin Comenzar</button>
+								<button type="button" class="btn btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="chat-message-form">
+									<div class="input-group">
+										<input type="text" ng-model="objNote.content"
+												placeholder="Ingresar nombre"  class="form-control"><span class="input-group-btn" required>
+											<button type="button" class="btn btn-primary" ng-click="createNote(event)">+</button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="table-container">
+							<table class="table table-filter">
+								<tbody>
+									<tr data-status="Concluido">
+										<td>
+											<div class="media">
+												<div class="media-body">
+													<span class="media-meta pull-right">Febrero 13, 2016</span>
+													<h4 class="title">
+														Lorem Impsum
+														<span class="pull-right Concluido">(Concluido)</span>
+													</h4>
+													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr data-status="Pendiente">
+										<td>
+											<div class="media">
+												<div class="media-body">
+													<span class="media-meta pull-right">Febrero 13, 2016</span>
+													<h4 class="title">
+														Lorem Impsum
+														<span class="pull-right Pendiente">(Pendiente)</span>
+													</h4>
+													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr data-status="SinComenzar">
+										<td>
+											<div class="media">
+												<div class="media-body">
+													<span class="media-meta pull-right">Febrero 13, 2016</span>
+													<h4 class="title">
+														Lorem Impsum
+														<span class="pull-right SinComenzar">(SinComenzar)</span>
+													</h4>
+													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr data-status="Concluido" class="selected">
+										<td>
+											<div class="media">
+												<div class="media-body">
+													<span class="media-meta pull-right">Febrero 13, 2016</span>
+													<h4 class="title">
+														Lorem Impsum
+														<span class="pull-right Concluido">(Concluido)</span>
+													</h4>
+													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr data-status="Pendiente">
+										<td>
+											<div class="media">
+												<div class="media-body">
+													<span class="media-meta pull-right">Febrero 13, 2016</span>
+													<h4 class="title">
+														Lorem Impsum
+														<span class="pull-right Pendiente">(Pendiente)</span>
+													</h4>
+													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+	</div>
+</div>

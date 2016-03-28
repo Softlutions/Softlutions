@@ -12,32 +12,18 @@ angular
 				[
 						'$scope',
 						'$http',
-						'$location','$interval',
-						function($scope, $http, $location, $interval) {
+						'$location','$interval','$timeout',
+						function($scope, $http, $location, $interval, $timeout) {
 							$("#messageByChat").hide();
 							$scope.objMessage = {};
+							$scope.chatCurrent;
+							$scope.currentInterval;
+							$scope.eventNameByChat;
+							$scope.showError = true;
+							$scope.messages= {};
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
-
-							// $(document).ready(function() {
-							//							
-							// // show when page load
-							// toastr.info('Page Loaded!');
-							//							
-							// $('#linkButton').click(function() {
-							// toastr.options = {
-							// closeButton: true,
-							// progressBar: true,
-							// showMethod: 'slideDown',
-							// timeOut: 4000
-							// };
-							// toastr.success('Responsive Admin Theme', 'Welcome
-							// to INSPINIA');
-							//							
-							// });
-							//							
-							// });
-
+							
 							$http(
 									{
 										method : 'GET',
@@ -48,12 +34,44 @@ angular
 										}
 									}).success(function(response) {
 								$scope.chats = response.chats;
+						
 							})
-
 							
-
+							$scope.stop = function(){
+								$interval.cancel($scope.currentInterval);
+							}
+							
+							$scope.on = function(){
+								$scope.stop();
+								
+								$scope.currentInterval =$interval($scope.loadMessage($scope.chatCurrent), 5000);
+							}
+							$scope.getEventName= function(eventName){
+								$scope.eventNameByChat = eventName;
+								console.log("asassss " + $scope.eventNameByChat )
+							}
 							$scope.getAllMessage = function(idChat) {
-
+								
+								
+								if($scope.chatCurrent == undefined || $scope.chatCurrent != idChat){
+									$scope.chatCurrent = idChat;
+									$scope.currentInterval =$interval($scope.loadMessage(), 5000);
+							
+								}else{
+									$scope.on();
+								}
+								
+								$scope.loadMessage();
+								
+								$interval(function() {
+									$scope.loadMessage();
+						          }, 500);
+								
+							}
+							
+							$scope.loadMessage=function (){
+								var idChat = $scope.chatCurrent;
+								console.log(idChat +" "+new Date());
 								$("#messageByChat").show();
 								$scope.chat = {
 									chatId : idChat
@@ -68,10 +86,17 @@ angular
 											}
 										}).success(function(response) {
 									$scope.messages = response.messages;
-									$interval($scope.getAllMessage(idChat), 50000);
+//									$timeout($scope.loadMessage(idChat), 50000);
+//									$interval($scope.loadMessage(idChat), 5000);
 								})
+								if($scope.messages.length == 0){
+									$scope.showError = false;
+								}else{
+									$scope.showError = true;
+								}
 							}
 
+							
 							$scope.sendMessage = function(event) {
 
 								var dataCreate = {
@@ -99,12 +124,6 @@ angular
 								} else {
 									setTimeout(
 											function() {
-												toastr.options = {
-													closeButton : true,
-													progressBar : true,
-													showMethod : 'slideDown',
-													timeOut : 4000
-												};
 												toastr
 														.error(
 																'No puede enviar mensajes en blanco',

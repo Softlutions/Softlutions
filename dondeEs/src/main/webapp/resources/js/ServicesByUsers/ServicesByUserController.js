@@ -18,16 +18,25 @@ angular
 								$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 								$scope.requestObject = {};
 								$scope.objService={};
-						
-								
+								$scope.showError = true;
+								$scope.serviceModal = {};
 								$scope.requestObject = {"pageNumber": 0,"pageSize": 0,"direction": "","sortBy": [""],"searchColumn": "string","searchTerm": "","user": {}};
-								$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
-									$scope.services = response.listService;
-									console.log(response.listService);
-								});
-							
-								
-								
+
+								if(!$scope.$parent.permissions.isAdmin){
+									$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
+										$scope.services = response.listService;
+									});
+								}else{
+									$http.get('rest/protected/service/getAllService').success(function(response) {
+										$scope.services = response.serviceLists;
+									});
+									
+									if($scope.services.length==0){
+										$scope.showError = false;
+									}else{
+										$scope.showError = true;
+									}
+								}
 								  $scope.init = function() {
 								    	
 								    	$http.get('rest/protected/serviceCatalog/getAllCatalogService')
@@ -48,12 +57,8 @@ angular
 								    $scope.saveService = function(event){
 								    	console.log($scope.requestObject);
 									$scope.onError = false;
-								    if(document.getElementById('inlineCheckbox1').checked){
 								    	$scope.objService.state = 1
-								    }
-								    else{
-								    	$scope.objService.state = 0
-								    }
+								 
 								    
 									dataCreate={
 											serviceCatalog :$scope.requestObject,
@@ -63,10 +68,13 @@ angular
 											user:$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"))
 									}		
 									if($scope.objService.name != null && $scope.objService.description != null){
+										$scope.objService = {};
 										$("#modal-form").modal('hide');
+										
 										$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 											$scope.services = $scope.services.concat(dataCreate);
-										    toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
+											$scope.serviceModal = {};
+											toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
 
 										});
 									}else{

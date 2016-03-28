@@ -38,19 +38,9 @@ angular.module('dondeEs.eventsPublish', ['ngRoute'])
 					} 
 				}
 			} else {
-		    	toastr.options = {
-	                    closeButton: true,
-	                    progressBar: true,
-	                    showMethod: 'slideDown'
-		        };
 		    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
 			}
 		} else {
-	    	toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown'
-	        };
 	    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
 		}
 	});
