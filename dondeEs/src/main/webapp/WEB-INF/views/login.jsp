@@ -41,7 +41,7 @@
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 	<script src="resources/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-1
+
 	<!-- Custom and plugin javascript -->
 	<script src="resources/js/inspinia.js"></script>
 	<script src="resources/js/plugins/pace/pace.min.js"></script>
@@ -56,4 +56,4 @@
 	<script src="resources/bower_components/angular-route/angular-route.js"></script>
 	<script src="resources/js/Login/loginController.js"></script>
 </body>
-</html> 
+</html>
