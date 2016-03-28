@@ -14,7 +14,7 @@
 										ng-click="showEventForm()">Sin asistente</a>
 						</li>
 						<li><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
-										ng-click="">Con asistente</a>
+										ng-click="showCreateEventForm(true)">Con asistente</a>
 						</li>
 					</ul>
 				</div>
@@ -557,7 +557,7 @@
  <br>
  <br>
 	<form class="form-horizontal" name="formCreateEvent"
-		ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
+		ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEventAsistente():saveEventChanges()):validationError()">
 		<div class="form-group">
 			<label class="col-lg-2 control-label">Nombre</label>
 			<div class="col-lg-10">

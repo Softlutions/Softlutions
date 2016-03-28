@@ -89,6 +89,13 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 		
 		
 		//#region Users
+		$(document).ready(function(){
+			$('.numbersOnly').keyup(function () { 
+			    this.value = this.value.replace(/[^0-9\.]/g,'');
+			});
+		});
+		
+		
 		$scope.forgotPassword = function() {
 			if($scope.user.email != null){
 				$http.post("rest/login/updatePassword", $scope.user)

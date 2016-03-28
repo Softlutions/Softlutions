@@ -667,7 +667,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
     
     //#REGION ASISTENTE DE CREACION
-    $scope.createEvent = function() {
+    
+    $scope.showCreateEventForm = function(estado){
+    	$scope.eventsWizard = estado;
+    }
+    
+    
+    $scope.createEventAsistente = function() {
 		$scope.upload = $upload
 			.upload(
 				{
