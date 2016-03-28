@@ -21,7 +21,6 @@ public class Log implements Serializable {
 	private int logId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="date")
 	private Date date;
 
 	private String event;

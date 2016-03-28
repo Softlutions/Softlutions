@@ -1,37 +1,5 @@
 <div class="container">
-	     
-	<div class="table-responsive" id="contractTable">
-		<div class="ibox-title">
-	             <h4>Mis contratos</h4>
-	       </div>
-		<div class="ibox-content">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th class="hidden">ID</th>
-						<th>Contrato</th>
-						<th>Estado</th>
-						<th>Comentario</th>
-					</tr>
-				</thead>
-				<tbody ng-repeat = "serviceContact in serviceContacts">
-					<tr>
-						<td class="hidden">{{serviceContact.serviceContractId}}</td>
-						<td>{{serviceContact.service.name}}</td>
-						<td>{{(serviceContact.state == 0? "Pendiente":(serviceContact.state == 1? "Concretado":"Cancelado"))}}</td>
-						<td>{{serviceContact.comment}}</td>
-						
-						<td ng-if="serviceContact.state != 2">
-							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-danger" ng-click="cancel(serviceContact)">Cancelar</Button>
-						</td>
-						<td ng-if="serviceContact.state == 2">
-							<Button id="btnCancelService-{{serviceContact.serviceContractId}}" class="btn btn-warning" ng-click="cancel(serviceContact)" disabled>Cancelado</Button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+
 	
 	<button type="button" class="btn btn-info" data-toggle="modal" ng-click="serviceInfo()" data-target="#myModal">Contratar Servicio</button>
 	
@@ -57,20 +25,4 @@
 			</div>
 		</div>
 	</div>
-	
-	<!-- Graph morris donut chart -->
-	<div class="col-lg-6">
-	    <div class="ibox float-e-margins">
-	        <div class="ibox-title">
-	            <h5>Resumen</h5>
-	        </div>
-	        <div class="ibox-content">
-	            <div id="contracts-state-chart" class="hidden"></div>
-	        </div>
-	    </div>
-	</div>
-	
-	<!-- Morris -->
-    <script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="resources/js/plugins/morris/morris.js"></script>
 </div>

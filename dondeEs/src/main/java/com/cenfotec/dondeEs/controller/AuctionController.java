@@ -1,6 +1,5 @@
 package com.cenfotec.dondeEs.controller;
 
-import java.util.Date;
 
 import javax.transaction.Transactional;
 
@@ -109,13 +108,6 @@ public class AuctionController {
 
 		} finally { return response; }
 	}
-	
-	@RequestMapping(value ="/getAllAuctionsByServiceCatalog/{id}", method = RequestMethod.GET)
-	public AuctionResponse getAllAuctionsByServiceCatalog(@PathVariable("id") int id){				
-		AuctionResponse response = new AuctionResponse();
-		response.setAuctionList(auctionServiceInterface.getAllByAuctionsByServiceCatalog(id));
-		return response;
-	}
 
 	/**
 	 * @Author Juan Carlos Sánchez G.
@@ -143,7 +135,7 @@ public class AuctionController {
 		Auction auction = auctionServiceInterface.findById(nauction.getAuctionId());
 		
 		auction.setState((byte)0);
-		auction.setDate(new Date());
+		
 		Boolean stateAuction = auctionServiceInterface.saveAuction(auction);
 		
 		if(stateAuction){

@@ -1,0 +1,117 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="pull-left">
+			<a class="btn btn-primary pull-right" href="app#/index">Volver</a>
+		</div>
+	</div>
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="pull-left">
+					<h1>Notas del evento</h1>
+				</div>
+				<div class="pull-right">
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary btn-filter" ng-click="showEventReminderBy('Concluido')">Concluido</button>
+						<button type="button" class="btn btn-warning btn-filter" ng-click="showEventReminderBy('Pendiente')">Pendiente</button>
+						<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin comenzar</button>
+						<button type="button" class="btn btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="chat-message-form">
+							<div class="input-group">
+								<input type="text" ng-model="objNote.content"
+										placeholder="Contenido de la nueva nota"  class="form-control"><span class="input-group-btn" required>
+									<button type="button" class="btn btn-primary" ng-click="createNote(event)">+</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="table-container">
+						<div ng-hide="notesList.length">
+							<p>No hay notas para este evento</p>
+						</div>
+							<table class="table table-filter" ng-show="notesList.length">
+								<tbody ng-repeat="note in notesList">
+									<tr data-status="{{note.state}}">
+										<td>
+											<div class="media">
+												<div class="media-body">
+													<div class="media-body">
+														<span class="glyphicon glyphicon-pencil pull-right editEventReminder" aria-hidden="true" 
+																	ng-click="uploadEventReminderData(note.noteId, note.content, note.state)"
+																	data-toggle="modal" data-target="#modal-form"
+																	></span>
+														<span class="media-meta pull-right">{{note.date | date:'dd-MM-yyyy'}}</span>
+														<h4 class="title pull-right">
+															<span ng-if="note.state == 'SinComenzar'" class="{{note.state}}">(Sin comenzar)</span>
+															<span ng-if="note.state != 'SinComenzar'" class="{{note.state}}">({{note.state}})</span>					
+														</h4>										
+														<p class="summary">{{note.content}}</p>
+													</div>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="modal-form" class="modal fade" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-12 b-r">
+								<h3 class="m-t-none m-b">Modificar recordatorio de evento</h3>
+								<form name="formEditEvent" ng-submit="formEditEvent.$valid ? editEventReminder() : null">
+									<div class="form-group">
+										<div class="input-group">
+											<label class="font-noraml"><strong>Estado</strong></label>
+
+											<select class="form-control m-b"
+												style="width: 525px; height: 34px; background: white"
+												tabindex="3" class="form-control" ng-model="objEventReminderEdit.state"
+												ng-options="ert.id as ert.name for ert in eventReminderStateList" required>
+											</select>
+										</div>
+									</div>
+								
+									<div class="form-group">
+										<label class="font-noraml"><strong>Contenido</strong></label> <input
+											type="text" class="form-control" ng-model="objEventReminderEdit.content" required/>
+									</div>
+
+									<div class="form-group">
+										<button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit">
+											<strong>Guardar</strong>
+										</button>
+
+									</div>
+
+									<div class="form-group">
+										<button type="button"
+											class="btn btn-sm btn-danger pull-right m-t-n-xs"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+		
+	</div>
+</div>

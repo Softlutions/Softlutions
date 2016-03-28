@@ -2,7 +2,6 @@ package com.cenfotec.dondeEs.services;
 
 import java.util.List;
 
-import com.cenfotec.dondeEs.ejb.ServiceCatalog;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 
 public interface ServiceCatalogInterface {

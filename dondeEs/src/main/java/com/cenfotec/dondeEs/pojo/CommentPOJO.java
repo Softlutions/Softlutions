@@ -14,6 +14,8 @@ public class CommentPOJO {
 	private int commentId;
 
 	private String content;
+	
+	private String image;
 
 	private Date date;
 
@@ -36,6 +38,14 @@ public class CommentPOJO {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public Date getDate() {
