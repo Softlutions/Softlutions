@@ -12,10 +12,20 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			password : "",
 			isCript: false
 		};
+		$scope.loginNormalPage = false;
+		
 		$scope.user = {
 			email : "",
 			password : ""
 		};
+		
+		
+		$scope.showLoginPage = function(estado){
+			if(estado) $scope.loginNormalPage = true;
+			else $scope.loginNormalPage = false;
+		}
+		
+		
 		$scope.confirmPassword;
 		$("#selectTypeUser").hide();
 		$scope.checkLogin = function() {
@@ -161,6 +171,78 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				});
 		//#endregion Users
 		$scope.showSubModal1=function(){
+			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5);
+			setTimeout(function(){$('#createUserForm').modal('show')}, 900);
+		}
+		
+		$scope.showMainModal=function(){
+			setTimeout(function(){$('#createCompanyForm').modal('hide')}, 5);
+			setTimeout(function(){$('#selectTypeUser').modal('show')}, 900);;
+		}
+		
+		$scope.showSubModal2=function(){
+			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5);
+			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900);
+		}
+		
+		
+		// Start: Scroll logic
+		angular.element(document).ready(function () {
+			$(document).ready(function () {
+		        $('body').scrollspy({
+		            target: '.navbar-fixed-top',
+		            offset: 80
+		        });
+		        // Page scrolling feature
+		        $('a.page-scroll').bind('click', function(event) {
+		            var link = $(this);
+		            $('html, body').stop().animate({
+		                scrollTop: $(link.attr('href')).offset().top - 50
+		            }, 500);
+		            event.preventDefault();
+		            $("#navbar").collapse('hide');
+		        });
+		    });
+			
+		    var cbpAnimatedHeader = (function() {
+		        var docElem = document.documentElement,
+		                header = document.querySelector( '.navbar-default' ),
+		                didScroll = false,
+		                changeHeaderOn = 200;
+		        function init() {
+		            window.addEventListener( 'scroll', function( event ) {
+		                if( !didScroll ) {
+		                    didScroll = true;
+		                    setTimeout( scrollPage, 250 );
+		                }
+		            }, false );
+		        }
+		        
+		        function scrollPage() {
+		            var sy = scrollY();
+		            if ( sy >= changeHeaderOn ) {
+		                $(header).addClass('navbar-scroll')
+		            }
+		            else {
+		                $(header).removeClass('navbar-scroll')
+		            }
+		            didScroll = false;
+		        }
+		        function scrollY() {
+		            return window.pageYOffset || docElem.scrollTop;
+		        }
+		        init();
+
+		    })();
+
+		    // Activate WOW.js plugin for animation on scroll
+		    new WOW().init();
+		});
+		// End: Scroll logic
+		
+		
+		// Modals show and hideS
+		$scope.showSubModal1=function(){
 			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5)
 			setTimeout(function(){$('#createUserForm').modal('show')}, 900)
 		}
@@ -176,12 +258,22 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 		}
 		
 		
-		//#region ASISTENTE DE CREACION
-		
-		
-		
-		
-		
-		//#endregion ASISTENTE DE CREACION
-
+		// Start: Contact message
+		$scope.sendMessage = function () {
+			var dataRequest = {
+				userName: $scope.name,
+				userEmail: $scope.email,
+				message: $scope.message
+			};
+						
+			$http({method: 'POST',url:'rest/contactMessage/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
+					.success(function(response) {
+				if (response.code == 200) {
+			    	toastr.success('Contacto', 'El mensaje se envió con éxito.');
+				} else {
+			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');
+				}
+			});
+		}
+		// End: Contact message
 	}]);
