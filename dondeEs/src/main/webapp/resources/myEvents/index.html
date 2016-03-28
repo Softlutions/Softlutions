@@ -1,4 +1,4 @@
-<div class="" ng-show="false">
+<div class="" ng-show="eventForm == false && eventsWizard == false">
 	<div class="col-xs-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
@@ -530,7 +530,7 @@
 </div>
 
 <!-- ASISTENTE DE CREACIÓN -->
-<wizard on-finish="finishedWizard()"> 
+<wizard on-finish="finishedWizard()"  ng-if="eventsWizard == true"> 
 <wz-step wz-title="Crear evento" class="container" title="Starting">
 <div class="firstStep col-md-12">
  <br>
@@ -651,6 +651,7 @@
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
 			<h5>Subastas del evento</h5>
+			<a href="#" class="pull-right btn btn-xs btn-primary">Volver a mis eventos</a>
 		</div>
 		<div class="ibox-content">
 
