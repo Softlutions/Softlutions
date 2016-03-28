@@ -115,9 +115,11 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				user : $scope.user
 			}
 			
-			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password == $scope.confirmPassword ){
-
-				$http.post("rest/login/create",userRequest)
+			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password!=null){
+				if($scope.user.password != $scope.user.confirmPassword){
+					 toastr.error('Las contraseñas no coinciden', 'Error');
+				}else{
+					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
 							console.log(response);
@@ -130,6 +132,7 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 							toastr.error(response.codeMessage, 'Registro negado');
 						}
 					});
+				}
 			}else{
 				 setTimeout(function() {					
 		                toastr.options = {
@@ -143,6 +146,13 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 		            }, 1300);
 			}
 		}
+		
+		
+		$(document).ready(function(){
+			$('.numbersOnly').keyup(function () { 
+			    this.value = this.value.replace(/[^0-9\.]/g,'');
+			});
+		});
 
 		// get roles
 		$http.get('rest/login/getAll').success(
@@ -164,5 +174,14 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5)
 			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900)
 		}
+		
+		
+		//#region ASISTENTE DE CREACION
+		
+		
+		
+		
+		
+		//#endregion ASISTENTE DE CREACION
 
 	}]);

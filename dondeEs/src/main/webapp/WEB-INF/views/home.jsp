@@ -26,6 +26,7 @@
 <link href="resources/css/plugins/steps/jquery.steps.css" rel="stylesheet">
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 <link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper" ng-controller="IndexCtrl">
@@ -169,7 +170,7 @@
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
-
+	<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 
