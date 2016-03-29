@@ -50,6 +50,10 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<Message> messages;
 
+	//bi-directional many-to-one association to Notification
+	@OneToMany(mappedBy="user")
+	private List<Notification> notifications;
+
 	//bi-directional many-to-one association to PasswordHistory
 	@OneToMany(mappedBy="user")
 	private List<PasswordHistory> passwordHistories;
@@ -101,10 +105,6 @@ public class User implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="type_id")
 	private UserType userType;
-
-	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="user")
-	private List<Notification> notifications;
 
 	public User() {
 	}
@@ -247,6 +247,28 @@ public class User implements Serializable {
 		return message;
 	}
 
+	public List<Notification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
+	public Notification addNotification(Notification notification) {
+		getNotifications().add(notification);
+		notification.setUser(this);
+
+		return notification;
+	}
+
+	public Notification removeNotification(Notification notification) {
+		getNotifications().remove(notification);
+		notification.setUser(null);
+
+		return notification;
+	}
+
 	public List<PasswordHistory> getPasswordHistories() {
 		return this.passwordHistories;
 	}
@@ -351,28 +373,6 @@ public class User implements Serializable {
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
-	}
-
-	public List<Notification> getNotifications() {
-		return this.notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
-
-	public Notification addNotification(Notification notification) {
-		getNotifications().add(notification);
-		notification.setUser(this);
-
-		return notification;
-	}
-
-	public Notification removeNotification(Notification notification) {
-		getNotifications().remove(notification);
-		notification.setUser(null);
-
-		return notification;
 	}
 
 }

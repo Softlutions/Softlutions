@@ -4,7 +4,6 @@ package com.cenfotec.dondeEs.pojo;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tools.ant.types.resources.BaseResourceCollectionContainer;
 
 
 /**

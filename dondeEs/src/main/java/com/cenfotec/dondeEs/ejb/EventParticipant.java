@@ -46,6 +46,10 @@ public class EventParticipant implements Serializable {
 	@JoinColumn(name="user_id")
 	private User user;
 
+	//bi-directional many-to-one association to EventImage
+	@OneToMany(mappedBy="eventParticipant")
+	private List<EventImage> eventImages;
+
 	public EventParticipant() {
 	}
 
@@ -117,6 +121,28 @@ public class EventParticipant implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<EventImage> getEventImages() {
+		return this.eventImages;
+	}
+
+	public void setEventImages(List<EventImage> eventImages) {
+		this.eventImages = eventImages;
+	}
+
+	public EventImage addEventImage(EventImage eventImage) {
+		getEventImages().add(eventImage);
+		eventImage.setEventParticipant(this);
+
+		return eventImage;
+	}
+
+	public EventImage removeEventImage(EventImage eventImage) {
+		getEventImages().remove(eventImage);
+		eventImage.setEventParticipant(null);
+
+		return eventImage;
 	}
 
 }
