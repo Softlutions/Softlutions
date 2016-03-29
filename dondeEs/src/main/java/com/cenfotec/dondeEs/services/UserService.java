@@ -93,6 +93,15 @@ public class UserService implements UserServiceInterface {
 
 		return listPojo;
 	}
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param u usuario por actualizar
+	 * @return si es falso o no
+	 */
+	public Boolean updateUser(User u){
+		User nu = userRepository.save(u);
+		return (nu == null) ? false:true;
+	}
 
 	public int saveUser(UserRequest ur) {
 		User user = new User();

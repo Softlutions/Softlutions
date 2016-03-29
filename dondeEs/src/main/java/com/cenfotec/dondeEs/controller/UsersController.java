@@ -9,14 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.contracts.UserResponse;
+import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.ejb.UserType;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
+import com.cenfotec.dondeEs.services.UserTypeServiceInterface;
 
 @RestController
 @RequestMapping(value = "rest/protected/users")
 public class UsersController {
 	
 	@Autowired private UserServiceInterface userServiceInterface;
-	
+	@Autowired private UserTypeServiceInterface userTypeService;
 	/**
 	 * @author Ernesto Méndez A.
 	 * @return Lista de usuarios y servicios
@@ -58,6 +61,24 @@ public class UsersController {
 		if(userId){
 			us.setCode(200);
 			us.setCodeMessage("User created succesfully");
+		}else{
+			us.setCode(400);
+			us.setCodeMessage("El usuario ya existe en la base de datos!");
+		}
+		
+		return us;
+	}
+	
+	@RequestMapping(value ="/updateUser", method = RequestMethod.PUT)
+	public UserResponse updateUser(@RequestBody User ur){	
+		UserResponse us = new UserResponse();
+		User nur = ur;		
+		UserType ust = userTypeService.findByName(ur.getUserType().getName());
+		nur.setUserType(ust);
+		Boolean userId= userServiceInterface.updateUser(nur);
+		if(userId){
+			us.setCode(200);
+			us.setCodeMessage("User update succesfully");
 		}else{
 			us.setCode(400);
 			us.setCodeMessage("El usuario ya existe en la base de datos!");

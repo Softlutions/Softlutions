@@ -21,4 +21,6 @@ public interface ServiceRepository extends CrudRepository<Service, Integer> {
 	List<Service> findAllByUserUserIdAndServiceCatalogServiceCatalogId(int userId, int serviceCatalogId);
 
 	List<Service> findAllByUserUserId(int userId);
+	
+	List<Service> findAllByServiceCatalogServiceCatalogId(int id);
 }

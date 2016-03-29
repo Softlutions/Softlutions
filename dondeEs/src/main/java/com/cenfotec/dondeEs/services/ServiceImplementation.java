@@ -140,5 +140,27 @@ public class ServiceImplementation implements ServiceInterface {
 		});
 		return servicePOJOList;
 	}
+	
+	@Override
+	public List<ServicePOJO> getServiceByServiceCatalog(int id) {
+		List<Service> serviceList = serviceRepository.findAllByServiceCatalogServiceCatalogId(id);
+		List<ServicePOJO> listPojo = new ArrayList<ServicePOJO>();
+		serviceList.stream().forEach(ta -> {
+			ServicePOJO servicePOJO = new ServicePOJO();
+			BeanUtils.copyProperties(ta, servicePOJO);
+
+			if (ta.getServiceCatalog() != null) {
+				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
+				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
+
+				catalogPOJO.setAuctions(null);
+				servicePOJO.setServiceCatalog(catalogPOJO);
+			}
+			servicePOJO.setServiceContacts(null);
+
+			listPojo.add(servicePOJO);
+		});
+		return listPojo;
+	}
 
 }
