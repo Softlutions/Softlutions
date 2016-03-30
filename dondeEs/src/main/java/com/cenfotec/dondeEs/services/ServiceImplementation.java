@@ -148,11 +148,25 @@ public class ServiceImplementation implements ServiceInterface {
 		serviceList.stream().forEach(ta -> {
 			ServicePOJO servicePOJO = new ServicePOJO();
 			BeanUtils.copyProperties(ta, servicePOJO);
+			
+			if(ta.getUser() != null){
+				UserPOJO userPOJO = new UserPOJO();
+				BeanUtils.copyProperties(ta.getUser(), userPOJO);
+				userPOJO.setChats(null);
+				userPOJO.setPasswordHistories(null);
+				userPOJO.setUsers2(null);
+				userPOJO.setUsers1(null);
+				userPOJO.setEventParticipants(null);
+				userPOJO.setMessages(null);
+				userPOJO.setTermConditions(null);
+				
+				servicePOJO.setUser(userPOJO);
+			}
 
 			if (ta.getServiceCatalog() != null) {
 				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
 				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
-
+				
 				catalogPOJO.setAuctions(null);
 				servicePOJO.setServiceCatalog(catalogPOJO);
 			}

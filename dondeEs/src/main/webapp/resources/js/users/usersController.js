@@ -7,7 +7,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 		});
 	}]).controller('UsersCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
 	$scope.users = [];
-
+	$scope.objRequest={};
 	// list Users
 	$http.get("rest/protected/users/getAll").success(function(response){
 		if(response.code == 200){
@@ -88,5 +88,36 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 	// get roles
 	$http.get('rest/protected/role/getAll').success( function(response) {
 		$scope.roles = response.listRole;
+		$scope.objRequest.roleId = $scope.roles[0].roleId 
 	});
+	
+	//update user
+	$scope.loadInfo= function (user){
+		$scope.users.name = user.name,
+		$scope.users.userId = user.userId,
+		$scope.users.lastName1 = user.lastName1,
+		$scope.users.lastName2 = user.lastName2,
+		$scope.users.email = user.email,
+		$scope.users.phone = user.phone,
+		$scope.users.userType = user.userType
+		
+	}
+	
+	$scope.updateUser= function(event){
+		var dataUpdate ={
+			userId : $scope.users.userId,
+			name: $scope.users.name,
+			lastName1 : $scope.users.lastName1,
+			lastName2 :$scope.users.lastName2,
+			password:'asdf',
+			email: $scope.users.email,
+			phone : $scope.users.phone,
+			userType: $scope.users.userType,
+			role : $scope.objRequest
+		}
+		$http.put('rest/protected/users/updateUser',dataUpdate).success(function(response) {
+			console.log('ok');
+		});
+	}
+	
 }]);
