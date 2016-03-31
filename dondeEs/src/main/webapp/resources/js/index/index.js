@@ -29,10 +29,10 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			$http.get("rest/login/logout").success(function(response){
 				var sessionCookie = $cookies.getObject("lastSession");
 				if(sessionCookie != null){
-					sessionCookie.autologin = false;
 					$cookies.putObject("lastSession", sessionCookie);
 				}
-				window.location.href = "/dondeEs/#/login";
+				
+				window.location.reload(true);
 			});
 		}
 		

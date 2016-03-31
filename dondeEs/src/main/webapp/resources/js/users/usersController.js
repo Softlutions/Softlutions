@@ -109,7 +109,6 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			name: $scope.users.name,
 			lastName1 : $scope.users.lastName1,
 			lastName2 :$scope.users.lastName2,
-			password:'asdf',
 			email: $scope.users.email,
 			phone : $scope.users.phone,
 			userType: $scope.users.userType,

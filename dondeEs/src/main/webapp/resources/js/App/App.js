@@ -24,11 +24,10 @@ angular.module('dondeEs', [
 	// Opciones globales de los popup de notificaciones.
 	toastr.options = {
             closeButton: true,
-            progressBar: true,
+            progressBar: false,
             showMethod: 'slideDown',
             timeOut: 4000
         };
-	// FIN, opciones globales de los popup de notificaciones.
 	
 	$routeProvider.otherwise({redirectTo: '/index'});
   
@@ -41,7 +40,7 @@ angular.module('dondeEs', [
 		    responseError: function(response) {
 		      // do something on error
 		    	if(response.status === 401){
-					window.location.href = "/dondeEs/#/login";
+					window.location.href = "/dondeEs/#/landingPage";
 				}
 		      return $q.reject(response);
 		    }
@@ -56,12 +55,11 @@ angular.module('dondeEs', [
 	    },
 	    complete: function(response) {
 	    	if(response.status === 401){
-	    		window.location.href = "/dondeEs/login";
+	    		window.location.href = "/dondeEs/landingPage";
 			}
 	    }
 	});
 }]).run(function($rootScope, $location) {
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-    	$rootScope.hola  = "Hola";
       });
     });

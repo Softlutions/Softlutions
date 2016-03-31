@@ -555,12 +555,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.tempEvent.largeDesc = event.largeDescription;
 		$scope.tempEvent.type = event.private_;
 		$scope.tempEvent.placeName = event.place.name;
-		$scope.tempEvent.file = event.image;
+		$scope.tempEvent.file = event.image == null? $scope.DEFAULT_IMG:event.image;
 		$scope.tempEvent.originalFile = null;
 		
 		$scope.map.center.latitude = event.place.latitude;
 		$scope.map.center.longitude = event.place.longitude;
 		
+		//$scope.tempEvent.date = new Date(event.publishDate);
 		$('#eventDatePicker').data("DateTimePicker").date(new Date(event.publishDate));
 		
 		$("#eventFormTitle").text("Modificar evento");
