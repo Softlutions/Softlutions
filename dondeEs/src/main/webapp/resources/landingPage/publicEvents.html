@@ -1,0 +1,93 @@
+<!-- LISTA DE EVENTOS PUBLICADOS -->
+
+<div>
+    <div class="row">
+		<div class="col-sm-12">
+			<div class="input-group">
+				<button type="button" class="btn btn-primary" ng-click="openDivSearch()">Criterio</button>
+			</div>
+			<div id="itemsSearch" class="ibox-content">
+				<form role="form" class="form-inline">
+					<div class="form-group">
+						<label for="searchByPlace" class="sr-only" > <strong> Lugar </strong></label> <input
+							type="text" placeholder="Busque por lugar" id="searchByPlace"
+							ng-model="searchByPlace" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="searchByEvent" class="sr-only"> <strong> Evento </strong>
+						</label> <input type="text" id="searchByEvent"
+							placeholder="Busque por evento" class="form-control"
+							ng-model="searchByEvent" />
+					</div>
+					<div class="form-group">
+						<label for="searchByUser" class="sr-only"> <strong> Usuario </strong>
+
+						</label><input type="text" id="searchByUser"
+							placeholder="Busque por usuario" class="form-control"
+							ng-model="searchByUser" />
+					</div>
+					<button class="btn btn-primary"
+						ng-click="searchByParam()">Buscar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div>
+		<ul class="event-list collapseDiv" ng-repeat="event in eventsPublish">
+			<li>
+				<time datetime="event.publishDate" data-toggle="collapse" data-target="#demo{{$index}}">
+					<span class="day">{{event.day}}</span> <span class="month">{{event.month}}</span>
+				</time> 
+				<img ng-if="event.image == null || event.image == ''"
+				alt="No se pudo cargar la imagen del evento"
+				src="resources/img/imagen-no-disponible.gif"
+				data-toggle="collapse" data-target="#demo{{$index}}" width="50px" height="50px"/> 
+				
+				<img ng-if="event.image != null && event.image != ''"
+				alt="No se pudo cargar la imagen del evento" src="{{event.image}}"
+				data-toggle="collapse" data-target="#demo{{$index}}" width="50px" height="50px"/>
+				
+				<div class="info">
+					<h2 class="title" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.name }}</h2>
+					<p class="desc" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.description }}</p>
+					<ul>
+						<li style="width:34%;" ng-click="showComments(event)" >Comentarios  
+							<span class="fa fa-envelope"></span>
+						</li>
+						<li style="width:33%;" ng-click="goToEventPromoterProfile(event.user.userId)">Promotor {{ event.user.name }} {{ event.user.lastName1 }}
+							<span class="fa fa-male"></span>
+						</li>
+					</ul>
+				</div>
+				<div class="social" data-toggle="collapse" data-target="#demo{{$index}}">
+					<ul>
+						<li ng-click="loadImgs(event)"><span>ver más</span></li>
+						<li><span class="fa fa-chevron-down pull-right"></span></li>
+					</ul>
+				</div>
+			</li>
+			
+			<div id="demo{{$index}}" class="collapse">
+	            <div class="row">
+			        <div class="col-lg-10 col-lg-offset-1">
+						<slick ng-if="eventImages.length > 0" class="slick_demo_2" infinite="true" slides-to-show="3" slides-to-scroll="1" center-mode="true"
+		                   responsive="[ { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true } }, { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } } ]" >
+			                
+			                <div ng-repeat="img in eventImages">
+			                	<div class="ibox-content">
+				                	<img id="eventImg-{{img.eventImageId}}" ng-src="{{img.image}}" ng-click="selectImg(img)" class="img-rounded" width="150px" height="100px"/>
+			                    </div>
+			                </div>
+			            </slick>
+			            <input id="btnImgSelect" type="button" ng-click="enableSelect()" class="btn btn-primary pull-right" value="Seleccionar"/>
+        				<input ng-show="selectedImgs.length > 0" type="button" ng-click="deleteImgs()" class="btn btn-danger pull-right" value="Eliminar"/>
+			        </div>
+			    </div>
+			</div>
+		</ul>
+	</div>
+	<div ng-hide="eventsPublish.length" class="ibox-content">
+		<p>No hay eventos con ese criterio de busqueda.</p>
+	</div>
+</div>

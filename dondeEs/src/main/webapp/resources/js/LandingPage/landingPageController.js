@@ -82,8 +82,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			});
 		}
 		
-		
-		
 		//#region Users
 		$scope.forgotPassword = function() {
 			if($scope.user.email != null){
@@ -170,7 +168,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5);
 			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900);
 		}
-		
 		
 		// Start: Scroll logic
 		angular.element(document).ready(function () {
@@ -262,4 +259,40 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			});
 		}
 		// End: Contact message
+		
+		// PUBLIC EVENTS
+		
+		$scope.eventsPublish = [];
+		
+		$http.get('rest/protected/event/getAllEventPublish').success(function(response) {
+			if (response.code == 200) {
+				if (response.eventList != null && response.eventList.length > 0) {
+					$scope.eventsPublish = response.eventList;
+					
+					/*for (var i=0; i<$scope.eventsPublish.length; i++) {
+						$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
+						
+						switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
+						    case '01': $scope.eventsPublish[i].month = "ENE"; break;
+						    case '02': $scope.eventsPublish[i].month = "FEB"; break;
+						    case '03': $scope.eventsPublish[i].month = "MAR"; break;
+						    case '04': $scope.eventsPublish[i].month = "ABR"; break;
+						    case '05': $scope.eventsPublish[i].month = "MAY"; break;
+						    case '06': $scope.eventsPublish[i].month = "JUN"; break;
+						    case '07': $scope.eventsPublish[i].month = "JUL"; break;
+						    case '08': $scope.eventsPublish[i].month = "AGO"; break;
+						    case '09': $scope.eventsPublish[i].month = "SEP"; break;
+						    case '10': $scope.eventsPublish[i].month = "OCT"; break;
+						    case '11': $scope.eventsPublish[i].month = "NOV"; break;
+						    case '12': $scope.eventsPublish[i].month = "DIC"; break;
+						    default: $scope.eventsPublish[i].month = "N/A";
+						}
+					}*/
+				} else {
+			    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
+				}
+			} else {
+		    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
+			}
+		});
 	}]);
