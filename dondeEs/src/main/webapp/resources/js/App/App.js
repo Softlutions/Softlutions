@@ -6,6 +6,7 @@ angular.module('dondeEs', [
 	"dondeEs.index",
 	"dondeEs.update",
 	"dondeEs.serviceByUser",
+	"dondeEs.servicesAvailable",
 	"dondeEs.users",
 	"dondeEs.myEvents",
 	"dondeEs.eventsPublish",

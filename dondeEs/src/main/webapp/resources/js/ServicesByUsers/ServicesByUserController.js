@@ -66,10 +66,7 @@ angular
 										.success(function(response) {
 
 											$scope.serviceCatalogList = response.serviceCatalogList;
-											$scope.requestObject.serviceCatalogId = $scope.serviceCatalogList[0].serviceCatalogId;
-											$scope.requestObject.name = $scope.serviceCatalogList[0].name;
-											
-											
+											$scope.requestObject = $scope.serviceCatalogList[0];											
 										});
 								    	
 								    };
@@ -92,7 +89,8 @@ angular
 										if($scope.objService.name != null && $scope.objService.description != null){
 											$("#modal-form").modal('hide');
 											$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-												$scope.services = $scope.services.concat(dataCreate);
+												$scope.services.push(dataCreate);
+												$scope.servicesTable.reload();
 											    toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
 	
 											});

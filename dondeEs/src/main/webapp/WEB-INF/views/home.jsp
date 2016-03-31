@@ -152,11 +152,12 @@
 	<!-- Morris -->
 	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="resources/js/plugins/morris/morris.js"></script>
-
+	
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
 	<script src="resources/js/myEvents/myEventsController.js"></script>
+	<script src="resources/js/ServicesAvailable/ServicesAvailableController.js"></script>
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 	<script src="resources/js/Events/eventsPublishController.js"></script>
 	<script src="resources/js/AnswerInvitation/answerInvitation.js"></script>
@@ -168,7 +169,6 @@
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
-	<script src="resources/js/ServicesByUsers/ServicesAvailableController.js"></script>
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 

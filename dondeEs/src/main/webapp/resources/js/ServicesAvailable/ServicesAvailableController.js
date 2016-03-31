@@ -1,8 +1,8 @@
 'use strict';
-angular.module('dondeEs.serviceByUser', [ 'ngRoute', 'ngTable' ]).config(
+angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		[ '$routeProvider', function($routeProvider) {
 			$routeProvider.when('/ServicesAvailable', {
-				templateUrl : 'resources/ServicesByUser/ServicesAvailable.html',
+				templateUrl : 'resources/ServicesAvailable/ServicesAvailable.html',
 				controller : 'ServicesAvailable'
 			});
 		} ]).controller(
