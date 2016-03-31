@@ -40,8 +40,7 @@
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
 											{{loggedUser.lastName}}</strong>
-								</span> <span class="text-muted text-xs block">{{loggedUser.role.name}}<b
-										class="caret"></b></span>
+								</span> <span class="text-muted text-xs block">{{loggedUser.role.name}}</span>
 							</span>
 							</a>
 						</div>
