@@ -24,18 +24,15 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			isPromotor : false,
 			isPrestatario : false
 		}
-		/*
-		var sessionCookie = $cookies.getObject("lastSession");
-		if(sessionCookie == null)
-			window.location.href = "/dondeEs/#/login";
-		*/
+		
 		$scope.logout = function(){
 			$http.get("rest/login/logout").success(function(response){
 				var sessionCookie = $cookies.getObject("lastSession");
 				if(sessionCookie != null){
 					$cookies.putObject("lastSession", sessionCookie);
 				}
-				window.location.href = "/dondeEs/#/login";
+				
+				window.location.reload(true);
 			});
 		}
 		
