@@ -1,6 +1,6 @@
 <div class="" ng-show="eventForm == false && eventsWizard == false">
-	<div class="col-xs-11">
-		<div class="ibox float-e-margins">
+	<div class="col-xs-12">
+		<div class="table-responsive">
 			<div class="ibox-title">
 				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
 			
@@ -9,7 +9,8 @@
 						class="btn btn-primary btn-xs dropdown-toggle">
 						Crear evento <span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu">
+					
+					<ul class="dropdown-menu col-md-3 col-md-pull-9">
 						<li><a ng-if="!$parent.permissions.isAdmin"
 										ng-click="showEventForm()">Sin asistente</a>
 						</li>
@@ -42,12 +43,12 @@
 							<td>{{ event.place.name }}</td>
 
 							<td>
-								<div class="btn-group">
+								<div class="btn-group col-sm-10  m-b">
 									<button data-toggle="dropdown"
 										class="btn btn-primary btn-xs dropdown-toggle">
 										Acción <span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
+									<ul class="dropdown-menu" >
 										<li><a ng-click="listContracts(event.eventId)"
 											data-toggle="modal" data-target="#modalListContacts">Listar
 												contratos</a></li>

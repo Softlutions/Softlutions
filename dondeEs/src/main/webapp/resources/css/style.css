@@ -94,12 +94,10 @@ h5 {
   float: left;
   font-size: 12px;
   left: 0;
-  list-style: none outside none;
   padding: 0;
   position: absolute;
   text-shadow: none;
   top: 100%;
-  z-index: 1000;
 }
 .dropdown-menu > li > a {
   border-radius: 3px;
