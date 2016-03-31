@@ -7,7 +7,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 		});
 	}]).controller('UsersCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
 	$scope.users = [];
-
+	
 	// list Users
 	$http.get("rest/protected/users/getAll").success(function(response){
 		if(response.code == 200){

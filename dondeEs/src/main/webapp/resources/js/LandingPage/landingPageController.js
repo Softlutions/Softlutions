@@ -36,16 +36,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			}
 		}
 		
-		var sessionCookie = $cookies.getObject("lastSession");
-		
-		if(sessionCookie != null && sessionCookie.autologin){
-			$('#chkRememberMe').prop('checked', true);
-			$scope.loginRequest.email = sessionCookie.email;
-			$scope.loginRequest.password = sessionCookie.pass;
-			$scope.loginRequest.isCript = true;
-			login();
-		}
-		
 		function login(){
 			$http.post("rest/login/checkuser/", $scope.loginRequest)
 			.success(function(response){
@@ -64,8 +54,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 					if(rememberMe){
 						var session = {
 							email: responseUser.email,
-							pass: response.criptPass,
-							autologin: true
+							pass: response.criptPass
 						};
 						
 						var expireDate = new Date();

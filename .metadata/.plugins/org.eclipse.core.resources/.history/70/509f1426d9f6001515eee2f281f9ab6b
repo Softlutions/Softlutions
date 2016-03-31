@@ -40,14 +40,16 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 		}
 		
 		var sessionCookie = $cookies.getObject("lastSession");
+		if(sessionCookie == null)
+			window.location.href = "/dondeEs/#/login";
 		
-		if(sessionCookie != null && sessionCookie.autologin){
+		/*if(sessionCookie != null && sessionCookie.autologin){
 			$('#chkRememberMe').prop('checked', true);
 			$scope.loginRequest.email = sessionCookie.email;
 			$scope.loginRequest.password = sessionCookie.pass;
 			$scope.loginRequest.isCript = true;
 			login();
-		}
+		}*/
 		
 		function login(){
 			$http.post("rest/login/checkuser/", $scope.loginRequest)
