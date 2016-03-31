@@ -40,7 +40,7 @@ angular.module('dondeEs', [
 		    responseError: function(response) {
 		      // do something on error
 		    	if(response.status === 401){
-					window.location.href = "/dondeEs/#/login";
+					window.location.href = "/dondeEs/#/landingPage";
 				}
 		      return $q.reject(response);
 		    }
@@ -55,12 +55,11 @@ angular.module('dondeEs', [
 	    },
 	    complete: function(response) {
 	    	if(response.status === 401){
-	    		window.location.href = "/dondeEs/login";
+	    		window.location.href = "/dondeEs/landingPage";
 			}
 	    }
 	});
 }]).run(function($rootScope, $location) {
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-    	$rootScope.hola  = "Hola";
       });
     });
