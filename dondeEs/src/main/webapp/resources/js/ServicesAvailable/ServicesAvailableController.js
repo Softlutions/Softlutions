@@ -1,14 +1,14 @@
 'use strict';
 angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		[ '$routeProvider', function($routeProvider) {
-			$routeProvider.when('/ServicesAvailable', {
+			$routeProvider.when('/ServicesAvailable/:id', {
 				templateUrl : 'resources/ServicesAvailable/ServicesAvailable.html',
 				controller : 'ServicesAvailable'
 			});
 		} ]).controller(
 		'ServicesAvailable',
-		[ '$scope', '$http', 'ngTableParams', '$filter',
-				function($scope, $http, ngTableParams, $filter) {
+		[ '$scope', '$http', 'ngTableParams', '$filter', '$routeParams',
+				function($scope, $http, ngTableParams, $filter, $routeParams) {
 			
 			$scope.requestObject={};
 			$scope.currentCatalogId;
@@ -59,7 +59,7 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		    
 		    $scope.contactProvider= function(pservice){
 		    
-		    	$http.get("rest/protected/serviceContact/contractService/"+pservice.serviceId+"/"+ 1).success(function(response){
+		    	$http.get("rest/protected/serviceContact/contractService/"+pservice.serviceId+"/"+ $routeParams.id).success(function(response){
 					if(response.code == 200){
 						toastr.success("Servicio "+pservice.name+" contratado!");
 					}else if(response.code == 400){

@@ -63,6 +63,7 @@
 											ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
+										<li><a type="button" href="app#/ServicesAvailable/{{event.eventId}}">Servicios disponibles</a></li>
 										<li><a type="button" href="app#/eventReminder/{{event.eventId}}">Notas</a></li>
 										<li class="divider"></li>
 										<li><a type="button" ng-show="event.state!==0" ng-click="editEvent(event)">Modificar</a></li>

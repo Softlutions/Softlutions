@@ -1,12 +1,17 @@
 <div class="container">
 	<div class="col-lg-11">
+		<div class="pull-left">
+			<a class="btn btn-primary pull-right" href="app#/index">Volver</a>
+		</div>
+	</div>
+	<div class="col-lg-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h4>Servicios disponibles</h4>
 				<label class="font-normal"><strong>Categoría</strong></label> <select
 					class="form-control m-b" name="serviceCatalog" id="serviceCatalog"
 					ng-change="getServiceByCatalog(selectedCatalog)"
-					 ng-model="selectedCatalog"
+					ng-model="selectedCatalog"
 					ng-options="ta.serviceCatalogId as ta.name for ta in serviceCatalogList">
 				</select>
 			</div>
@@ -18,7 +23,7 @@
 							<th>Descripción</th>
 							<th>Proveedor</th>
 							<th>Estado</th>
-						<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody ng-repeat="service in $data">
@@ -27,9 +32,10 @@
 							<td>{{service.description}}</td>
 							<td>{{service.user.name}}</td>
 							<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
-						<td>
-							<button class="btn btn-primary btn-xs" ng-click="contactProvider(service)">Contactar</button>
-						</td>
+							<td>
+								<button class="btn btn-primary btn-xs"
+									ng-click="contactProvider(service)">Contactar</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
