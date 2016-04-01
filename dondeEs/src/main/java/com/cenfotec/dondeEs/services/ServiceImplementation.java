@@ -143,7 +143,7 @@ public class ServiceImplementation implements ServiceInterface {
 	
 	@Override
 	public List<ServicePOJO> getServiceByServiceCatalog(int id) {
-		List<Service> serviceList = serviceRepository.findAllByServiceCatalogServiceCatalogId(id);
+		List<Service> serviceList = serviceRepository.findAllByServiceCatalogServiceCatalogIdAndState(id, (byte)1);
 		List<ServicePOJO> listPojo = new ArrayList<ServicePOJO>();
 		serviceList.stream().forEach(ta -> {
 			ServicePOJO servicePOJO = new ServicePOJO();
