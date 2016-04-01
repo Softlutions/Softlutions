@@ -7,7 +7,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope','$http','$cookies',function($scope,$http,$cookies) {
+	.controller('IndexCtrl', ['$scope','$http','$cookies','$rootScope',function($scope,$http,$cookies, $rootScope) {
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.permissions = {
 			comentarEventos: false,
@@ -82,4 +82,18 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			$scope.permissions.isPromotor = true;
 			break;
 		}
+		
+		$rootScope.$on( "$routeChangeStart", function(event, next, current) {
+			if($scope.permissions.isPrestatario){
+				if(next.originalPath == '/users' || next.originalPath == '/index'){
+					window.location.href = "/dondeEs/app#/index";
+				}
+			}
+			
+			if($scope.permissions.isPromotor){
+				if(next.originalPath == '/users', next.originalPath == '/serviceByUser')
+					window.location.href = "/dondeEs/app#/index";
+				}
+			}
+	    });
 	}]);

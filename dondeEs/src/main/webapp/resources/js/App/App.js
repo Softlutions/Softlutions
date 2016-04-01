@@ -59,8 +59,4 @@ angular.module('dondeEs', [
 			}
 	    }
 	});
-}]).run(function($rootScope, $location) {
-    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-    	$rootScope.hola  = "Hola";
-      });
-    });
+}])
