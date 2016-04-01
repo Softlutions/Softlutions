@@ -1,0 +1,117 @@
+<div class="navbar-wrapper">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#/landingPage">Volver</a>
+				<a class="navbar-brand" data-target="#modalLogin" data-toggle="modal" ng-show="loggedUser == null">Iniciar sesión</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a class="page-scroll" href="#page-top">Inicio</a></li>
+					<li><a class="page-scroll" href="#features">Eventos</a></li>
+					<li><a class="page-scroll" href="#team">Equipo</a></li>
+					<li><a class="page-scroll" href="#testimonials">Opinión</a></li>
+					<li><a class="page-scroll" href="#contact">Contacto</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<div ng-show="images.length > 0" id="inSlider" class="carousel carousel-fade" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        <div ng-repeat="img in images" class="item {{$index == 0? 'active':''}}">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>{{event.name}}</h1>
+                    <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
+                    <p>
+                        <a class="btn btn-lg btn-primary" data-target="#selectTypeUser" data-toggle="modal">PARTICIPAR</a>
+                    </p>
+                </div>
+            	<img src="{{img.image}}" alt="{{img.name}}" width="100%" height="470px"/>
+            </div>
+	    </div>
+	    
+	    <button ng-show="eventParticipant != null" class="btn btn-default btn-circle pull-right" data-toggle="tooltip" title="Subir imagen" ng-click="showUploadField = !showUploadField">+</button>
+	    
+	    <a class="left carousel-control" href="#inSlider" target="_self" role="button" data-slide="prev">
+	        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	        <span class="sr-only">Anterior</span>
+	    </a>
+	    <a class="right carousel-control" href="#inSlider" target="_self" role="button" data-slide="next">
+	        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	        <span class="sr-only">Siguiente</span>
+	    </a>
+	</div>
+</div>
+
+<div class="center-block" style="width: 80%" ng-show="showUploadField && eventParticipant != null">
+	<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
+	<div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" 
+	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
+		<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
+		
+		<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px" 
+		title="{{img.name}} {{img.size / 1024 | number:2}}Kb"/>
+	</div>
+	
+	<input type="button" ng-click="upload(previewFiles)" class="btn btn-primary pull-right" value="Publicar"/>
+	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-warning pull-right" value="Limpiar"/>
+	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
+</div>
+
+<div class="ibox float-e-margins center-block" style="width: 80%;">
+	 <div class="ibox-title">
+	     <h4>Comentarios</h4>
+	 </div>
+	 <div ng-show="eventParticipant != null" class="containerComment" id="commentDiv">
+		<div class="row">
+			<form>
+			 	<div class="form-group">
+			 		<img ng-if="commentPreviewFile != null" ng-src={{commentPreviewFile}} class="center-block" with="250px" height="200px"/><br/>
+			 		<textarea class="form-control" rows="2" placeholder="Escriba su comentario aquí..." ng-model="comment"></textarea>
+					<button class="btn btn-primary pull-right" ng-click="commentEvent()">Comentar</button>
+					
+					<div class="button" ngf-select="attach($file)">
+						<label class="btn btn-default pull-right fa fa-camera" data-toggle="tooltip" title="Adjuntar imagen"></label>
+					</div>
+					<label class="btn btn-default pull-right fa fa-trash" data-toggle="tooltip" title="Quitar imagen adjunta" 
+					ng-click="commentPreviewFile = null; commentFile = null;" ng-show="commentFile != null"></label>
+			 	</div>
+			</form>
+		</div>
+	</div>
+	<div class="containerComment">
+		<div class="row">
+			<div class="col-lg-12">
+	            <div class="panel panel-white post panel-shadow" ng-repeat="comment in commentList | orderBy : 'date' : true">
+	                <div class="post-heading">
+	                    <div class="pull-left image">
+	                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+	                    </div>
+	                    <div class="pull-left meta">
+	                        <div class="title h5">
+	                            <a href="#"><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : comment.eventParticipant.user.name}}</b></a>
+	                        </div>
+	                        <h6 class="text-muted time" >{{setDate(comment.date)}}</h6>
+	                    </div>
+	                </div> 
+	                <div class="post-description"> 
+	                	<img ng-if="comment.image != null" class="center-block" ng-src="{{comment.image}}" width="300px" height="250px"/>
+	                	<br/>
+	                    <p>{{comment.content}}</p>
+	                </div>
+	            </div>
+	       </div>
+	   </div>
+	</div>
+</div>

@@ -1,12 +1,15 @@
 <!-- LISTA DE EVENTOS PUBLICADOS -->
 
 <div>
+
+	<!-- BUSCADOR -->
+	
     <div class="row">
 		<div class="col-sm-12">
 			<div class="input-group">
 				<button type="button" class="btn btn-primary" ng-click="openDivSearch()">Criterio</button>
 			</div>
-			<div id="itemsSearch" class="ibox-content">
+			<div ng-show="isOpen" class="ibox-content">
 				<form role="form" class="form-inline">
 					<div class="form-group">
 						<label for="searchByPlace" class="sr-only" > <strong> Lugar </strong></label> <input
@@ -26,27 +29,28 @@
 							placeholder="Busque por usuario" class="form-control"
 							ng-model="searchByUser" />
 					</div>
-					<button class="btn btn-primary"
-						ng-click="searchByParam()">Buscar</button>
+					<button class="btn btn-primary" ng-click="searchByParam()">Buscar</button>
 				</form>
 			</div>
 		</div>
 	</div>
 	
+	<!-- LISTA DE EVENTOS -->
+	
 	<div>
 		<ul class="event-list collapseDiv" ng-repeat="event in eventsPublish">
-			<li>
+			<li ng-click="viewEvent(event)">
 				<time datetime="event.publishDate" data-toggle="collapse" data-target="#demo{{$index}}">
 					<span class="day">{{event.day}}</span> <span class="month">{{event.month}}</span>
 				</time> 
 				<img ng-if="event.image == null || event.image == ''"
 				alt="No se pudo cargar la imagen del evento"
 				src="resources/img/imagen-no-disponible.gif"
-				data-toggle="collapse" data-target="#demo{{$index}}" width="50px" height="50px"/> 
+				data-toggle="collapse" data-target="#demo{{$index}}"/> 
 				
 				<img ng-if="event.image != null && event.image != ''"
 				alt="No se pudo cargar la imagen del evento" src="{{event.image}}"
-				data-toggle="collapse" data-target="#demo{{$index}}" width="50px" height="50px"/>
+				data-toggle="collapse" data-target="#demo{{$index}}"/>
 				
 				<div class="info">
 					<h2 class="title" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.name }}</h2>
@@ -67,24 +71,6 @@
 					</ul>
 				</div>
 			</li>
-			
-			<div id="demo{{$index}}" class="collapse">
-	            <div class="row">
-			        <div class="col-lg-10 col-lg-offset-1">
-						<slick ng-if="eventImages.length > 0" class="slick_demo_2" infinite="true" slides-to-show="3" slides-to-scroll="1" center-mode="true"
-		                   responsive="[ { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3, infinite: true } }, { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } }, { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } } ]" >
-			                
-			                <div ng-repeat="img in eventImages">
-			                	<div class="ibox-content">
-				                	<img id="eventImg-{{img.eventImageId}}" ng-src="{{img.image}}" ng-click="selectImg(img)" class="img-rounded" width="150px" height="100px"/>
-			                    </div>
-			                </div>
-			            </slick>
-			            <input id="btnImgSelect" type="button" ng-click="enableSelect()" class="btn btn-primary pull-right" value="Seleccionar"/>
-        				<input ng-show="selectedImgs.length > 0" type="button" ng-click="deleteImgs()" class="btn btn-danger pull-right" value="Eliminar"/>
-			        </div>
-			    </div>
-			</div>
 		</ul>
 	</div>
 	<div ng-hide="eventsPublish.length" class="ibox-content">

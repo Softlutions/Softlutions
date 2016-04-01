@@ -8408,3 +8408,8 @@ textarea {
 .containerComment{
 	width: 100% !important;
 }
+
+.custom-button{
+	padding-top: 14px;
+	border-color: white;
+}
