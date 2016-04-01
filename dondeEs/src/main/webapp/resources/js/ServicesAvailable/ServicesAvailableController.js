@@ -22,7 +22,6 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 					$scope.requestObject.name = $scope.serviceCatalogList[0].name;
 					$scope.currentCatalogId = $scope.requestObject.serviceCatalogId;
 					
-					console.log($scope.currentCatalogId)
 				});
 		    	
 		    };
@@ -57,9 +56,18 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 	
 				});
 		    }
-		    $scope.contactProvider= function(){
-		    	alert('AQUI EL MACHO PEGA EL BRETE DE EL')
-				
+		    
+		    $scope.contactProvider= function(pservice){
+		    
+		    	$http.get("rest/protected/serviceContact/contractService/"+pservice.serviceId+"/"+ 1).success(function(response){
+					if(response.code == 200){
+						toastr.success("Servicio "+pservice.name+" contratado!");
+					}else if(response.code == 400){
+						toastr.warning("El servicio ya fue contratado");
+					}
+				}).error(function(response){
+					toastr.error("Error", "No se pudo contratar el servicio");
+				});
 		    }
 		    
 		    $scope.getServiceByCatalog = function(selectedCatalog){
