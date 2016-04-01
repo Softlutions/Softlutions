@@ -39,14 +39,14 @@ public class CommentService implements CommentServiceInterface {
 			ncomment = commentRepository.save(comment);
 		}
 		
-		return (ncomment == null);
+		return (ncomment != null);
 	}
 	
 	@Override
 	public Boolean saveComment(Comment comment) {
 		comment.setEventParticipant(eventParticipantRepository.findOne(comment.getEventParticipant().getEventParticipantId()));
 		Comment ncomment = commentRepository.save(comment);
-		return (ncomment == null);
+		return (ncomment != null);
 	}
 	
 	@Override

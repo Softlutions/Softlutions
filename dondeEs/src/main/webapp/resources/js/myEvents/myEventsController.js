@@ -120,14 +120,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.auctionEventServices = function(event){
-
+		var date = new Date();
+		date.setDate(date.getDate() + 1);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
-            minDate: new Date(),
-            maxDate: event.registerDate
+            minDate: date,
+            maxDate: event.publishDate
         });
-
 		$scope.selectedEvent = event;
 	}
 	
