@@ -46,20 +46,15 @@
 							<div class="col-sm-12 b-r">
 								<h3 class="m-t-none m-b">Registrar servicio</h3>
 								<form role="form" ng-init="service">
-									<div class="form-group">
-										<div class="input-group">
-											<label class="font-noraml"><strong>Categoría</strong></label>
-
-											<select class="form-control m-b"
-												style="width: 525px; height: 34px; background: white"
-												tabindex="6" name="serviceCatalog" id="serviceCatalog"
+										<div class="form-group">
+											<label class="font-normal"><strong>Categoría</strong></label>
+											<select class="form-control"
+												name="serviceCatalog" id="serviceCatalog"
 												class="form-control"
-												ng-model="requestObject.serviceCatalogId"
-												ng-options="ta.serviceCatalogId as ta.name for ta in serviceCatalogList">
-
+												ng-model="requestObject"
+												ng-options="ta as ta.name for ta in serviceCatalogList track by ta.serviceCatalogId ">
 											</select>
 										</div>
-									</div>
 									<div class="form-group">
 										<label class="font-noraml"><strong>Nombre</strong></label> <input
 											type="text" id="nombre" class="form-control"

@@ -21,4 +21,6 @@ public interface ServiceInterface {
 	List<ServicePOJO> getByCatalog(int catalogId);
 	List<ServicePOJO> getAllServiceByUserAndServiceCatalog(int userId, int serviceCatalogId);
 	List<ServicePOJO> getServiceCatalogIdByProvider(int userId);
+	
+	List<ServicePOJO> getServiceByServiceCatalog(int id);
 }

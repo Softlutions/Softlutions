@@ -86,4 +86,21 @@ public class ServiceContactController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "/contractService/{idService}/{idEvent}", method = RequestMethod.GET)
+	public ServiceContactResponse contractService(@PathVariable("idService") int service,
+			@PathVariable("idEvent") int event) {
+		ServiceContactResponse response = new ServiceContactResponse();
+
+		if (serviceContactInterface.contractService(service, event)) {
+			response.setCode(200);
+			response.setCodeMessage("Successful");
+		} else {
+			response.setCode(400);
+			response.setCodeMessage("You already was invited");
+		}
+
+		return response;
+
+	}
 }

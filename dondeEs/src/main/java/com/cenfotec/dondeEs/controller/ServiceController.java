@@ -121,5 +121,15 @@ public class ServiceController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "/getServiceByCatalog/{id}", method = RequestMethod.GET)
+	public ServiceResponse getServiceByCatalog(@PathVariable("id") int id){
+		ServiceResponse response = new ServiceResponse();
+		
+		response.setServiceLists(serviceInterface.getServiceByServiceCatalog(id));
+		response.setCode(200);
+		
+		return response;
+	}
 
 }
