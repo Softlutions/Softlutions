@@ -9,7 +9,7 @@
 					<option value="">Todas las categorias</option>
 				</select>
 			</div>
-			<div ng-show="true" class="ibox-content">
+			<div ng-show="tempAuctionList.length != 0" class="ibox-content">
 				<table class="table table-hover" ng-table="auctionsTable">
 					<thead>
 						<tr>
@@ -19,7 +19,7 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="auction in tempAuctionList=( $data | filter : (!!selectedCatalog.serviceCatalogId || undefined) && {serviceCatalog : {serviceCatalogId: selectedCatalog.serviceCatalogId}} : true)">
+					<tbody ng-repeat="auction in tempAuctionList = ($data | filter : (!!selectedCatalog.serviceCatalogId || undefined) && {serviceCatalog : {serviceCatalogId: selectedCatalog.serviceCatalogId}} : true)">
 						<tr>
 							<td>{{auction.name}}</td>
 							<td>{{auction.description}}</td>
@@ -41,7 +41,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div ng-hide="true" class="ibox-content">
+			<div ng-hide="tempAuctionList.length != 0" class="ibox-content">
 				<p>No hay subastas disponibles.</p>
 			</div>
 		</div>

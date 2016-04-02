@@ -17,6 +17,8 @@ angular
 		$scope.auctionList =[];
 		$scope.selectedCatalogId = "";
 		$scope.step = 0;
+		$scope.tempAuctionList = [1];
+		$scope.showError = true;
 		
 		angular.element(document).ready(function(){
 			getAllAuctions();
@@ -45,6 +47,13 @@ angular
 		$scope.validationError = function(){
 			toastr.warning('Algunos campos no cumplen con los requisitos');
 		}
+		
+		$scope.$watch('tempAuctionList', function(){
+			if($scope.tempAuctionList.length==0)
+				$scope.showError = false;
+			else
+				$scope.showError = true;
+		});
 		
 		$scope.validatelistItem = function(auction,index){
 			$scope.selectedAuction = auction;
@@ -78,11 +87,6 @@ angular
 					}
 				};					
 				$scope.auctionsTable = new ngTableParams(params, settings);
-				if($scope.auctionList.length == 0){
-					$scope.showError = false;
-				}else{
-					$scope.showError = true;
-				}
 			});		
 		};
 
@@ -170,6 +174,5 @@ angular
 				});
 				$scope.listForm = true;
 			}
-		};
-		
+		};	
 }]);
