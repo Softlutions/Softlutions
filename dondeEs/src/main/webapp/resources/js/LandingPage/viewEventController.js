@@ -196,25 +196,9 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	}
 	
 	// --------------------------- SCROLL LOGIC
-	console.log("wtf!!");
-	/*angular.element(document).ready(function () {
-		$(document).ready(function () {
-	        $('body').scrollspy({
-	            target: '.navbar-fixed-top',
-	            offset: 80
-	        });
-	        // Page scrolling feature
-	        $('a.page-scroll').bind('click', function(event) {
-	            var link = $(this);
-	            $('html, body').stop().animate({
-	                scrollTop: $(link.attr('href')).offset().top - 50
-	            }, 500);
-	            event.preventDefault();
-	            $("#navbar").collapse('hide');
-	        });
-	    });
-		
-	    var cbpAnimatedHeader = (function() {
+	
+	angular.element(document).ready(function () {
+		var cbpAnimatedHeader = (function() {
 	        var docElem = document.documentElement,
 	                header = document.querySelector( '.navbar-default' ),
 	                didScroll = false,
@@ -247,5 +231,5 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 
 	    // Activate WOW.js plugin for animation on scroll
 	    new WOW().init();
-	});*/
+	});
 }]);

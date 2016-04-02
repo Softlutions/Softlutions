@@ -1,5 +1,5 @@
 'use strict';
-angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.viewEvent'])
+angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.viewEvent', 'landingPageModule.events'])
 	.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/landingPage', {
 			templateUrl : 'resources/landingPage/landingPage.html',
