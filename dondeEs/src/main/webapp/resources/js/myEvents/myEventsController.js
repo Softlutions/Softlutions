@@ -628,6 +628,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.hiddenEventForm = function () {
 		$scope.eventForm  = false;
 		$scope.eventInEdition = false;
+		$scope.eventsWizard = false;
 		$scope.resetCreateEvent();
 	}
 	
