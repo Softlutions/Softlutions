@@ -6,7 +6,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
+	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location){
 		$scope.loginRequest = {
 			email : "",
 			password : "",
@@ -14,6 +14,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		};
 		$scope.userCompany={};
 		$scope.loginNormalPage = false;
+		
+		$scope.tempRedirect = {};
 		
 		$scope.user = {
 			email : "",
@@ -62,16 +64,27 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						expireDate.setDate(expireDate.getDate() + 7);
 						$cookies.putObject("lastSession", session, {expires: expireDate});
 					}
-					switch (responseUser.role.roleId) {
-						case 1:
-							window.location.href = "/dondeEs/app#/users";
-							break;
-						case 2:
-							window.location.href = "/dondeEs/app#/serviceByUser";
-							break;
-						case 3:
-							window.location.href = "/dondeEs/app#/index";
-							break;
+					
+					if($scope.tempRedirect.event != null){
+						var url = "#/viewEvent?view="+$scope.tempRedirect.event;
+						
+						if($scope.tempRedirect.assist != null)
+							url = url+"&assist";
+						
+						$("#modalLogin").modal("toggle");
+						setTimeout(function(){ window.location.href = url; }, 500);
+					}else{
+						switch (responseUser.role.roleId) {
+							case 1:
+								window.location.href = "/dondeEs/app#/users";
+								break;
+							case 2:
+								window.location.href = "/dondeEs/app#/serviceByUser";
+								break;
+							case 3:
+								window.location.href = "/dondeEs/app#/index";
+								break;
+						}
 					}
 				}else{
 					$("#errorMsj").css("visibility", "visible");
@@ -179,7 +192,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		            target: '.navbar-fixed-top',
 		            offset: 80
 		        });
-		        // Page scrolling feature
+		        
 		        $('a.page-scroll').bind('click', function(event) {
 		            var link = $(this);
 		            $('html, body').stop().animate({
@@ -220,11 +233,32 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		        init();
 
 		    })();
-
-		    // Activate WOW.js plugin for animation on scroll
+		    
 		    new WOW().init();
+		    
+		    // Redirect logic
+		    
+		    switch($location.search().p){
+		    	case "login":
+		    		$("#modalLogin").modal("toggle");
+		    		$scope.tempRedirect.event = $location.search().event;
+		    		$scope.tempRedirect.assist = $location.search().assist;
+		    		break;
+		    	case "events":
+		    		window.location.href = "#/landingPage#events";
+		    		break;
+		    	case "team":
+		    		window.location.href = "#/landingPage#team";
+		    		break;
+		    	case "testimonials":
+		    		window.location.href = "#/landingPage#testimonials";
+		    		break;
+		    	case "team":
+		    		window.location.href = "#/landingPage#contact";
+		    		break;
+		    }
+		    
 		});
-		// End: Scroll logic
 		
 		
 		// Modals show and hideS
@@ -375,6 +409,4 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$scope.viewEvent = function(event){
 			window.location.href = "#/viewEvent?view="+event.eventId;
 		}
-		
-		
 	}]);

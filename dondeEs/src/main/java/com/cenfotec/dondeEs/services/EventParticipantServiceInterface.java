@@ -8,6 +8,8 @@ public interface EventParticipantServiceInterface {
 
 	List<EventParticipantPOJO> getAllEventParticipants(int idEvent);
 
+	Integer createParticipant(EventParticipant eventParticipant);
+
 	Boolean saveParticipant(EventParticipant eventParticipant);
 	
 	EventParticipant findById(int id);

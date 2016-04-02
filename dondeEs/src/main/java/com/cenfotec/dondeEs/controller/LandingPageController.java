@@ -22,6 +22,7 @@ import com.cenfotec.dondeEs.services.CommentServiceInterface;
 import com.cenfotec.dondeEs.services.EventImageServiceInterface;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
+import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 /**
  * Handles requests for the application home page.
@@ -34,6 +35,7 @@ public class LandingPageController {
 	@Autowired private EventImageServiceInterface eventImageServiceInterface;
 	@Autowired private CommentServiceInterface commentServiceInterface;
 	@Autowired private EventServiceInterface eventServiceInterface;
+	@Autowired private UserServiceInterface userServiceInterface;
 	
 	/**
 	 * @author Ernesto Mendez A.
@@ -63,12 +65,12 @@ public class LandingPageController {
 	 * @return Lista de imagenes del evento
 	 * @version 1.0
 	 */
-	@RequestMapping(value = "/getImagesByEventId/{id}", method = RequestMethod.GET)
-	public EventImageResponse getAllByUser(@PathVariable("id") int id) {
+	@RequestMapping(value = "/getImagesByEventId/{eventId}", method = RequestMethod.GET)
+	public EventImageResponse getAllByUser(@PathVariable("eventId") int eventId) {
 		EventImageResponse response = new EventImageResponse();
 		response.setCode(200);
 		response.setCodeMessage("Success");
-		response.setImages(eventImageServiceInterface.getAllByEventId(id));
+		response.setImages(eventImageServiceInterface.getAllByEventId(eventId));
 		return response;
 	}
 	
@@ -167,4 +169,41 @@ public class LandingPageController {
 		return response;
 	}
 	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param userId id del usuario en sesion
+	 * @param eventId id del evento
+	 * @return id del nuevo participante
+	 */
+	@RequestMapping(value = "/createParticipant", method = RequestMethod.GET)
+	public EventParticipantResponse createParticipant(@RequestParam("userId") int userId, @RequestParam("eventId") int eventId) {
+		EventParticipantResponse response = new EventParticipantResponse();
+		EventParticipantPOJO participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
+		
+		if(participant != null){
+			response.setCode(202);
+			response.setCodeMessage("You already accepted");
+			response.setEventParticipant(participant);
+		}else{
+			EventParticipant eventParticipant = new EventParticipant();
+			eventParticipant.setUser(userServiceInterface.findById(userId));
+			eventParticipant.setEvent(eventServiceInterface.getEventById(eventId));
+			
+			int nparticipantId = eventParticipantServiceInterface.createParticipant(eventParticipant);
+			
+			if(nparticipantId == 0){
+				response.setCode(404);
+				response.setCodeMessage("User or event not found!");
+			}else{
+				participant = new EventParticipantPOJO();
+				participant.setEventParticipantId(nparticipantId);
+				
+				response.setCode(200);
+				response.setCodeMessage("Success");
+				response.setEventParticipant(participant);
+			}
+		}
+		
+		return response;
+	}
 }
