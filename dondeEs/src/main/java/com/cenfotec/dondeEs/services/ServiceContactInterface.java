@@ -13,4 +13,5 @@ public interface ServiceContactInterface {
 	Boolean saveServiceContact(ServiceContact service);
 	ServiceContact getByServiceServiceIdAndEventEventId(int eventId, int serviceId);
 	Boolean cancelServiceContact(int contractID, ServiceContact service);
+	Boolean contractService(int pservice, int pevent);
 }

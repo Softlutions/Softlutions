@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps', 'mgo-angular-wizard'])
+var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps', 'mgo-angular-wizard', 'ngTable'])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/index', {
     templateUrl: 'resources/myEvents/index.html',
@@ -68,7 +68,7 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams) { 
 	$scope.eventForm = false;
 	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
@@ -105,6 +105,28 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	if(!$scope.$parent.permissions.isAdmin){
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			$scope.events = response.eventList;
+			
+			// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
+			var params = {
+				page: 1,	// PAGINA INICIAL
+				count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
+				sorting: {name: "asc"}
+			};
+			
+			var settings = {
+				total: $scope.events.length,	
+				counts: [],	
+				getData: function($defer, params){
+					var fromIndex = (params.page() - 1) * params.count();
+					var toIndex = params.page() * params.count();
+					
+					var subList = $scope.events.slice(fromIndex, toIndex);
+					var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
+					$defer.resolve(sortedList);
+				}
+			};
+			
+			$scope.eventsTable = new ngTableParams(params, settings);
 		});
 	}else{
 		$http.get('rest/protected/event/getAllEventPublish').success(function(response) {
@@ -119,14 +141,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.auctionEventServices = function(event){
-
+		var date = new Date();
+		date.setDate(date.getDate() + 1);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
-            minDate: new Date(),
-            maxDate: event.registerDate
+            minDate: date,
+            maxDate: event.publishDate
         });
-
 		$scope.selectedEvent = event;
 	}
 	

@@ -14,6 +14,8 @@ angular
 						'$http','$location',
 						function($scope, $http, $location) {
 							$scope.comment;
+							$scope.isComment = true;
+							$scope.answer = '';
 							$scope.geteventById = function(){
 								$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 									$scope.event = response.eventPOJO;
@@ -22,30 +24,29 @@ angular
 								});
 								
 							}
+							
+							$scope.geteventById();
+							
 							$scope.userEmail = $location.search().email;
-							console.log("Email "+$scope.userEmail);
-							console.log($location.search().eventParticipantId);
-							$scope.createParticipant = function($event){
-								 if(document.getElementById('optionsRadios1').checked){
-								    	$scope.event.state = 2
+							$scope.createParticipant = function(state){
+								 if(state == 2){
+								    	$scope.event.state = 2;
+								    	$scope.answer = 'Gracias por asistir al evento';
 								    }
-								    else if (document.getElementById('optionsRadios2').checked){
+								  else if (state ==0){
 								    	$scope.event.state = 0
+								    	$scope.answer = 'Es una lastima que no vaya a estar en el evento. Gracias por participar';
 								    }
 						
-								 
+								 $scope.isComment = false;
 								var dataCreate={
 										state: $scope.event.state,
 										comment: $scope.comment
 								}
-								if(document.getElementById('optionsRadios1').checked || document.getElementById('optionsRadios2').checked){
+																		
+								$http({method: 'PUT',url:'rest/protected/eventParticipant/updateEventParticipant/'+$location.search().eventParticipantId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+								});
 								
-									$("#modal-form").modal('hide');
-									
-									$http({method: 'PUT',url:'rest/protected/eventParticipant/updateEventParticipant/'+$location.search().eventParticipantId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-									});
-								}else{
-								}
 							}
 							
 	}])

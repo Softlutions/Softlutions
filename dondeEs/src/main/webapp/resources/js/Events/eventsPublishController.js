@@ -317,8 +317,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 					date: new Date(),
 					eventParticipant: $scope.eventParticipant
 			}
-			
 			$http({method: 'POST',url:'rest/protected/comment/createComment', data:eventComment, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				console.log(response);
 				if(response.code==200){
 					$scope.commentList.push(eventComment);
 					$scope.comment = undefined;
