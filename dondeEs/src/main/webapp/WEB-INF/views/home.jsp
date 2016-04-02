@@ -89,9 +89,9 @@
 					<div class="navbar-header">
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
-					<p class="label pull-right" ng-click="logout()">
-                        <i class="fa fa-sign-out"> Log out</i>
-                    </p>
+					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
+                        <i class="fa fa-sign-out"> Cerrar sesión</i>
+                    </button>
 				</nav>
 			</div>
 			<div class="wrapper wrapper-content animated fadeInRight">
