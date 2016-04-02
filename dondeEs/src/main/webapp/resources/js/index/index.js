@@ -84,16 +84,22 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 		}
 		
 		$rootScope.$on( "$routeChangeStart", function(event, next, current) {
-			if($scope.permissions.isPrestatario){
-				if(next.originalPath == '/users' || next.originalPath == '/index'){
+			if($scope.permissions.isPrestatario)
+				if(next.originalPath == '/users' || next.originalPath == '/index')
 					window.location.href = "/dondeEs/app#/index";
-				}
-			}
+				
 			
-			if($scope.permissions.isPromotor){
-				if(next.originalPath == '/users', next.originalPath == '/serviceByUser')
-					window.location.href = "/dondeEs/app#/index";
-				}
-			}
+			
+			if($scope.permissions.isPromotor)
+				if(next.originalPath == '/users' || next.originalPath == '/serviceByUser')
+					window.location.href = "/dondeEs/app#/index ";
+			
+			
+			
+			
+			
+
+
+			
 	    });
 	}]);

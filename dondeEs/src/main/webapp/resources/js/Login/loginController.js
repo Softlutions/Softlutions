@@ -6,7 +6,7 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			controller : 'LoginCtrl'
 		});
 	}])
-	.controller('LoginCtrl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
+	.controller('LoginCtrl', ['$scope', '$http', '$cookies', '$rootScope', function($scope, $http, $cookies, $rootScope){
 		$scope.loginRequest = {
 			email : "",
 			password : "",
@@ -158,6 +158,8 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 		}
 		
 		
+		
+		
 		$(document).ready(function(){
 			$('.numbersOnly').keyup(function () { 
 			    this.value = this.value.replace(/[^0-9\.]/g,'');
@@ -184,6 +186,8 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5);
 			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900);
 		}
+		
+		
 		
 		
 		// Start: Scroll logic
@@ -275,5 +279,6 @@ angular.module('loginModule', ['ngRoute', 'ngCookies'])
 				}
 			});
 		}
+		
 		// End: Contact message
 	}]);
