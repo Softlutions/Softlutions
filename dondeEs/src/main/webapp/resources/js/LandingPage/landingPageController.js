@@ -12,6 +12,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			password : "",
 			isCript: false
 		};
+		$scope.userCompany={};
 		$scope.loginNormalPage = false;
 		
 		$scope.user = {
@@ -107,12 +108,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 		
 		
 		$scope.saveUser = function(user) {
+			$scope.user.email = $scope.userCompany.email;
+			$scope.user.password = $scope.userCompany.password;
 			var userRequest = {
 				user : $scope.user
 			}
 			
 			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password!=null){
-				if($scope.user.password != $scope.user.confirmPassword){
+				if($scope.user.password != $scope.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
 				}else{
 					$http.post("rest/login/create",userRequest) 
