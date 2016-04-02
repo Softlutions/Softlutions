@@ -8,6 +8,20 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 		controller: 'viewEventCtrl'
 	});
 }])
+/*
+.directive('onErrorSrc', function() {
+    return {
+        link: function(scope, element, attrs) {
+        	console.log(element);
+			element.bind('error', function() {
+				if (attrs.src != attrs.onErrorSrc) {
+					attrs.$set('src', attrs.onErrorSrc);
+					console.log("error OK!");
+				}
+			});
+        }
+    }
+})*/
 
 .controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', function($scope, $http, $timeout, Upload, $location) {
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -41,8 +55,10 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	});
 	
 	function loadData(){
+		console.log($scope.event);
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 			$scope.images = responseImgs.images;
+			console.log($scope.images);
 		});
 		
 		$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
@@ -180,8 +196,8 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	}
 	
 	// --------------------------- SCROLL LOGIC
-	
-	angular.element(document).ready(function () {
+	console.log("wtf!!");
+	/*angular.element(document).ready(function () {
 		$(document).ready(function () {
 	        $('body').scrollspy({
 	            target: '.navbar-fixed-top',
@@ -231,5 +247,5 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 
 	    // Activate WOW.js plugin for animation on scroll
 	    new WOW().init();
-	});
+	});*/
 }]);
