@@ -134,7 +134,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
-	
 	$scope.listParticipants = function(eventId){
 		$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+eventId).success(function(response) {
 			$scope.participants = response.eventParticipantsList;
@@ -142,14 +141,14 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.auctionEventServices = function(event){
-
+		var date = new Date();
+		date.setDate(date.getDate() + 1);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
-            minDate: new Date(),
-            maxDate: event.registerDate
+            minDate: date,
+            maxDate: event.publishDate
         });
-
 		$scope.selectedEvent = event;
 	}
 	
@@ -629,6 +628,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.hiddenEventForm = function () {
 		$scope.eventForm  = false;
 		$scope.eventInEdition = false;
+		$scope.eventsWizard = false;
 		$scope.resetCreateEvent();
 	}
 	

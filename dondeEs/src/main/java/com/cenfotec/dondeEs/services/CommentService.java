@@ -28,25 +28,23 @@ public class CommentService implements CommentServiceInterface {
 	
 	@Override
 	public Boolean saveComment(Comment comment, MultipartFile file) {
-		String image = null;
 		Comment ncomment = null;
+		String image = null;
 		
 		if(file != null)
 			image = Utils.writeToFile(file, servletContext);
 		
-		if(image != null){
-			comment.setImage(image);
-			ncomment = commentRepository.save(comment);
-		}
+		comment.setImage(image);
+		ncomment = commentRepository.save(comment);
 		
-		return (ncomment == null);
+		return (ncomment != null);
 	}
 	
 	@Override
 	public Boolean saveComment(Comment comment) {
 		comment.setEventParticipant(eventParticipantRepository.findOne(comment.getEventParticipant().getEventParticipantId()));
 		Comment ncomment = commentRepository.save(comment);
-		return (ncomment == null);
+		return (ncomment != null);
 	}
 	
 	@Override
@@ -57,6 +55,7 @@ public class CommentService implements CommentServiceInterface {
 			CommentPOJO commentPOJO = new CommentPOJO();
 			commentPOJO.setCommentId(c.getCommentId());
 			commentPOJO.setContent(c.getContent());
+			commentPOJO.setImage(c.getImage());
 			commentPOJO.setDate(c.getDate());
 			EventParticipantPOJO eventParticipantPOJO = new EventParticipantPOJO();
 			if(c.getEventParticipant().getUser() != null){
