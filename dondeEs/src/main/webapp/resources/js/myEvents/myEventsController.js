@@ -37,7 +37,7 @@ app.factory('MarkerCreatorService', function () {
     function createByAddress(address, successCallback) {
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({'address' : address}, function (results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
+            if (status == google.maps.GeocoderStatus.OK) {
                 var firstAddress = results[0];
                 var latitude = firstAddress.geometry.location.lat();
                 var longitude = firstAddress.geometry.location.lng();
@@ -638,6 +638,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	    $scope.map.markers.push($scope.autentiaMarker);
 	}
+	
 	initMap(9.6283789, -85.3756947);
 	
     $scope.addCurrentLocation = function () {
@@ -647,10 +648,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
             $scope.map.markers.push(marker);
         });
     };
-    
+
     $scope.addAddress = function() {
-        if ($scope.address !== '') {
-            MarkerCreatorService.createByAddress($scope.address, function(marker) {
+        if ($scope.tempEvent.address !== '') {
+            MarkerCreatorService.createByAddress($scope.tempEvent.address, function(marker) {
             	refresh(marker);
                 $scope.map.markers.push(marker);
             });
