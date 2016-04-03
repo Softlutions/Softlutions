@@ -6,7 +6,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
+	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location){
+		$scope.TOP_EVENTS = 5;
 		$scope.loginRequest = {
 			email : "",
 			password : "",
@@ -14,6 +15,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		};
 		$scope.userCompany={};
 		$scope.loginNormalPage = false;
+		
+		$scope.tempRedirect = {};
+		$scope.topEvents = [];
 		
 		$scope.user = {
 			email : "",
@@ -62,16 +66,32 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						expireDate.setDate(expireDate.getDate() + 7);
 						$cookies.putObject("lastSession", session, {expires: expireDate});
 					}
-					switch (responseUser.role.roleId) {
-						case 1:
-							window.location.href = "/dondeEs/app#/users";
-							break;
-						case 2:
-							window.location.href = "/dondeEs/app#/serviceByUser";
-							break;
-						case 3:
-							window.location.href = "/dondeEs/app#/index";
-							break;
+					
+					if($scope.tempRedirect.event != null){
+						if($scope.tempRedirect.public != null){
+							$("#modalLogin").modal("toggle");
+							setTimeout(function(){ window.location.href = "#/events"; }, 500);
+						}else{
+							var url = "#/viewEvent?view="+$scope.tempRedirect.event;
+							
+							if($scope.tempRedirect.assist != null)
+								url = url+"&assist";
+							
+							$("#modalLogin").modal("toggle");
+							setTimeout(function(){ window.location.href = url; }, 500);
+						}
+					}else{
+						switch (responseUser.role.roleId) {
+							case 1:
+								window.location.href = "/dondeEs/app#/users";
+								break;
+							case 2:
+								window.location.href = "/dondeEs/app#/serviceByUser";
+								break;
+							case 3:
+								window.location.href = "/dondeEs/app#/index";
+								break;
+						}
 					}
 				}else{
 					$("#errorMsj").css("visibility", "visible");
@@ -179,7 +199,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		            target: '.navbar-fixed-top',
 		            offset: 80
 		        });
-		        // Page scrolling feature
+		        
 		        $('a.page-scroll').bind('click', function(event) {
 		            var link = $(this);
 		            $('html, body').stop().animate({
@@ -220,11 +240,30 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		        init();
 
 		    })();
-
-		    // Activate WOW.js plugin for animation on scroll
+		    
 		    new WOW().init();
+		    
+		    // Redirect logic
+		    
+		    switch($location.search().p){
+		    	case "login":
+		    		$("#modalLogin").modal("toggle");
+		    		$scope.tempRedirect.event = $location.search().event;
+		    		$scope.tempRedirect.assist = $location.search().assist;
+		    		$scope.tempRedirect.public = $location.search().public;
+		    		break;
+		    	case "events":
+		    		window.location.href = "#/landingPage#events";
+		    		break;
+		    	case "testimonials":
+		    		window.location.href = "#/landingPage#testimonials";
+		    		break;
+		    	case "contact":
+		    		window.location.href = "#/landingPage#contact";
+		    		break;
+		    }
+		    
 		});
-		// End: Scroll logic
 		
 		
 		// Modals show and hideS
@@ -243,7 +282,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900)
 		}
 		
-		
 		// Start: Contact message
 		$scope.sendMessage = function () {
 			var dataRequest = {
@@ -261,120 +299,15 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				}
 			});
 		}
-		// End: Contact message
-		
-		// ------------------------------------- PUBLIC EVENTS
-		
-		// SEARCH
-		
-		$scope.searchByUser;
-		$scope.searchByPlace;
-		$scope.searchByEvent;
-		$scope.isOpen = false;
-		
-		$scope.searchByParam = function(){
-			
-			if($scope.searchByUser == undefined || $scope.searchByUser == ''){
-				$scope.searchByUser = null;
-			}
-			if($scope.searchByPlace == undefined || $scope.searchByPlace == ''){
-				$scope.searchByPlace = null;
-			}
-			if($scope.searchByEvent == undefined || $scope.searchByEvent == ''){
-				$scope.searchByEvent = null	;
-			}
-			$http.get('rest/protected/event/getEventByParams/'+ $scope.searchByUser +'/'+ $scope.searchByEvent + '/'+ $scope.searchByPlace ).success(function(response){
-				$scope.eventsPublish = response.eventList;
-				
-			});
-			if($scope.eventsPublish.length==0){
-				$scope.showError = false;
-			}else{
-				$scope.showError = true;
-			}
-		}
-		
-		$scope.openDivSearch = function(){
-			$scope.isOpen = !$scope.isOpen;
-			
-			if($scope.isOpen){
-				$scope.searchByUser='';
-				$scope.searchByPlace='';
-				$scope.searchByEvent='';
-				$http.get('rest/protected/event/getAllEventPublish',$scope.requestObject).success(function(response) {
-					if (response.code == 200) {
-						if (response.eventList != null && response.eventList.length > 0) {
-							$scope.eventsPublish = response.eventList;
-							/*for (var i=0; i<$scope.eventsPublish.length; i++) {
-								$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
-								
-								switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
-								    case '01': $scope.eventsPublish[i].month = "JAN"; break;
-								    case '02': $scope.eventsPublish[i].month = "FEB"; break;
-								    case '03': $scope.eventsPublish[i].month = "MAR"; break;
-								    case '04': $scope.eventsPublish[i].month = "APR"; break;
-								    case '05': $scope.eventsPublish[i].month = "MAY"; break;
-								    case '06': $scope.eventsPublish[i].month = "JUN"; break;
-								    case '07': $scope.eventsPublish[i].month = "JUL"; break;
-								    case '08': $scope.eventsPublish[i].month = "AUG"; break;
-								    case '09': $scope.eventsPublish[i].month = "SEP"; break;
-								    case '10': $scope.eventsPublish[i].month = "OCT"; break;
-								    case '11': $scope.eventsPublish[i].month = "NOV"; break;
-								    case '12': $scope.eventsPublish[i].month = "DEC"; break;
-								    default: $scope.eventsPublish[i].month = "NONE";
-								} 
-							}*/
-						} else {
-					    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
-						}
-					} else {
-				    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
-					}
-				});
-			}
-		}
-		
-		//-------------
-		
-		// PUBLISHED EVENTS
-		
-		$scope.eventsPublish = [];
-		
-		$http.get('rest/protected/event/getAllEventPublish').success(function(response) {
-			if (response.code == 200) {
-				if (response.eventList != null && response.eventList.length > 0) {
-					$scope.eventsPublish = response.eventList;
-					
-					/*for (var i=0; i<$scope.eventsPublish.length; i++) {
-						$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
-						
-						switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
-						    case '01': $scope.eventsPublish[i].month = "ENE"; break;
-						    case '02': $scope.eventsPublish[i].month = "FEB"; break;
-						    case '03': $scope.eventsPublish[i].month = "MAR"; break;
-						    case '04': $scope.eventsPublish[i].month = "ABR"; break;
-						    case '05': $scope.eventsPublish[i].month = "MAY"; break;
-						    case '06': $scope.eventsPublish[i].month = "JUN"; break;
-						    case '07': $scope.eventsPublish[i].month = "JUL"; break;
-						    case '08': $scope.eventsPublish[i].month = "AGO"; break;
-						    case '09': $scope.eventsPublish[i].month = "SEP"; break;
-						    case '10': $scope.eventsPublish[i].month = "OCT"; break;
-						    case '11': $scope.eventsPublish[i].month = "NOV"; break;
-						    case '12': $scope.eventsPublish[i].month = "DIC"; break;
-						    default: $scope.eventsPublish[i].month = "N/A";
-						}
-					}*/
-				} else {
-			    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
-				}
-			} else {
-		    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
-			}
-		});
 		
 		$scope.viewEvent = function(event){
 			window.location.href = "#/viewEvent?view="+event.eventId;
 		}
 		
-		
+		$http.get("rest/landing/getTopEvents/"+$scope.TOP_EVENTS).success(function(response){
+			if(response.code == 200){
+				$scope.topEvents = response.eventList;
+				console.log($scope.topEvents);
+			}
+		})
 	}]);
