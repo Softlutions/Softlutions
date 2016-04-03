@@ -30,7 +30,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$cookies.putObject("goToEventsPublish", false);
 		}			
 		
-		$scope.showRegisterUser = function () {
+		$scope.hiddenModalLogin = function () {
 			$('#modalLogin').modal('toggle');
 		}
 		

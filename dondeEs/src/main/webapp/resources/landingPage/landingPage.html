@@ -268,12 +268,12 @@
 										class="form-control">
 								</div>
 								<div>
-									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-										type="submit">
+									<button class="btn btn-primary pull-right btn-sm-normalize-size"
+												type="submit">
 										<strong>Cambiar contraseña</strong>
 									</button>
 									<button type="button"
-										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										class="btn btn-sm btn-danger pull-right"
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
@@ -481,12 +481,12 @@
 							
 							<div class="form-group">	
 								 <a class="pull-right" data-toggle="modal"
-									data-target="#updatePasswordModal">¿Olvidó su contraseña?</a>
+									data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
 							</div>																			
 						</form>
 
 						<a class="pull-right" data-toggle="modal"
-								data-target="#selectTypeUser" ng-click="showRegisterUser()">Registrarse</a>
+								data-target="#selectTypeUser" ng-click="hiddenModalLogin()">Registrarse</a>
 					</div>
 				</div>
 			</div>
