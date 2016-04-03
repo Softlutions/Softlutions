@@ -21,9 +21,16 @@ public class ServiceContactController {
 	
 	/**
 	 * @Author Juan Carlos Sánchez G.
-	 * @param idEvent Id del evento del que se consultarán los contratos de servicio
+	 * @param idEvent Id del evento del que se consultarán los contratos de servicio014 
+	 * 
 	 * @return response Respuesta del servidor de la petición incluyendo la lista de contratos de servicio.
-	 * @version 1.0
+	 * @version 1.0k
+	 * 0\
+	 * 
+	 * 87
+	 * '
+	 * \
+	 * ]0
 	 */
 
 	@RequestMapping(value ="/getAllServiceContact/{idEvent}", method = RequestMethod.GET)
@@ -57,9 +64,14 @@ public class ServiceContactController {
 	public ServiceContactResponse answerContract(@RequestBody ServiceContactRequest serviceContactRequest) {
 		String streventId = AES.base64decode(serviceContactRequest.getEventId());
 		String strserviceId = AES.base64decode(serviceContactRequest.getServiceId());
+		
+		
+		
+		
+		
 		ServiceContactResponse response = new ServiceContactResponse();
 		ServiceContact serviceContact = serviceContactInterface
-				.getByServiceServiceIdAndEventEventId(Integer.parseInt(streventId), Integer.parseInt(strserviceId));
+				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
@@ -85,5 +97,22 @@ public class ServiceContactController {
 		}
 		
 		return response;
+	}
+	
+	@RequestMapping(value = "/contractService/{idService}/{idEvent}", method = RequestMethod.GET)
+	public ServiceContactResponse contractService(@PathVariable("idService") int service,
+			@PathVariable("idEvent") int event) {
+		ServiceContactResponse response = new ServiceContactResponse();
+
+		if (serviceContactInterface.contractService(service, event)) {
+			response.setCode(200);
+			response.setCodeMessage("Successful");
+		} else {
+			response.setCode(400);
+			response.setCodeMessage("You already was invited");
+		}
+
+		return response;
+
 	}
 }

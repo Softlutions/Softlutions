@@ -6,6 +6,7 @@ angular.module('dondeEs', [
 	"dondeEs.index",
 	"dondeEs.update",
 	"dondeEs.serviceByUser",
+	"dondeEs.servicesAvailable",
 	"dondeEs.users",
 	"dondeEs.myEvents",
 	"dondeEs.eventsPublish",
@@ -24,11 +25,10 @@ angular.module('dondeEs', [
 	// Opciones globales de los popup de notificaciones.
 	toastr.options = {
             closeButton: true,
-            progressBar: true,
+            progressBar: false,
             showMethod: 'slideDown',
             timeOut: 4000
         };
-	// FIN, opciones globales de los popup de notificaciones.
 	
 	$routeProvider.otherwise({redirectTo: '/index'});
   

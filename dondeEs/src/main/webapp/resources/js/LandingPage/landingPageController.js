@@ -1,5 +1,5 @@
 'use strict';
-angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
+angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.viewEvent', 'landingPageModule.events'])
 	.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/landingPage', {
 			templateUrl : 'resources/landingPage/landingPage.html',
@@ -16,8 +16,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			email : "",
 			password : "",
 			isCript: false
-		};	
-				
+		};
+		$scope.userCompany={};
 		$scope.loginNormalPage = false;
 		
 		$scope.user = {
@@ -33,7 +33,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 		$scope.showRegisterUser = function () {
 			$('#modalLogin').modal('toggle');
 		}
-			
+		
 		$scope.confirmPassword;
 		$("#selectTypeUser").hide();
 		$scope.checkLogin = function() {
@@ -45,16 +45,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			}else{
 				$("#errorMsj").css("visibility", "visible");
 			}
-		}
-		
-		var sessionCookie = $cookies.getObject("lastSession");
-		
-		if(sessionCookie != null && sessionCookie.autologin){
-			$('#chkRememberMe').prop('checked', true);
-			$scope.loginRequest.email = sessionCookie.email;
-			$scope.loginRequest.password = sessionCookie.pass;
-			$scope.loginRequest.isCript = true;
-			login();
 		}
 		
 		function login(){
@@ -75,8 +65,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 					if(rememberMe){
 						var session = {
 							email: responseUser.email,
-							pass: response.criptPass,
-							autologin: true
+							pass: response.criptPass
 						};
 						
 						var expireDate = new Date();
@@ -104,8 +93,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			});
 		}
 		
-		
-		
 		//#region Users
 		$scope.forgotPassword = function() {
 			if($scope.user.email != null){
@@ -129,12 +116,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 		
 		
 		$scope.saveUser = function(user) {
+			$scope.user.email = $scope.userCompany.email;
+			$scope.user.password = $scope.userCompany.password;
 			var userRequest = {
 				user : $scope.user
 			}
 			
 			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password!=null){
-				if($scope.user.password != $scope.user.confirmPassword){
+				if($scope.user.password != $scope.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
 				}else{
 					$http.post("rest/login/create",userRequest) 
@@ -192,7 +181,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5);
 			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900);
 		}
-		
 		
 		// Start: Scroll logic
 		angular.element(document).ready(function () {
@@ -284,4 +272,119 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			});
 		}
 		// End: Contact message
+		
+		// ------------------------------------- PUBLIC EVENTS
+		
+		// SEARCH
+		
+		$scope.searchByUser;
+		$scope.searchByPlace;
+		$scope.searchByEvent;
+		$scope.isOpen = false;
+		
+		$scope.searchByParam = function(){
+			
+			if($scope.searchByUser == undefined || $scope.searchByUser == ''){
+				$scope.searchByUser = null;
+			}
+			if($scope.searchByPlace == undefined || $scope.searchByPlace == ''){
+				$scope.searchByPlace = null;
+			}
+			if($scope.searchByEvent == undefined || $scope.searchByEvent == ''){
+				$scope.searchByEvent = null	;
+			}
+			$http.get('rest/protected/event/getEventByParams/'+ $scope.searchByUser +'/'+ $scope.searchByEvent + '/'+ $scope.searchByPlace ).success(function(response){
+				$scope.eventsPublish = response.eventList;
+				
+			});
+			if($scope.eventsPublish.length==0){
+				$scope.showError = false;
+			}else{
+				$scope.showError = true;
+			}
+		}
+		
+		$scope.openDivSearch = function(){
+			$scope.isOpen = !$scope.isOpen;
+			
+			if($scope.isOpen){
+				$scope.searchByUser='';
+				$scope.searchByPlace='';
+				$scope.searchByEvent='';
+				$http.get('rest/protected/event/getAllEventPublish',$scope.requestObject).success(function(response) {
+					if (response.code == 200) {
+						if (response.eventList != null && response.eventList.length > 0) {
+							$scope.eventsPublish = response.eventList;
+							/*for (var i=0; i<$scope.eventsPublish.length; i++) {
+								$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
+								
+								switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
+								    case '01': $scope.eventsPublish[i].month = "JAN"; break;
+								    case '02': $scope.eventsPublish[i].month = "FEB"; break;
+								    case '03': $scope.eventsPublish[i].month = "MAR"; break;
+								    case '04': $scope.eventsPublish[i].month = "APR"; break;
+								    case '05': $scope.eventsPublish[i].month = "MAY"; break;
+								    case '06': $scope.eventsPublish[i].month = "JUN"; break;
+								    case '07': $scope.eventsPublish[i].month = "JUL"; break;
+								    case '08': $scope.eventsPublish[i].month = "AUG"; break;
+								    case '09': $scope.eventsPublish[i].month = "SEP"; break;
+								    case '10': $scope.eventsPublish[i].month = "OCT"; break;
+								    case '11': $scope.eventsPublish[i].month = "NOV"; break;
+								    case '12': $scope.eventsPublish[i].month = "DEC"; break;
+								    default: $scope.eventsPublish[i].month = "NONE";
+								} 
+							}*/
+						} else {
+					    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
+						}
+					} else {
+				    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
+					}
+				});
+			}
+		}
+		
+		//-------------
+		
+		// PUBLISHED EVENTS
+		
+		$scope.eventsPublish = [];
+		
+		$http.get('rest/protected/event/getAllEventPublish').success(function(response) {
+			if (response.code == 200) {
+				if (response.eventList != null && response.eventList.length > 0) {
+					$scope.eventsPublish = response.eventList;
+					
+					/*for (var i=0; i<$scope.eventsPublish.length; i++) {
+						$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
+						
+						switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
+						    case '01': $scope.eventsPublish[i].month = "ENE"; break;
+						    case '02': $scope.eventsPublish[i].month = "FEB"; break;
+						    case '03': $scope.eventsPublish[i].month = "MAR"; break;
+						    case '04': $scope.eventsPublish[i].month = "ABR"; break;
+						    case '05': $scope.eventsPublish[i].month = "MAY"; break;
+						    case '06': $scope.eventsPublish[i].month = "JUN"; break;
+						    case '07': $scope.eventsPublish[i].month = "JUL"; break;
+						    case '08': $scope.eventsPublish[i].month = "AGO"; break;
+						    case '09': $scope.eventsPublish[i].month = "SEP"; break;
+						    case '10': $scope.eventsPublish[i].month = "OCT"; break;
+						    case '11': $scope.eventsPublish[i].month = "NOV"; break;
+						    case '12': $scope.eventsPublish[i].month = "DIC"; break;
+						    default: $scope.eventsPublish[i].month = "N/A";
+						}
+					}*/
+				} else {
+			    	toastr.warning('Eventos publicados', 'No se encontraron eventos.');
+				}
+			} else {
+		    	toastr.error('Eventos publicados', 'Ocurrió un error al buscar los eventos.');
+			}
+		});
+		
+		$scope.viewEvent = function(event){
+			window.location.href = "#/viewEvent?view="+event.eventId;
+		}
+		
+		
 	}]);
