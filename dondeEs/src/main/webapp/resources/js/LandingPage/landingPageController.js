@@ -6,18 +6,29 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies'])
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
+	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', 
+	                                		function($scope, $http, $cookies, $rootScope){
+		if ($cookies.getObject("goToEventsPublish") == null) {
+			$cookies.putObject("goToEventsPublish", false);
+		}
+		
 		$scope.loginRequest = {
 			email : "",
 			password : "",
 			isCript: false
-		};
+		};	
+				
 		$scope.loginNormalPage = false;
 		
 		$scope.user = {
 			email : "",
 			password : ""
 		};
+		
+		if ($cookies.getObject("goToEventsPublish") == true) {
+			$('html,body').animate({scrollTop:$('#eventPublish').height()+370},2e3);
+			$cookies.putObject("goToEventsPublish", false);
+		}			
 		
 		$scope.showRegisterUser = function () {
 			$('#modalLogin').modal('toggle');

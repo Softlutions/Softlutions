@@ -7,7 +7,8 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope','$http','$cookies',function($scope,$http,$cookies) {
+	.controller('IndexCtrl', ['$scope', '$http', '$cookies',
+	                          			function($scope, $http, $cookies) {
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.permissions = {
 			comentarEventos: false,
@@ -32,8 +33,13 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 					sessionCookie.autologin = false;
 					$cookies.putObject("lastSession", sessionCookie);
 				}
-				window.location.href = "/dondeEs/#/login";
+				window.location.href = "/dondeEs/#/landingPage";
 			});
+		}
+		
+		$scope.returnLandingPage = function () {
+			$cookies.putObject("goToEventsPublish", true);
+			window.location.href = "/dondeEs/#/landingPage";
 		}
 		
 		for (var i = 0; i < $scope.loggedUser.role.permissions.length; i++) { 

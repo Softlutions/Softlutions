@@ -80,9 +80,12 @@
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
 						</ul>
 					</li>
-					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
-					<span class="nav-label">Contacto</span></a>
+					<li><a ng-click="returnLandingPage()"><i class="glyphicon glyphicon-glass"></i> 
+						<span class="nav-label">Eventos publicados</span></a>
 					</li>
+					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
+						<span class="nav-label">Contacto</span></a>
+					</li>		
 				</ul>
 			</div>
 		</nav>
