@@ -322,13 +322,13 @@
 	</div>
 </div>
 
-<div ng-show="eventForm == true">
-	<div class="col-xs-12">
-		<div class="form-group">
-			<a class="btn btn-primary pull-right" ng-click="hiddenEventForm()">Volver</a>
+<div class="container" ng-show="eventForm == true">
+	<div class="col-xs-11">
+		<div class="row">
 			<h1>Crear evento</h1>	
+			<a class="fa fa-reply btn btn-primary pull-left" ng-click="hiddenEventForm()"> Volver</a>
 		</div>		
-	
+		<br/>
 		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
 			<div class="form-group">
 				<label class="col-lg-2">Nombre</label>
@@ -398,8 +398,10 @@
 				<div class="col-lg-12">
 					<label class='control-label'>Imagen principal</label> 
 					<img ng-src="{{tempEvent.file}}" class="img-responsive img-rounded center-block" width="175px" height="125px"/>
-					<input id="uploadImageEvent" class="btn btn-primary col-lg-4" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
-					<input ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="btn btn-warning col-lg-4" value="Quitar imagen" type="button"/>
+					<label class="fa fa-camera btn btn-primary" data-toggle="tooltip" title="Adjuntar foto principal">
+						<input id="uploadImageEvent" style="display: none;" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
+					</label>
+					<label ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="fa fa-trash btn btn-danger col-lg-4" data-toggle="tooltip" title="Quitar imagen"></label>
 					<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
 				</div>
 			</div>
@@ -491,8 +493,10 @@
 				<div class="col-lg-12">
 					<label class='control-label'>Imagen principal</label> 
 					<img ng-src="{{tempEvent.file}}" class="img-responsive img-rounded center-block" width="175px" height="125px"/>
-					<input id="uploadImageEvent" class="btn btn-primary col-lg-4" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
-					<input ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="btn btn-warning col-lg-4" value="Quitar imagen" type="button"/>
+					<label class="fa fa-camera btn btn-primary" data-toggle="tooltip" title="Adjuntar foto principal">
+						<input id="uploadImageEvent" style="display: none;" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
+					</label>
+					<label ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="fa fa-trash btn btn-danger col-lg-4" data-toggle="tooltip" title="Quitar imagen"></label>
 					<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
 				</div>
 			</div>
@@ -513,7 +517,7 @@
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
 			<h5>Subastas del evento</h5>
-			<a href="#" class="pull-right btn btn-xs btn-primary">Volver a mis eventos</a>
+			<a href="#" class="fa fa-reply pull-left btn btn-primary"> Volver</a>
 		</div>
 		<div class="ibox-content">
 
@@ -551,7 +555,7 @@
 	</div>
 </div>		
 	<div class="col-sm-12" ng-show="serviceList == true">
-		<button ng-click="hideServiceList()" class="btn btn-primary">Volver</button>
+		<button ng-click="hideServiceList()" class="fa fa-try btn btn-primary"> Volver</button>
 		<div class="ibox float-e-margins">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">

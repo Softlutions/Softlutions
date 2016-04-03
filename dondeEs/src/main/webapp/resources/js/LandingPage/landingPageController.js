@@ -269,6 +269,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		    	case "contact":
 		    		window.location.href = "#/landingPage#contact";
 		    		break;
+		    	case "singin":
+		    		$("#selectTypeUser").modal("toggle");
+		    		break;
 		    }
 		    
 		});
