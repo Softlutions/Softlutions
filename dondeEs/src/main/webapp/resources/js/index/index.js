@@ -7,7 +7,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope','$http','$cookies',function($scope,$http,$cookies) {
+	.controller('IndexCtrl', ['$scope','$http','$cookies','$rootScope',function($scope,$http,$cookies, $rootScope) {
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.permissions = {
 			comentarEventos: false,

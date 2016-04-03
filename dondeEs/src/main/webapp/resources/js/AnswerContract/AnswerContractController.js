@@ -21,10 +21,23 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 		var dataCreate = {
 				eventId : $location.search().eventId,
 				serviceId : $location.search().serviceId,
+				state : 2
+		};
+		$http({method: 'POST',url:'rest/protected/serviceContact/answerContract', data:dataCreate}).success(function(response) {
+
+		});
+	}
+	
+	$scope.noAccept = function(event){
+		var dataCreate = {
+				eventId : $location.search().eventId,
+				serviceId : $location.search().serviceId,
 				state : 1
 		};
 		$http({method: 'POST',url:'rest/protected/serviceContact/answerContract', data:dataCreate}).success(function(response) {
 
 		});
 	}
+	
+	
 } ]);
