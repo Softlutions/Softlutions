@@ -5,8 +5,9 @@
 			<h2 class="font-bold no-margins">{{event.name}}</h2>
 			<small>{{event.place.name}}</small>
 		</div>
-		<img src="http://lorempixel.com/image_output/people-q-c-100-100-1.jpg"
-			class="img-circle circle-border m-b-md" alt="profile">
+		<img src="{{event.image}}"
+			class="img-responsive img-rounded center-block" width="175px"
+			height="105px" alt="profile">
 		<div>
 			<span>Correo: {{event.user.email}}</span>
 		</div>
