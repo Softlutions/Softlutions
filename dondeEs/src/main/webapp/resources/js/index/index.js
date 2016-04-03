@@ -7,7 +7,9 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope','$http','$cookies','$rootScope',function($scope,$http,$cookies, $rootScope) {
+	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope',
+	                          			function($scope, $http, $cookies, $rootScope) {
+
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.pageTitle = "Donde es";
 		$scope.permissions = {
@@ -32,10 +34,13 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 				if(sessionCookie != null){
 					$cookies.putObject("lastSession", sessionCookie);
 				}
-				
-				
-				window.location.href = "#/landingPage";
+				window.location.href = "/dondeEs/#/landingPage";
 			});
+		}
+		
+		$scope.returnLandingPage = function () {
+			$cookies.putObject("goToEventsPublish", true);
+			window.location.href = "/dondeEs/#/landingPage";
 		}
 		
 		if($scope.loggedUser != null){

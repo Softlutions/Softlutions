@@ -322,8 +322,8 @@
 	</div>
 </div>
 
-<div class="container" ng-show="eventForm == true">
-	<div class="col-xs-11">
+<div ng-show="eventForm == true">
+	<div class="col-xs-12">
 		<div class="form-group">
 			<a class="btn btn-primary pull-right" ng-click="hiddenEventForm()">Volver</a>
 			<h1>Crear evento</h1>	
@@ -414,8 +414,8 @@
 
 <!-- ASISTENTE DE CREACIÓN -->
 <wizard on-finish="finishedWizard()"  ng-if="eventsWizard == true"> 
-<wz-step wz-title="Crear evento" class="container" title="Starting">
-<div class="col-xs-11">
+<wz-step wz-title="Crear evento" title="Starting">
+<div class="col-xs-12">
 <br>
 <br>
 		<div class="form-group">

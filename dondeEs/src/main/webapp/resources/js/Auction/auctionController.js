@@ -82,4 +82,74 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 		$("#modal-form").modal("toggle");
 	}
 	
+	$scope.auctionEventServices = function(event){
+		var date = new Date();
+		date.setDate(date.getDate() + 1);
+        $('#datetimepicker').datetimepicker({
+        	locale: 'es',
+            format: 'LLLL',
+            minDate: date,
+            maxDate: event.publishDate
+        });
+		$scope.selectedEvent = event;
+	}
+	
+	$scope.catalogsList = function(){
+		if($scope.catalogs.length == 0){
+			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
+				$scope.catalogs = response.serviceCatalogList;
+			});
+		}
+	}
+	
+	$scope.createAuction = function(){
+		if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
+			toastr.error('Debe ingresar todos los datos!');
+		}else{			
+			var date = new Date($('#datetimepicker').data("DateTimePicker").date());
+			if($scope.globalEventId !=0){
+				var event = {
+						eventId: $scope.globalEventId
+				}
+				var auction = {
+						name: $scope.tempAuction.name,
+						description: $scope.tempAuction.description,
+						date: date,
+						state: 1,
+						event: event,
+						serviceCatalog: $scope.tempAuction.selected
+				};
+			}else{
+				var auction = {
+						name: $scope.tempAuction.name,
+						description: $scope.tempAuction.description,
+						date: date,
+						state: 1,
+						event: $scope.selectedEvent,
+						serviceCatalog: $scope.tempAuction.selected
+				}
+			}
+			
+			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				$('#modalAuctionEventServices').modal('toggle');
+				$scope.tempAuction = {};
+				toastr.success('Subasta publicada!');
+				if($scope.globalEventId!=0){
+					setTimeout(function(){$('#modalAuctionEventServices').modal('hide')}, 10)
+					$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
+							if (response.code == 200) {
+								if (response.auctionList != null && response.auctionList != {}) {
+									$scope.auctionsEvent = response.auctionList;
+								} else {
+							    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
+								}
+							} else {
+						    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+							}
+						});
+			    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900);
+				}
+			});	
+		}
+	}	
 }]);

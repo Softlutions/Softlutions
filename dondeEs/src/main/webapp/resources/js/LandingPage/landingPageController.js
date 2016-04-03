@@ -6,7 +6,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location){
+	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', 
+	                                		function($scope, $http, $cookies, $rootScope, $location){
+		if ($cookies.getObject("goToEventsPublish") == null) {
+			$cookies.putObject("goToEventsPublish", false);
+		}
+		
 		$scope.TOP_EVENTS = 5;
 		$scope.loginRequest = {
 			email : "",
@@ -24,7 +29,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			password : ""
 		};
 		
-		$scope.showRegisterUser = function () {
+		if ($cookies.getObject("goToEventsPublish") == true) {
+			$('html,body').animate({scrollTop:$('#eventPublish').height()+460},2e3);
+			$cookies.putObject("goToEventsPublish", false);
+		}			
+		
+		$scope.hiddenModalLogin = function () {
 			$('#modalLogin').modal('toggle');
 		}
 		

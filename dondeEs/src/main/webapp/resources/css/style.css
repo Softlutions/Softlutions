@@ -8407,6 +8407,13 @@ textarea {
 	width: 100% !important;
 }
 
+.btn-sm-normalize-size{
+	padding: 5px 10px !important;
+	font-size: 12px !important;
+	line-height: 1.5 !important;
+	margin: 10px 0 0 !important;
+}
+
 .custom-button{
 	padding-top: 14px;
 	border-color: white;

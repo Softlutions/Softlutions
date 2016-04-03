@@ -76,9 +76,12 @@
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
 						</ul>
 					</li>
-					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
-					<span class="nav-label">Contacto</span></a>
+					<li><a ng-click="returnLandingPage()"><i class="glyphicon glyphicon-glass"></i> 
+						<span class="nav-label">Eventos publicados</span></a>
 					</li>
+					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
+						<span class="nav-label">Contacto</span></a>
+					</li>		
 				</ul>
 			</div>
 		</nav>
@@ -90,7 +93,7 @@
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
-                        <i class="fa fa-sign-out"> Cerrar sesiï¿½n</i>
+                        <i class="fa fa-sign-out"> Cerrar sesión</i>
                     </button>
 				</nav>
 			</div>
