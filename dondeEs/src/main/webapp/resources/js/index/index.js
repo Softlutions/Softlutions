@@ -9,6 +9,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	}])
 	.controller('IndexCtrl', ['$scope','$http','$cookies','$rootScope',function($scope,$http,$cookies, $rootScope) {
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.pageName = "Donde es";
 		$scope.permissions = {
 			comentarEventos: false,
 			gestionarEventosPropios: false,

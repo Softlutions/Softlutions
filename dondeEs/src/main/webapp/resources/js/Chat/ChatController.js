@@ -69,6 +69,8 @@ angular
 								
 							}
 							
+							$scope.$parent.pageName = "Chats";
+							
 							$scope.loadMessage=function (){
 								var idChat = $scope.chatCurrent;
 								console.log(idChat +" "+new Date());

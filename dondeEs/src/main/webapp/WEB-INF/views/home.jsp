@@ -6,12 +6,12 @@
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="dondeEs" class="no-js">
+<html lang="en" ng-app="dondeEs" ng-controller="IndexCtrl" class="no-js">
 <!--<![endif]-->
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Donde es | Inicio</title>
+<title>Donde es | {{pageName}}</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
 <link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
 </head>
 <body>
-	<div id="wrapper" ng-controller="IndexCtrl">
+	<div id="wrapper">
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
