@@ -7,6 +7,7 @@ angular.module('dondeEs.contact', ['ngRoute'])
 	  });
 	}])
 	.controller('ContactCtrl', ['$scope','$http',function($scope,$http) {
+		$scope.$parent.pageTitle = "Donde es - Contacto";
 
 		$scope.sendMessage = function () {
 			var dataRequest = {

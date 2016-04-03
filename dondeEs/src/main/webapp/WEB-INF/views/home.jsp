@@ -11,7 +11,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Donde es | {{pageName}}</title>
+<title>{{pageTitle}}</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
@@ -90,7 +90,7 @@
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
-                        <i class="fa fa-sign-out"> Cerrar sesión</i>
+                        <i class="fa fa-sign-out"> Cerrar sesiï¿½n</i>
                     </button>
 				</nav>
 			</div>

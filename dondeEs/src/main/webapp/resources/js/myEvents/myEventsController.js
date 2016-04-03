@@ -69,6 +69,7 @@ app.factory('MarkerCreatorService', function () {
 });
 
 app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams) { 
+	$scope.$parent.pageTitle = "Donde es - Mis eventos";
 	$scope.eventForm = false;
 	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
@@ -246,7 +247,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		}
 	
 	$scope.prepublishEvent = function(){
-		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 900);
+		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 500);
 		$http.get("rest/protected/chat/saveChatEventId/" + $scope.globalEventId).success(function(response){
 			if (response.code == 200) {
 				toastr.success('Nuevo chat administrativo', 'Visita la pagina de chats!');
@@ -256,12 +257,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	}
 	
-	$scope.prepublishEventById = function(eventId){
-		$http.get("rest/protected/chat/saveChatEventId/" + eventId).success(function(response){
+	$scope.prepublishEventById = function(event){
+		$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
 			if (response.code == 200) {
 				
 				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 					if (response.code == 200) {
+						event.state = 2;
 						$scope.events = response.eventList;
 						window.location.href = "/dondeEs/app#/#";
 						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
@@ -385,8 +387,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		}
 	}
 		
-	$scope.publishEvent = function(eventId){  
-		$scope.requestObject = {"eventId":eventId};
+	$scope.publishEvent = function(event){  
+		$scope.requestObject = {"eventId":event.eventId};
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
 			if (response.code == 200) {
 				window.location.href = "/dondeEs/app#/#";
@@ -411,8 +413,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
-	$scope.cancelEvent = function(eventId){  
-	 	$scope.requestObject = {"eventId":eventId};
+	$scope.cancelEvent = function(event){  
+	 	$scope.requestObject = {"eventId":event.eventId};
 	 	$http.put('rest/protected/event/cancelEvent',$scope.requestObject).success(function(response) {
 	 		if (response.code == 200) {
 	 			window.location.href = "/dondeEs/app#/#";
@@ -473,7 +475,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 						'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
 						'loggedUser':$scope.loggedUser.userId,
 					},
-					file : $scope.tempEvent.originalFile,
+					file : $scope.tempEvent.originalFile
 				})
 			.progress(
 				function(evt) {})

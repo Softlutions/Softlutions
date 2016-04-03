@@ -6,6 +6,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			controller : 'UsersCtrl'
 		});
 	}]).controller('UsersCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
+	$scope.$parent.pageTitle = "Donde es - Usuarios";
 	$scope.users = [];
 	$scope.objRequest={};
 	// list Users

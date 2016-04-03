@@ -1,6 +1,6 @@
 <div class="col-sm-12" ng-show="serviceList == false">
 	<div class="pull-left">
-		<a class="btn btn-primary pull-right" href="app#/index">Volver</a>
+		<a class="fa fa-reply btn btn-primary pull-right" href="app#/index"> Volver</a>
 	</div>
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
@@ -13,9 +13,9 @@
 			<table class="table table-hover table-responsive" ng-show="auctionsEvent.length">
 				<thead>
 					<tr>
-						<th>Nombre</th>
+						<th class="col-sm-3">Nombre</th>
 						<th>Descripción</th>
-						<th>Fecha de publicación</th>
+						<th class="col-sm-3">Fecha de finalización</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
@@ -23,7 +23,7 @@
 					<tr ng-repeat="auction in auctionsEvent">
 						<td>{{auction.name}}</td>
 						<td>{{auction.description}}</td>
-						<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
+						<td>{{auction.date | date:'dd-MM-yyyy hh:mma'}}</td>
 						<td><a class="btn btn-primary btn-sm" ng-click="loadAuctionServices($index); showServiceList();">
 							Ver servicios</a></td>
 						<td ng-if="auction.state == 1">
