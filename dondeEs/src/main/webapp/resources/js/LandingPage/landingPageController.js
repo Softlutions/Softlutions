@@ -133,14 +133,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		
-		
 		$scope.saveUser = function(user) {
-			$scope.user.email = $scope.userCompany.email;
-			$scope.user.password = $scope.userCompany.password;
 			var userRequest = {
 				user : $scope.user
 			}
-			
 			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length > 7 && $scope.user.password!=null){
 				if($scope.user.password != $scope.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
