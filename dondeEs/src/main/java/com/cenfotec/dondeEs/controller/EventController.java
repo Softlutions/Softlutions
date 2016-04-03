@@ -205,6 +205,14 @@ public class EventController {
 		}
 	}
 
+	/***
+	 * Devuelve un evento cuando le envian el id encriptado
+	 * 
+	 * @author Alejandro bermudez Vargas
+	 * @param eventRequest
+	 * @return
+	 * @version 1.0
+	 */
 	// get event by id
 	@RequestMapping(value = "/getEventByEncryptId/{idEvent}", method = RequestMethod.GET)
 	public EventResponse getEventByEncryptId(@PathVariable("idEvent") String id) {

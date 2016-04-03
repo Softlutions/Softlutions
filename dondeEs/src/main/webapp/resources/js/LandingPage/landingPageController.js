@@ -313,4 +313,44 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				$scope.topEvents = response.eventList;
 			}
 		})
+		
+		
+		
+		//#region ASNWER CONTRACT
+		
+		if($location.search().eventId != null && $location.search().serviceId){
+			$scope.getEventById = function(){
+				$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+					$scope.event = response.eventPOJO;
+				});
+				setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 2000);
+			}
+			
+			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+			
+			$scope.accept = function(event){
+				var dataCreate = {
+						eventId : $location.search().eventId,
+						serviceId : $location.search().serviceId,
+						state : 2
+				};
+				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
+					
+					toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
+				});
+			}
+			
+			$scope.noAccept = function(event){
+				var dataCreate = {
+						eventId : $location.search().eventId,
+						serviceId : $location.search().serviceId,
+						state : 1
+				};
+				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
+					toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
+				});
+			}
+		}
+		//#endregion ASNWER CONTRACT
+		
 	}]);
