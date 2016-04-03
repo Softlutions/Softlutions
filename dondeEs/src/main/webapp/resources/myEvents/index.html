@@ -32,14 +32,16 @@
 							<th sortable="'name'">Nombre</th>
 							<th>Descripción</th>
 							<th>Lugar</th>
+							<th>Estado</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody ng-repeat="event in $data | filter:search:strict">
 						<tr>
 							<td>{{ event.name }}</td>
+							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
-
+							<td>{{ event.state == 0? 'Cancelado':(event.state == 1? 'Creado':(event.state == 2? 'Pre-publicado':'Publicado')) }}</td>
 							<td>
 								<div class="btn-group">
 									<button data-toggle="dropdown"
@@ -52,28 +54,26 @@
 												contratos</a></li>
 										<li><a href="/dondeEs/app#/eventParticipants/{{event.eventId}}">Listar
 												participantes</a></li>
-										<li ng-if="!$parent.permissions.isAdmin"><a
+										<li ng-show="event.state!==0" ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
 
 										<li><a href="/dondeEs/app#/auctionsEvent/{{event.eventId}}">Ver subastas</a></li>
-										<li ng-if="!$parent.permissions.isAdmin"><a type="button"
+										<li ng-show="event.state!==0" ng-if="!$parent.permissions.isAdmin"><a type="button"
 											ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
 										<li><a type="button" href="app#/ServicesAvailable/{{event.eventId}}">Servicios disponibles</a></li>
 										<li><a type="button" href="app#/eventReminder/{{event.eventId}}">Notas</a></li>
-										<li class="divider"></li>
-										<li><a type="button" ng-show="event.state!==0" ng-click="editEvent(event)">Modificar</a></li>
+										<li ng-show="event.state!==0" class="divider"></li>
+										<li ng-show="event.state!==0"><a type="button" ng-click="editEvent(event)">Modificar</a></li>
 										<li ng-show="event.state===1"><a type="button"
-											ng-click="prepublishEventById(event.eventId)" class="text-danger">Prepublicar</a></li>
+											ng-click="prepublishEventById(event)" class="text-danger">Prepublicar</a></li>
 										<li ng-show="event.state===2"><a type="button"
-											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
+											ng-click="publishEvent(event)" class="text-danger">Publicar</a></li>
 										<li ng-show="event.state===3"><a type="button"
-											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar</a></li>
-										<li ng-show="event.state===0"><a type="button"
-											disabled class="text-danger">Cancelado</a></li>  
+											ng-click="cancelEvent(event)" class="text-danger">Cancelar</a></li>
 									</ul>
 								</div>
 							</td>
@@ -207,9 +207,8 @@
 					</div>	
 					
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary"
-							id="btnCreateAuction" ng-click="createAuction()">Crear
-							subasta</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-primary" id="btnCreateAuction" ng-click="createAuction()">Crear subasta</button>
 					</div>
 				</div>
 			</div>
@@ -420,10 +419,10 @@
 <br>
 <br>
 		<div class="form-group">
-			<h1>Crear evento</h1>	
+			<h1>Crear evento <a href="#" class="pull-right btn btn-xs btn-primary">Volver a mis eventos</a></h1>	
 		</div>		
 	
-		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEventAsistente():saveEventChanges()):validationError()">
 			<div class="form-group">
 				<label class="col-lg-2">Nombre</label>
 				<div class="col-lg-10">

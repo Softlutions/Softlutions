@@ -20,7 +20,7 @@ angular.module('dondeEs', [
 	"dondeEs.eventReminder",
 	"dondeEs.EventParticipant"
 
-]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {	
+]).config(['$routeProvider','$provide','$httpProvider', function($routeProvider,$provide,$httpProvider) {
 	// Opciones globales de los popup de notificaciones.
 	toastr.options = {
             closeButton: true,
@@ -61,5 +61,6 @@ angular.module('dondeEs', [
 	});
 }]).run(function($rootScope, $location) {
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-      });
+    	
     });
+});

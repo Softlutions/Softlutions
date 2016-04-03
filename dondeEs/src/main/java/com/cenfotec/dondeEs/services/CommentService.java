@@ -63,6 +63,7 @@ public class CommentService implements CommentServiceInterface {
 				userPOJO.setName(c.getEventParticipant().getUser().getName());
 				userPOJO.setLastName1(c.getEventParticipant().getUser().getLastName1());
 				userPOJO.setLastName2(c.getEventParticipant().getUser().getLastName2());
+				userPOJO.setImage(c.getEventParticipant().getUser().getImage());
 				eventParticipantPOJO.setUser(userPOJO);
 			}
 			if(c.getEventParticipant().getOfflineUser() != null){

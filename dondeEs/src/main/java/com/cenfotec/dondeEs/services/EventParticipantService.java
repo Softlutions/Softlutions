@@ -106,4 +106,14 @@ public class EventParticipantService implements EventParticipantServiceInterface
 		
 		return eventParticipantPOJO;
 	}
+
+	@Override
+	public Integer createParticipant(EventParticipant eventParticipant) {
+		int nparticipantId = 0;
+		
+		if(eventParticipant.getUser() != null && eventParticipant.getEvent() != null)
+			nparticipantId = eventParticipantRepository.save(eventParticipant).getEventParticipantId();
+		
+		return nparticipantId;
+	}
 }

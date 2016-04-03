@@ -69,6 +69,7 @@ app.factory('MarkerCreatorService', function () {
 });
 
 app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams) { 
+	$scope.$parent.pageTitle = "Donde es - Mis eventos";
 	$scope.eventForm = false;
 	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
@@ -246,7 +247,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		}
 	
 	$scope.prepublishEvent = function(){
-		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 900);
+		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 500);
 		$http.get("rest/protected/chat/saveChatEventId/" + $scope.globalEventId).success(function(response){
 			if (response.code == 200) {
 				toastr.success('Nuevo chat administrativo', 'Visita la pagina de chats!');
@@ -256,12 +257,15 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	}
 	
-	$scope.prepublishEventById = function(eventId){
-		$http.get("rest/protected/chat/saveChatEventId/" + eventId).success(function(response){
+	$scope.prepublishEventById = function(event){
+		$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
 			if (response.code == 200) {
+				
 				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 					if (response.code == 200) {
+						event.state = 2;
 						$scope.events = response.eventList;
+						window.location.href = "/dondeEs/app#/#";
 						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
 					} else {
 						toastr.warning('Prepublicación del evento');
@@ -383,19 +387,11 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		}
 	}
 		
-	$scope.publishEvent = function(eventId){  
-		$scope.requestObject = {"eventId":eventId};
+	$scope.publishEvent = function(event){  
+		$scope.requestObject = {"eventId":event.eventId};
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
 			if (response.code == 200) {
-				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-					if (response.code == 200) {
-						$scope.events = response.eventList;
-						toastr.success('Publicación del evento', 'El evento se publicó con éxito.');
-					} else {
-						toastr.warning('Publicación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se publicó.');
-					}
-					
-				});
+				window.location.href = "/dondeEs/app#/#";
 			} else {
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
@@ -417,18 +413,11 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
-	$scope.cancelEvent = function(eventId){  
-	 	$scope.requestObject = {"eventId":eventId};
+	$scope.cancelEvent = function(event){  
+	 	$scope.requestObject = {"eventId":event.eventId};
 	 	$http.put('rest/protected/event/cancelEvent',$scope.requestObject).success(function(response) {
 	 		if (response.code == 200) {
-		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-			 		if (response.code == 200) {
-							$scope.events = response.eventList;
-								toastr.success('Cancelación del evento', 'El evento se canceló con éxito.');
-			 		} else {
-						toastr.warning('Cancelación del evento', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se canceló.')
-					}
-		 		});
+	 			window.location.href = "/dondeEs/app#/#";
 			} else if (response.errorMessage == "notification cancel event error") {
 		    	toastr.options = {
 	                    timeOut: 7000
@@ -486,7 +475,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 						'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
 						'loggedUser':$scope.loggedUser.userId,
 					},
-					file : $scope.tempEvent.originalFile,
+					file : $scope.tempEvent.originalFile
 				})
 			.progress(
 				function(evt) {})
@@ -510,13 +499,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 										}
 									});
-									
-							    	setTimeout(function(){$('#modalCreateEvent').modal('hide')}, 10)
-							    	$scope.catalogsList();
-							    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900)
 							    	
 							    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
 							    	$scope.hiddenEventForm();
+							    	window.location.href = "/dondeEs/app#/#";
 								} else {
 							    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
 								}
@@ -766,13 +752,11 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									});
 							    	
 							    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
-							    	$scope.hiddenEventForm();
 								} else {
 							    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
 								}
 							} else {
 						    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
-						    	$scope.hiddenEventForm();
 							}			
 						});
 						
