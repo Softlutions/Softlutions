@@ -17,7 +17,6 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="page-scroll" href="#/landingPage">Inicio</a></li>
 					<li><a class="page-scroll" href="#/landingPage?p=events">Eventos</a></li>
-					<li><a class="page-scroll" href="#/landingPage?p=team">Equipo</a></li>
 					<li><a class="page-scroll" href="#/landingPage?p=testimonials">Opinión</a></li>
 					<li><a class="page-scroll" href="#/landingPage?p=contact">Contacto</a></li>
 				</ul>
@@ -120,7 +119,7 @@
 					                    </div>
 					                    <div class="pull-left meta">
 					                        <div class="title h5">
-					                            <a><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : (comment.eventParticipant.user.name+' '+comment.eventParticipant.user.lastName1+' '+comment.eventParticipant.user.lastName2)}}</b></a>
+					                            <a><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : (comment.eventParticipant.user.name+' '+comment.eventParticipant.user.lastName1+' '+(comment.eventParticipant.user.lastName2 == null? '':comment.eventParticipant.user.lastName2))}}</b></a>
 					                        </div>
 					                        <h6 class="text-muted time" sorteable="'date'">{{setDate(comment.date)}}</h6>
 					                    </div>

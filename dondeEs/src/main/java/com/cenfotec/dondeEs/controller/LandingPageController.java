@@ -206,4 +206,62 @@ public class LandingPageController {
 		
 		return response;
 	}
+	
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param nameUser criterio a consultar
+	 * @param namePlace criterio a consultar
+	 * @param name criterio a consultar
+	 * @param publishDate criterio a consultar
+	 * @return lista de eventos basados en los criterios
+	 */
+	@RequestMapping(value="/getEventByParams/{nameUser}/{name}/{namePlace}", method= RequestMethod.GET)
+	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name, @PathVariable("namePlace")String namePlace){
+		EventResponse e = new EventResponse();
+		e.setEventList(eventServiceInterface.getAllByParam(nameUser, name, namePlace, (byte)3));
+		e.setCode(200);
+		return e;
+	}
+	
+	/**
+	 * @author Enmanuel García González
+	 * @return lista de eventos publicos
+	 * @version 1.0
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/getAllEventPublish", method = RequestMethod.GET)
+	public EventResponse getAll() {
+		EventResponse response = new EventResponse();
+
+		try {
+			response.setCode(200);
+			response.setCodeMessage("eventsPublish fetch success");
+			response.setEventList(eventServiceInterface.getAllEventPublish());
+
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setCodeMessage(e.toString());
+			e.printStackTrace();
+
+		} finally {
+			return response;
+		}
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param top cantidad de items que tendra la lista top
+	 * @return lista con los eventos con mas participantes
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/getTopEvents/{top}", method = RequestMethod.GET)
+	public EventResponse getTopEvents(@PathVariable("top") int top) {
+		EventResponse response = new EventResponse();
+		
+		response.setCode(200);
+		response.setCodeMessage("top events fetch success");
+		response.setEventList(eventServiceInterface.getTopEventsByParticipants(top));
+		
+		return response;
+	}
 }

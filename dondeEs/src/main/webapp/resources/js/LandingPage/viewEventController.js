@@ -50,25 +50,25 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			$scope.commentList = response.commentList.reverse();
 			
 			var params = {
-					page: 1,
-					count: 30,
-					sorting: {date: "desc"}
-				};
-				
-				var settings = {
-					total: $scope.commentList.length,	
-					counts: [],	
-					getData: function($defer, params){
-						var fromIndex = (params.page() - 1) * params.count();
-						var toIndex = params.page() * params.count();
-						
-						var subList = $scope.commentList.slice(fromIndex, toIndex);
-						var sortedList = $filter('orderBy')(subList, params.orderBy());
-						$defer.resolve(sortedList);
-					}
-				};
-				
-				$scope.commentsTable = new ngTableParams(params, settings);
+				page: 1,
+				count: 6,
+				sorting: {date: "desc"}
+			};
+			
+			var settings = {
+				total: $scope.commentList.length,	
+				counts: [],	
+				getData: function($defer, params){
+					var fromIndex = (params.page() - 1) * params.count();
+					var toIndex = params.page() * params.count();
+					
+					var subList = $scope.commentList.slice(fromIndex, toIndex);
+					var sortedList = $filter('orderBy')(subList, params.orderBy());
+					$defer.resolve(sortedList);
+				}
+			};
+			
+			$scope.commentsTable = new ngTableParams(params, settings);
 		});
 		
 		// --------------------------- GET PARTICIPANT, ONLY IF A USER IS ALREADY LOGUED
