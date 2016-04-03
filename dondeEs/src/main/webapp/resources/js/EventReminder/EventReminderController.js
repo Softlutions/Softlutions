@@ -7,6 +7,7 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 	  });
 	}])
 	.controller('EventReminderCtrl', ['$scope','$http','$routeParams', function($scope,$http,$routeParams) {
+		$scope.$parent.pageTitle = "Donde es - Mis notas";
 		$scope.notesList;
 		getAllEventRemider();
 		$scope.objNote = {}
@@ -73,12 +74,11 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 				event: $scope.event
 			}
 			
-			console.log(dataEdit);
-			
 			$http({method: 'POST',url:'rest/protected/note/saveNote', data:dataEdit, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 				if (response.code == 200) {
 					getAllEventRemider();
 					toastr.success("Notas del evento", "La nota fué modificada con éxito");
+					$("#modal-form").modal("toggle");
 				} else {
 					toastr.success("Notas del evento", "Ocurrió un problema al modificar la nota");
 				}				

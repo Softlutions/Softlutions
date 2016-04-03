@@ -11,6 +11,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 
 .controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window', '$timeout', 
                                   			function($scope,$http,$location,$routeParams, $window, $timeout) {	
+	$scope.$parent.pageTitle = "Donde es - Subastas disponibles";
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
 	

@@ -365,8 +365,7 @@
 							src="resources/img/dondeEsLogo.png" width="90px" height="85px" />
 							
 						<div id="errorMsj" class="bg-danger">
-							<h3 class="text-danger text-center">Correo o contraseña
-										incorrectos</h3>
+							<h3 class="text-danger text-center">Correo o contraseña incorrectos</h3>
 						</div>
 						
 						<div class="form-group">
@@ -394,19 +393,15 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="pull-left"> <input id="chkRememberMe"
-									type="checkbox" value="remember-me"> Recordarme	
+								<label class="pull-left">
+									<input id="chkRememberMe" type="checkbox" value="remember-me">Recordarme
 								</label>
-							</div>
-							
-							<div class="form-group">	
-								 <a class="pull-right" data-toggle="modal"
-									data-target="#updatePasswordModal">¿Olvidó su contraseña?</a>
-							</div>																			
+								
+								<a class="pull-right" data-toggle="modal" data-target="#updatePasswordModal">¿Olvidó su contraseña?</a><br/>
+								<a class="pull-right" data-toggle="modal" data-target="#selectTypeUser" ng-click="showRegisterUser()">Registrarse</a>
+							</div>																		
 						</form>
-
-						<a class="pull-right" data-toggle="modal"
-								data-target="#selectTypeUser" ng-click="showRegisterUser()">Registrarse</a>
+						
 					</div>
 				</div>
 			</div>

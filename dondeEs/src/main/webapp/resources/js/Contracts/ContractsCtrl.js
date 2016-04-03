@@ -8,6 +8,7 @@ angular
 			});
 		} ])
 		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
+			$scope.$parent.pageTitle = "Donde es - Contratos";
 		$scope.chartValues = null;
 		
 		$scope.listContracts = function(idEvent){s
