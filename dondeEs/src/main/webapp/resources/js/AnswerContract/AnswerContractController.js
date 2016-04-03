@@ -9,6 +9,8 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 } ])
 
 .controller('answerContractCtrl', [ '$scope', '$http','$location', function($scope, $http, $location) {
+	$scope.$parent.pageTitle = "Donde es";
+	
 	$scope.getEventById = function(){
 		$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 			$scope.event = response.eventPOJO;

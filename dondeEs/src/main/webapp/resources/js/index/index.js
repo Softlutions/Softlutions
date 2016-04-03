@@ -7,8 +7,11 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope','$http','$cookies','$rootScope',function($scope,$http,$cookies, $rootScope) {
+	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope',
+	                          			function($scope, $http, $cookies, $rootScope) {
+
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.pageTitle = "Donde es";
 		$scope.permissions = {
 			comentarEventos: false,
 			gestionarEventosPropios: false,
@@ -31,10 +34,13 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 				if(sessionCookie != null){
 					$cookies.putObject("lastSession", sessionCookie);
 				}
-				
-				
-				window.location.href = "#/landingPage";
+				window.location.href = "/dondeEs/#/landingPage";
 			});
+		}
+		
+		$scope.returnLandingPage = function () {
+			$cookies.putObject("goToEventsPublish", true);
+			window.location.href = "/dondeEs/#/landingPage";
 		}
 		
 		if($scope.loggedUser != null){
@@ -84,5 +90,15 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 					$scope.permissions.isPromotor = true;
 					break;
 			}
+			
+			$rootScope.$on( "$routeChangeStart", function(event, next, current) {
+			    if($scope.permissions.isPrestatario)
+			    	if(next.originalPath == '/users' || next.originalPath == '/index')
+			    		window.location.href = "/dondeEs/app#/index";
+			     
+			    if($scope.permissions.isPromotor)
+			    	if(next.originalPath == '/users' || next.originalPath == '/serviceByUser')
+			    		window.location.href = "/dondeEs/app#/index ";
+			   });
 		}
 	}]);

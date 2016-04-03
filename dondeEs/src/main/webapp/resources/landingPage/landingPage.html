@@ -14,8 +14,7 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="page-scroll" href="#page-top">Inicio</a></li>
-					<li><a class="page-scroll" href="#features">Eventos</a></li>
-					<li><a class="page-scroll" href="#team">Equipo</a></li>
+					<li><a class="page-scroll" href="#events">Eventos</a></li>
 					<li><a class="page-scroll" href="#testimonials">Opinión</a></li>
 					<li><a class="page-scroll" href="#contact">Contacto</a></li>
 				</ul>
@@ -38,7 +37,7 @@
                         registrate y crea<br/>
                         uno ahora mismo</h1>
                     <p>
-                        <a class="btn btn-lg btn-primary" data-target="#selectTypeUser" data-toggle="modal">REGISTRARSE</a>
+                        <a class="btn btn-lg btn-primary" ng-click="returnLandingPage()" data-target="#selectTypeUser" data-toggle="modal">REGISTRARSE</a>
                     </p>
                 </div>
                 <div class="carousel-image wow zoomIn">
@@ -73,80 +72,33 @@
     </a>
 </div>
 
-<section id="features" class="container services">
-    <div class="row">
-        <div class="col-xs-12 text-center ">
-            <h1>Top eventos</h1>
-            <ul>
-            
-            </ul>
-            
-            <a href="#/events"><button class="btn btn-warning">Ver mas</button></a>
-        </div>
-    </div>
-</section>
-
-<section id="team" class="gray-section team">
+<section id="events" class="container services">
     <div class="container">
-        <div class="row m-b-lg">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>Nuestro equipo</h1>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4 wow fadeInLeft">
-                <div class="team-member">
-                    <img src="resources/img/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
-                    <h4><span class="navy">Amelia</span> Smith</h4>
-                    <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus. </p>
-                    <ul class="list-inline social-icon">
-                        <li><a href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="team-member wow zoomIn">
-                    <img src="resources/img/avatar1.jpg" class="img-responsive img-circle" alt="">
-                    <h4><span class="navy">John</span> Novak</h4>
-                    <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-4 wow fadeInRight">
-                <div class="team-member">
-                    <img src="resources/img/avatar2.jpg" class="img-responsive img-circle img-small" alt="">
-                    <h4><span class="navy">Peter</span> Johnson</h4>
-                    <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
-            </div>
-        </div>
+    	<div class="row">
+	        <div class="col-xs-12" class="center-block">
+	            <p><h1 class="text-center">Top eventos</h1></p>
+	            
+	            <ul id="topList" ng-repeat="event in topEvents">
+	            	<li class="col-sm-4">
+	            		<div class="panel panel-default">
+	            			<div class="panel-heading">
+		            			<h3 class="text-center">{{event.name}}</h3>
+	            			</div>
+	           				<div class="panel-body">
+	           					<img src="{{event.image}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
+		            			<p class="text-center">
+			            			<strong>{{event.place.name}}</strong><br/>
+			            			{{event.publishDate | date: 'EEE dd MMM yyyy hh:mma'}}
+		            			</p>
+		            			<button class="btn btn-default btn-xs pull-right" ng-click="viewEvent(event)">Ver evento</button>
+	           				</div>
+	            		</div>
+	            	</li>
+	            </ul>
+	        </div>
+	    </div>
+	    
+	    <a href="#/events"><button class="btn btn-warning center-block">Ver mas</button></a><br/>
     </div>
 </section>
 
@@ -236,12 +188,12 @@
 										class="form-control">
 								</div>
 								<div>
-									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-										type="submit">
+									<button class="btn btn-primary pull-right btn-sm-normalize-size"
+												type="submit">
 										<strong>Cambiar contraseña</strong>
 									</button>
 									<button type="button"
-										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										class="btn btn-sm btn-danger pull-right"
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
@@ -318,6 +270,11 @@
 										placeholder="Mínimo 8 caracteres" class="form-control">
 								</div>
 								<div class="form-group">
+									<label>Confirmar contraseña</label> <input type="password"
+										ng-model="confirmPassword" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
 										class="form-control">
@@ -329,12 +286,12 @@
 										ng-model="user.role"></select>
 								</div>
 								<div>
-									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+									<button class="btn btn-sm btn-primary pull-right btn-sm-normalize-size"
 										type="submit">
 										<strong>Guardar</strong>
 									</button>
 									<button type="button"
-										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										class="btn btn-sm btn-danger pull-right"
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
@@ -383,12 +340,12 @@
 										ng-model="user.role"></select>
 								</div>
 								<div>
-									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+									<button class="btn btn-primary pull-right btn-sm-normalize-size"
 										type="submit">
 										<strong>Guardar</strong>
 									</button>
 									<button type="button"
-										class="btn btn-sm btn-danger pull-right m-t-n-xs"
+										class="btn btn-sm btn-danger pull-right"
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
@@ -413,8 +370,7 @@
 							src="resources/img/dondeEsLogo.png" width="90px" height="85px" />
 							
 						<div id="errorMsj" class="bg-danger">
-							<h3 class="text-danger text-center">Correo o contraseña
-										incorrectos</h3>
+							<h3 class="text-danger text-center">Correo o contraseña incorrectos</h3>
 						</div>
 						
 						<div class="form-group">
@@ -442,19 +398,23 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="pull-left"> <input id="chkRememberMe"
-									type="checkbox" value="remember-me"> Recordarme	
+								<label class="pull-left">
+									<input id="chkRememberMe" type="checkbox" value="remember-me">Recordarme
 								</label>
 							</div>
 							
 							<div class="form-group">	
 								 <a class="pull-right" data-toggle="modal"
-									data-target="#updatePasswordModal">¿Olvidó su contraseña?</a>
-							</div>																			
+									data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
+							</div>
+							
+							<div class="form-group">	
+								<a class="pull-right" data-toggle="modal"
+										data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
+								<a class="pull-right" data-toggle="modal"
+										data-target="#selectTypeUser" ng-click="hiddenModalLogin()">Registrarse</a>
+							</div>																				
 						</form>
-
-						<a class="pull-right" data-toggle="modal"
-								data-target="#selectTypeUser" ng-click="showRegisterUser()">Registrarse</a>
 					</div>
 				</div>
 			</div>

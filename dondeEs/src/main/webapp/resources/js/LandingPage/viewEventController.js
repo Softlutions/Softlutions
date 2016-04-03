@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
+angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTable'])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/viewEvent', {
@@ -8,23 +8,10 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 		controller: 'viewEventCtrl'
 	});
 }])
-/*
-.directive('onErrorSrc', function() {
-    return {
-        link: function(scope, element, attrs) {
-        	console.log(element);
-			element.bind('error', function() {
-				if (attrs.src != attrs.onErrorSrc) {
-					attrs.$set('src', attrs.onErrorSrc);
-					console.log("error OK!");
-				}
-			});
-        }
-    }
-})*/
 
-.controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', function($scope, $http, $timeout, Upload, $location) {
+.controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter) {
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	$scope.DEFAULT_USER_IMAGE = "http://bootdey.com/img/Content/user_1.jpg";
 	$scope.commentPreviewFile = null;
 	$scope.eventParticipant = null;
 	$scope.commentFile = null;
@@ -38,7 +25,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	$scope.previewFiles = [];
 	$scope.progressPercentaje = 0;
 	$scope. showUploadField = false;
-	
+	//localStorage.setItem("loggedUser", null);
 	// --------------------------- LOAD EVENT DATA
 	
 	$http.get("rest/landing/getEventById/"+$location.search().view).success(function(response){
@@ -55,24 +42,70 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	});
 	
 	function loadData(){
-		console.log($scope.event);
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 			$scope.images = responseImgs.images;
-			console.log($scope.images);
 		});
 		
 		$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
-			$scope.commentList = response.commentList;
+			$scope.commentList = response.commentList.reverse();
+			
+			var params = {
+				page: 1,
+				count: 6,
+				sorting: {date: "desc"}
+			};
+			
+			var settings = {
+				total: $scope.commentList.length,	
+				counts: [],	
+				getData: function($defer, params){
+					var fromIndex = (params.page() - 1) * params.count();
+					var toIndex = params.page() * params.count();
+					
+					var subList = $scope.commentList.slice(fromIndex, toIndex);
+					var sortedList = $filter('orderBy')(subList, params.orderBy());
+					$defer.resolve(sortedList);
+				}
+			};
+			
+			$scope.commentsTable = new ngTableParams(params, settings);
 		});
 		
 		// --------------------------- GET PARTICIPANT, ONLY IF A USER IS ALREADY LOGUED
 		
-		if($scope.loggedUser != null && $scope.event != null){
+		if($scope.loggedUser != null){
 			$http.get("rest/landing/getEventParticipantByUserAndEvent?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
 				if(response.code == 200){
 					$scope.eventParticipant = response.eventParticipant;
 				}else{
-					toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar');
+					if($location.search().assist != null){
+						$http.get("rest/landing/createParticipant?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
+							if(response.code == 200){
+								$scope.eventParticipant = response.eventParticipant;
+								toastr.success('Estas participando en este evento');
+							}else if(response.code == 202){
+								toastr.warning('Ya estas participando en este evento');
+							}else{
+								toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar');
+							}
+						});
+					}
+				}
+			});
+		}
+	}
+
+	//--------------------------- ASSIST
+	
+	$scope.assist = function(){
+		if($scope.loggedUser == null){
+			window.location.href="#/landingPage?p=login&event="+$scope.event.eventId+"&assist";
+		}else if($scope.eventParticipant == null){
+			$http.get("rest/landing/createParticipant?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
+				if(response.code == 200){
+					$scope.eventParticipant = response.eventParticipant;
+				}else if(response.code == 202){
+					toastr.warning('Ya estas participando en este evento');
 				}
 			});
 		}
@@ -177,6 +210,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 			}).then(function(resp) {
 				if(resp.status == 200){
 					$scope.commentList.push(eventComment);
+					$scope.commentsTable.reload();
 					$scope.comment = undefined;
 					$scope.commentPreviewFile = null;
 					$scope.commentFile = null;
@@ -190,8 +224,8 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	$scope.setDate = function(date){
 		var m = moment.locale('es');
 		var stringDate = new Date(date).toString();
-		stringDate = stringDate.substring(4,24);
-		m = moment(stringDate,"MMM-DD-YYYY HH:mm:ss");
+		stringDate = stringDate.substring(4, 24);
+		m = moment(stringDate,"MMM DD YYYY HH:mm:ss");
 		return m.fromNow();
 	}
 	
@@ -228,8 +262,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload'])
 	        init();
 
 	    })();
-
-	    // Activate WOW.js plugin for animation on scroll
+		
 	    new WOW().init();
 	});
 }]);

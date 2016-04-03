@@ -13,6 +13,7 @@ angular
 						'$scope',
 						'$http','$location',
 						function($scope, $http, $location) {
+							$scope.$parent.pageTitle = "Donde es";
 							$scope.comment;
 							$scope.isComment = true;
 							$scope.answer = '';

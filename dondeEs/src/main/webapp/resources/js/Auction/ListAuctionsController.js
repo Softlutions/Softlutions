@@ -8,6 +8,7 @@ angular
 		});
 	} ])
 	.controller('AuctionsCtrl',['$scope','$http','ngTableParams',function($scope, $http,ngTableParams) {
+		$scope.$parent.pageTitle = "Donde es - Subastas de evento";
 		$scope.selectedCatalogId = "";
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.loggedUserServiceCatalogs = [];

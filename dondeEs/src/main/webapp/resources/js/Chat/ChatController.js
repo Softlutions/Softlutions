@@ -14,6 +14,7 @@ angular
 						'$http',
 						'$location','$interval','$timeout',
 						function($scope, $http, $location, $interval, $timeout) {
+							$scope.$parent.pageTitle = "Donde es - Chats";
 							$("#messageByChat").hide();
 							$scope.objMessage = {};
 							$scope.chatCurrent;
@@ -69,6 +70,8 @@ angular
 						          }, 500);
 								
 							}
+							
+							$scope.$parent.pageName = "Chats";
 							
 							$scope.loadMessage=function (){
 								var idChat = $scope.chatCurrent;
