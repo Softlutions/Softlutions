@@ -68,8 +68,8 @@
 		
 		<script src="resources/non_bower_components/slick.min.js"></script>
 		<script src="resources/non_bower_components/angular-slick.min.js"></script>
+		
 		<script src="resources/bower_components/toastr/toastr.js"></script>
-		<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
 		
 		<!-- Controllers -->
 		<script src="resources/js/LandingPage/landingPageController.js"></script>

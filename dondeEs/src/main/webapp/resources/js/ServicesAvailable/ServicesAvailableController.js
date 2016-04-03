@@ -9,7 +9,7 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		'ServicesAvailable',
 		[ '$scope', '$http', 'ngTableParams', '$filter', '$routeParams',
 				function($scope, $http, ngTableParams, $filter, $routeParams) {
-			
+			$scope.$parent.pageTitle = "Donde es - Servicios disponibles";
 			$scope.requestObject={};
 			$scope.currentCatalogId;
 			$scope.init = function() {

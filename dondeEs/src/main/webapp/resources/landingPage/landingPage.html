@@ -14,8 +14,7 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="page-scroll" href="#page-top">Inicio</a></li>
-					<li><a class="page-scroll" href="#eventPublish">Eventos</a></li>
-					<li><a class="page-scroll" href="#team">Equipo</a></li>
+					<li><a class="page-scroll" href="#events">Eventos</a></li>
 					<li><a class="page-scroll" href="#testimonials">Opinión</a></li>
 					<li><a class="page-scroll" href="#contact">Contacto</a></li>
 				</ul>
@@ -73,112 +72,33 @@
     </a>
 </div>
 
-<section id="eventPublish" class="container services">
-    <div class="row">
-        <div class="col-xs-12 text-center ">
-            <h1>Top eventos</h1>
-            <ul>
-            
-            </ul>
-            
-            <a href="#/events"><button class="btn btn-warning">Ver mas</button></a>
-        </div>
-    </div>
-</section>
-
-<section id="team" class="gray-section team">
+<section id="events" class="container services">
     <div class="container">
-        <div class="row m-b-lg">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>Nuestro equipo</h1>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.</p>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-sm-4 wow fadeInLeft">
-                <div class="team-member">
-                    <img src="resources/img/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
-                    <h4><span class="navy">Juan Carlos</span> Sánchez</h4>
-                    <p>Desarrollador de sotfware</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href=""><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="col-sm-4">
-                <div class="team-member wow zoomIn">
-                    <img src="resources/img/avatar1.jpg" class="img-responsive img-circle" alt="">
-                    <h4><span class="navy">Enmanuel</span> García</h4>
-                    <p>Desarrollador de sotfware</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href=""><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="col-sm-4 wow fadeInRight">
-                <div class="team-member">
-                    <img src="resources/img/avatar2.jpg" class="img-responsive img-circle img-small" alt="">
-                    <h4><span class="navy">Antoni</span> Ramirez</h4>
-                    <p>Desarrollador de sotfware</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href=""><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-sm-6 wow fadeInLeft">
-                <div class="team-member">
-                    <img src="resources/img/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
-                    <h4><span class="navy">Ernesto</span> Méndez</h4>
-                    <p>Desarrollador de sotfware</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href=""><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="col-sm-6 wow fadeInRight">
-                <div class="team-member">
-                    <img src="resources/img/avatar2.jpg" class="img-responsive img-circle img-small" alt="">
-                    <h4><span class="navy">Alejandro</span> Bermudez</h4>
-                    <p>Desarrollador de sotfware</p>
-                    <ul class="list-inline social-icon">
-                        <li><a href=""><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href=""><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    	<div class="row">
+	        <div class="col-xs-12" class="center-block">
+	            <p><h1 class="text-center">Top eventos</h1></p>
+	            
+	            <ul id="topList" ng-repeat="event in topEvents">
+	            	<li class="col-sm-4">
+	            		<div class="panel panel-default">
+	            			<div class="panel-heading">
+		            			<h3 class="text-center">{{event.name}}</h3>
+	            			</div>
+	           				<div class="panel-body">
+	           					<img src="{{event.image}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
+		            			<p class="text-center">
+			            			<strong>{{event.place.name}}</strong><br/>
+			            			{{event.publishDate | date: 'EEE dd MMM yyyy hh:mma'}}
+		            			</p>
+		            			<button class="btn btn-default btn-xs pull-right" ng-click="viewEvent(event)">Ver evento</button>
+	           				</div>
+	            		</div>
+	            	</li>
+	            </ul>
+	        </div>
+	    </div>
+	    
+	    <a href="#/events"><button class="btn btn-warning center-block">Ver mas</button></a><br/>
     </div>
 </section>
 
@@ -350,6 +270,11 @@
 										placeholder="Mínimo 8 caracteres" class="form-control">
 								</div>
 								<div class="form-group">
+									<label>Confirmar contraseña</label> <input type="password"
+										ng-model="confirmPassword" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
 										class="form-control">
@@ -445,8 +370,7 @@
 							src="resources/img/dondeEsLogo.png" width="90px" height="85px" />
 							
 						<div id="errorMsj" class="bg-danger">
-							<h3 class="text-danger text-center">Correo o contraseña
-										incorrectos</h3>
+							<h3 class="text-danger text-center">Correo o contraseña incorrectos</h3>
 						</div>
 						
 						<div class="form-group">
@@ -474,19 +398,23 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="pull-left"> <input id="chkRememberMe"
-									type="checkbox" value="remember-me"> Recordarme	
+								<label class="pull-left">
+									<input id="chkRememberMe" type="checkbox" value="remember-me">Recordarme
 								</label>
 							</div>
 							
 							<div class="form-group">	
 								 <a class="pull-right" data-toggle="modal"
 									data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
-							</div>																			
+							</div>
+							
+							<div class="form-group">	
+								<a class="pull-right" data-toggle="modal"
+										data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
+								<a class="pull-right" data-toggle="modal"
+										data-target="#selectTypeUser" ng-click="hiddenModalLogin()">Registrarse</a>
+							</div>																				
 						</form>
-
-						<a class="pull-right" data-toggle="modal"
-								data-target="#selectTypeUser" ng-click="hiddenModalLogin()">Registrarse</a>
 					</div>
 				</div>
 			</div>

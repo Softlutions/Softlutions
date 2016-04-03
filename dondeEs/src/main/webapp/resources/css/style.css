@@ -8418,3 +8418,12 @@ textarea {
 	padding-top: 14px;
 	border-color: white;
 }
+
+#topList{
+	list-style-type: none;
+	padding-left: 0px;
+}
+
+#seeMore{
+	margin-bottom: 10px;
+}

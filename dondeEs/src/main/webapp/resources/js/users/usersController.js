@@ -6,6 +6,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			controller : 'UsersCtrl'
 		});
 	}]).controller('UsersCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
+	$scope.$parent.pageTitle = "Donde es - Usuarios";
 	$scope.users = [];
 	$scope.objRequest={};
 	// list Users
@@ -60,7 +61,6 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 		if($scope.user.name != null && $scope.user.email != null && $scope.user.lastName1 != null && $scope.user.password.length >= 8 && $scope.user.phone != null){
 			$http.post("rest/protected/users/create", userRequest)
 				.success(function(response) {
-					console.log(response);
 					if (response.code == 200) {
 						user["userId"] = response.userId;
 						$scope.users.push(user);

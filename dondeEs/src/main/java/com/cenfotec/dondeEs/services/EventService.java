@@ -215,5 +215,36 @@ public class EventService implements EventServiceInterface {
 		});
 		return listEventPOJO;
 	}
+	
+	@Override
+	public List<EventPOJO> getTopEventsByParticipants(int top) {
+		List<Event> events = eventRepository.getPublicEvents();
+		List<EventPOJO> eventsPOJO = new ArrayList<>();
+		/*List<Event> temp = new ArrayList<>();
+		
+		events.forEach(e -> {
+			
+		});*/
+		
+		events.stream().forEach(e -> {
+			EventPOJO event = new EventPOJO();
+			event.setEventId(e.getEventId());
+			event.setImage(e.getImage());
+			event.setName(e.getName());
+			event.setState(e.getState());
+			event.setPrivate_(e.getPrivate_());
+			event.setPublishDate(e.getPublishDate());
+			event.setDescription(e.getDescription());
+			
+			PlacePOJO place = new PlacePOJO();
+			place.setPlaceId(e.getPlace().getPlaceId());
+			place.setName(e.getPlace().getName());
+			event.setPlace(place);
+			
+			eventsPOJO.add(event);
+		});
+		
+		return eventsPOJO;
+	}
 
 }
