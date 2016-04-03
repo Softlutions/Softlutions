@@ -420,10 +420,10 @@
 <br>
 <br>
 		<div class="form-group">
-			<h1>Crear evento</h1>	
+			<h1>Crear evento <a href="#" class="pull-right btn btn-xs btn-primary">Volver a mis eventos</a></h1>	
 		</div>		
 	
-		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEventAsistente():saveEventChanges()):validationError()">
 			<div class="form-group">
 				<label class="col-lg-2">Nombre</label>
 				<div class="col-lg-10">

@@ -99,7 +99,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			})
 			.error(function(response){
 				$("#errorMsj").css("visibility", "visible");
-				console.log("error" + response.message);
 			});
 		}
 		
@@ -132,14 +131,13 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				user : $scope.user
 			}
 			
-			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length >= 8 && $scope.user.password!=null){
+			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length > 7 && $scope.user.password!=null){
 				if($scope.user.password != $scope.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
 				}else{
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
-							console.log(response);
 							$("#createUserForm").modal('hide');
 							$("#createCompanyForm").modal('hide');
 							$scope.user={};
@@ -307,7 +305,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$http.get("rest/landing/getTopEvents/"+$scope.TOP_EVENTS).success(function(response){
 			if(response.code == 200){
 				$scope.topEvents = response.eventList;
-				console.log($scope.topEvents);
 			}
 		})
 	}]);
