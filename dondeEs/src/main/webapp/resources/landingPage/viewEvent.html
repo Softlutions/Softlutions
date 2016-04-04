@@ -93,19 +93,22 @@
 	 </div>
 	 <div ng-show="eventParticipant != null" class="containerComment" id="commentDiv">
 		<div class="row">
-			<form>
-			 	<div class="form-group">
-			 		<img ng-if="commentPreviewFile != null" ng-src={{commentPreviewFile}} class="center-block" with="250px" height="200px"/><br/>
-			 		<textarea class="form-control" rows="2" placeholder="Escriba su comentario aquí..." ng-model="comment"></textarea>
-					<button class="fa btn btn-primary pull-right" ng-click="commentEvent()">Comentar</button>
-					
-					<div class="button" ngf-select="attach($file)">
-						<label class="btn btn-default pull-right fa fa-camera" data-toggle="tooltip" title="Adjuntar imagen"></label>
-					</div>
-					<label class="btn btn-default pull-right fa fa-trash" data-toggle="tooltip" title="Quitar imagen adjunta" 
-					ng-click="commentPreviewFile = null; commentFile = null;" ng-show="commentFile != null"></label>
-			 	</div>
-			</form>
+			<div class="col-lg-12">
+				<form name="formComment" ng-submit="formComment.$valid? commentEvent():">
+				 	<div class="form-group">
+				 		<img ng-if="commentPreviewFile != null" ng-src={{commentPreviewFile}} class="center-block" with="250px" height="200px"/><br/>
+				 		<textarea class="form-control" rows="4" placeholder="Escriba su comentario aquí..." name="comment" ng-model="comment" ng-maxlength="255"></textarea>
+				 		<span class="text-muted pull-left" ng-show="formComment.comment.$error.maxlength">El comentario es demasiado largo</span>
+						<button type="submit" class="btn btn-primary pull-right" >Comentar</button>
+						
+						<div class="button" ngf-select="attach($file)">
+							<label class="btn btn-default pull-right fa fa-camera" data-toggle="tooltip" title="Adjuntar imagen"></label>
+						</div>
+						<label class="btn btn-default pull-right fa fa-trash" data-toggle="tooltip" title="Quitar imagen adjunta" 
+						ng-click="commentPreviewFile = null; commentFile = null;" ng-show="commentFile != null"></label>
+				 	</div>
+				</form>
+			</div>
 		</div>
 	</div>
 	<div class="containerComment">
