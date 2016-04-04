@@ -9,7 +9,11 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" data-target="#modalLogin" data-toggle="modal">Iniciar sesión</a>
+				<a class="navbar-brand" ng-click="logout()" ng-show="loggedUser != null">Cerrar sesión</a>
+				<a class="navbar-brand" data-target="#modalLogin" data-toggle="modal" ng-show="loggedUser == null">Iniciar sesión</a>
+				<a class="navbar-brand" href="app#/index" ng-show="loggedUser != null && loggedUser.role.name == 'Promotor'">Mis eventos</a>
+				<a class="navbar-brand" href="app#/serviceByUser" ng-show="loggedUser != null && loggedUser.role.name == 'Prestatario'">Mis Servicios</a>
+				<a class="navbar-brand" href="app#/users" ng-show="loggedUser != null && loggedUser.role.name == 'Administrador'">Admnistrar</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
@@ -78,23 +82,28 @@
 	        <div class="col-xs-12" class="center-block">
 	            <p><h1 class="text-center">Top eventos</h1></p>
 	            
-	            <ul id="topList" ng-repeat="event in topEvents">
-	            	<li class="col-sm-4">
-	            		<div class="panel panel-default">
-	            			<div class="panel-heading">
-		            			<h3 class="text-center">{{event.name}}</h3>
-	            			</div>
-	           				<div class="panel-body">
-	           					<img src="{{event.image}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
-		            			<p class="text-center">
-			            			<strong>{{event.place.name}}</strong><br/>
-			            			{{event.publishDate | date: 'EEE dd MMM yyyy hh:mma'}}
-		            			</p>
-		            			<button class="btn btn-default btn-xs pull-right" ng-click="viewEvent(event)">Ver evento</button>
-	           				</div>
-	            		</div>
-	            	</li>
-	            </ul>
+	            <div ng-show="topEvents.length > 0">
+	            	<ul id="topList" ng-repeat="event in topEvents">
+		            	<li class="col-sm-4">
+		            		<div class="panel panel-default">
+		            			<div class="panel-heading">
+			            			<h3 class="text-center">{{event.name}}</h3>
+		            			</div>
+		           				<div class="panel-body">
+		           					<img src="{{event.image}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
+			            			<p class="text-center">
+				            			<strong>{{event.place.name}}</strong><br/>
+				            			{{event.publishDate | date: 'EEE dd MMM yyyy hh:mma'}}
+			            			</p>
+			            			<button class="btn btn-default btn-xs pull-right" ng-click="viewEvent(event)">Ver evento</button>
+		           				</div>
+		            		</div>
+		            	</li>
+		            </ul>
+	            </div>
+			    <div ng-show="topEvents.length == 0" class="row">
+			    	<p><h3 class="text text-center">No hay eventos</h3></p>
+			    </div>
 	        </div>
 	    </div>
 	    
@@ -277,7 +286,7 @@
 								<div class="form-group">
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
-										class="form-control">
+										class="form-control numbersOnly">
 								</div>
 								<div class="form-group">
 									<label>Seleccione un rol</label> <select
@@ -324,14 +333,14 @@
 										placeholder="Mínimo 8 caracteres" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>Confrimar contraseña</label> <input type="password"
+									<label>Confirmar contraseña</label> <input type="password"
 										required ng-model="confirmPassword"
 										placeholder="Confirme su contraseña" class="form-control">
 								</div>
 								<div class="form-group"> 	 	
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
-										class="form-control">
+										class="form-control numbersOnly">
 								</div>
 								<div class="form-group">
 									<label>Seleccione un rol</label> <select
@@ -349,6 +358,44 @@
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- MODAL ANSWER CONTRACT -->
+<div id="modalAsnwerContract" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12" ng-init="getEventById()">
+						<div class="widget-head-color-box navy-bg p-lg text-center">
+							<div class="m-b-md">
+								<h2 class="font-bold no-margins">{{event.name}}</h2>
+								<small>{{event.place.name}}</small>
+							</div>
+							<img
+								src="http://lorempixel.com/image_output/people-q-c-100-100-1.jpg"
+								class="img-circle circle-border m-b-md" alt="profile">
+							<div>
+								<span>Correo: {{event.user.email}}</span>
+							</div>
+						</div>
+						<div class="widget-text-box">
+							<p>Has sido contratado para brindar tus servicios en este
+								evento!</p>
+							<div class="text-right">
+								<a class="btn btn-sm btn-danger btn-sm-normalize-size" ng-click="noAccept(event)"><i
+									class="fa fa-thumbs-down"></i> NO aceptar </a> <a
+									ng-click="accept(event)" class="btn btn-primary btn-sm-normalize-size"><i
+									class="fa fa-thumbs-up"></i> Aceptar</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -404,13 +451,8 @@
 							</div>
 							
 							<div class="form-group">	
-								 <a class="pull-right" data-toggle="modal"
-									data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
-							</div>
-							
-							<div class="form-group">	
 								<a class="pull-right" data-toggle="modal"
-										data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a>
+										data-target="#updatePasswordModal" ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a><br/>
 								<a class="pull-right" data-toggle="modal"
 										data-target="#selectTypeUser" ng-click="hiddenModalLogin()">Registrarse</a>
 							</div>																				

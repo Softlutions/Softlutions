@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,14 +15,19 @@ import com.cenfotec.dondeEs.contracts.CommentResponse;
 import com.cenfotec.dondeEs.contracts.EventImageResponse;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
 import com.cenfotec.dondeEs.contracts.EventResponse;
+import com.cenfotec.dondeEs.contracts.ServiceContactRequest;
+import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
 import com.cenfotec.dondeEs.ejb.Comment;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.services.CommentServiceInterface;
 import com.cenfotec.dondeEs.services.EventImageServiceInterface;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
+import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
 
 /**
@@ -36,7 +42,7 @@ public class LandingPageController {
 	@Autowired private CommentServiceInterface commentServiceInterface;
 	@Autowired private EventServiceInterface eventServiceInterface;
 	@Autowired private UserServiceInterface userServiceInterface;
-	
+	@Autowired private ServiceContactInterface serviceContactInterface;
 	/**
 	 * @author Ernesto Mendez A.
 	 * @param eventParticipantId id del participante del evento asociado
@@ -188,6 +194,7 @@ public class LandingPageController {
 			EventParticipant eventParticipant = new EventParticipant();
 			eventParticipant.setUser(userServiceInterface.findById(userId));
 			eventParticipant.setEvent(eventServiceInterface.getEventById(eventId));
+			eventParticipant.setState((byte)1);
 			
 			int nparticipantId = eventParticipantServiceInterface.createParticipant(eventParticipant);
 			
@@ -264,4 +271,85 @@ public class LandingPageController {
 		
 		return response;
 	}
+	
+	/***
+	 * Devuelve un evento cuando le envian el id encriptado
+	 * 
+	 * @author Alejandro bermudez Vargas
+	 * @param eventRequest
+	 * @return
+	 * @version 1.0
+	 */
+	// get event by id
+	@RequestMapping(value = "/getEventByEncryptId/{idEvent}", method = RequestMethod.GET)
+	public EventResponse getEventByEncryptId(@PathVariable("idEvent") String id) {
+		EventResponse response = new EventResponse();
+		int eventId = Integer.parseInt(AES.base64decode(id));
+		if (eventId != 0) {
+			response.setEventPOJO(eventServiceInterface.eventById(eventId));
+			response.getEventPOJO().setPrivate_((byte) 1);
+			response.getEventPOJO().setState((byte) 1);
+			response.getEventPOJO().setPublishDate(new Date());
+			response.setCode(200);
+		} else {
+			response.setCode(400);
+			response.setCodeMessage("Something is wrong");
+		}
+		return response;
+	}
+	
+	
+	/**
+	 * @Author Alejandro Bermudez Vargas
+	 * @param ServiceContactRequest serviceContactRequest
+	 * @return Retonrna el resultado de dicha  respuesta
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/getServiceContact", method = RequestMethod.POST)
+	public ServiceContactResponse getServiceContact(@RequestBody ServiceContactRequest serviceContactRequest) {
+		String streventId = AES.base64decode(serviceContactRequest.getEventId());
+		String strserviceId = AES.base64decode(serviceContactRequest.getServiceId());
+		ServiceContactResponse response = new ServiceContactResponse();
+		ServiceContact serviceContact = serviceContactInterface
+				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
+		
+		if (serviceContact.getState() == 0) {
+			serviceContact.setState(serviceContactRequest.getState());
+			response.setCode(200);
+			response.setCodeMessage("Tienes una solicitud pendiente");
+		} else if(serviceContact.getState() == 2){
+			response.setCode(201);
+			response.setCodeMessage("Ya confirmaste!");
+		}
+		else if(serviceContact.getState() == 1){
+			response.setCode(202);
+			response.setCodeMessage("Ya cancelaste!");
+		}
+		return response;
+	}
+	
+	
+	/**
+	 * @Author Alejandro Bermudez Vargas
+	 * @param ServiceContactRequest serviceContactRequest
+	 * @return Retonrna el resultado de dicha  respuesta
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/answerContract", method = RequestMethod.POST)
+	public ServiceContactResponse answerContract(@RequestBody ServiceContactRequest serviceContactRequest) {
+		String streventId = AES.base64decode(serviceContactRequest.getEventId());
+		String strserviceId = AES.base64decode(serviceContactRequest.getServiceId());
+		ServiceContactResponse response = new ServiceContactResponse();
+		ServiceContact serviceContact = serviceContactInterface
+				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
+		if (serviceContact.getState() == 0) {
+			serviceContact.setState(serviceContactRequest.getState());
+			response.setCode(200);
+			if(serviceContactRequest.getState() == 2) response.setCodeMessage("Solicitud aceptada");
+			if(serviceContactRequest.getState() == 1) response.setCodeMessage("Solicitud no aceptada");
+		}
+		serviceContactInterface.saveServiceContact(serviceContact);
+		return response;
+	}
+	
 }

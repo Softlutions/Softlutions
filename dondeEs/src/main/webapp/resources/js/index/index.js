@@ -32,15 +32,17 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			$http.get("rest/login/logout").success(function(response){
 				var sessionCookie = $cookies.getObject("lastSession");
 				if(sessionCookie != null){
+					sessionCookie["sessionClosed"] = true;
 					$cookies.putObject("lastSession", sessionCookie);
 				}
+				
 				window.location.href = "/dondeEs/#/landingPage";
 			});
 		}
 		
 		$scope.returnLandingPage = function () {
 			$cookies.putObject("goToEventsPublish", true);
-			window.location.href = "/dondeEs/#/landingPage";
+			window.location.href = "/dondeEs/#/events";
 		}
 		
 		if($scope.loggedUser != null){
@@ -94,11 +96,11 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 			    if($scope.permissions.isPrestatario)
 			    	if(next.originalPath == '/users' || next.originalPath == '/index')
-			    		window.location.href = "/dondeEs/app#/index";
+			    		window.location.href = "/dondeEs/app#/serviceByUser";
 			     
 			    if($scope.permissions.isPromotor)
 			    	if(next.originalPath == '/users' || next.originalPath == '/serviceByUser')
-			    		window.location.href = "/dondeEs/app#/index ";
+			    		window.location.href = "/dondeEs/app#/index";
 			   });
 		}
 	}]);

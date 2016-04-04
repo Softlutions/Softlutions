@@ -6982,6 +6982,18 @@ body.landing-page {
   padding: 10px 20px;
   font-weight: 600;
 }
+
+.landing-page .btn-primary-landing {
+    background-color: #1ab394;
+  border-color: #1ab394;
+  color: #FFFFFF;
+  font-size: 12px;
+  padding: 5px 10px;
+  font-weight: 600;
+}
+
+
+
 .landing-page .btn-primary:hover,
 .landing-page .btn-primary:focus,
 .landing-page .btn-primary:active,

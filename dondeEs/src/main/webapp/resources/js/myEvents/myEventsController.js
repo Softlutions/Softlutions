@@ -460,6 +460,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	};
 	
 	$scope.createEvent = function() {
+		if($scope.tempEvent.originalFile == null)
+			$scope.tempEvent.originalFile = {};
+		
 		$scope.upload = $upload
 			.upload(
 				{
@@ -473,9 +476,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 						'placeLatitude':$scope.map.center.latitude,
 						'placeLongitude':$scope.map.center.longitude, 
 						'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
-						'loggedUser':$scope.loggedUser.userId,
+						'loggedUser':$scope.loggedUser.userId
 					},
-					file : $scope.tempEvent.originalFile
+					file: $scope.tempEvent.originalFile
 				})
 			.progress(
 				function(evt) {})
