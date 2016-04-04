@@ -37,7 +37,7 @@ app.factory('MarkerCreatorService', function () {
     function createByAddress(address, successCallback) {
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({'address' : address}, function (results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
+            if (status == google.maps.GeocoderStatus.OK) {
                 var firstAddress = results[0];
                 var latitude = firstAddress.geometry.location.lat();
                 var longitude = firstAddress.geometry.location.lng();
@@ -86,6 +86,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.eventForm = false;
+	$scope.tempAuction = {};
 	
 	$scope.listOfEmails = [];
 	// Create auction
@@ -295,33 +296,40 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	
 	 $scope.geteventById = function(eventId){
 		$scope.eventId = eventId;
-
 	};
 	
 	$scope.selectCatalog = function(selectedCatalog){
 		$scope.catalogServiceSelected = selectedCatalog;
-	}
+	};
 	
-		$scope.addEmail = function(pemail){
-			if(pemail !=null){
-			$scope.listOfEmails.push(pemail.to);
-			pemail.to = "";
-			}else{	
-			 	  setTimeout(function() {	
-		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
-
-		            }, 1300);
-				 
-			}
+	$scope.addEmail = function(pemail){
+		if(pemail !=null){
+		$scope.listOfEmails.push(pemail.to);
+		pemail.to = "";
+		}else{	
+		 	  setTimeout(function() {	
+	                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
+	            }, 1300);			 
+		}
 	}
 	
 	$scope.catalogsList = function(){
 		if($scope.catalogs.length == 0){
 			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
 				$scope.catalogs = response.serviceCatalogList;
+				$scope.tempAuction.selected = response.serviceCatalogList[0];
 			});
 		}
-	}
+	};
+	
+	$('#modalAuctionEventServices').on('hidden.bs.modal', function () {
+		$scope.tempAuction.selected = $scope.catalogs[0];
+		$scope.tempAuction.name = '';
+		$scope.tempAuction.description = '';
+		var date = new Date();
+		date.setDate(date.getDate() + 1);
+		$('#datetimepicker').data('DateTimePicker').date(date);
+	});
 	
 	$scope.openCreateAuction = function(){
 		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 10);
@@ -614,6 +622,12 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
         format: 'LLLL'
     });
 	
+	$('#eventDatePicker2').datetimepicker({
+    	minDate: new Date().addHours($scope.HOURS_BEFORE_EVENT),
+    	locale: 'es',
+        format: 'LLLL'
+    });
+	
 	$scope.hiddenEventForm = function () {
 		$scope.eventForm  = false;
 		$scope.eventInEdition = false;
@@ -641,6 +655,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		
 	    $scope.map.markers.push($scope.autentiaMarker);
 	}
+	
 	initMap(9.6283789, -85.3756947);
 	
     $scope.addCurrentLocation = function () {
@@ -650,10 +665,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
             $scope.map.markers.push(marker);
         });
     };
-    
+
     $scope.addAddress = function() {
-        if ($scope.address !== '') {
-            MarkerCreatorService.createByAddress($scope.address, function(marker) {
+        if ($scope.tempEvent.address !== '') {
+            MarkerCreatorService.createByAddress($scope.tempEvent.address, function(marker) {
             	refresh(marker);
                 $scope.map.markers.push(marker);
             });

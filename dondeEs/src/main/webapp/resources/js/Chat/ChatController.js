@@ -22,6 +22,7 @@ angular
 							$scope.eventNameByChat;
 							$scope.showError = true;
 							$scope.messages= {};
+							$scope.isChat= false;
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
 							
@@ -91,6 +92,7 @@ angular
 									$scope.messages = response.messages;
 //									$timeout($scope.loadMessage(idChat), 50000);
 //									$interval($scope.loadMessage(idChat), 5000);
+									$scope.isChat = true;
 								})
 								if($scope.messages.length == 0){
 									$scope.showError = false;
@@ -108,7 +110,8 @@ angular
 									content : $scope.objMessage.content
 
 								}
-								if ($scope.objMessage.content != null) {
+								if ($scope.objMessage.content != null && $scope.objMessage.content != '') {
+										if($scope.chat != null){
 									$http(
 											{
 												method : 'POST',
@@ -124,6 +127,16 @@ angular
 																.concat(dataCreate);
 														$scope.objMessage.content=''
 													})
+										}else{
+											setTimeout(
+											function() {
+												toastr
+														.error(
+																'Seleccione un chat',
+																'Error');
+
+											}, 1300);
+										}
 								} else {
 									setTimeout(
 											function() {

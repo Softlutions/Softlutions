@@ -20,9 +20,9 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 	@Query("Select e from Event as e WHERE e.state = ?1 and (e.user.name = ?2 OR e.name = ?3 OR e.place.name= ?4)")
 	List<Event> finByParams(byte state, String nameUser, String name, String namePlace);
 	
-	@Query("Select e from Event as e WHERE e.state = ?1 and e.private_ = ?2")
+	@Query("SELECT e FROM Event AS e WHERE e.state = ?1 AND e.private_ = ?2 AND e.publishDate > current_date()")
 	List<Event> findAllEventPublish(byte state, byte _private);
-
+	
 	@Query(value="SELECT e FROM Event AS e WHERE e.state = 3 AND e.private_ = 0")
 	List<Event> getPublicEvents();
 }
