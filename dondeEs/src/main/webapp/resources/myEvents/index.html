@@ -423,7 +423,7 @@
 			<h1>Crear evento</h1>	
 		</div>		
 	
-		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEventAsistente():saveEventChanges()):validationError()">
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
 			<div class="form-group">
 				<label class="col-lg-2">Nombre</label>
 				<div class="col-lg-10">
@@ -434,7 +434,7 @@
 			<div class=form-group>
 				<label class="col-lg-2">Fecha del evento</label>
 				<div class="col-lg-10">
-					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-model="tempEvent.date" id='eventDatePicker'/>
+					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-model="tempEvent.date" id='eventDatePicker2'/>
 				</div>
 			</div>
 			

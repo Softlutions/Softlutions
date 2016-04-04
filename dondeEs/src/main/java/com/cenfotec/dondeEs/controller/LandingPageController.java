@@ -222,7 +222,7 @@ public class LandingPageController {
 			EventParticipant eventParticipant = new EventParticipant();
 			eventParticipant.setUser(userServiceInterface.findById(userId));
 			eventParticipant.setEvent(eventServiceInterface.getEventById(eventId));
-			eventParticipant.setState((byte)1);
+			eventParticipant.setState((byte) 2);
 			
 			int nparticipantId = eventParticipantServiceInterface.createParticipant(eventParticipant);
 
