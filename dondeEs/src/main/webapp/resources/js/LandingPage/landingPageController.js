@@ -8,6 +8,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 	}])
 	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', 
 	                                		function($scope, $http, $cookies, $rootScope, $location){
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		if ($cookies.getObject("goToEventsPublish") == null) {
 			$cookies.putObject("goToEventsPublish", false);
 		}
@@ -29,7 +30,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			password : ""
 		};
 		
-		if ($cookies.getObject("goToEventsPublish") == true) {
+		var sessionCookie = $cookies.getObject("lastSession");
+		if(sessionCookie != null && sessionCookie.sessionClosed){
+			sessionCookie.sessionClosed = false;
+			$scope.loggedUser = null;
+			$cookies.putObject("lastSession", sessionCookie);
+		}
+		
+		if($cookies.getObject("goToEventsPublish") == true) {
 			$('html,body').animate({scrollTop:$('#eventPublish').height()+460},2e3);
 			$cookies.putObject("goToEventsPublish", false);
 		}			
@@ -49,6 +57,20 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}else{
 				$("#errorMsj").css("visibility", "visible");
 			}
+		}
+		
+		$scope.logout = function(){
+			$http.get("rest/login/logout").success(function(response){
+				var sessionCookie = $cookies.getObject("lastSession");
+				if(sessionCookie != null){
+					sessionCookie["sessionClosed"] = true;
+					$cookies.putObject("lastSession", sessionCookie);
+				}
+				
+				$scope.loggedUser = null;
+				localStorage.setItem("loggedUser", null);
+				window.location.href = "#/landingPage";
+			});
 		}
 		
 		function login(){
@@ -265,10 +287,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		    	case "contact":
 		    		window.location.href = "#/landingPage#contact";
 		    		break;
+		    	case "singin":
+		    		$("#selectTypeUser").modal("toggle");
+		    		break;
 		    }
 		    
 		});
-		
 		
 		// Modals show and hideS
 		$scope.showSubModal1=function(){
