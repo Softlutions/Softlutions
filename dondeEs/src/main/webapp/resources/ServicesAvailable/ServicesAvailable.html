@@ -1,10 +1,11 @@
 <div class="container">
-	<div class="row col-lg-11">
-		<div class="pull-left">
-			<a class="btn btn-primary pull-right" href="app#/index"> <i class="fa fa-reply"></i> Volver</a>
-		</div>
-	</div>
+
 	<div class="col-lg-11">
+		<div class="pull-left">
+			<a class="btn btn-primary pull-right " href="app#/index"> <i
+				class="fa fa-reply">Volver</i>
+			</a>
+		</div>
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h4>Servicios disponibles</h4>
@@ -28,7 +29,8 @@
 						<tr>
 							<td sortable="'name'">{{service.name}}</td>
 							<td>{{service.description}}</td>
-							<td>{{service.user.name}} {{service.user.lastName1}} {{service.user.lastName2}}</td>
+							<td>{{service.user.name}} {{service.user.lastName1}}
+								{{service.user.lastName2}}</td>
 							<td>
 								<button class="btn btn-primary btn-xs"
 									ng-click="contactProvider(service)">Contactar</button>

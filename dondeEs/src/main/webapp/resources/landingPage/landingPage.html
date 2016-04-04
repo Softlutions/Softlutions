@@ -320,27 +320,27 @@
 							<form role="form" ng-submit="saveCompany(user)" ng-init="user">
 								<div class="form-group">
 									<label>Nombre de la compañía</label> <input type="text"
-										ng-model="user.name" placeholder="Ingresar nombre" required
+										ng-model="user.name" ng-maxlength="255" placeholder="Ingresar nombre" required
 										class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Email</label> <input type="email" ng-model="userCompany.email"
-										required placeholder="Ingresar email" class="form-control">
+										required ng-maxlength="255" placeholder="Ingresar email" class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Contraseña</label> <input type="password"
-										ng-model="userCompany.password" required
+										ng-model="userCompany.password" ng-maxlength="255" required
 										placeholder="Mínimo 8 caracteres" class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Confirmar contraseña</label> <input type="password"
 										required ng-model="confirmPassword"
-										placeholder="Confirme su contraseña" class="form-control">
+										placeholder="Confirme su contraseña" ng-maxlength="255" class="form-control">
 								</div>
 								<div class="form-group"> 	 	
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
-										class="form-control numbersOnly">
+										class="form-control numbersOnly" ng-maxlength="255">
 								</div>
 								<div class="form-group">
 									<label>Seleccione un rol</label> <select

@@ -433,15 +433,19 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$scope.isComment = true;
 		$scope.answer = '';
 		if($location.search().eventId != null && $location.search().eventParticipantId != null ){
-			$scope.geteventByIdInvitation = function(){
-				$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
-					$scope.event = response.eventPOJO;
-					$scope.nameProvaider = $scope.event.user.name + " "+ $scope.event.user.lastName1 + " "+ $scope.event.user.lastName2;
-					console.log("Provaider" + $scope.nameProvaider);
-					
-				});
-				setTimeout(function(){$('#modalAsnwerInvitation').modal('show')}, 2000);
-			}
+			$scope.state = 1;
+			$http({method: 'POST',url:'rest/landing/getPaticipant/'+ $location.search().eventParticipantId +'/'+ $scope.state }).success(function(response) {
+				if(response.code != 201 && response.code != 202){
+						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+							$scope.event = response.eventPOJO;
+						});
+						toastr.success(response.codeMessage);
+						setTimeout(function(){$('#modalAsnwerInvitation').modal('show')}, 1000);
+				}else{
+					toastr.error(response.codeMessage, 'Error');
+					window.location.href = "#/landingPage";
+				}
+					});
 			
 			$scope.userEmail = $location.search().email;
 			$scope.createParticipant = function(state){
