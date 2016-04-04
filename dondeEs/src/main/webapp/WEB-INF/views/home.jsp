@@ -93,7 +93,7 @@
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
-                        <i class="fa fa-sign-out"> Cerrar sesión</i>
+                        <span class="nav-label"><i class="fa fa-sign-out"></i> Cerrar sesión</span>
                     </button>
 				</nav>
 			</div>
@@ -170,6 +170,7 @@
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
+	
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
 

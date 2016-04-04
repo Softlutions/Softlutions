@@ -29,7 +29,6 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
 				$scope.eventsPublish = response.eventList;
-				
 				for (var i=0; i<$scope.eventsPublish.length; i++) {
 					$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 					
