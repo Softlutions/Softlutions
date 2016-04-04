@@ -94,7 +94,7 @@
 	 <div ng-show="eventParticipant != null" class="containerComment" id="commentDiv">
 		<div class="row">
 			<div class="col-lg-12">
-				<form name="formComment" ng-submit="formComment.$valid? commentEvent():">
+				<form name="formComment" ng-submit="formComment.$valid? commentEvent():null">
 				 	<div class="form-group">
 				 		<img ng-if="commentPreviewFile != null" ng-src={{commentPreviewFile}} class="center-block" with="250px" height="200px"/><br/>
 				 		<textarea class="form-control" rows="4" placeholder="Escriba su comentario aquí..." name="comment" ng-model="comment" ng-maxlength="255"></textarea>
