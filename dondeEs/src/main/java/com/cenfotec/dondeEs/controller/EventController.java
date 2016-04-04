@@ -257,41 +257,40 @@ public class EventController {
 			@RequestParam("largeDescription") String largeDescription, @RequestParam("eventType") int eventType,
 			@RequestParam("eventPlaceName") String placeName, @RequestParam("placeLatitude") String placeLatitude,
 			@RequestParam("placeLongitude") String placeLongitude, @RequestParam("loggedUser") int userId,
-			@RequestParam("publishDate") String publishDate, @RequestParam("file") MultipartFile file) {
+			@RequestParam("publishDate") String publishDate, @RequestParam(value="file", required=false) MultipartFile file) {
 		EventResponse eventResponse = new EventResponse();
 		Event event = new Event();
 		Place place;
 
 		try {
-			String resultFileName = Utils.writeToFile(file, servletContext);
-
-			if (!resultFileName.equals("")) {
-				place = new Place();
-				place.setLatitude(placeLatitude);
-				place.setLongitude(placeLongitude);
-				place.setName(placeName);
-				place = placeServiceInterface.savePlace(place);
-
-				User user = userServiceInterface.findById(userId);
-				
-				publishDate = publishDate.replace(" GMT-0600 (CST)", "");
-				
-				try{
-					SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
-					Date date = format.parse(publishDate);
-					event.setPublishDate(date);
-				}catch(Exception e){ e.printStackTrace(); }
-				
-				event.setName(name);
-				event.setDescription(description);
-				event.setLargeDescription(largeDescription);
-				event.setImage(resultFileName);
-				event.setState((byte) 1);
-				event.setPrivate_((byte) eventType);
-				event.setRegisterDate(new Date());
-				event.setUser(user);
-				event.setPlace(place);
+			if (file != null) {
+				event.setImage(Utils.writeToFile(file, servletContext));
 			}
+			
+			place = new Place();
+			place.setLatitude(placeLatitude);
+			place.setLongitude(placeLongitude);
+			place.setName(placeName);
+			place = placeServiceInterface.savePlace(place);
+
+			User user = userServiceInterface.findById(userId);
+			
+			publishDate = publishDate.replace(" GMT-0600 (CST)", "");
+			
+			try{
+				SimpleDateFormat format = new SimpleDateFormat("E MMM dd yyyy kk:mm:ss");
+				Date date = format.parse(publishDate);
+				event.setPublishDate(date);
+			}catch(Exception e){ e.printStackTrace(); }
+			
+			event.setName(name);
+			event.setDescription(description);
+			event.setLargeDescription(largeDescription);
+			event.setState((byte) 1);
+			event.setPrivate_((byte) eventType);
+			event.setRegisterDate(new Date());
+			event.setUser(user);
+			event.setPlace(place);
 
 			int eventId = eventServiceInterface.saveEvent(event);
 

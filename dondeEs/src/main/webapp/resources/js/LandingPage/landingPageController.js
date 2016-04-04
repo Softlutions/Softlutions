@@ -8,6 +8,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 	}])
 	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', 
 	                                		function($scope, $http, $cookies, $rootScope, $location){
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		if ($cookies.getObject("goToEventsPublish") == null) {
 			$cookies.putObject("goToEventsPublish", false);
 		}
@@ -29,7 +30,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			password : ""
 		};
 		
-		if ($cookies.getObject("goToEventsPublish") == true) {
+		var sessionCookie = $cookies.getObject("lastSession");
+		if(sessionCookie != null && sessionCookie.sessionClosed){
+			sessionCookie.sessionClosed = false;
+			$scope.loggedUser = null;
+			$cookies.putObject("lastSession", sessionCookie);
+		}
+		
+		if($cookies.getObject("goToEventsPublish") == true) {
 			$('html,body').animate({scrollTop:$('#eventPublish').height()+460},2e3);
 			$cookies.putObject("goToEventsPublish", false);
 		}			
@@ -49,6 +57,20 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}else{
 				$("#errorMsj").css("visibility", "visible");
 			}
+		}
+		
+		$scope.logout = function(){
+			$http.get("rest/login/logout").success(function(response){
+				var sessionCookie = $cookies.getObject("lastSession");
+				if(sessionCookie != null){
+					sessionCookie["sessionClosed"] = true;
+					$cookies.putObject("lastSession", sessionCookie);
+				}
+				
+				$scope.loggedUser = null;
+				localStorage.setItem("loggedUser", null);
+				window.location.href = "#/landingPage";
+			});
 		}
 		
 		function login(){
@@ -302,10 +324,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		    	case "contact":
 		    		window.location.href = "#/landingPage#contact";
 		    		break;
+		    	case "singin":
+		    		$("#selectTypeUser").modal("toggle");
+		    		break;
 		    }
 		    
 		});
-		
 		
 		// Modals show and hideS
 		$scope.showSubModal1=function(){
@@ -356,12 +380,24 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		//#region ASNWER CONTRACT
 		
 		if($location.search().eventId != null && $location.search().serviceId){
-			$scope.getEventById = function(){
-				$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
-					$scope.event = response.eventPOJO;
-				});
-				setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 2000);
-			}
+			var dataCreate = {
+					eventId : $location.search().eventId,
+					serviceId : $location.search().serviceId
+			};
+			$http({method: 'POST',url:'rest/landing/getServiceContact', data:dataCreate}).success(function(response) {
+				if(response.code != 201 && response.code != 202){
+						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+							$scope.event = response.eventPOJO;
+						});
+						toastr.success(response.codeMessage);
+						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+				}else{
+					toastr.error(response.codeMessage, 'Error');
+					window.location.href = "#/landingPage";
+				}
+					});
+			
+			
 			
 			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 			
@@ -372,8 +408,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						state : 2
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					
-					toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
+					toastr.success(response.codeMessage);
+					$('#modalAsnwerContract').modal('hide');
 				});
 			}
 			
@@ -384,7 +420,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						state : 1
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
+					toastr.success(response.codeMessage);
+					$('#modalAsnwerContract').modal('hide');
 				});
 			}
 		}
@@ -395,7 +432,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$scope.comment;
 		$scope.isComment = true;
 		$scope.answer = '';
-		if($location.search().eventId != null){
+		if($location.search().eventId != null && $location.search().eventParticipantId != null ){
 			$scope.geteventByIdInvitation = function(){
 				$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 					$scope.event = response.eventPOJO;

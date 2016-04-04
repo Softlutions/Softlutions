@@ -151,7 +151,7 @@ public class SendEmailController {
 			
 			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
 					.getEmail();
-			text = "http://localhost:8080/dondeEs/app#/answerContract/?eventId="
+			text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
 					+ AES.base64encode(String.valueOf(eventId)) + "&serviceId="
 					+ AES.base64encode(String.valueOf(serviceId));
 
