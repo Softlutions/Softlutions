@@ -63,13 +63,13 @@
 						<input type="text" id="nombre" class="form-control"
 							placeholder="Nombre" ng-model="objService.name" required />
 						<span ng-show="onError && createRentForm.name.$error.required"
-							class="help-inline">Required </span>
+							class="help-inline" ng-maxlength="255">Required </span>
 					</div>
 					<div class="form-group">
 						<label class="font-normal"><strong>Descripción</strong></label>
 						<textarea rows="5" style="resize: none"
 							placeholder="Descripción" class="form-control"
-							ng-model="objService.description" required></textarea>
+							ng-model="objService.description" ng-maxlength="255" required></textarea>
 					</div>
 					<div ng-hide="creating">
 						<div class="form-group">
