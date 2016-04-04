@@ -8427,3 +8427,7 @@ textarea {
 #seeMore{
 	margin-bottom: 10px;
 }
+
+.dropdown-menu-actions-event{
+	left: -157px !important;
+}
