@@ -10,8 +10,12 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="fa fa-reply navbar-brand" href="#/landingPage"> Volver</a>
-				<a class="fa navbar-brand" href="#/landingPage?p=login&public" ng-show="loggedUser == null">Iniciar sesión</a>
+				<a class="navbar-brand" href="#/landingPage"><i class="fa fa-reply"></i> Volver</a>
+				<a class="navbar-brand" ng-click="logout()" ng-show="loggedUser != null">Cerrar sesión</a>
+				<a class="navbar-brand" href="#/landingPage?p=login&public" ng-show="loggedUser == null">Iniciar sesión</a>
+				<a class="navbar-brand" href="app#/index" ng-show="loggedUser != null && loggedUser.role.name == 'Promotor'">Mis eventos</a>
+				<a class="navbar-brand" href="app#/serviceByUser" ng-show="loggedUser != null && loggedUser.role.name == 'Prestatario'">Mis Servicios</a>
+				<a class="navbar-brand" href="app#/users" ng-show="loggedUser != null && loggedUser.role.name == 'Administrador'">Admnistrar</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
@@ -127,12 +131,11 @@
 									<span class="day">{{event.day}}</span> <span class="month">{{event.month}}</span> {{event.time | date : 'hh:mma'}}
 								</time> 
 								<img ng-if="event.image == null || event.image == ''"
-								alt="No se pudo cargar la imagen del evento"
-								src="resources/img/imagen-no-disponible.gif"
+								alt="Image not found" src="resources/img/imagen-no-disponible.gif"
 								data-toggle="collapse" data-target="#demo{{$index}}"/> 
 								
 								<img ng-if="event.image != null && event.image != ''"
-								alt="No se pudo cargar la imagen del evento" src="{{event.image}}"
+								alt="Image not found" src="{{event.image}}"
 								data-toggle="collapse" data-target="#demo{{$index}}"/>
 								
 								<div class="info">

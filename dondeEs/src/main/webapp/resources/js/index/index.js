@@ -32,15 +32,17 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			$http.get("rest/login/logout").success(function(response){
 				var sessionCookie = $cookies.getObject("lastSession");
 				if(sessionCookie != null){
+					sessionCookie["sessionClosed"] = true;
 					$cookies.putObject("lastSession", sessionCookie);
 				}
+				
 				window.location.href = "/dondeEs/#/landingPage";
 			});
 		}
 		
 		$scope.returnLandingPage = function () {
 			$cookies.putObject("goToEventsPublish", true);
-			window.location.href = "/dondeEs/#/landingPage";
+			window.location.href = "/dondeEs/#/events";
 		}
 		
 		if($scope.loggedUser != null){
