@@ -117,6 +117,5 @@ public class ServiceContactController {
 		}
 
 		return response;
-
 	}
 }
