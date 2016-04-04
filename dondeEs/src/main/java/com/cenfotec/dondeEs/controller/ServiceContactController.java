@@ -60,15 +60,17 @@ public class ServiceContactController {
 		}
 		return response;
 	}
+	
+	/**
+	 * @Author Alejandro Bermudez Vargas
+	 * @param ServiceContactRequest serviceContactRequest
+	 * @return Retonrna el resultado de dicha  respuesta
+	 * @version 1.0
+	 */
 	@RequestMapping(value = "/answerContract", method = RequestMethod.POST)
 	public ServiceContactResponse answerContract(@RequestBody ServiceContactRequest serviceContactRequest) {
 		String streventId = AES.base64decode(serviceContactRequest.getEventId());
 		String strserviceId = AES.base64decode(serviceContactRequest.getServiceId());
-		
-		
-		
-		
-		
 		ServiceContactResponse response = new ServiceContactResponse();
 		ServiceContact serviceContact = serviceContactInterface
 				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
@@ -77,12 +79,14 @@ public class ServiceContactController {
 			response.setCode(200);
 			response.setCodeMessage("Asistiras!");
 		} else {
-			response.setCode(500);
+			response.setCode(201);
 			response.setCodeMessage("Ya confirmaste");
 		}
 		serviceContactInterface.saveServiceContact(serviceContact);
 		return response;
 	}
+	
+	
 	@RequestMapping(value ="/cancelServiceContact/{contractID}", method = RequestMethod.POST)
 	public ServiceContactResponse cancelServiceContact(@PathVariable("contractID") int contractID, @RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();
