@@ -372,7 +372,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
 					toastr.success(response.codeMessage);
-					setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+					$('#modalAsnwerContract').modal('hide');
 				});
 			}
 			
@@ -384,7 +384,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
 					toastr.success(response.codeMessage);
-					setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+					$('#modalAsnwerContract').modal('hide');
 				});
 			}
 		}

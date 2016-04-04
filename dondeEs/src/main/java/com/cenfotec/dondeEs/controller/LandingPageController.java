@@ -3,7 +3,6 @@ package com.cenfotec.dondeEs.controller;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.CommentResponse;
-import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.contracts.EventImageResponse;
 import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
 import com.cenfotec.dondeEs.contracts.EventResponse;
@@ -197,6 +194,7 @@ public class LandingPageController {
 			EventParticipant eventParticipant = new EventParticipant();
 			eventParticipant.setUser(userServiceInterface.findById(userId));
 			eventParticipant.setEvent(eventServiceInterface.getEventById(eventId));
+			eventParticipant.setState((byte)1);
 			
 			int nparticipantId = eventParticipantServiceInterface.createParticipant(eventParticipant);
 			
@@ -347,7 +345,7 @@ public class LandingPageController {
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
-			if(serviceContactRequest.getState() == 2) response.setCodeMessage("Solicitud no aceptada");
+			if(serviceContactRequest.getState() == 2) response.setCodeMessage("Solicitud aceptada");
 			if(serviceContactRequest.getState() == 1) response.setCodeMessage("Solicitud no aceptada");
 		}
 		serviceContactInterface.saveServiceContact(serviceContact);
