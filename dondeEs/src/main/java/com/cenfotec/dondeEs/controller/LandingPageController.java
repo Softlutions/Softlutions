@@ -429,5 +429,26 @@ public class LandingPageController {
 		serviceContactInterface.saveServiceContact(serviceContact);
 		return response;
 	}
+	
+	@RequestMapping(value = "/getPaticipant/{eventParticipant}/{state}", method = RequestMethod.POST)
+	public ServiceContactResponse getPaticipant(@PathVariable String eventParticipant, @PathVariable byte state) {
+		int idParticipant = Integer.parseInt(AES.base64decode(eventParticipant));
+		ServiceContactResponse response = new ServiceContactResponse();
+		EventParticipant objEventParticipant = eventParticipantServiceInterface.findById(idParticipant);
+
+		if (objEventParticipant.getState() == 1) {
+			objEventParticipant.setState(state);
+			response.setCode(200);
+			response.setCodeMessage("Te han invitado a un evento");
+		} else if(objEventParticipant.getState() == 2){
+			response.setCode(201);
+			response.setCodeMessage("Ya confirmaste!");
+		}
+		else if(objEventParticipant.getState() == 0){
+			response.setCode(202);
+			response.setCodeMessage("Ya cancelaste!");
+		}
+		return response;
+	}
 
 }
