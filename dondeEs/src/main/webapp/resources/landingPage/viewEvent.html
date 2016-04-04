@@ -13,9 +13,9 @@
 				<a class="navbar-brand" href="#/landingPage"><i class="fa fa-reply"></i> Volver</a>
 				<a class="navbar-brand" ng-click="logout()" ng-show="loggedUser != null">Cerrar sesión</a>
 				<a class="navbar-brand" href="#/landingPage?p=login&event={{event.eventId}}" ng-show="loggedUser == null">Iniciar sesión</a>
-				<a class="navbar-brand" href="app#/index" ng-show="loggedUser != null && loggedUser.role.name == 'Promotor'">Mis eventos</a>
-				<a class="navbar-brand" href="app#/serviceByUser" ng-show="loggedUser != null && loggedUser.role.name == 'Prestatario'">Mis Servicios</a>
-				<a class="navbar-brand" href="app#/users" ng-show="loggedUser != null && loggedUser.role.name == 'Administrador'">Admnistrar</a>
+				<a class="navbar-brand" href="app#/index" ng-show="loggedUser != null && loggedUser.role.roleId == 3">Mis eventos</a>
+				<a class="navbar-brand" href="app#/serviceByUser" ng-show="loggedUser != null && loggedUser.role.roleId == 2">Mis Servicios</a>
+				<a class="navbar-brand" href="app#/users" ng-show="loggedUser != null && loggedUser.role.roleId == 1">Admnistrar</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
@@ -74,16 +74,16 @@
 
 <div class="center-block" style="width: 80%" ng-show="showUploadField && eventParticipant != null">
 	<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
-	<div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" 
+	<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
 	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
 		<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
 		
-		<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px" 
-		title="{{img.name}} {{img.size / 1024 | number:2}}Kb"/>
+		<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px"
+		title="{{img.name}} | {{img.size / 1024 | number:2}}Kb"/>
 	</div>
 	
-	<input type="button" ng-click="upload(previewFiles)" class="btn btn-primary pull-right" value="Publicar"/>
-	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-warning pull-right" value="Limpiar"/>
+	<input type="button" ng-click="upload(previewFiles)" class="btn btn-info pull-right" value="Publicar"/>
+	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-danger pull-right" value="Limpiar"/>
 	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
 </div>
 
@@ -98,7 +98,7 @@
 				 	<div class="form-group">
 				 		<img ng-if="commentPreviewFile != null" ng-src={{commentPreviewFile}} class="center-block" with="250px" height="200px"/><br/>
 				 		<textarea class="form-control" rows="4" placeholder="Escriba su comentario aquí..." name="comment" ng-model="comment" ng-maxlength="255"></textarea>
-				 		<span class="text-muted pull-left" ng-show="formComment.comment.$error.maxlength">El comentario es demasiado largo</span>
+				 		<span class="text-muted pull-left text-danger" ng-show="formComment.comment.$error.maxlength">El comentario es demasiado largo</span>
 						<button type="submit" class="btn btn-primary pull-right" >Comentar</button>
 						
 						<div class="button" ngf-select="attach($file)">

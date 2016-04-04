@@ -28,6 +28,9 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			isPrestatario : false
 		}
 		
+		if($scope.loggedUser == null)
+			window.location.href = "/dondeEs/#/landingPage";
+		
 		$scope.logout = function(){
 			$http.get("rest/login/logout").success(function(response){
 				var sessionCookie = $cookies.getObject("lastSession");
@@ -35,7 +38,9 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 					sessionCookie["sessionClosed"] = true;
 					$cookies.putObject("lastSession", sessionCookie);
 				}
-				
+
+				$scope.loggedUser = null;
+				localStorage.setItem("loggedUser", null);
 				window.location.href = "/dondeEs/#/landingPage";
 			});
 		}

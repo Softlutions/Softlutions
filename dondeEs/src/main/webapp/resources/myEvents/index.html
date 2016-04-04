@@ -14,7 +14,7 @@
 						<li><a ng-if="!$parent.permissions.isAdmin"
 										ng-click="showEventForm()">Sin asistente</a>
 						</li>
-						<li><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
+						<li class="hidden"><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
 										ng-click="showCreateEventForm(true)">Con asistente</a>
 						</li>
 					</ul>

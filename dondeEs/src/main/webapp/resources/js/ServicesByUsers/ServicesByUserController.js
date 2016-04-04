@@ -16,6 +16,9 @@ angular
 		$scope.showError = true;
 		$scope.serviceModal = {};
 
+		if($scope.loggedUser == null)
+			window.location.href = "/dondeEs/#/landingPage";
+
 		if(!$scope.$parent.permissions.isAdmin){
 			$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
 				$scope.services = response.listService;
