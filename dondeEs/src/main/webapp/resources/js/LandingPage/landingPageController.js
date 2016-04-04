@@ -155,14 +155,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		
-		
 		$scope.saveUser = function(user) {
-			$scope.user.email = $scope.userCompany.email;
-			$scope.user.password = $scope.userCompany.password;
 			var userRequest = {
 				user : $scope.user
 			}
-			
 			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length > 7 && $scope.user.password!=null){
 				if($scope.user.password != $scope.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
@@ -341,4 +337,57 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				$scope.topEvents = response.eventList;
 			}
 		})
+		
+		
+		
+		//#region ASNWER CONTRACT
+		
+		if($location.search().eventId != null && $location.search().serviceId){
+			var dataCreate = {
+					eventId : $location.search().eventId,
+					serviceId : $location.search().serviceId
+			};
+			$http({method: 'POST',url:'rest/landing/getServiceContact', data:dataCreate}).success(function(response) {
+				if(response.code != 201 && response.code != 202){
+						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+							$scope.event = response.eventPOJO;
+						});
+						toastr.success(response.codeMessage);
+						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+				}else{
+					toastr.error(response.codeMessage, 'Error');
+					window.location.href = "#/landingPage";
+				}
+					});
+			
+			
+			
+			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+			
+			$scope.accept = function(event){
+				var dataCreate = {
+						eventId : $location.search().eventId,
+						serviceId : $location.search().serviceId,
+						state : 2
+				};
+				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
+					toastr.success(response.codeMessage);
+					$('#modalAsnwerContract').modal('hide');
+				});
+			}
+			
+			$scope.noAccept = function(event){
+				var dataCreate = {
+						eventId : $location.search().eventId,
+						serviceId : $location.search().serviceId,
+						state : 1
+				};
+				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
+					toastr.success(response.codeMessage);
+					$('#modalAsnwerContract').modal('hide');
+				});
+			}
+		}
+		//#endregion ASNWER CONTRACT
+		
 	}]);

@@ -286,7 +286,7 @@
 								<div class="form-group">
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
-										class="form-control">
+										class="form-control numbersOnly">
 								</div>
 								<div class="form-group">
 									<label>Seleccione un rol</label> <select
@@ -333,14 +333,14 @@
 										placeholder="Mínimo 8 caracteres" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>Confrimar contraseña</label> <input type="password"
+									<label>Confirmar contraseña</label> <input type="password"
 										required ng-model="confirmPassword"
 										placeholder="Confirme su contraseña" class="form-control">
 								</div>
 								<div class="form-group"> 	 	
 									<label>Teléfono</label> <input type="text"
 										ng-model="user.phone" required placeholder="Ingresar teléfono"
-										class="form-control">
+										class="form-control numbersOnly">
 								</div>
 								<div class="form-group">
 									<label>Seleccione un rol</label> <select
@@ -358,6 +358,44 @@
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- MODAL ANSWER CONTRACT -->
+<div id="modalAsnwerContract" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12" ng-init="getEventById()">
+						<div class="widget-head-color-box navy-bg p-lg text-center">
+							<div class="m-b-md">
+								<h2 class="font-bold no-margins">{{event.name}}</h2>
+								<small>{{event.place.name}}</small>
+							</div>
+							<img
+								src="http://lorempixel.com/image_output/people-q-c-100-100-1.jpg"
+								class="img-circle circle-border m-b-md" alt="profile">
+							<div>
+								<span>Correo: {{event.user.email}}</span>
+							</div>
+						</div>
+						<div class="widget-text-box">
+							<p>Has sido contratado para brindar tus servicios en este
+								evento!</p>
+							<div class="text-right">
+								<a class="btn btn-sm btn-danger btn-sm-normalize-size" ng-click="noAccept(event)"><i
+									class="fa fa-thumbs-down"></i> NO aceptar </a> <a
+									ng-click="accept(event)" class="btn btn-primary btn-sm-normalize-size"><i
+									class="fa fa-thumbs-up"></i> Aceptar</a>
+							</div>
 						</div>
 					</div>
 				</div>
