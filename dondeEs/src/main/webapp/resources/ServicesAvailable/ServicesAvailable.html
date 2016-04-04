@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row col-lg-11">
 		<div class="pull-left">
-			<a class="btn btn-primary btn-sm pull-left" href="app#/index"><i class="fa fa-reply"></i> Volver</a>
+			<a class="btn btn-primary pull-right" href="app#/index"> <i class="fa fa-reply"></i> Volver</a>
 		</div>
 	</div>
 	<div class="col-lg-11">
@@ -22,16 +22,13 @@
 							<th>Nombre</th>
 							<th>Descripción</th>
 							<th>Proveedor</th>
-							<th>Estado</th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody ng-repeat="service in $data">
 						<tr>
 							<td sortable="'name'">{{service.name}}</td>
 							<td>{{service.description}}</td>
-							<td>{{service.user.name}}</td>
-							<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
+							<td>{{service.user.name}} {{service.user.lastName1}} {{service.user.lastName2}}</td>
 							<td>
 								<button class="btn btn-primary btn-xs"
 									ng-click="contactProvider(service)">Contactar</button>
