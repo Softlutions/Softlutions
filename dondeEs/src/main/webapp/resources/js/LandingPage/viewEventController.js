@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTable'])
+angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTable', 'ngCookies'])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/viewEvent', {
@@ -9,7 +9,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	});
 }])
 
-.controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter) {
+.controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', '$cookies', function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter, $cookies) {
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 	$scope.DEFAULT_USER_IMAGE = "http://bootdey.com/img/Content/user_1.jpg";
 	$scope.commentPreviewFile = null;
@@ -26,6 +26,21 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	$scope.progressPercentaje = 0;
 	$scope. showUploadField = false;
 	//localStorage.setItem("loggedUser", null);
+	
+	$scope.logout = function(){
+		$http.get("rest/login/logout").success(function(response){
+			var sessionCookie = $cookies.getObject("lastSession");
+			if(sessionCookie != null){
+				sessionCookie["sessionClosed"] = true;
+				$cookies.putObject("lastSession", sessionCookie);
+			}
+			
+			$scope.loggedUser = null;
+			localStorage.setItem("loggedUser", null);
+			window.location.href = "#/landingPage";
+		});
+	}
+	
 	// --------------------------- LOAD EVENT DATA
 	
 	$http.get("rest/landing/getEventById/"+$location.search().view).success(function(response){
@@ -113,25 +128,26 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	
 	//--------------------------- UPLOAD IMAGES
 	
-	$scope.$watch('files', function() {
+	$scope.loadFiles =  function() {
 		for(var i=0;i<$scope.files.length;i++) {
 			var reader = new FileReader();
-			var file = $scope.files[i];
 			
-	        reader.onload = function(e) {
-	        	var data = {
-	        		index:$scope.previewFiles.length,
-	        		name:file.name,
-	        		size:file.size,
-	        		originalFile:file,
-	        		thumbnail:e.target.result
-	        	};
-	        	$scope.previewFiles.push(data);
-	        };
-	        
-	        reader.readAsDataURL(file);
+			reader.onload = (function(tempFile){
+			    return function(e){
+		        	var data = {
+		        		index:$scope.previewFiles.length,
+		        		name:tempFile.name,
+		        		size:tempFile.size,
+		        		originalFile:tempFile,
+		        		thumbnail:e.target.result
+		        	};
+		        	$scope.previewFiles.push(data);
+			    };
+			})($scope.files[i]);
+			
+	        reader.readAsDataURL($scope.files[i]);
 		}
-    });
+    };
 	
     $scope.upload = function(files) {
     	if(files.length > 0 && !$scope.sending && $scope.eventParticipant.eventParticipantId > 0){
@@ -158,6 +174,8 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
     		        	}else if(i == files.length-1){
     		        		toastr.warning('Algunas imágenes no se pudieron publicar');
     		        	}
+    					
+    					window.location.reload();
     				}, null, function(evt) {
     					$scope.progressPercentaje = parseInt(100.0 * evt.loaded / evt.total);
     				});
@@ -222,10 +240,9 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	};
 	
 	$scope.setDate = function(date){
-		var m = moment.locale('es');
 		var stringDate = new Date(date).toString();
 		stringDate = stringDate.substring(4, 24);
-		m = moment(stringDate,"MMM DD YYYY HH:mm:ss");
+		var m = moment(stringDate,"MMM DD YYYY HH:mm:ss").locale('es');
 		return m.fromNow();
 	}
 	

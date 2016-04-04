@@ -14,7 +14,7 @@
 						<li><a ng-if="!$parent.permissions.isAdmin"
 										ng-click="showEventForm()">Sin asistente</a>
 						</li>
-						<li><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
+						<li class="hidden"><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
 										ng-click="showCreateEventForm(true)">Con asistente</a>
 						</li>
 					</ul>
@@ -162,53 +162,51 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Crear subasta para un servicio del
-							evento</h4>
+						<h4 class="modal-title">Crear subasta para un servicio del evento</h4>
 					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-12">
-								<form class="form-horizontal">
-								
+					<form class="form-horizontal" name="formCreateAuction" ng-submit="formCreateAuction.$valid? createAuction():validationError()">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-sm-12">
 									<div class="form-group">
 										<label class="col-lg-2 control-label">Nombre</label>
 										<div class="col-lg-10">
 											<input type="text" placeholder="Nombre" class="form-control"
-												ng-model="tempAuction.name">
+												ng-model="tempAuction.name" ng-maxlength="255" required>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-lg-2 control-label">Tipo de servicio a
-											subastar</label>
+										<label class="col-lg-2 control-label">Servicio a subastar</label>
 										<div class="col-lg-10">
 											<select id="cboAuctionCatalogs" class="form-control"
 												ng-options="c as c.name for c in catalogs"
-												ng-model="tempAuction.selected"></select>
+												ng-model="tempAuction.selected" required></select>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-lg-2 control-label">Descripción</label>
 										<div class="col-lg-10">
-											<textarea rows="5" placeholder="Descripción"
-												class="form-control" ng-model="tempAuction.description"></textarea>
+											<textarea rows="5" placeholder="Descripción" ng-maxlength="255"
+												class="form-control" ng-model="tempAuction.description" required></textarea>
 										</div>
 									</div>
-
+	
 									<div class="form-group">
 										<label class="col-lg-2 control-label">Fecha de finalización</label>
 										<div class="col-lg-10">
-											<input type='text' class="form-control" ng-model="tempAuction.date" id='datetimepicker' />
+											<input type='text' class="form-control" id='datetimepicker'
+											placeholder="Haga click para seleccionar fecha" required/>
 										</div>
-									</div>
-								</form>
-							</div>
+									</div>								
+								</div>
+							</div>	
 						</div>	
-					</div>	
-					
-					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-						<button type="button" class="btn btn-primary" id="btnCreateAuction" ng-click="createAuction()">Crear subasta</button>
-					</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary">Crear subasta</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -321,19 +319,11 @@
 	</div>
 </div>
 
-<<<<<<< HEAD
-<div ng-show="eventForm == true">
-	<div class="col-xs-12">
-		<div class="form-group">
-			<a class="btn btn-primary pull-right" href="app#/index"> <i class="fa fa-reply"></i> Volver</a>
-			<h1>Crear evento</h1>	
-=======
 <div class="container" ng-show="eventForm == true">
 	<div class="col-xs-11">
 		<div class="row">
 			<h1>Crear evento</h1>
 			<a class="btn btn-primary pull-left" ng-click="hiddenEventForm()"><i class="fa fa-reply"></i> Volver</a>
->>>>>>> master_dev
 		</div>		
 		<br/>
 		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
@@ -428,14 +418,12 @@
 <br>
 <br>
 		<div class="form-group">
-<<<<<<< HEAD
-=======
 			<a href="#" class="btn btn-primary pull-right">Volver</a>
->>>>>>> master_dev
+
 			<h1>Crear evento</h1>	
 		</div>		
 	
-		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEventAsistente():saveEventChanges()):validationError()">
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
 			<div class="form-group">
 				<label class="col-lg-2">Nombre</label>
 				<div class="col-lg-10">
@@ -446,7 +434,7 @@
 			<div class=form-group>
 				<label class="col-lg-2">Fecha del evento</label>
 				<div class="col-lg-10">
-					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-model="tempEvent.date" id='eventDatePicker'/>
+					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-model="tempEvent.date" id='eventDatePicker2'/>
 				</div>
 			</div>
 			

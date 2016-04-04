@@ -9,7 +9,7 @@
 		</div>
 		<div class="ibox-content">
 
-			<table ng-show="participants.length" class="table table-hover table-responsive">
+			<table ng-show="participants.length" class="table table-hover table-responsive" ng-table="participantsTable">
 				<thead>
 					<tr>
 						<th>Nombre</th>
@@ -17,7 +17,7 @@
 						<th>Fecha de envio de la invitación</th>
 					</tr>
 				</thead>
-				<tbody ng-repeat="participant in participants">
+				<tbody ng-repeat="participant in $data">
 					<tr>
 						<td>{{ ((participant.user != null) ?
 							(participant.user.name+" "+participant.user.lastName1+"

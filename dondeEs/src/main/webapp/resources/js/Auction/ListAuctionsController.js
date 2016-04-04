@@ -169,6 +169,8 @@ angular
 				
 				$http({method: 'POST',url:'rest/protected/auctionService/createAuctionService', data:newAuctionService, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 					$scope.auctionServices.push(newAuctionService);
+					$scope.auctionServicesTable.reload();
+					$("#registerModal").modal("toggle");
 					$scope.auctionService = {};
 					$scope.listForm = true;
 					toastr.success('Se ha incorporado a la subasta!')
