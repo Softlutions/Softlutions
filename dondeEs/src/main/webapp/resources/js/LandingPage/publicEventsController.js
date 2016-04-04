@@ -10,12 +10,14 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable'])
 }])
 
 .controller('eventsCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
+	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
 	$scope.eventsPublish = [];
 	$scope.searchByUser;
 	$scope.searchByPlace;
 	$scope.searchByEvent;
 	$scope.isOpen = false;
-
+	
 	$scope.viewEvent = function(event){
 		window.location.href = "#/viewEvent?view="+event.eventId;
 	}
