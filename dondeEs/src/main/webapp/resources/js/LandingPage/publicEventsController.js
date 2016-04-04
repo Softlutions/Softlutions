@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('landingPageModule.events', ['ngRoute', 'ngTable'])
+angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/events', {
@@ -9,7 +9,7 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable'])
 	});
 }])
 
-.controller('eventsCtrl', ['$scope', '$http', 'ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
+.controller('eventsCtrl', ['$scope', '$http', 'ngTableParams', '$filter', '$cookies', function($scope, $http, ngTableParams, $filter, $cookies) {
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
 	$scope.eventsPublish = [];
@@ -20,6 +20,20 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable'])
 	
 	$scope.viewEvent = function(event){
 		window.location.href = "#/viewEvent?view="+event.eventId;
+	}
+	
+	$scope.logout = function(){
+		$http.get("rest/login/logout").success(function(response){
+			var sessionCookie = $cookies.getObject("lastSession");
+			if(sessionCookie != null){
+				sessionCookie["sessionClosed"] = true;
+				$cookies.putObject("lastSession", sessionCookie);
+			}
+			
+			$scope.loggedUser = null;
+			localStorage.setItem("loggedUser", null);
+			window.location.href = "#/landingPage";
+		});
 	}
 	
 	// SEARCH

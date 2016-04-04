@@ -354,7 +354,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				userEmail: $scope.email,
 				message: $scope.message
 			};
-						
+			
 			$http({method: 'POST',url:'rest/contactMessage/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
 				if (response.code == 200) {
