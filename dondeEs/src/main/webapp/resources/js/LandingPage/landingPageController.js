@@ -329,7 +329,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							$scope.event = response.eventPOJO;
 						});
 						toastr.success(response.codeMessage);
-						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 2000);
+						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
 				}else{
 					toastr.error(response.codeMessage, 'Error');
 					window.location.href = "#/landingPage";
@@ -347,8 +347,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						state : 2
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					
-					toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
+					toastr.success(response.codeMessage);
+					setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
 				});
 			}
 			
@@ -359,7 +359,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						state : 1
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					toastr.error('Google Maps no pudo encontrar la dirección solicitada.');
+					toastr.success(response.codeMessage);
+					setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
 				});
 			}
 		}

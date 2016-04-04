@@ -347,8 +347,8 @@ public class LandingPageController {
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
-			if(serviceContactRequest.getState() == 2) response.setCodeMessage("No asistiras");
-			if(serviceContactRequest.getState() == 1) response.setCodeMessage("Has confirmado");
+			if(serviceContactRequest.getState() == 2) response.setCodeMessage("Solicitud no aceptada");
+			if(serviceContactRequest.getState() == 1) response.setCodeMessage("Solicitud no aceptada");
 		}
 		serviceContactInterface.saveServiceContact(serviceContact);
 		return response;
