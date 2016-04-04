@@ -87,7 +87,7 @@ public class SendEmailController {
 					response.setCodeMessage("Something is wrong");
 				}
 
-				text = "http://localhost:8080/dondeEs/app#/answerInvitation?eventId="
+				text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
 						+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
 						+ "&eventParticipantId="
 						+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));

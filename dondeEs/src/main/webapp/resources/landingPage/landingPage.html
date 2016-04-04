@@ -317,7 +317,7 @@
 					<div class="row">
 						<div class="col-sm-12 b-r">
 							<h3 class="m-t-none m-b">Registrar compañía</h3>
-							<form role="form" ng-submit="saveUser(user)" ng-init="user">
+							<form role="form" ng-submit="saveCompany(user)" ng-init="user">
 								<div class="form-group">
 									<label>Nombre de la compañía</label> <input type="text"
 										ng-model="user.name" placeholder="Ingresar nombre" required
@@ -395,6 +395,61 @@
 									class="fa fa-thumbs-down"></i> NO aceptar </a> <a
 									ng-click="accept(event)" class="btn btn-primary btn-sm-normalize-size"><i
 									class="fa fa-thumbs-up"></i> Aceptar</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- MODAL ANSWER INVITATION -->
+<div id="modalAsnwerInvitation" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12" ng-init="geteventByIdInvitation()">
+						<div class="widget-head-color-box navy-bg p-lg text-center">
+							<div class="m-b-md">
+								<h2 class="font-bold no-margins">{{event.name}}</h2>
+								<small>{{event.place.name}}</small>
+							</div>
+							<img src="{{event.image}}"
+								class="img-responsive img-rounded center-block" width="175px"
+								height="105px" alt="profile">
+							<div>
+								<span>Correo: {{event.user.email}}</span>
+							</div>
+							<div>
+								<span>Evento: {{(((event.private_)==0)?
+									"Público":"Privado")}}</span>
+							</div>
+						</div>
+						<div class="widget-text-box">
+							<h4 class="media-heading" ng-show="isComment">{{nameProvaider}}</h4>
+							<p ng-show="isComment">Te ha invitado a un evento</p>
+							<div class="form-group" ng-show="isComment">
+								<h4 class="media-heading">Comentarios</h4>
+								<textarea rows="5" style="resize: none" type="text"
+									id="desciption" class="form-control" placeholder="Comentarios"
+									ng-model="comment"></textarea>
+							</div>
+							<div class="form-group" ng-show="isComment === false">
+								<h4 class="media-heading">Tu respuesta ha sido enviada</h4>
+								<p>{{answer}}</p>
+							</div>
+							<div class="text-right" ng-show="isComment">
+								<button class="btn btn-sm btn-danger btn-sm-normalize-size" id="noAttend"
+									ng-click="createParticipant(0)"><i
+									class="fa fa-thumbs-down"></i> No asistir </button>
+								<button id="attend" ng-click="createParticipant(2)"
+									class="btn btn-sm btn-primary btn-sm-normalize-size">
+									<i class="fa fa-thumbs-up"></i> Asistir
+								</button>
 							</div>
 						</div>
 					</div>

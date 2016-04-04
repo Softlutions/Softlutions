@@ -190,6 +190,43 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		
+		//SAVE COMPANY
+		$scope.saveCompany = function(user) {
+			$scope.user.email = $scope.userCompany.email;
+			$scope.user.password = $scope.userCompany.password;
+			var userRequest = {
+				user : $scope.user
+			}
+			
+			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length > 7 && $scope.user.password!=null){
+				if($scope.user.password != $scope.confirmPassword){
+					 toastr.error('Las contraseñas no coinciden', 'Error');
+				}else{
+					$http.post("rest/login/create",userRequest) 
+					.success(function(response) {
+						if (response.code == 200) {
+							$("#createCompanyForm").modal('hide');
+							$scope.user={};
+							$scope.confirmPassword='';
+							toastr.success(response.codeMessage, 'Registro exitoso');
+						} else {
+							toastr.error(response.codeMessage, 'Registro negado');
+						}
+					});
+				}
+			}else{
+				 setTimeout(function() {					
+		                toastr.options = {
+		                    closeButton: true,
+		                    progressBar: true,
+		                    showMethod: 'slideDown',
+		                    timeOut: 4000
+		                };
+		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+
+		            }, 1300);
+			}
+		}
 		
 		$(document).ready(function(){
 			$('.numbersOnly').keyup(function () { 
@@ -389,5 +426,48 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		//#endregion ASNWER CONTRACT
+		
+		// START ANSWER INVITATION
+		
+		$scope.comment;
+		$scope.isComment = true;
+		$scope.answer = '';
+		if($location.search().eventId != null && $location.search().eventParticipantId != null ){
+			$scope.geteventByIdInvitation = function(){
+				$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+					$scope.event = response.eventPOJO;
+					$scope.nameProvaider = $scope.event.user.name + " "+ $scope.event.user.lastName1 + " "+ $scope.event.user.lastName2;
+					console.log("Provaider" + $scope.nameProvaider);
+					
+				});
+				setTimeout(function(){$('#modalAsnwerInvitation').modal('show')}, 2000);
+			}
+			
+			$scope.userEmail = $location.search().email;
+			$scope.createParticipant = function(state){
+				 if(state == 2){
+				    	$scope.event.state = 2;
+				    	$scope.answer = 'Gracias por asistir al evento';
+				    }
+				  else if (state ==0){
+				    	$scope.event.state = 0
+				    	$scope.answer = 'Es una lastima que no vaya a estar en el evento. Gracias por participar';
+				    }
+		
+				 $scope.isComment = false;
+				var dataCreate={
+						state: $scope.event.state,
+						comment: $scope.comment
+				}
+														
+				$http({method: 'PUT',url:'rest/landing/updateEventParticipant/'+$location.search().eventParticipantId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				});
+				
+			}
+		}
+		//END ANSWER INVITATION
+		
+		
+		
 		
 	}]);
