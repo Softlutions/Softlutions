@@ -324,14 +324,15 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					serviceId : $location.search().serviceId
 			};
 			$http({method: 'POST',url:'rest/landing/getServiceContact', data:dataCreate}).success(function(response) {
-				toastr.success(response.codeMessage);
-				if(response.code != 201 && 202){
-					$scope.getEventById = function(){
+				if(response.code != 201 && response.code != 202){
 						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 							$scope.event = response.eventPOJO;
 						});
+						toastr.success(response.codeMessage);
 						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 2000);
-					}
+				}else{
+					toastr.error(response.codeMessage, 'Error');
+					window.location.href = "#/landingPage";
 				}
 					});
 			

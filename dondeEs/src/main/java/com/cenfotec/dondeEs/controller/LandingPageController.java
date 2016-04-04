@@ -318,7 +318,7 @@ public class LandingPageController {
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
-			response.setCodeMessage("Has aceptado!");
+			response.setCodeMessage("Tienes una solicitud pendiente");
 		} else if(serviceContact.getState() == 2){
 			response.setCode(201);
 			response.setCodeMessage("Ya confirmaste!");
