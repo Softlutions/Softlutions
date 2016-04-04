@@ -86,6 +86,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.eventForm = false;
+	$scope.tempAuction = {};
 	
 	$scope.listOfEmails = [];
 	// Create auction
@@ -295,33 +296,40 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	
 	 $scope.geteventById = function(eventId){
 		$scope.eventId = eventId;
-
 	};
 	
 	$scope.selectCatalog = function(selectedCatalog){
 		$scope.catalogServiceSelected = selectedCatalog;
-	}
+	};
 	
-		$scope.addEmail = function(pemail){
-			if(pemail !=null){
-			$scope.listOfEmails.push(pemail.to);
-			pemail.to = "";
-			}else{	
-			 	  setTimeout(function() {	
-		                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
-
-		            }, 1300);
-				 
-			}
+	$scope.addEmail = function(pemail){
+		if(pemail !=null){
+		$scope.listOfEmails.push(pemail.to);
+		pemail.to = "";
+		}else{	
+		 	  setTimeout(function() {	
+	                toastr.error('Tiene que ingresar la lista de correos que desea invitar', 'Error');
+	            }, 1300);			 
+		}
 	}
 	
 	$scope.catalogsList = function(){
 		if($scope.catalogs.length == 0){
 			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
 				$scope.catalogs = response.serviceCatalogList;
+				$scope.tempAuction.selected = response.serviceCatalogList[0];
 			});
 		}
-	}
+	};
+	
+	$('#modalAuctionEventServices').on('hidden.bs.modal', function () {
+		$scope.tempAuction.selected = $scope.catalogs[0];
+		$scope.tempAuction.name = '';
+		$scope.tempAuction.description = '';
+		var date = new Date();
+		date.setDate(date.getDate() + 1);
+		$('#datetimepicker').data('DateTimePicker').date(date);
+	});
 	
 	$scope.openCreateAuction = function(){
 		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 10);

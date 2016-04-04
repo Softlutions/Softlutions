@@ -222,10 +222,9 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	};
 	
 	$scope.setDate = function(date){
-		var m = moment.locale('es');
 		var stringDate = new Date(date).toString();
 		stringDate = stringDate.substring(4, 24);
-		m = moment(stringDate,"MMM DD YYYY HH:mm:ss");
+		var m = moment(stringDate,"MMM DD YYYY HH:mm:ss").locale('es');
 		return m.fromNow();
 	}
 	
