@@ -23,7 +23,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$scope.loginNormalPage = false;
 		
 		$scope.tempRedirect = {};
-		$scope.topEvents = [];
 		
 		$scope.user = {
 			email : "",
@@ -155,21 +154,20 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		
-		$scope.saveUser = function(user) {
+		$scope.saveUser = function(newUser) {
 			var userRequest = {
-				user : $scope.user
+				user : $scope.newUser
 			}
-			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length > 7 && $scope.user.password!=null){
-				if($scope.user.password != $scope.confirmPassword){
+								if ($scope.newUser.name != null
+										&& $scope.newUser.email != null && $scope.newUser.password.length > 7 && $scope.newUser.password!=null){
+				if($scope.newUser.password != $scope.newUser.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
 				}else{
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
 							$("#createUserForm").modal('hide');
-							$("#createCompanyForm").modal('hide');
-							$scope.user={};
-							$scope.confirmPassword='';
+							$scope.newUser={};
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
 							toastr.error(response.codeMessage, 'Registro negado');
@@ -188,6 +186,11 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 
 		            }, 1300);
 			}
+		}
+		
+		$scope.hideCreateUserForm  = function(){
+			$("#createUserForm").modal('hide');
+			$scope.newUser={};
 		}
 		
 		//SAVE COMPANY

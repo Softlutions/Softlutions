@@ -18,7 +18,8 @@ angular.module('dondeEs', [
 	"dondeEs.contact",
 	"dondeEs.chat",
 	"dondeEs.eventReminder",
-	"dondeEs.EventParticipant"
+	"dondeEs.EventParticipant",
+	"dondeEs.eventWizard"
 
 ]).config(['$routeProvider','$provide','$httpProvider', 
            			function($routeProvider,$provide,$httpProvider) {

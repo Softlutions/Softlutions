@@ -154,6 +154,7 @@
 	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="resources/js/plugins/morris/morris.js"></script>
 	
+	<script src="resources/js/Events/createEventWizard.js"></script>
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
