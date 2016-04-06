@@ -257,6 +257,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 		
 	}
+	$scope.showCreateEventForm = function(){
+		window.location.href = "app#/eventWizard";
+	}
+	
 	
 	$scope.prepublishEventById = function(event){
 		$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
