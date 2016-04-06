@@ -2,6 +2,7 @@ package com.cenfotec.dondeEs.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -23,6 +24,6 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 	@Query("SELECT e FROM Event AS e WHERE e.state = ?1 AND e.private_ = ?2 AND e.publishDate > current_date()")
 	List<Event> findAllEventPublish(byte state, byte _private);
 	
-	@Query(value="SELECT e FROM Event AS e WHERE e.state = 3 AND e.private_ = 0")
-	List<Event> getPublicEvents();
+	@Query(value="SELECT e FROM Event AS e JOIN e.eventParticipants AS ep GROUP BY ep.event HAVING e.state = 3 AND e.private_ = 0 AND e.publishDate > sysdate() ORDER BY count(ep.eventParticipantId) DESC")
+	List<Event> getTopEventsByParticipants(Pageable pageable);
 }

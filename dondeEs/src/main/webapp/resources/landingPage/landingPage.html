@@ -9,7 +9,19 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" ng-click="logout()" ng-show="loggedUser != null">Cerrar sesión</a>
+				
+				<div ng-show="loggedUser != null" class="btn-group dropdown-toggle navbar-brand">
+					<a data-toggle="dropdown">
+						{{loggedUser.name}} {{loggedUser.lastName}}
+						<span class="caret"></span>
+					</a>
+					
+					<ul class="dropdown-menu col-md-3 col-md-pull-9">
+						<li><a ng-click="viewProfile()">Mi cuenta</a></li>
+						<li><a ng-click="logout()">Cerrar sesión</a></li>
+					</ul>
+				</div>
+				
 				<a class="navbar-brand" data-target="#modalLogin" data-toggle="modal" ng-show="loggedUser == null">Iniciar sesión</a>
 				<a class="navbar-brand" href="app#/index" ng-show="loggedUser != null && loggedUser.role.roleId == 3">Mis eventos</a>
 				<a class="navbar-brand" href="app#/serviceByUser" ng-show="loggedUser != null && loggedUser.role.roleId == 2">Mis Servicios</a>
