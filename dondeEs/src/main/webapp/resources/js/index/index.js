@@ -11,6 +11,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	                          			function($scope, $http, $cookies, $rootScope) {
 
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		console.log($scope.loggedUser);
 		$scope.pageTitle = "Donde es";
 		$scope.permissions = {
 			comentarEventos: false,

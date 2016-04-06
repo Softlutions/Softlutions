@@ -122,6 +122,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							case 3:
 								window.location.href = "/dondeEs/app#/index";
 								break;
+							case 4:
+								window.location.reload();
+								break;
 						}
 					}
 				}else{

@@ -38,12 +38,12 @@ public class LoginService implements LoginServiceInterface{
 		}else{
 			response.setCode(200);
 			response.setCodeMessage("User authorized");
-			
 			response.setIdUser(loggedUser.getUserId());
 			response.setFirstName(loggedUser.getName());
 			response.setLastName(loggedUser.getLastName1());
 			response.setEmail(loggedUser.getEmail());
 			response.setCriptPass(pass);
+			response.setState((byte)loggedUser.getState());
 			
 			RolePOJO rolePOJO = new RolePOJO();
 			BeanUtils.copyProperties(loggedUser.getRole(), rolePOJO);

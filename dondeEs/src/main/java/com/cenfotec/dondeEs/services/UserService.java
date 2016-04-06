@@ -141,6 +141,7 @@ public class UserService implements UserServiceInterface {
 			String encryptPassword = AES.base64encode(password);
 			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password;
 			user.setPassword(encryptPassword);
+			user.setState((byte)3);
 			mailMessage.setTo(email);
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
