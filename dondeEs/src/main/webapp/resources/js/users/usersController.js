@@ -9,6 +9,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 	$scope.$parent.pageTitle = "Donde es - Usuarios";
 	$scope.users = [];
 	$scope.objRequest={};
+	$scope.isCompany;
 	// list Users
 	$http.get("rest/protected/users/getAll").success(function(response){
 		if(response.code == 200){
@@ -100,7 +101,11 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 		$scope.users.email = user.email,
 		$scope.users.phone = user.phone,
 		$scope.users.userType = user.userType
-		
+		if($scope.users.lastName1 != null){
+			$scope.isCompany = true;
+		}else{
+			$scope.isCompany = false;
+		}
 	}
 	
 	$scope.updateUser= function(event){
@@ -114,9 +119,15 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			userType: $scope.users.userType,
 			role : $scope.objRequest
 		}
+		
+
 		$http.put('rest/protected/users/updateUser',dataUpdate).success(function(response) {
-			console.log('ok');
 		});
+	}
+	
+	//validation error
+	$scope.validationError = function(){
+		toastr.warning('Algunos campos no cumplen con los requisitos');
 	}
 	
 }]);

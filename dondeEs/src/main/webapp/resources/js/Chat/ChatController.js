@@ -102,7 +102,7 @@ angular
 							}
 
 							
-							$scope.sendMessage = function(event) {
+							$scope.sendMessage = function() {
 
 								var dataCreate = {
 									user : $scope.loggedUser,
@@ -148,4 +148,10 @@ angular
 											}, 1300);
 								}
 							}
+							
+							$(document.body).delegate('input:text', 'keypress', function(e) {
+							    if (e.which === 13) { // if is enter
+							    	$scope.sendMessage();
+							    }
+							});
 						} ])
