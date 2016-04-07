@@ -24,13 +24,10 @@
 								<td ng-if="s.state != 2">
 									<Button ng-if="!$parent.permissions.isAdmin"
 										id="btnCancelService-{{s.serviceContractId}}"
-										class="btn btn-danger btn-xs" ng-click="cancel(s)">Cancelar</Button>
+										class="btn btn-danger btn-xs center-block" ng-click="cancel(s)">Cancelar</Button>
 								</td>
 								<td ng-if="s.state == 2">
-									<Button
-										id="btnCancelService-{{s.serviceContractId}}"
-										class="btn btn-warning btn-xs" ng-click="cancel(s)"
-										disabled>Cancelado</Button>
+									<label class="label center-block">Cancelado</label>
 								</td>
 							</tr>
 						</tbody>
@@ -43,7 +40,7 @@
 			</div>
 			
 			<div class="col-md-4 pull-right">
-				<div id="contracts-state-chart" class="hidden"></div>
+				<div id="contracts-state-chart" class="hidden-xs"></div>
 			</div>
 		</div>
 	</div>

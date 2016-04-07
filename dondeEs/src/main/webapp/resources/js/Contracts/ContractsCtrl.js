@@ -17,11 +17,31 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
 				
-				/*for(var i=0;i<10;i++){
-					var temp = $scope.serviceContacts[0];
-					temp.serviceContractId = i;
+				for(var i=0;i<10;i++){
+					var original = $scope.serviceContacts[i%$scope.serviceContacts.length];
+					var temp = {};
+					temp.service = {};
+					
+					temp.serviceContractId = original.serviceContractId;
+					temp.service.name = original.service.name;
+					temp.state = original.state;
+					temp.comment = original.comment;
+					
+					if(temp.serviceContractId % 2 == 0){
+						temp.state = 1;
+						console.log(1);
+					}else{
+						if(Math.random() <= 0.5){
+							temp.state = 0;
+							console.log(0);
+						}else{
+							temp.state = 2;
+							console.log(2);
+						}
+					}
+					
 					$scope.serviceContacts.push(temp);
-				}*/
+				}
 				
 				var params = {
 					page: 1,
@@ -57,8 +77,8 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 					
 					var btn = $("#btnCancelService-"+serviceContact.serviceContractId);
 					btn.text("Cancelado");
-					btn.removeClass("btn-danger");
-					btn.addClass("btn-warning");
+					btn.removeClass("btn-dangerr");
+					btn.addClass("btn-default");
 					btn.prop("disabled", true);
 					
 					$scope.refreshChart();
@@ -99,7 +119,7 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 				           { label: "Cancelados", value: contractsCanceled }
 		            ],
 				    resize: false,
-				    colors: ['#87d6c6', '#54cdb4','#1ab394'],
+				    colors: ['#8a6d3b', '#3c763d', '#a94442'],
 				});
 			}
 		}
