@@ -1,7 +1,5 @@
 'use strict';
 
-'use strict';
-
 var app = angular.module('dondeEs.eventWizard', ['ngRoute', 'ngFileUpload', 'ngTable'])
 
 .config(['$routeProvider', function($routeProvider) {
@@ -71,7 +69,7 @@ app.factory('MarkerCreatorService', function () {
     };
 
 });
-app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams',function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams) {
+app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', '$timeout',function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams, $timeout) {
 	//#REGION ASISTENTE DE CREACION
 	$scope.$parent.pageTitle = "Donde es - Mis eventos";
 	$scope.eventForm = false;
@@ -88,6 +86,12 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	    this.setHours(this.getHours() + h);
 	    return this;
 	}
+	
+	$('#eventDatePicker').datetimepicker({
+    	minDate: new Date().addHours($scope.HOURS_BEFORE_EVENT),
+    	locale: 'es',
+        format: 'LLLL'
+    });
 	
 	$scope.eventForm = false;
 	$scope.tempAuction = {};
@@ -144,7 +148,7 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 						'eventPlaceName':$scope.tempEvent.placeName,
 						'placeLatitude':$scope.map.center.latitude,
 						'placeLongitude':$scope.map.center.longitude, 
-						'publishDate':undefined,
+						'publishDate':$scope.Date,
 						'loggedUser':$scope.loggedUser.userId
 					},
 					file: $scope.tempEvent.originalFile
@@ -204,64 +208,14 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 		toastr.warning('Algunos campos no cumplen con los requisitos');
 	}
 	
-	$scope.saveEventChanges = function(){
-		var event = {
-			'eventId':$scope.eventInEdition.eventId,
-			'name':$scope.tempEvent.name,
-			'description':$scope.tempEvent.desc,
-			'largeDescription':$scope.tempEvent.largeDesc,
-			'eventType':$scope.tempEvent.type,
-			'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
-			'placeId':$scope.eventInEdition.place.placeId,
-			'placeName':$scope.tempEvent.placeName,
-			'placeLatitude':$scope.map.center.latitude,
-			'placeLongitude':$scope.map.center.longitude,
-			'owner':$scope.loggedUser.userId
-		};
-		
-		$scope.eventInEdition.name = event.name;
-		$scope.eventInEdition.descripction = event.description;
-		$scope.eventInEdition.largeDescription = event.largeDescription;
-		$scope.eventInEdition.private_= event.eventType;
-		$scope.eventInEdition.publishDate = event.publishDate;
-		$scope.eventInEdition.place.name = event.placeName;
-		
-		if($scope.tempEvent.originalFile == null){
-			$scope.tempEvent.originalFile = {};
-		}else{
-			$scope.eventInEdition.image = $scope.tempEvent.file;
-		}
-		
-		$upload.upload({url:'rest/protected/event/editEvent', data:event, file:$scope.tempEvent.originalFile})
-		.progress(function(evt) {})
-		.success(function(response) {
-			$scope.eventInEdition = null;
-			$scope.resetCreateEvent();
-			toastr.success('Eventos del usuario', 'El evento se modificó con éxito.');
-		})
-		.error(function(msj) {
-			console.log("cathedError: ", msj);
-			toastr.error('Eventos del usuario', 'Ocurrió un error al modificar el evento.');
-		});
-	}
-	
 	$scope.showEventForm = function () {
 		$scope.eventForm  = true;
 		$scope.eventInEdition = null;
 		$scope.addCurrentLocation();
 	}
 	
-	$('#eventDatePicker').datetimepicker({
-    	minDate: new Date().addHours($scope.HOURS_BEFORE_EVENT),
-    	locale: 'es',
-        format: 'LLLL'
-    });
 	
-	$('#eventDatePicker2').datetimepicker({
-    	minDate: new Date().addHours($scope.HOURS_BEFORE_EVENT),
-    	locale: 'es',
-        format: 'LLLL'
-    });
+	
 	
 	$scope.hiddenEventForm = function () {
 		$scope.eventForm  = false;
@@ -424,16 +378,15 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 		$("#modal-form").modal("toggle");
 	}
 	
-	$scope.auctionEventServices = function(event){
+	$scope.auctionEventServices = function(){
 		var date = new Date();
 		date.setDate(date.getDate() + 1);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
             minDate: date,
-            maxDate: event.publishDate
+            maxDate: new Date().setDate(date.getDate() + 1)
         });
-		$scope.selectedEvent = event;
 	}
 	
 	$scope.catalogsList = function(){
@@ -447,8 +400,10 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	$scope.createAuction = function(){
 		if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
 			toastr.error('Debe ingresar todos los datos!');
-		}else{			
-			var date = new Date($('#datetimepicker').data("DateTimePicker").date());
+		}else{
+			var date = new Date();
+			date.setDate(date.getDate() + 1);
+			//var date = new Date($('#datetimepicker').data("DateTimePicker").date());
 			if($scope.globalEventId !=0){
 				var event = {
 						eventId: $scope.globalEventId
