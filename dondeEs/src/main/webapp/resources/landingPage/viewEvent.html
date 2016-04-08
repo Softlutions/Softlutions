@@ -69,7 +69,10 @@
             </div>
 	    </div>
 	    
-	    <button ng-show="eventParticipant != null" class="btn btn-default btn-circle pull-right" data-toggle="tooltip" title="Subir imagen" ng-click="showUploadField = !showUploadField">+</button>
+	    <button class="btn btn-primary btn-sm pull-right" ng-hide="view == 2" data-toggle="tooltip" title="Ver todas las imágenes" ng-click="view = 2"><i class="fa fa-th"></i> Ver galería</button>
+	    <button class="btn btn-primary btn-sm pull-right" ng-hide="view == 1" data-toggle="tooltip" title="Ver todos los participantes" ng-click="view = 1"><i class="fa fa-users"></i> Ver participantes</button>
+	    <button class="btn btn-primary btn-sm pull-right" ng-hide="view == 0" data-toggle="tooltip" title="Ver todos los comentarios" ng-click="view = 0"><i class="fa fa-comment"></i> Ver commentarios</button>
+	    <button ng-hide="eventParticipant == null || event.user.userId != loggedUser.userId" class="btn btn-default btn-circle pull-right" data-toggle="tooltip" title="Subir imagen" ng-click="showUploadField = !showUploadField">+</button>
 	    
 	    <a ng-show="images.length > 1" class="left carousel-control" href="#inSlider" target="_self" role="button" data-slide="prev">
 	        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -82,7 +85,7 @@
 	</div>
 </div>
 
-<div class="center-block" style="width: 80%" ng-show="showUploadField && eventParticipant != null">
+<div class="center-block" style="width: 80%" ng-hide="!showUploadField && eventParticipant != null && view == 0 || view == 2">
 	<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
 	<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
 	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
@@ -97,7 +100,7 @@
 	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
 </div>
 
-<div class="ibox float-e-margins center-block" style="width: 80%;">
+<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 0">
 	 <div class="ibox-title">
 	     <h4>Comentarios</h4>
 	 </div>
@@ -160,5 +163,26 @@
 	            </div>
 	       </div>
 	   </div>
+	</div>
+</div>
+
+<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 2">
+	<ul id="lightBoxGallery">
+		<li ng-repeat="img in images">
+			<a href="{{img.image}}" title="Click para expandir" data-gallery="">
+	   			<img src="{{img.image}}" class="image-responsive" alt="{{event.name+'-'+img.name}}">
+	   		</a>
+	   		<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right" title="Eliminar" ng-click="removeImg(img)"></i>
+	   		<i class="fa fa-flag pull-right" title="Marcar como inadecuado" ng-click="inapposite(img)"></i>
+		</li>
+	</ul>
+   	
+   	<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+	    <div class="slides"></div>
+	    <a class="prev">‹</a>
+	    <a class="next">›</a>
+	    <a class="close">×</a>
+	    <a class="play-pause"></a>
+	    <ol class="indicator"></ol>
 	</div>
 </div>

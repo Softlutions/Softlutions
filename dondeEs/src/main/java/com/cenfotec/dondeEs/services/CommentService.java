@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cenfotec.dondeEs.ejb.Comment;
@@ -78,5 +79,15 @@ public class CommentService implements CommentServiceInterface {
 		return commentPOJOList;
 	}
 	
-	
+	@Override
+	@Transactional
+	public Boolean deleteComment(int commentId) {
+		boolean isDeleted = false;
+		Comment comment = commentRepository.findOne(commentId);
+		
+		if(isDeleted = (comment != null))
+			commentRepository.delete(comment);
+		
+		return isDeleted;
+	}
 }

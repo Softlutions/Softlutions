@@ -25,7 +25,8 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	$scope.previewFiles = [];
 	$scope.progressPercentaje = 0;
 	$scope. showUploadField = false;
-	//localStorage.setItem("loggedUser", null);
+	
+	$scope.view = 0;
 	
 	$scope.logout = function(){
 		$http.get("rest/login/logout").success(function(response){
@@ -59,6 +60,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	function loadData(){
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 			$scope.images = responseImgs.images;
+			console.log($scope.images);
 		});
 		
 		$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
@@ -109,7 +111,40 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			});
 		}
 	}
-
+	
+	//--------------------------- INAPPOSITE
+	
+	$scope.inapposite = function(img){
+		$http.get("rest/landing/deleteImage/"+img.eventImageId).success(function(response){
+			if(response.code == 200){
+				$scope.images.splice($scope.images.indexOf(img), 1);
+				toastr.warning('La imagen fue reportada');
+				
+				$http.get("rest/landing/reportParticipant/"+img.eventParticipant.eventParticipantId).success(function(response){
+					if(response.code == 200){
+						toastr.warning('Usuario reportado');
+					}else{
+						toastr.warning('No se pudo reportar el usuario');
+					}
+				});
+			}else{
+				toastr.warning('No se pudo reportar la imagen');
+			}
+		});
+	}
+	
+	$scope.removeImg = function(img){
+		console.log(img);
+		$http.get("rest/landing/deleteImage/"+img.eventImageId).success(function(response){
+			if(response.code == 200){
+				$scope.images.splice($scope.images.indexOf(img), 1);
+				toastr.warning('La imagen fue reportada');
+			}else{
+				toastr.warning('No se pudo reportar la imagen');
+			}
+		});
+	}
+	
 	//--------------------------- ASSIST
 	
 	$scope.assist = function(){

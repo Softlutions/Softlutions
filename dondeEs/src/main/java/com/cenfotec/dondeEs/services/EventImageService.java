@@ -1,10 +1,12 @@
 package com.cenfotec.dondeEs.services;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.cenfotec.dondeEs.pojo.EventImagePOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
@@ -85,13 +87,18 @@ public class EventImageService implements EventImageServiceInterface {
 	}
 
 	@Override
+	@Transactional
 	public Boolean deleteImage(int imageId) {
 		EventImage eventImage = eventImageRepository.findOne(imageId);
 		boolean isDeleted = false;
 		
 		if(eventImage != null){
-			eventImageRepository.delete(eventImage);
-			isDeleted = true;
+			File img = new File(eventImage.getImage());
+			
+			if(img.delete()){
+				eventImageRepository.delete(eventImage);
+				isDeleted = true;
+			}
 		}
 		
 		return isDeleted;

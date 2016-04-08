@@ -8474,3 +8474,23 @@ textarea {
 .nav2 > div > label:focus {
   color: #1ab394;
 }
+
+#lightBoxGallery {
+	list-style-type: none;
+}
+
+#lightBoxGallery > li {
+	margin: 10px;
+	display: inline-block;
+	width: 150px;
+	height: 140px;
+}
+
+#lightBoxGallery > li > i {
+	cursor: pointer;
+}
+
+#lightBoxGallery > li > a > img {
+	width: 150px;
+	height: 125px;
+}

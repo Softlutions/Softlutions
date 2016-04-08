@@ -15,4 +15,6 @@ public interface EventParticipantServiceInterface {
 	EventParticipant findById(int id);
 	
 	EventParticipantPOJO findByUserAndEvent(int userId, int eventId);
+
+	Boolean reportParticipant(int participantId);
 }
