@@ -42,4 +42,6 @@ public interface AuctionServiceInterface {
 	 */
 	boolean auctionInvitationAnswer(AuctionRequest request);
 
+	AuctionPOJO getAuctionById(int auctionId);
+
 }
