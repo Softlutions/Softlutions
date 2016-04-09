@@ -8369,17 +8369,17 @@ textarea {
 	line-height: normal;
 	margin: 0;
 }
-.table-filter .media .title span {
+.table-filter .media .title h4 {
 	font-size: .8em;
 	margin-right: 20px;
 }
-.table-filter .media .title span.SinComenzar {
+.SinComenzar {
 	color: #ed5565;
 }
-.table-filter .media .title span.Pendiente {
+.Pendiente {
 	color: #f0ad4e;
 }
-.table-filter .media .title span.Concluido {
+.Concluido {
 	color: #1ab394;
 }
 .table-filter .media .summary {
