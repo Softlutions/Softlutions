@@ -23,6 +23,7 @@ angular
 							$scope.showError = true;
 							$scope.messages= {};
 							$scope.isChat= false;
+							$scope.imageGroup = "resources/img/default_group.png"
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
 							

@@ -261,23 +261,40 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	}
 	
 	$scope.prepublishEventById = function(event){
-		$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
-			if (response.code == 200) {
-				
-				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-					if (response.code == 200) {
-						event.state = 2;
-						$scope.events = response.eventList;
-						window.location.href = "/dondeEs/app#/#";
-						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
-					} else {
-						toastr.warning('Prepublicación del evento');
-					}
-					
-				});
-			} else {
-				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
-			} 
+		swal({
+			  title: "¿Está seguro?",
+			  text: "Una vez prepublicado el evento, se crea un chat con los servicios contratados y no se pueden agregar más participantes. ",
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Prepublicar evento",
+			  cancelButtonText: "Cancelar",
+			  closeOnConfirm: false,
+			  closeOnCancel: false
+			},function(isConfirm){
+				if(isConfirm){
+					$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
+						if (response.code == 200) {
+							
+							$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+								if (response.code == 200) {
+									event.state = 2;
+									$scope.events = response.eventList;
+									window.location.href = "/dondeEs/app#/#";
+									toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+								} else {
+									
+								}
+								
+							});
+						} else {
+							toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+						}
+					})
+				}else{
+					swal("Cancelado", "Se ha cancelado la prepublicación del evento", "error");
+				}
+
 		});
 
 	}
