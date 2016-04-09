@@ -9,8 +9,8 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
   });
 }])
 
-.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window', '$timeout', 
-                                  			function($scope,$http,$location,$routeParams, $window, $timeout) {	
+.controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window', '$timeout', '$interval', 
+                                  			function($scope,$http,$location,$routeParams, $window, $timeout, $interval) {	
 	$scope.$parent.pageTitle = "Donde es - Subastas disponibles";
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
@@ -36,18 +36,23 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 		}
 	});
 	
+	$scope.$on('$destroy', function() {
+		$interval.cancel($scope.refreshInterval);
+	});
+	
 	$scope.loadAuctionServices = function (index) {
-		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;
+		$interval.cancel($scope.refreshInterval);
+		$scope.auctionServices = [];
 		
-		$timeout(function(){
-			$scope.auctionServices.forEach(function(entry){
-				if($scope.auctionsEvent[index].state == 0)
-					$("#auctionParticipant-"+entry.auctionServicesId).attr("disabled", true);
-				
-				if(entry.acept = 1)
-					$("#auctionParticipant-"+entry.auctionServicesId).text("Contratado");
-			});
+		$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$scope.auctionsEvent[index].auctionId).success(function(response) {
+			$scope.auctionServices = response.auctionServiceList;
 		});
+		
+		$scope.refreshInterval = $interval(function(){
+			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$scope.auctionsEvent[index].auctionId).success(function(response) {
+				$scope.auctionServices = response.auctionServiceList;
+			});
+		}, 3000);
 	}
 	
 	$scope.goToServiceProviderProfile = function () {

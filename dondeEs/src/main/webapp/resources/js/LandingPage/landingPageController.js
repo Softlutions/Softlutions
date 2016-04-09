@@ -13,7 +13,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$cookies.putObject("goToEventsPublish", false);
 		}
 		
-		$scope.TOP_EVENTS = 5;
+		$scope.TOP_EVENTS = 3;
 		$scope.loginRequest = {
 			email : "",
 			password : "",
@@ -122,6 +122,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 								break;
 							case 3:
 								window.location.href = "/dondeEs/app#/index";
+								break;
+							case 4:
+								$("#modalLogin").modal("toggle");
+								$scope.loggedUser = responseUser;
 								break;
 						}
 					}

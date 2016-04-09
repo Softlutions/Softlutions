@@ -10,20 +10,30 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#/landingPage"><i class="fa fa-reply"></i> Volver</a>
-				<a class="navbar-brand" ng-click="logout()" ng-show="loggedUser != null">Cerrar sesión</a>
-				<a class="navbar-brand" href="#/landingPage?p=login&event={{event.eventId}}" ng-show="loggedUser == null">Iniciar sesión</a>
-				<a class="navbar-brand" href="app#/index" ng-show="loggedUser != null && loggedUser.role.roleId == 3">Mis eventos</a>
-				<a class="navbar-brand" href="app#/serviceByUser" ng-show="loggedUser != null && loggedUser.role.roleId == 2">Mis Servicios</a>
-				<a class="navbar-brand" href="app#/users" ng-show="loggedUser != null && loggedUser.role.roleId == 1">Admnistrar</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav navbar-left col-lg-6">
 					<li><a class="page-scroll" href="#/landingPage">Inicio</a></li>
-					<li><a class="page-scroll" href="#/landingPage?p=events">Eventos</a></li>
+					<li><a class="page-scroll" href="#/events">Eventos</a></li>
 					<li><a class="page-scroll" href="#/landingPage?p=testimonials">Opinión</a></li>
 					<li><a class="page-scroll" href="#/landingPage?p=contact">Contacto</a></li>
+					
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 1" href="app#/users">Administrar</a></li>
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 2" href="app#/serviceByUser">Mis servicios</a></li>
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 3" href="app#/index">Mis eventos</a></li>
 				</ul>
+				
+				<div class="nav2 navbar-right col-lg-3">
+					<div ng-show="loggedUser == null">
+						<button class="btn btn-primary btn-sm-normalize-size page-scroll" data-toggle="modal" data-target="#modalLogin" ng-click="logout()">Iniciar sesión</button>
+					</div>
+					
+					<div ng-hide="loggedUser == null">
+						<label class="page-scroll" ng-click="viewProfile()">{{loggedUser.name}} {{loggedUser.lastName}}</label>
+						<span>|</span>
+						<label class="page-scroll" ng-click="logout()">Cerrar sesión</label>
+					</div>
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -37,7 +47,7 @@
                     <h1>{{event.name}}</h1>
                     <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
                     <p>
-                    	<button class="btn btn-primary" ng-show="eventParticipant != null">Estas participando</button>
+                    	<button class="btn btn-primary" ng-hide="eventParticipant == null">Estas participando</button>
                         <button class="btn btn-primary" ng-show="eventParticipant == null" ng-click="assist()">PARTICIPAR</button>
                     </p>
                 </div>
@@ -51,7 +61,7 @@
                     <h1>{{event.name}}</h1>
                     <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
                     <p>
-                    	<label class="label label-primary" ng-show="eventParticipant != null">Estas participando</label>
+                    	<label class="label label-primary" ng-hide="eventParticipant == null">Estas participando</label>
                         <button class="btn btn-primary" ng-show="eventParticipant == null" ng-click="assist()">PARTICIPAR</button>
                     </p>
                 </div>
@@ -59,7 +69,10 @@
             </div>
 	    </div>
 	    
-	    <button ng-show="eventParticipant != null" class="btn btn-default btn-circle pull-right" data-toggle="tooltip" title="Subir imagen" ng-click="showUploadField = !showUploadField">+</button>
+	    <button class="btn btn-primary btn-sm pull-right" ng-hide="view == 2" data-toggle="tooltip" title="Ver todas las imágenes" ng-click="view = 2"><i class="fa fa-th"></i> Ver galería</button>
+	    <button class="btn btn-primary btn-sm pull-right" ng-hide="view == 1" data-toggle="tooltip" title="Ver todos los participantes" ng-click="view = 1"><i class="fa fa-users"></i> Ver participantes</button>
+	    <button class="btn btn-primary btn-sm pull-right" ng-hide="view == 0" data-toggle="tooltip" title="Ver todos los comentarios" ng-click="view = 0"><i class="fa fa-comment"></i> Ver commentarios</button>
+	    <button ng-hide="eventParticipant == null || event.user.userId != loggedUser.userId" class="btn btn-default btn-circle pull-right" data-toggle="tooltip" title="Subir imagen" ng-click="showUploadField = !showUploadField">+</button>
 	    
 	    <a ng-show="images.length > 1" class="left carousel-control" href="#inSlider" target="_self" role="button" data-slide="prev">
 	        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -72,7 +85,7 @@
 	</div>
 </div>
 
-<div class="center-block" style="width: 80%" ng-show="showUploadField && eventParticipant != null">
+<div class="center-block" style="width: 80%" ng-hide="!showUploadField && eventParticipant != null && (view == 0 || view == 2)">
 	<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
 	<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
 	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
@@ -87,7 +100,7 @@
 	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
 </div>
 
-<div class="ibox float-e-margins center-block" style="width: 80%;">
+<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 0">
 	 <div class="ibox-title">
 	     <h4>Comentarios</h4>
 	 </div>
@@ -124,6 +137,9 @@
 					                    <div class="pull-left image">
 					                        <img ng-src="{{comment.eventParticipant.user.image || DEFAULT_USER_IMAGE}}" class="img-circle avatar">
 					                    </div>
+					                    <div class="pull-right">
+	   										<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right pointerCursor" title="Eliminar" ng-click="removecomment(comment)"></i>
+					                    </div>
 					                    <div class="pull-left meta">
 					                        <div class="title h5">
 					                            <a><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : (comment.eventParticipant.user.name+' '+comment.eventParticipant.user.lastName1+' '+(comment.eventParticipant.user.lastName2 == null? '':comment.eventParticipant.user.lastName2))}}</b></a>
@@ -150,5 +166,34 @@
 	            </div>
 	       </div>
 	   </div>
+	</div>
+</div>
+
+<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 1">
+	<ul class="normalListStyle">
+		<li ng-repeat="img in images">
+			
+		</li>
+	</ul>
+</div>
+
+<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 2">
+	<ul id="lightBoxGallery" class="normalListStyle">
+		<li ng-repeat="img in images">
+			<a href="{{img.image}}" title="Click para expandir" data-gallery="">
+	   			<img src="{{img.image}}" class="image-responsive" alt="{{event.name+'-'+img.name}}">
+	   		</a>
+	   		<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right pointerCursor" title="Eliminar" ng-click="removeImg(img)"></i>
+	   		<i class="fa fa-flag pull-right pointerCursor" title="Marcar como inadecuado" ng-click="inapposite(img)"></i>
+		</li>
+	</ul>
+   	
+   	<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+	    <div class="slides"></div>
+	    <a class="prev">‹</a>
+	    <a class="next">›</a>
+	    <a class="close">×</a>
+	    <a class="play-pause"></a>
+	    <ol class="indicator"></ol>
 	</div>
 </div>

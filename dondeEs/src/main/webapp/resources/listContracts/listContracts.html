@@ -1,25 +1,43 @@
 <div class="container">
-	<button type="button" class="btn btn-info" data-toggle="modal" ng-click="serviceInfo()" data-target="#myModal">Contratar Servicio</button>
-	
-	<div id="myModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-		
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">{{service.name}}</h4>
+	<a class="btn btn-primary btn-sm pull-left" href="app#/index"><i class="fa fa-reply"></i> Volver</a>
+	<div class="ibox">
+		<div class="ibox-title">
+			<h5>Contratos de este evento</h5>
+		</div>
+		<div class="ibox-content">
+			<div class="col-md-8 pull-left">
+				<div ng-show="serviceContacts.length > 0">
+					<table class="table table-hover table-responsive" ng-table="contractsTable">
+						<thead>
+							<tr>
+								<th>Contrato</th>
+								<th>Estado</th>
+								<th>Comentario</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="s in $data track by $index">
+							<tr>
+								<td sortable="'name'">{{s.service.name}}</td>
+								<td>{{s.state == 0? "Pendiente":(s.state == 1? "Concretado":"Cancelado")}}</td>
+								<td>{{s.comment}}</td>
+								
+								<td ng-if="s.state != 2">
+									<Button ng-if="!$parent.permissions.isAdmin"
+										id="btnCancelService-{{s.serviceContractId}}"
+										class="btn btn-danger btn-xs center-block" ng-click="cancel(s)">Cancelar</Button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-				<div class="modal-body">
-					<p>{{service.description}}</p>
-					<label>Comentario</label>
-					<textarea class="form-control" rows="5" id="comment"></textarea>
+				
+				<div ng-show="serviceContacts.length == 0">
+					<p class="text">No hay contratos</p>
 				</div>
-				<div class="modal-footer">
-					
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary" ng-click="contractService()">Contratar</button>
-				</div>
+			</div>
+			
+			<div class="col-md-4 pull-right">
+				<div id="contracts-state-chart" class="hidden-xs"></div>
 			</div>
 		</div>
 	</div>

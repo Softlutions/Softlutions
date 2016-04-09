@@ -39,6 +39,10 @@ angular
 						
 							})
 							
+							$scope.$on('$destroy', function() {
+								$scope.stop();
+							});
+							
 							$scope.stop = function(){
 								$interval.cancel($scope.currentInterval);
 							}
@@ -50,32 +54,27 @@ angular
 							}
 							$scope.getEventName= function(eventName){
 								$scope.eventNameByChat = eventName;
-								console.log("asassss " + $scope.eventNameByChat )
 							}
 							$scope.getAllMessage = function(idChat) {
-								
+								$scope.stop();
 								
 								if($scope.chatCurrent == undefined || $scope.chatCurrent != idChat){
 									$scope.chatCurrent = idChat;
-									$scope.currentInterval =$interval($scope.loadMessage(), 5000);
-							
+									$scope.currentInterval = $interval(function() {
+										$scope.loadMessage();
+							        }, 3000);
 								}else{
 									$scope.on();
 								}
 								
 								$scope.loadMessage();
-								
-								$interval(function() {
-									$scope.loadMessage();
-						          }, 500);
-								
 							}
 							
 							$scope.$parent.pageName = "Chats";
 							
 							$scope.loadMessage=function (){
 								var idChat = $scope.chatCurrent;
-								console.log(idChat +" "+new Date());
+								
 								$("#messageByChat").show();
 								$scope.chat = {
 									chatId : idChat

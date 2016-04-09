@@ -116,4 +116,17 @@ public class EventParticipantService implements EventParticipantServiceInterface
 		
 		return nparticipantId;
 	}
+
+	@Override
+	@Transactional
+	public Boolean reportParticipant(int participantId) {
+		EventParticipant ep = eventParticipantRepository.findOne(participantId);
+		boolean isBlocked;
+		
+		if(isBlocked = (ep != null)){
+			ep.setState((byte) 2);
+		}
+		
+		return isBlocked;
+	}
 }

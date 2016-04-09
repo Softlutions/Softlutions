@@ -9,39 +9,50 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 	$scope.$parent.pageTitle = "Donde es - Usuarios";
 	$scope.users = [];
 	$scope.objRequest={};
+	$scope.emptyTable = false;
 	$scope.isCompany;
 	// list Users
 	$http.get("rest/protected/users/getAll").success(function(response){
 		if(response.code == 200){
 			$scope.users = response.listUser;
-
-			// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
-			var params = {
-				page: 1,	// PAGINA INICIAL
-				count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-				sorting: {name: "asc"}
-			};
-			
-			var settings = {
-				total: $scope.users.length,	
-				counts: [],	
-				getData: function($defer, params){
-					var fromIndex = (params.page() - 1) * params.count();
-					var toIndex = params.page() * params.count();
-					
-					var subList = $scope.users.slice(fromIndex, toIndex);
-					var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
-					$defer.resolve(sortedList);
-				}
-			};
-			
-			$scope.usersTable = new ngTableParams(params, settings);
+			pagination($scope.users);
 		}
-			
 	}).error(function(response){
 		toastr.error("No se pudo cargar los datos");
 		console.log("error" + response.message);
 	});
+	
+	$scope.search = function(criteria){
+		if($scope.users.length > 0){
+			var newList = $filter('filter')($scope.users, criteria);
+			$scope.emptyTable = (newList.length == 0);
+			pagination(newList);
+		}
+	}
+	
+	function pagination(userList){
+		// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
+		var params = {
+			page: 1,	// PAGINA INICIAL
+			count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
+			sorting: {name: "asc"}
+		};
+		
+		var settings = {
+			total: userList.length,	
+			counts: [],	
+			getData: function($defer, params){
+				var fromIndex = (params.page() - 1) * params.count();
+				var toIndex = params.page() * params.count();
+				
+				var subList = userList.slice(fromIndex, toIndex);
+				var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
+				$defer.resolve(sortedList);
+			}
+		};
+		
+		$scope.usersTable = new ngTableParams(params, settings);
+	}
 	
 	// change user state
 	$scope.userState = function(userId, check){

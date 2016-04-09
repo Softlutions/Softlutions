@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -218,13 +219,8 @@ public class EventService implements EventServiceInterface {
 	
 	@Override
 	public List<EventPOJO> getTopEventsByParticipants(int top) {
-		List<Event> events = eventRepository.getPublicEvents();
+		List<Event> events = eventRepository.getTopEventsByParticipants(new PageRequest(0, top));
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		/*List<Event> temp = new ArrayList<>();
-		
-		events.forEach(e -> {
-			
-		});*/
 		
 		events.stream().forEach(e -> {
 			EventPOJO event = new EventPOJO();

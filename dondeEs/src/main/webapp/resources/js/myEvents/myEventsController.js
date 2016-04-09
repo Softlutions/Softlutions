@@ -282,21 +282,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 
 	}
 	
-	$scope.listContracts = function(eventId){
-		$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
-				$scope.serviceContacts = response.listContracts;
-				if($scope.serviceContacts.length == 0){
-					$('#errorMessage').removeClass('hidden');
-					$('#contractTable').addClass('hidden');
-				}else{
-					$('#contractTable').removeClass('hidden');
-					$('#errorMessage').addClass('hidden');
-					$scope.refreshChart();
-				}
-			});
-	}
-	
-	 $scope.geteventById = function(eventId){
+	$scope.geteventById = function(eventId){
 		$scope.eventId = eventId;
 	};
 	
@@ -406,21 +392,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
 		});	
-	}
-	
-	$scope.cancel = function(serviceContact){
-		$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
-			if(response.code == 200){
-				serviceContact.state = 2;
-
-				$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
-				$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
-				$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
-				$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
-				
-				$scope.refreshChart();
-			}
-		});
 	}
 	
 	$scope.cancelEvent = function(event){  
@@ -682,44 +653,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
         $scope.map.control.refresh({latitude: marker.latitude,
             							longitude: marker.longitude});
     }
-    
-    $scope.refreshChart = function(){
-		var contractsLeft = 0;
-		var contractsOk = 0;
-		var contractsCanceled = 0;
-		
-		$('#contracts-state-chart').removeClass('hidden');
-		
-		angular.forEach($scope.serviceContacts, function(value){
-			if(value.state == 0)
-				contractsLeft++;
-				
-			if(value.state == 1)
-				contractsOk++;
-			
-			if(value.state == 2)
-				contractsCanceled++;
-		});
-		
-		if($scope.chartValues != null){
-			$scope.chartValues.setData([
-				{ label: "Pendientes", value: contractsLeft },
-				{ label: "Concretados", value: contractsOk },
-				{ label: "Cancelados", value: contractsCanceled }
-			]);
-		}else if(contractsLeft > 0 || contractsOk > 0 || contractsCanceled > 0){
-			$scope.chartValues = Morris.Donut({
-			    element: 'contracts-state-chart',
-			    data: [
-			           { label: "Pendientes", value: contractsLeft },
-			           { label: "Concretados", value: contractsOk },
-			           { label: "Cancelados", value: contractsCanceled }
-	            ],
-			    resize: false,
-			    colors: ['#87d6c6', '#54cdb4','#1ab394'],
-			});
-		}
-	}
     
  //#REGION ASISTENTE DE CREACION
     
