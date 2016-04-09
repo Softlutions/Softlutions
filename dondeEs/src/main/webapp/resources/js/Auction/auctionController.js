@@ -23,6 +23,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 	}
 	
 	$scope.hideServiceList = function () {
+		$interval.cancel($scope.refreshInterval);
 		$scope.serviceList  = false;
 	}
 		
@@ -51,6 +52,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute'])
 		$scope.refreshInterval = $interval(function(){
 			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$scope.auctionsEvent[index].auctionId).success(function(response) {
 				$scope.auctionServices = response.auctionServiceList;
+				console.log($scope.auctionServices);
 			});
 		}, 3000);
 	}

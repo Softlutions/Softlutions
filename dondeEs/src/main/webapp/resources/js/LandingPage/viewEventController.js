@@ -61,7 +61,6 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		$scope.imagesInterval = $interval(function() {
 			$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 				$scope.images = responseImgs.images;
-				console.log($scope.images);
 			});
 	    }, 3000);
 		
@@ -86,6 +85,10 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 			$scope.images = responseImgs.images;
+		});
+		
+		$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
+			$scope.participants = response.eventParticipantsList;
 		});
 		
 		$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
@@ -169,7 +172,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		});
 	}
 	
-	$scope.removecomment = function(comment){
+	$scope.removeComment = function(comment){
 		$http.get("rest/landing/deleteComment/"+comment.commentId).success(function(response){
 			if(response.code == 200){
 				$scope.commentList.splice($scope.commentList.indexOf(comment), 1);
