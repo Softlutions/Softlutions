@@ -13,6 +13,7 @@ import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.AuctionService;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 import com.cenfotec.dondeEs.pojo.AuctionServicePOJO;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
@@ -76,12 +77,23 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 	 		List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();
 	 		auctionServices.stream().forEach(e -> {
 	 			AuctionServicePOJO auctionServicePOJO = new AuctionServicePOJO();
+	 			auctionServicePOJO.setAuctionServicesId(e.getAuctionServicesId());
+	 			auctionServicePOJO.setDate(e.getDate());
+	 			auctionServicePOJO.setAcept(e.getAcept());
 	 			auctionServicePOJO.setDescription(e.getDescription());
 	 			auctionServicePOJO.setPrice(e.getPrice());
 	 			
 	 			ServicePOJO servicePOJO = new ServicePOJO();
+	 			servicePOJO.setServiceId(e.getService().getServiceId());
 	 			servicePOJO.setName(e.getService().getName());
+	 			servicePOJO.setDescription(e.getService().getDescription());
+	 			servicePOJO.setState(e.getService().getState());
 	 			auctionServicePOJO.setService(servicePOJO);
+	 			
+	 			AuctionPOJO auctionPOJO = new AuctionPOJO();
+	 			auctionPOJO.setAuctionId(e.getAuction().getAuctionId());
+	 			auctionPOJO.setState(e.getAuction().getState());
+	 			auctionServicePOJO.setAuction(auctionPOJO);
 	 			
 	 			auctionServicesPOJO.add(auctionServicePOJO);
 	 			

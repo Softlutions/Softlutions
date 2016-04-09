@@ -175,7 +175,7 @@ public class LandingPageController {
 			response.setCodeMessage("Success");
 		}else{
 			response.setCode(404);
-			response.setCodeMessage("Comment not found");
+			response.setCodeMessage("Image not found");
 		}
 		
 		return response;

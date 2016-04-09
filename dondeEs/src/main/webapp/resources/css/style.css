@@ -8475,7 +8475,7 @@ textarea {
   color: #1ab394;
 }
 
-#lightBoxGallery {
+.normalListStyle {
 	list-style-type: none;
 }
 
@@ -8486,7 +8486,7 @@ textarea {
 	height: 140px;
 }
 
-#lightBoxGallery > li > i {
+.pointerCursor {
 	cursor: pointer;
 }
 

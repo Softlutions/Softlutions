@@ -47,7 +47,7 @@
                     <h1>{{event.name}}</h1>
                     <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
                     <p>
-                    	<button class="btn btn-primary" ng-show="eventParticipant != null">Estas participando</button>
+                    	<button class="btn btn-primary" ng-hide="eventParticipant == null">Estas participando</button>
                         <button class="btn btn-primary" ng-show="eventParticipant == null" ng-click="assist()">PARTICIPAR</button>
                     </p>
                 </div>
@@ -61,7 +61,7 @@
                     <h1>{{event.name}}</h1>
                     <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
                     <p>
-                    	<label class="label label-primary" ng-show="eventParticipant != null">Estas participando</label>
+                    	<label class="label label-primary" ng-hide="eventParticipant == null">Estas participando</label>
                         <button class="btn btn-primary" ng-show="eventParticipant == null" ng-click="assist()">PARTICIPAR</button>
                     </p>
                 </div>
@@ -85,7 +85,7 @@
 	</div>
 </div>
 
-<div class="center-block" style="width: 80%" ng-hide="!showUploadField && eventParticipant != null && view == 0 || view == 2">
+<div class="center-block" style="width: 80%" ng-hide="!showUploadField && eventParticipant != null && (view == 0 || view == 2)">
 	<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
 	<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
 	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
@@ -137,6 +137,9 @@
 					                    <div class="pull-left image">
 					                        <img ng-src="{{comment.eventParticipant.user.image || DEFAULT_USER_IMAGE}}" class="img-circle avatar">
 					                    </div>
+					                    <div class="pull-right">
+	   										<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right pointerCursor" title="Eliminar" ng-click="removecomment(comment)"></i>
+					                    </div>
 					                    <div class="pull-left meta">
 					                        <div class="title h5">
 					                            <a><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : (comment.eventParticipant.user.name+' '+comment.eventParticipant.user.lastName1+' '+(comment.eventParticipant.user.lastName2 == null? '':comment.eventParticipant.user.lastName2))}}</b></a>
@@ -166,14 +169,22 @@
 	</div>
 </div>
 
+<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 1">
+	<ul class="normalListStyle">
+		<li ng-repeat="img in images">
+			
+		</li>
+	</ul>
+</div>
+
 <div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 2">
-	<ul id="lightBoxGallery">
+	<ul id="lightBoxGallery" class="normalListStyle">
 		<li ng-repeat="img in images">
 			<a href="{{img.image}}" title="Click para expandir" data-gallery="">
 	   			<img src="{{img.image}}" class="image-responsive" alt="{{event.name+'-'+img.name}}">
 	   		</a>
-	   		<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right" title="Eliminar" ng-click="removeImg(img)"></i>
-	   		<i class="fa fa-flag pull-right" title="Marcar como inadecuado" ng-click="inapposite(img)"></i>
+	   		<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right pointerCursor" title="Eliminar" ng-click="removeImg(img)"></i>
+	   		<i class="fa fa-flag pull-right pointerCursor" title="Marcar como inadecuado" ng-click="inapposite(img)"></i>
 		</li>
 	</ul>
    	

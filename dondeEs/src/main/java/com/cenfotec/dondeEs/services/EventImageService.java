@@ -94,11 +94,9 @@ public class EventImageService implements EventImageServiceInterface {
 		
 		if(eventImage != null){
 			File img = new File(eventImage.getImage());
-			
-			if(img.delete()){
-				eventImageRepository.delete(eventImage);
-				isDeleted = true;
-			}
+			img.delete();
+			eventImageRepository.delete(eventImage);
+			isDeleted = true;
 		}
 		
 		return isDeleted;

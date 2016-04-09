@@ -90,14 +90,20 @@ angular
 				$scope.auctionsTable = new ngTableParams(params, settings);
 			});		
 		};
-
+		
+		$scope.$on('$destroy', function() {
+			$interval.cancel($scope.participantsInterval);
+		});
+		
 		$scope.listParticipants = function(auction){
+			if($scope.participantsInterval != null)
+				$interval.cancel($scope.participantsInterval);
+			
 			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+auction.auctionId).success(function(response) {
 				$scope.auctionServices = response.auctionServiceList;
 				var params = {
-						page: 1,	// PAGINA INICIAL
-						count: 10 	// CANTIDAD DE ITEMS POR PAGINA
-						//sorting: {name: "asc"}
+						page: 1,
+						count: 10
 				};
 				var settings = {
 					total: $scope.auctionServices.length,	
@@ -108,10 +114,12 @@ angular
 						var subList = $scope.auctionServices.slice(fromIndex, toIndex);
 						$defer.resolve(subList);
 					}
-				};					
+				};
+				
 				$scope.auctionServicesTable = new ngTableParams(params, settings);
 				$scope.selectedAuction = auction;
 				$scope.step = 1;
+				
 				if($scope.validateService(auction.serviceCatalog.serviceCatalogId))
 					$("#btnParticipate").removeAttr("disabled");
 				else{
