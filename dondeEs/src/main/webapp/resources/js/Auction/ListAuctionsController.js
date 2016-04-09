@@ -208,4 +208,5 @@ angular
 				setTimeout(function(){ $window.location.href = "app#/auctionParticipants/"+$scope.selectedAuction.auctionId; }, 500);				
 			});	
 		};	
+	}
 }]);
