@@ -25,6 +25,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	$scope.files = [];
 	$scope.sending = false;
 	$scope.previewFiles = [];
+	$scope.carouselImages = [];
 	$scope.progressPercentaje = 0;
 	$scope.showUploadField = false;
 	
@@ -58,6 +59,8 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	});
 	
 	function loadData(){
+		// SET INTERVALS
+		
 		$scope.imagesInterval = $interval(function() {
 			$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 				$scope.images = responseImgs.images;
@@ -65,10 +68,10 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	    }, 3000);
 		
 		$scope.paticipantsInterval = $interval(function() {
-			$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
+			$http.get('rest/landing/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
 				$scope.participants = response.eventParticipantsList;
 				
-				console.log($scope.participants);
+				console.log("participants", $scope.participants);
 				
 				//$scope.participantsTable.reload();
 			});
@@ -85,9 +88,10 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 			$scope.images = responseImgs.images;
+			$scope.carouselImages = responseImgs.images;
 		});
 		
-		$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
+		$http.get('rest/landing/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
 			$scope.participants = response.eventParticipantsList;
 		});
 		
@@ -165,9 +169,9 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		$http.get("rest/landing/deleteImage/"+img.eventImageId).success(function(response){
 			if(response.code == 200){
 				$scope.images.splice($scope.images.indexOf(img), 1);
-				toastr.warning('La imagen fue reportada');
+				toastr.warning('La imagen fue eliminada');
 			}else{
-				toastr.warning('No se pudo reportar la imagen');
+				toastr.warning('No se pudo eliminar la imagen');
 			}
 		});
 	}
@@ -183,8 +187,12 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			}
 		});
 	}
-
-	//--------------------------- INTERVALS
+	
+	$scope.participantState = function(participant){
+		console.log(participant);
+	}
+	
+	//--------------------------- CANCEL INTERVALS
 	
 	$scope.$on('$destroy', function() {
 		if($scope.imagesInterval != null)

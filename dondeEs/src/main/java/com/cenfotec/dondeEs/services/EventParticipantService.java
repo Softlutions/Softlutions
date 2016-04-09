@@ -41,6 +41,7 @@ public class EventParticipantService implements EventParticipantServiceInterface
 				UserPOJO userPojo = new UserPOJO();
 				userPojo.setUserId(ep.getUser().getUserId());
 				userPojo.setName(ep.getUser().getName());
+				userPojo.setImage(ep.getUser().getImage());
 				userPojo.setLastName1(ep.getUser().getLastName1());
 				userPojo.setLastName2(ep.getUser().getLastName2());
 				eventParticipantPOJO.setUser(userPojo);

@@ -41,7 +41,7 @@
 
 <div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
     <div class="carousel-inner" role="listbox" style="height: 470px;">
-        <div ng-show="images.length > 0" ng-repeat="img in images" class="item {{$index == 0? 'active':''}}">
+        <div ng-show="images.length > 0" ng-repeat="img in carouselImages" class="item {{$index == 0? 'active':''}}">
             <div class="container">
                 <div class="carousel-caption">
                     <h1>{{event.name}}</h1>
@@ -85,19 +85,21 @@
 	</div>
 </div>
 
-<div class="center-block" style="width: 80%" ng-hide="!showUploadField && eventParticipant != null && (view == 0 || view == 2)">
-	<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
-	<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
-	ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
-		<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
+<div class="row">
+	<div class="center-block" style="width: 80%" ng-hide="!showUploadField && (eventParticipant == null || loggedUser != null) && (view != 0 || view != 2)">
+		<h4 class="text-center">Sube tus imágenes a {{eventParticipant.event.name}}</h4>
+		<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
+		ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
+			<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
+			
+			<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px"
+			title="{{img.name}} | {{img.size / 1024 | number:2}}Kb"/>
+		</div>
 		
-		<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px"
-		title="{{img.name}} | {{img.size / 1024 | number:2}}Kb"/>
+		<input type="button" ng-click="upload(previewFiles)" class="btn btn-info pull-right" value="Publicar"/>
+		<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-danger pull-right" value="Limpiar"/>
+		<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
 	</div>
-	
-	<input type="button" ng-click="upload(previewFiles)" class="btn btn-info pull-right" value="Publicar"/>
-	<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" class="btn btn-danger pull-right" value="Limpiar"/>
-	<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
 </div>
 
 <div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 0">
@@ -170,11 +172,55 @@
 </div>
 
 <div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 1">
-	<ul class="normalListStyle">
-		<li ng-repeat="img in images">
-			
-		</li>
-	</ul>
+	<div class="participantsContainer">
+		<h1>Asistirán </h1><label class="label">{{assistants.length}}</label>
+		<ul class="normalListStyle participantsList">
+			<li ng-repeat="p in assistants = (participants | filter: {state: 0})">
+				<div>
+		            <div class="m-b-sm">
+		            	<img alt="profileImage" class="img-circle center-block" ng-src="{{p.user.image || DEFAULT_USER_IMAGE}}">
+		            </div>
+		            <p class="font-bold text-center">{{p.user != null? (p.user.name+' '+p.user.lastName1+' '+p.user.lastName2):p.offlineUser.email}}</p>
+					<a ng-hide="event.user.userId != loggedUser.userId" class="btn btn-xs {{p.state == 2? 'btn-danger':'btn-default'}} pull-right">
+						<i class="fa {{p.state == 2? 'fa-lock':'fa-unlock-alt'}} pointerCursor" title="Bloquear/Desbloquear" ng-click="participantState(p)"></i>
+					</a>
+		        </div>
+			</li>
+		</ul>
+	</div>
+	<div class="participantsContainer">
+		<h1>Pendientes </h1><label class="label">{{left.length}}</label>
+		<ul class="normalListStyle participantsList">
+			<li ng-repeat="p in left = (participants | filter: {state: 1})">
+				<div>
+		            <div class="m-b-sm">
+		            	<img alt="profileImage" class="img-circle center-block" ng-src="{{p.user.image || DEFAULT_USER_IMAGE}}">
+		            </div>
+		            <p class="font-bold text-center">{{p.user != null? (p.user.name+' '+p.user.lastName1+' '+p.user.lastName2):p.offlineUser.email}}</p>
+					<a ng-hide="event.user.userId != loggedUser.userId" class="btn btn-xs {{p.state == 2? 'btn-danger':'btn-default'}} pull-right">
+						<i class="fa {{p.state == 2? 'fa-lock':'fa-unlock-alt'}} pointerCursor" title="Bloquear/Desbloquear" ng-click="participantState(p)"></i>
+					</a>
+		        </div>
+			</li>
+		</ul>
+	</div>
+	<div class="participantsContainer" ng-hide="event.user.userId != loggedUser.userId">
+		<h1>Bloqueados </h1><label class="label">{{blocked.length}}</label>
+		<ul class="normalListStyle participantsList">
+			<li ng-repeat="p in blocked = (participants | filter: {state: 2})">
+				<div>
+		            <div class="m-b-sm">
+		            	<img alt="profileImage" class="img-circle center-block" ng-src="{{p.user.image || DEFAULT_USER_IMAGE}}">
+		            </div>
+		            <p class="font-bold text-center">{{p.user != null? (p.user.name+' '+p.user.lastName1+' '+p.user.lastName2):p.offlineUser.email}}</p>
+					<a class="btn btn-xs {{p.state == 2? 'btn-danger':'btn-default'}} pull-right">
+						<i class="fa {{p.state == 2? 'fa-lock':'fa-unlock-alt'}} pointerCursor" title="Bloquear/Desbloquear" ng-click="participantState(p)"></i>
+					</a>
+		        </div>
+			</li>
+		</ul>
+	</div>
+	<p ng-hide="participants.length > 0">No hay participantes en este evento, se el primero!</p>
 </div>
 
 <div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 2">

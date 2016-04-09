@@ -182,6 +182,19 @@ public class LandingPageController {
 	}
 	
 	/**
+	 * @Author Juan Carlos Sánchez G.
+	 * @param idEvent Id del evento del que se listarán los participantes.
+	 * @return response Respuesta del servidor de la petición que incluye la lista de participantes del evento.
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getAllEventParticipants/{idEvent}", method = RequestMethod.GET)
+	public EventParticipantResponse getAllEventParticipants(@PathVariable("idEvent") int idEvent){
+		EventParticipantResponse response = new EventParticipantResponse();
+		response.setEventParticipantsList(eventParticipantServiceInterface.getAllEventParticipants(idEvent));
+		return response;
+	}
+	
+	/**
 	 * @author Ernesto Mendez A.
 	 * @param eventId id del evento
 	 * @param userId id del usuario a bloquear para este evento

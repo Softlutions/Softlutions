@@ -8494,3 +8494,24 @@ textarea {
 	width: 150px;
 	height: 125px;
 }
+
+.participantsList > li {
+	margin: 10px;
+	display: inline-block;
+	width: 160px;
+	height: 140px;
+}
+
+.participantsList > li > img {
+	display: inline-block;
+	width: 150px;
+	height: 125px;
+}
+
+.participantsContainer {
+	margin-bottom: 160px;
+}
+
+.participantsContainer > h1 {
+	display: inline;
+}
