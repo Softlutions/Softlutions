@@ -68,7 +68,9 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 
+                                	'WizardHandler', 'ngTableParams', function($scope, $http, $upload, 
+                                				MarkerCreatorService, $filter, WizardHandler, ngTableParams) { 
 	$scope.$parent.pageTitle = "Donde es - Mis eventos";
 	$scope.eventForm = false;
 	$scope.address = '';
@@ -854,8 +856,4 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$("#modal-form").modal("toggle");
 	}
 	  //#ENDREGION ASISTENTE DE CREACION
-    
-    
-    
-    
 }]);
