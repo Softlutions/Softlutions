@@ -35,6 +35,21 @@ public class UsersController {
 	}
 	
 	/**
+	 * @author Juan Carlos Sánchez G.
+	 * @param userId Id del usuario a consultar
+	 * @return Usuario
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getUserById/{userId}", method = RequestMethod.GET)
+	public UserResponse getUserById(@PathVariable("userId") int userId){	
+		UserResponse response = new UserResponse();
+		response.setUser(userServiceInterface.getUserById(userId));
+		response.setCode(200);
+		return response;
+	}
+	
+	
+	/**
 	 * @author Ernesto Méndez A.
 	 * @return resultado de la operacion
 	 * @version 1.0

@@ -199,6 +199,40 @@ public class UserService implements UserServiceInterface {
 		return userRepository.findByUserId(id);
 	}
 	
+	/**
+	 * Obtiene un usuario por su id.
+	 * 
+	 * @param userId El id del usuario por consultar
+	 * @return El usuario deseado
+	 * @author Juan Carlos Sanchez G.
+	 * @version 1.0
+	 */
+	
+	public UserPOJO getUserById(int userId) {
+		User usersList = userRepository.findOne(userId);	
+		UserPOJO userPOJO = new UserPOJO();
+		
+		userPOJO.setUserId(usersList.getUserId());
+		userPOJO.setEmail(usersList.getEmail());
+		userPOJO.setLastName1(usersList.getLastName1());
+		userPOJO.setLastName2(usersList.getLastName2());
+		userPOJO.setName(usersList.getName());
+		userPOJO.setPhone(usersList.getPhone());
+		userPOJO.setState((usersList.getState() == 1 ? true : false));
+		
+		if (usersList.getRole() != null) {
+			RolePOJO rolePOJO = new RolePOJO();
+			rolePOJO.setName(usersList.getRole().getName());
+			userPOJO.setRole(rolePOJO);
+		}
+		if (usersList.getUserType() != null) {
+			UserTypePOJO userTypePOJO = new UserTypePOJO();
+			userTypePOJO.setName(usersList.getUserType().getName());
+			userPOJO.setUserType(userTypePOJO);
+		}
+		return userPOJO;
+	}
+	
 	@Override
 	@Transactional
 	public Boolean changeUserState(int userId, boolean state){
