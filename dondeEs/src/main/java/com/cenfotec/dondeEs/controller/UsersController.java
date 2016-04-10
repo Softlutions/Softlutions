@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.ejb.User;
@@ -33,6 +32,21 @@ public class UsersController {
 		response.setListUser(userServiceInterface.getAll());
 		return response;
 	}
+	
+	/**
+	 * @author Juan Carlos Sánchez G.
+	 * @param userId Id del usuario a consultar
+	 * @return Usuario
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getUserById/{userId}", method = RequestMethod.GET)
+	public UserResponse getUserById(@PathVariable("userId") int userId){	
+		UserResponse response = new UserResponse();
+		response.setUser(userServiceInterface.getUserById(userId));
+		response.setCode(200);
+		return response;
+	}
+	
 	
 	/**
 	 * @author Ernesto Méndez A.

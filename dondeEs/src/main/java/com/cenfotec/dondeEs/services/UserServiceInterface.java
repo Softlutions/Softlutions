@@ -78,4 +78,13 @@ public interface UserServiceInterface {
 	 */
 	Boolean changeUserState(int userId, boolean state);
 	Boolean createUser(UserRequest ur);
+	
+	
+	/***
+	 * Obtiene un usuario pojo por su id.
+	 * 
+	 * @author Juan Carlos Sanchez G.
+	 * @version 1.0
+	 */
+	UserPOJO getUserById(int userId);
 }

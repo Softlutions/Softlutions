@@ -77,6 +77,7 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 	 			AuctionServicePOJO auctionServicePOJO = new AuctionServicePOJO();
 	 			auctionServicePOJO.setDescription(e.getDescription());
 	 			auctionServicePOJO.setPrice(e.getPrice());
+	 			auctionServicePOJO.setDate(e.getDate());
 	 			
 	 			ServicePOJO servicePOJO = new ServicePOJO();
 	 			servicePOJO.setName(e.getService().getName());

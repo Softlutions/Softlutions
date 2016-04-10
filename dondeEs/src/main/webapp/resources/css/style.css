@@ -8369,17 +8369,17 @@ textarea {
 	line-height: normal;
 	margin: 0;
 }
-.table-filter .media .title span {
+.table-filter .media .title h4 {
 	font-size: .8em;
 	margin-right: 20px;
 }
-.table-filter .media .title span.SinComenzar {
+.SinComenzar {
 	color: #ed5565;
 }
-.table-filter .media .title span.Pendiente {
+.Pendiente {
 	color: #f0ad4e;
 }
-.table-filter .media .title span.Concluido {
+.Concluido {
 	color: #1ab394;
 }
 .table-filter .media .summary {
@@ -8448,4 +8448,49 @@ textarea {
 
 .table-myEvents{
 	height: 65vh;
+}
+
+.option-nav-tab{
+	margin-right: 2px;
+	line-height: 1.42857143;
+	border: 1px solid transparent;
+	border-radius: 4px 4px 0 0;
+	color: #A7B1C2;
+	font-weight: 600;
+	padding: 10px 20px 10px 25px;
+	position: relative;
+	display: block;
+}
+
+/*
+	System reports
+*/
+
+.title-reports{
+	margin-top: 0;
+}
+
+.nav-tabs-reports{
+	margin: 1em 0;
+}
+
+.option-nav-tab:focus{
+	background-color: #e6e6e6;
+	color: #676a6c;
+}
+
+.nav-tabs > li.active > .option-nav-tab, .nav-tabs > li.active > .option-nav-tab:hover, 
+.nav-tabs > li.active > .option-nav-tab:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none;
+    border-color: #dddddd #dddddd rgba(0, 0, 0, 0);
+    border-bottom: #f3f3f4;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px;
+    color: #555555;
+    cursor: default;
 }

@@ -43,7 +43,7 @@
 							<td>{{ event.state == 0? 'Cancelado':(event.state == 1? 'Creado':(event.state == 2? 'Pre-publicado':'Publicado')) }}</td>
 							<td>
 								<div class="btn-group">
-									<button data-toggle="dropdown"
+									<button ng-click="validateEvent(event.publishDate,event.state,$index)" data-toggle="dropdown"
 										class="btn btn-primary btn-xs dropdown-toggle">
 										Acción <span class="caret"></span>
 									</button>
@@ -53,7 +53,7 @@
 												contratos</a></li>
 										<li><a href="/dondeEs/app#/eventParticipants/{{event.eventId}}">Listar
 												participantes</a></li>
-										<li ng-show="event.state!==0" ng-if="!$parent.permissions.isAdmin"><a
+										<li id="auctionService{{$index}}" ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
@@ -156,13 +156,12 @@
 
 		<div id="modalAuctionEventServices" class="modal fade" role="dialog">
 			<div class="modal-dialog">
-
-				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title">Crear subasta para un servicio del evento</h4>
 					</div>
+					
 					<form class="form-horizontal" name="formCreateAuction" ng-submit="formCreateAuction.$valid? createAuction():validationError()">
 						<div class="modal-body">
 							<div class="row">
@@ -212,7 +211,6 @@
 
 		<div id="servicesOfAuction" class="modal fade" role="dialog">
 			<div class="modal-dialog">
-				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -220,6 +218,7 @@
 							ng-click="openAuctions()">Subastas</button>
 						<h4 class="modal-title">Servicios</h4>
 					</div>
+					
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">

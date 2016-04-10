@@ -16,4 +16,6 @@ public interface NoteServiceInterface {
 	List<NotePOJO> getAllNoteByEvent(int id);
 
 	Boolean saveNote(Note note);
+
+	void delete(Note note);
 }

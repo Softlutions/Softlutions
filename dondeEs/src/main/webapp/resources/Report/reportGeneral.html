@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col-xs-12">
+		<h1 class="title-reports">Reportes del sistema</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<ul id="tabs" class="nav nav-tabs nav-tabs-reports" data-tabs="tabs">
+		    <li class="active"><span class="option-nav-tab" href="#report1" data-toggle="tab">Participación en eventos</span></li>
+		    <li><span class="option-nav-tab" href="#report2" data-toggle="tab">Definir reporte</span></li>
+		    <li><span class="option-nav-tab" href="#report3" data-toggle="tab">Eventos realizados</span></li>
+		    <li><span class="option-nav-tab" href="#report4" data-toggle="tab">Definir reporte</span></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div id="my-tab-content" class="tab-content">
+		    <div class="tab-pane active" id="report1">
+		        <div ng-include src="'resources/Report/report1.html'"></div>
+		    </div>
+		    <div class="tab-pane" id="report2">
+		        <div ng-include src="'resources/Report/report2.html'"></div>
+		    </div>
+		    <div class="tab-pane" id="report3">
+		        <div ng-include src="'resources/Report/report3.html'"></div>
+		    </div>
+		    <div class="tab-pane" id="report4">
+		        <div ng-include src="'resources/Report/report4.html'"></div>
+		    </div>
+		</div>
+	</div>
+</div>
