@@ -9,6 +9,7 @@ public class LoginResponse extends BaseResponse {
 	private String lastName; 
 	private String email;
 	private String criptPass;
+	private byte state;
 	private RolePOJO role;
 
 	public LoginResponse() {
@@ -21,6 +22,14 @@ public class LoginResponse extends BaseResponse {
 
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
+	}
+	
+	public int getState() {
+		return state;
+	}
+
+	public void setState(byte state) {
+		this.state = state;
 	}
 
 	public String getFirstName() {
