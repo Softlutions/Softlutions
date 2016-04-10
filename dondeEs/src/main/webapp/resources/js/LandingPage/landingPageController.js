@@ -399,11 +399,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					toastr.error(response.codeMessage, 'Error');
 					window.location.href = "#/landingPage";
 				}
-					});
-			
-			
-			
-			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+			});
 			
 			$scope.accept = function(event){
 				var dataCreate = {
@@ -439,17 +435,17 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		if($location.search().eventId != null && $location.search().eventParticipantId != null ){
 			$scope.state = 1;
 			$http({method: 'POST',url:'rest/landing/getPaticipant/'+ $location.search().eventParticipantId +'/'+ $scope.state }).success(function(response) {
-				if(response.code != 201 && response.code != 202){
-						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
-							$scope.event = response.eventPOJO;
-						});
-						toastr.success(response.codeMessage);
-						setTimeout(function(){$('#modalAsnwerInvitation').modal('show')}, 1000);
+				if(response.code != 201 && response.code != 202 && response.code != 203){
+					$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
+						$scope.event = response.eventPOJO;
+					});
+					toastr.success(response.codeMessage);
+					setTimeout(function(){$('#modalAsnwerInvitation').modal('show')}, 1000);
 				}else{
 					toastr.error(response.codeMessage, 'Error');
 					window.location.href = "#/landingPage";
 				}
-					});
+			});
 			
 			$scope.userEmail = $location.search().email;
 			$scope.createParticipant = function(state){
@@ -462,13 +458,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				    	$scope.answer = 'Es una lastima que no vaya a estar en el evento. Gracias por participar';
 				    }
 		
-				 $scope.isComment = false;
+				$scope.isComment = false;
 				var dataCreate={
 						state: $scope.event.state,
 						comment: $scope.comment
 				}
-														
+				
 				$http({method: 'PUT',url:'rest/landing/updateEventParticipant/'+$location.search().eventParticipantId, params:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+					setTimeout(function(){$('#modalAsnwerInvitation').modal('toggle')}, 2500);
 				});
 				
 			}

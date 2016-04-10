@@ -8499,7 +8499,7 @@ textarea {
 	margin: 10px;
 	display: inline-block;
 	width: 160px;
-	height: 140px;
+	height: 160px;
 }
 
 .participantsList > li > img {
@@ -8509,9 +8509,13 @@ textarea {
 }
 
 .participantsContainer {
-	margin-bottom: 160px;
+	margin-bottom: 100px;
 }
 
 .participantsContainer > h1 {
 	display: inline;
+}
+
+.leftMargin {
+	margin: 0px 50px;
 }

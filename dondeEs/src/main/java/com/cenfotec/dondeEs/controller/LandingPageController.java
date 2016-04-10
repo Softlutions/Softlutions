@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +23,15 @@ import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.contracts.ServiceContactRequest;
 import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
 import com.cenfotec.dondeEs.ejb.Comment;
+import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
+import com.cenfotec.dondeEs.ejb.OfflineUser;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
+import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 import com.cenfotec.dondeEs.services.CommentServiceInterface;
 import com.cenfotec.dondeEs.services.EventImageServiceInterface;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
@@ -52,6 +58,10 @@ public class LandingPageController {
 	private UserServiceInterface userServiceInterface;
 	@Autowired
 	private ServiceContactInterface serviceContactInterface;
+	@Autowired
+	private UserServiceInterface userserviceInterface;
+	@Autowired
+	private JavaMailSender mailSender;
 
 	/**
 	 * @author Ernesto Mendez A.
@@ -263,10 +273,8 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param userId
-	 *            id del usuario en sesion
-	 * @param eventId
-	 *            id del evento
+	 * @param userId id del usuario en sesion
+	 * @param eventId  id del evento
 	 * @return id del nuevo participante
 	 */
 	@RequestMapping(value = "/createParticipant", method = RequestMethod.GET)
@@ -290,9 +298,8 @@ public class LandingPageController {
 				response.setCode(404);
 				response.setCodeMessage("User or event not found!");
 			} else {
-				participant = new EventParticipantPOJO();
-				participant.setEventParticipantId(nparticipantId);
-
+				participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
+				
 				response.setCode(200);
 				response.setCodeMessage("Success");
 				response.setEventParticipant(participant);
@@ -477,25 +484,93 @@ public class LandingPageController {
 		return response;
 	}
 	
+	/**
+	 * @param eventParticipant Id encriptado del participante solicitado
+	 * @param state nuevo estado del participante
+	 * @return El participante y su estado
+	 * @version 1.1
+	 */
 	@RequestMapping(value = "/getPaticipant/{eventParticipant}/{state}", method = RequestMethod.POST)
 	public ServiceContactResponse getPaticipant(@PathVariable String eventParticipant, @PathVariable byte state) {
 		int idParticipant = Integer.parseInt(AES.base64decode(eventParticipant));
 		ServiceContactResponse response = new ServiceContactResponse();
 		EventParticipant objEventParticipant = eventParticipantServiceInterface.findById(idParticipant);
-
-		if (objEventParticipant.getState() == 1) {
-			objEventParticipant.setState(state);
-			response.setCode(200);
-			response.setCodeMessage("Te han invitado a un evento");
-		} else if(objEventParticipant.getState() == 2){
-			response.setCode(201);
-			response.setCodeMessage("Ya confirmaste!");
+		
+		if(objEventParticipant.getState() != 3 && objEventParticipant.getState() != 4) {
+			if (objEventParticipant.getState() == 1) {
+				objEventParticipant.setState(state);
+				response.setCode(200);
+				response.setCodeMessage("Te han invitado a un evento");
+			}else if(objEventParticipant.getState() == 2){
+				response.setCode(201);
+				response.setCodeMessage("Ya confirmaste!");
+			}else if(objEventParticipant.getState() == 0){
+				response.setCode(202);
+				response.setCodeMessage("Ya cancelaste!");
+			}
+		}else{
+			response.setCode(203);
+			response.setCodeMessage("Fuiste bloqueado por el promotor");
 		}
-		else if(objEventParticipant.getState() == 0){
-			response.setCode(202);
-			response.setCodeMessage("Ya cancelaste!");
-		}
+		
 		return response;
 	}
 
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param to parametro con el que se recibe la lista de correos
+	 * @param eventId se recibe el id del evento para el cual han sido invitados
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
+	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		String subject = "Invitación a un evento";
+		String text;
+		try {
+
+			// To get the array of addresses
+			for (String email : to.getListSimple()) {
+
+				EventParticipantResponse response = new EventParticipantResponse();
+
+				EventParticipant eventParticipant = new EventParticipant();
+				eventParticipant.setEvent(new Event());
+				eventParticipant.getEvent().setEventId(eventId);
+				eventParticipant.setState((byte) 1);
+				User user = userserviceInterface.findByEmail(email);
+				
+				if (user != null) {
+					eventParticipant.setUser(user);
+				} else {
+					OfflineUser offlineUser = new OfflineUser();
+					offlineUser.setEmail(email);
+					eventParticipant.setOfflineUser(offlineUser);
+				}
+				eventParticipant.setInvitationDate(new Date());
+				Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
+
+				if (stateResponse) {
+					response.setCode(200);
+				} else {
+					response.setCodeMessage("Something is wrong");
+				}
+
+				text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
+						+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
+						+ "&eventParticipantId="
+						+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
+
+				mailMessage.setTo(email);
+				mailMessage.setText(text);
+				mailMessage.setSubject(subject);
+				mailSender.send(mailMessage);
+
+			}
+
+		} catch (Exception ae) {
+			ae.printStackTrace();
+		}
+	}
 }
