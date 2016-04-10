@@ -43,6 +43,15 @@ public interface UserServiceInterface {
 	 */
 	Boolean updatePassword(LoginRequest ur);
 	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
+	 * @version 1.0
+	 */
+	Boolean updatePasswordRequired(LoginRequest ur);
+	
 	/***
 	 * Obtiene el usuario de cada servicio ofertado en todas las subastas de un
 	 * determinado evento.

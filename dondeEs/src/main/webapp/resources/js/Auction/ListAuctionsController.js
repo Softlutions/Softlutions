@@ -81,6 +81,15 @@ angular
 				$scope.showError = true;
 		});
 		
+		$scope.formatPrice = function(model){
+			if(model==null) model = 0;
+			model = model.replace(".00", "");
+			model = model.replace("₡", "");
+			model = model.replace(/,/g, "");
+			var formatPrice = $filter('currency')(model, '₡', 2);
+			$scope.auctionService.price = formatPrice;
+		}
+		
 		$scope.validatelistItem = function(auction,index){
 			$scope.selectedAuction = auction;
 			if($scope.validateService(auction.serviceCatalog.serviceCatalogId))

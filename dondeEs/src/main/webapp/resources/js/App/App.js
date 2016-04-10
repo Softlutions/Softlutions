@@ -19,6 +19,7 @@ angular.module('dondeEs', [
 	"dondeEs.chat",
 	"dondeEs.eventReminder",
 	"dondeEs.EventParticipant",
+	"dondeEs.eventWizard",
 	'dondeEs.auctionParticipants',
 	"dondeEs.Report",
 	'dondeEs.userProfile'
