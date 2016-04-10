@@ -99,6 +99,8 @@ public class UserService implements UserServiceInterface {
 	 * @return si es falso o no
 	 */
 	public Boolean updateUser(User u){
+		if(u.getPassword()==null)
+			u.setPassword(userRepository.findOne(u.getUserId()).getPassword());
 		User nu = userRepository.save(u);
 		return (nu == null) ? false:true;
 	}
@@ -223,6 +225,8 @@ public class UserService implements UserServiceInterface {
 		if (usersList.getRole() != null) {
 			RolePOJO rolePOJO = new RolePOJO();
 			rolePOJO.setName(usersList.getRole().getName());
+			rolePOJO.setRoleId(usersList.getRole().getRoleId());
+			rolePOJO.setState(usersList.getRole().getState());
 			userPOJO.setRole(rolePOJO);
 		}
 		if (usersList.getUserType() != null) {
