@@ -71,7 +71,7 @@ app.factory('MarkerCreatorService', function () {
 });
 app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', '$timeout',function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams, $timeout) {
 	//#REGION ASISTENTE DE CREACION
-	$scope.$parent.pageTitle = "Donde es - Mis eventos";
+	$scope.$parent.pageTitle = "Donde es - Asistente de creación";
 	$scope.eventForm = false;
 	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
@@ -194,6 +194,11 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 				console.log(msj);
 			});
 	};
+	
+	$scope.finishEventWizard = function(){
+		toastr.success('Asistente de creación finalizado!', 'Exito!');
+		window.location.href = "/dondeEs/app#/index";
+	}
 	
 	$scope.resetCreateEvent = function(){
 		$("#eventFormTitle").text("Crear evento");
@@ -331,6 +336,8 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 		}
 	});
+	
+	
 	
 	$scope.loadAuctionServices = function (index) {
 		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;

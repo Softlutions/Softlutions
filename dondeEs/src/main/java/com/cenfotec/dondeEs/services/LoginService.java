@@ -43,7 +43,10 @@ public class LoginService implements LoginServiceInterface{
 			response.setLastName(loggedUser.getLastName1());
 			response.setEmail(loggedUser.getEmail());
 			response.setCriptPass(pass);
+			
+			/*Esta linea deberia de servir*/
 			response.setState((byte)loggedUser.getState());
+			/*Esta linea deberia de servir*/
 			
 			RolePOJO rolePOJO = new RolePOJO();
 			BeanUtils.copyProperties(loggedUser.getRole(), rolePOJO);

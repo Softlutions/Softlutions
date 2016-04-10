@@ -81,7 +81,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						"name" : response.firstName,
 						"lastName" : response.lastName,
 						"email" : response.email,
-						"role" : response.role
+						"role" : response.role,
+						"state" : response.state
 					};
 					
 					localStorage.setItem("loggedUser", JSON.stringify(responseUser));
@@ -261,6 +262,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			setTimeout(function(){$('#createCompanyForm').modal('show')}, 900);
 		}
 		
+		
+		
+		
 		// Start: Scroll logic
 		angular.element(document).ready(function () {
 			$(document).ready(function () {
@@ -395,8 +399,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 							$scope.event = response.eventPOJO;
 						});
-						toastr.success(response.codeMessage);
-						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+						if(event.state == 0){
+							toastr.error("El evento ha sido cancelado", 'Error');
+						}else{
+							toastr.success(response.codeMessage);
+							setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+						}
 				}else{
 					toastr.error(response.codeMessage, 'Error');
 					window.location.href = "#/landingPage";
