@@ -80,6 +80,9 @@
 					<li><a ng-click="returnLandingPage()"><i class="glyphicon glyphicon-glass"></i> 
 						<span class="nav-label">Eventos publicados</span></a>
 					</li>
+					<li><a href="app#/reports"><i class="glyphicon glyphicon-list-alt"></i> 
+						<span class="nav-label">Reportes</span></a>
+					</li>	
 					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
 						<span class="nav-label">Contacto</span></a>
 					</li>		
@@ -172,6 +175,7 @@
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
 	<script src="resources/js/Auction/AuctionParticipantsController.js"></script>
+	<script src="resources/js/Report/ReportController.js"></script>
 	<script src="resources/js/users/UserProfileController.js"></script>
 	
 	<!-- Google Maps -->
