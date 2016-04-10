@@ -20,7 +20,8 @@ angular.module('dondeEs', [
 	"dondeEs.eventReminder",
 	"dondeEs.EventParticipant",
 	'dondeEs.auctionParticipants',
-	"dondeEs.Report"
+	"dondeEs.Report",
+	'dondeEs.userProfile'
 
 ]).config(['$routeProvider','$provide','$httpProvider', 
            			function($routeProvider,$provide,$httpProvider) {

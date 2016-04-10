@@ -176,6 +176,7 @@
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
 	<script src="resources/js/Auction/AuctionParticipantsController.js"></script>
 	<script src="resources/js/Report/ReportController.js"></script>
+	<script src="resources/js/users/UserProfileController.js"></script>
 	
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>
