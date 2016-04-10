@@ -183,7 +183,48 @@
 
 
 	<!-- MODALS -->
+<!-- MOdal de cambio de contraseña -->
+		<div id="modal-changePassword" class="modal fade"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-12 b-r">
+								<h3 class="m-t-none m-b">Cambio de contraseña Requerido</h3>
+								<form role="form">
+									<div class="form-group">
+									<label>Contraseña</label> <input type="password"
+										ng-model="passwordRequired.password" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Confirmar contraseña</label> <input type="password"
+										ng-model="passwordRequired.confirmPassword" required
+										placeholder="Confirmar contraseña" class="form-control">
+								</div>
 
+									<div class="form-group">
+										<button class="btn btn-primary pull-right m-t-n-xs btn-sm-normalize-size"
+											ng-click="changePasswordRequired(passwordRequired)">
+											<strong>Cambiar</strong>
+										</button>
+
+									</div>
+
+									<div class="form-group">
+										<button type="button"
+											class="btn btn-danger pull-right m-t-n-xs btn-sm-normalize-size"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
 <div>
 	<div id="updatePasswordModal" class="modal fade" aria-hidden="true" >
 		<div class="modal-dialog">
@@ -257,7 +298,7 @@
 							<form role="form" ng-submit="saveUser(newUser)" ng-init="newUser">
 								<div class="form-group">
 									<label>Nombre</label> <input type="text" ng-model="newUser.name"
-										placeholder="Ingresar nombre" required class="form-control">
+										placeholder="Ingresar nombre" id="testProbando" required class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Primer apellido</label> <input type="text"

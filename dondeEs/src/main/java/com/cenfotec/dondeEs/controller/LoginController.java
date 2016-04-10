@@ -92,6 +92,24 @@ public class LoginController {
 		}
 		return us;
 	}
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @param LoginRequest,
+	 *            Este objeto poosee un atributo email y password
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/updatePasswordRequired", method = RequestMethod.POST)
+	@Transactional
+	public UserResponse updatePasswordRequired(@RequestBody LoginRequest lr, HttpServletRequest servletRequest,
+			HttpServletResponse servletResponse) {
+		UserResponse us = new UserResponse();
+		if (userServiceInterface.updatePasswordRequired(lr)) {
+			us.setCode(200);
+			us.setCodeMessage("Password cambiado exitosamente");
+		}
+		return us;
+	}
 
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)

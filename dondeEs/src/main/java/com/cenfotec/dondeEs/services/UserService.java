@@ -141,7 +141,7 @@ public class UserService implements UserServiceInterface {
 			String encryptPassword = AES.base64encode(password);
 			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password;
 			user.setPassword(encryptPassword);
-			user.setState((byte)3);
+			user.setState((byte)2);
 			mailMessage.setTo(email);
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
@@ -153,6 +153,22 @@ public class UserService implements UserServiceInterface {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
+	 * @version 1.0
+	 */
+	public Boolean updatePasswordRequired(LoginRequest ur) {
+		User user = userRepository.findByEmail(ur.getEmail());
+		if (user == null) return false;
+		user.setPassword(AES.base64encode(ur.getPassword()));
+		user.setState((byte)1);
+		User nuser = userRepository.save(user);
+		return true;
 	}
 
 	@Override

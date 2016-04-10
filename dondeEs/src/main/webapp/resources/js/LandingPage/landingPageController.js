@@ -6,8 +6,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', 
-	                                		function($scope, $http, $cookies, $rootScope, $location){
+	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$filter',
+	                                		function($scope, $http, $cookies, $rootScope, $location, $filter){
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		if ($cookies.getObject("goToEventsPublish") == null) {
 			$cookies.putObject("goToEventsPublish", false);
@@ -19,6 +19,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			password : "",
 			isCript: false
 		};
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.userCompany={};
 		$scope.loginNormalPage = false;
 		
@@ -265,6 +266,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		
 		
 		
+		
 		// Start: Scroll logic
 		angular.element(document).ready(function () {
 			$(document).ready(function () {
@@ -386,11 +388,38 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		})
 		
 		
+		if($scope.loggedUser!=null && $scope.loggedUser.state == 2){
+			setTimeout(function(){$('#modal-changePassword').modal('show')}, 1000);
+			toastr.success("Debes cambiar  tu contraseña");
+		}
 		
-		//#region ASNWER CONTRACT
-		
-		if($location.search().eventId != null && $location.search().serviceId){
-			var dataCreate = {
+		$scope.changePasswordRequired = function(requiredPassword){
+			if(requiredPassword.password != null && requiredPassword.confirmPassword != null){
+				if(requiredPassword.password == requiredPassword.confirmPassword){
+					var request = {
+							email: $scope.loggedUser.email,
+							password: requiredPassword.confirmPassword
+					}
+					
+					$http.post("rest/login/updatePasswordRequired/", request)
+					.success(function(response){
+						if(response.code == 200){
+							toastr.success(response.codeMessage, 'Exito!');
+							$('#modal-changePassword').modal('hide');
+						}else{
+							toastr.error('La contraseña no ha podido ser cambiada', 'Error');
+						}
+					})
+				}else{
+					toastr.error('Las contraseñas no coinciden', 'Error');
+				}
+			}else{
+				toastr.error('Debes llenar todos los campos', 'Error');
+			}
+			
+			
+			//
+			/*var dataCreate = {
 					eventId : $location.search().eventId,
 					serviceId : $location.search().serviceId
 			};
@@ -409,36 +438,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					toastr.error(response.codeMessage, 'Error');
 					window.location.href = "#/landingPage";
 				}
-					});
-			
-			
-			
-			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-			
-			$scope.accept = function(event){
-				var dataCreate = {
-						eventId : $location.search().eventId,
-						serviceId : $location.search().serviceId,
-						state : 2
-				};
-				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					toastr.success(response.codeMessage);
-					$('#modalAsnwerContract').modal('hide');
-				});
-			}
-			
-			$scope.noAccept = function(event){
-				var dataCreate = {
-						eventId : $location.search().eventId,
-						serviceId : $location.search().serviceId,
-						state : 1
-				};
-				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					toastr.success(response.codeMessage);
-					$('#modalAsnwerContract').modal('hide');
-				});
-			}
+					});*/
+
 		}
+		
+		//# ENDRegion Change password
+		
 		//#endregion ASNWER CONTRACT
 		
 		// START ANSWER INVITATION

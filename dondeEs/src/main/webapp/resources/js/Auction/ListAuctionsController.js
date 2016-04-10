@@ -7,7 +7,7 @@ angular
 			controller : 'AuctionsCtrl'
 		});
 	} ])
-	.controller('AuctionsCtrl',['$scope','$http','ngTableParams',function($scope, $http,ngTableParams) {
+	.controller('AuctionsCtrl',['$scope','$http','ngTableParams','$filter',function($scope, $http,ngTableParams, $filter) {
 		$scope.$parent.pageTitle = "Donde es - Subastas de evento";
 		$scope.selectedCatalogId = "";
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -55,6 +55,15 @@ angular
 			else
 				$scope.showError = true;
 		});
+		
+		$scope.formatPrice = function(model){
+			if(model==null) model = 0;
+			model = model.replace(".00", "");
+			model = model.replace("₡", "");
+			model = model.replace(/,/g, "");
+			var formatPrice = $filter('currency')(model, '₡', 2);
+			$scope.auctionService.price = formatPrice;
+		}
 		
 		$scope.validatelistItem = function(auction,index){
 			$scope.selectedAuction = auction;
