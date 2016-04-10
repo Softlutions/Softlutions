@@ -24,6 +24,7 @@ angular
 							$scope.messages= {};
 							$scope.isChat= false;
 							$scope.imageGroup = "resources/img/default_group.png"
+							$scope.imageProfile = "resources/img/default-profile.png";
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
 							

@@ -34,8 +34,8 @@
 							<td>{{user.role.name}}</td>
 							<td>{{user.userType.name}}</td>
 							<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
-							<td> <button data-toggle="modal" class="hide btn btn-primary btn-xs pull-right"
-							data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user)">Modificar usuario</button>
+							<td> <button data-toggle="modal" class="btn btn-primary btn-xs pull-right"
+							data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user, $index)">Modificar usuario</button>
 							 </td>
 						</tr>
 					</tbody>
@@ -198,9 +198,9 @@
 					</div>
 					<div class="form-group">
 						<label>Seleccione un rol</label> <select class="form-control m-b"
-							id="selectRol" required
+							id="selectRol" required name="roleName" id="roleName"
 							ng-options="role as role.name for role in roles track by role.roleId"
-							ng-model="requestObject.roleId"></select>
+							ng-model="requestObject"></select>
 					</div>
 
 				</div>

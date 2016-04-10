@@ -100,11 +100,12 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 	// get roles
 	$http.get('rest/protected/role/getAll').success( function(response) {
 		$scope.roles = response.listRole;
-		$scope.objRequest.roleId = $scope.roles[0].roleId 
+		$scope.objRequest.roleId = $scope.roles[0].roleId
+		$scope.objRequest.name = $scope.roles[0].name
 	});
 	
 	//update user
-	$scope.loadInfo= function (user){
+	$scope.loadInfo= function (user, index){
 		$scope.users.name = user.name,
 		$scope.users.userId = user.userId,
 		$scope.users.lastName1 = user.lastName1,
@@ -112,6 +113,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 		$scope.users.email = user.email,
 		$scope.users.phone = user.phone,
 		$scope.users.userType = user.userType
+
 		if($scope.users.lastName1 != null){
 			$scope.isCompany = true;
 		}else{
@@ -128,7 +130,7 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			email: $scope.users.email,
 			phone : $scope.users.phone,
 			userType: $scope.users.userType,
-			role : $scope.objRequest
+			role : $scope.currentRol
 		}
 		
 

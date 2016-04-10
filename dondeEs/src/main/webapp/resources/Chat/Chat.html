@@ -10,7 +10,7 @@
 						<div class="users-list">
 							<div class="chat-user" ng-repeat="chat in chats"
 								ng-click="getAllMessage(chat.chatId); getEventName(chat.event.name)">
-								<img class="chat-avatar"  ng-src="{{chat.event.image || imageGroup }}"
+								<img class="chat-avatar"  ng-src="{{chat.event.image	 || imageGroup }}"
 									alt="">
 
 								<div class="chat-user-name">
@@ -33,7 +33,7 @@
 						<div
 							ng-class="(message.user.userId == loggedUser.userId) ? 'chat-message left': 'chat-message right'"
 							ng-repeat="message in messages">
-							<img class="message-avatar" src="resources/img/default-profile.png"
+							<img class="message-avatar" src="{{chat.user.image || imageProfile}}"
 								alt="">
 
 							<div class="message">
