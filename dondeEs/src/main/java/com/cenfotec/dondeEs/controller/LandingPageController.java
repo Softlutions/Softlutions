@@ -196,16 +196,16 @@ public class LandingPageController {
 	
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param eventId id del evento
-	 * @param userId id del usuario a bloquear para este evento
+	 * @param participantId id del usuario a bloquear para este evento
+	 * @param state nuevo estado del participante
 	 * @return si la operacion fue exitosa
 	 * @version 1.0
 	 */
-	@RequestMapping(value = "/reportParticipant/{participantId}", method = RequestMethod.GET)
-	public EventImageResponse reportParticipant(@PathVariable int participantId){
+	@RequestMapping(value = "/participantState/{participantId}", method = RequestMethod.GET)
+	public EventImageResponse participantState(@PathVariable int participantId, @RequestParam("state") byte state){
 		EventImageResponse response = new EventImageResponse();
 		
-		if(eventParticipantServiceInterface.reportParticipant(participantId)){
+		if(eventParticipantServiceInterface.participantState(participantId, state)){
 			response.setCode(200);
 			response.setCodeMessage("Success");
 		}else{

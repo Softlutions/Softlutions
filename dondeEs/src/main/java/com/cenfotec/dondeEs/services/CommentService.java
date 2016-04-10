@@ -58,7 +58,10 @@ public class CommentService implements CommentServiceInterface {
 			commentPOJO.setContent(c.getContent());
 			commentPOJO.setImage(c.getImage());
 			commentPOJO.setDate(c.getDate());
+			
 			EventParticipantPOJO eventParticipantPOJO = new EventParticipantPOJO();
+			eventParticipantPOJO.setState(c.getEventParticipant().getState());
+			
 			if(c.getEventParticipant().getUser() != null){
 				UserPOJO userPOJO = new UserPOJO();
 				userPOJO.setName(c.getEventParticipant().getUser().getName());
@@ -67,11 +70,13 @@ public class CommentService implements CommentServiceInterface {
 				userPOJO.setImage(c.getEventParticipant().getUser().getImage());
 				eventParticipantPOJO.setUser(userPOJO);
 			}
+			
 			if(c.getEventParticipant().getOfflineUser() != null){
 				OfflineUserPOJO offlineUserPOJO = new OfflineUserPOJO();
 				offlineUserPOJO.setEmail(c.getEventParticipant().getOfflineUser().getEmail());
 				eventParticipantPOJO.setOfflineUser(offlineUserPOJO);
 			}
+			
 			commentPOJO.setEventParticipant(eventParticipantPOJO);
 			commentPOJOList.add(commentPOJO);
 			

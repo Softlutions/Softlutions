@@ -120,12 +120,12 @@ public class EventParticipantService implements EventParticipantServiceInterface
 
 	@Override
 	@Transactional
-	public Boolean reportParticipant(int participantId) {
+	public Boolean participantState(int participantId, byte state) {
 		EventParticipant ep = eventParticipantRepository.findOne(participantId);
 		boolean isBlocked;
 		
 		if(isBlocked = (ep != null)){
-			ep.setState((byte) 2);
+			ep.setState(state);
 		}
 		
 		return isBlocked;

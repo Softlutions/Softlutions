@@ -26,6 +26,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	$scope.sending = false;
 	$scope.previewFiles = [];
 	$scope.carouselImages = [];
+	$scope.refeshInterval = null;
 	$scope.progressPercentaje = 0;
 	$scope.showUploadField = false;
 	
@@ -43,6 +44,45 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		});
 	}
 	
+	$scope.changeView = function(view){
+		$("#btnView"+$scope.view).removeClass("btn-info");
+		$scope.view = view;
+		$("#btnView"+view).addClass("btn-info");
+		
+		if($scope.refeshInterval != null)
+			$interval.cancel($scope.refeshInterval);
+		
+		if(view == 2){
+			$scope.refeshInterval = $interval(function() {
+				$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
+					$scope.images = responseImgs.images;
+				});
+		    }, 3000);
+		}
+		
+		if(view == 1){
+			$scope.refeshInterval = $interval(function() {
+				$http.get('rest/landing/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
+					$scope.participants = response.eventParticipantsList;
+				});
+		    }, 3000);
+		}
+		
+		if(view == 0){
+			$scope.refeshInterval = $interval(function() {
+				$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
+					$scope.commentList = response.commentList.reverse();
+					$scope.commentsTable.reload();
+				});
+		    }, 3000);
+		}
+	}
+	
+	$scope.$on('$destroy', function() {
+		if($scope.refeshInterval != null)
+			$interval.cancel($scope.refeshInterval);
+	});
+	
 	// --------------------------- LOAD EVENT DATA
 	
 	$http.get("rest/landing/getEventById/"+$location.search().view).success(function(response){
@@ -59,33 +99,6 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	});
 	
 	function loadData(){
-		// SET INTERVALS
-		
-		$scope.imagesInterval = $interval(function() {
-			$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
-				$scope.images = responseImgs.images;
-			});
-	    }, 3000);
-		
-		$scope.paticipantsInterval = $interval(function() {
-			$http.get('rest/landing/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
-				$scope.participants = response.eventParticipantsList;
-				
-				console.log("participants", $scope.participants);
-				
-				//$scope.participantsTable.reload();
-			});
-	    }, 3000);
-		
-		$scope.commentInterval = $interval(function() {
-			$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
-				$scope.commentList = response.commentList.reverse();
-				$scope.commentsTable.reload();
-			});
-	    }, 3000);
-		
-		//----------------------
-		
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
 			$scope.images = responseImgs.images;
 			$scope.carouselImages = responseImgs.images;
@@ -120,6 +133,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			$scope.commentsTable = new ngTableParams(params, settings);
 		});
 		
+		$scope.changeView(0);
 		// --------------------------- GET PARTICIPANT, ONLY IF A USER IS ALREADY LOGUED
 		
 		if($scope.loggedUser != null){
@@ -145,6 +159,14 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	}
 	
 	//--------------------------- INAPPOSITE
+	
+	$scope.noInnapositeFilter = function(participant){
+		return participant.state == 0 || participant.state == 1;
+	}
+	
+	$scope.innapositeFilter = function(participant){
+		return participant.state == 2 || participant.state == 3;
+	}
 	
 	$scope.inapposite = function(img){
 		$http.get("rest/landing/deleteImage/"+img.eventImageId).success(function(response){
@@ -189,21 +211,25 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	}
 	
 	$scope.participantState = function(participant){
-		console.log(participant);
+		var newState;
+		
+		if(participant.state == 0) // pendiente
+			newState = 2; // pendiente-bloqueado
+		else if(participant.state == 1) // asistente
+			newState = 3; // asistente-bloqueado
+		else if(participant.state == 2) // pendiente-bloqueado
+			newState = 0; // pendiente
+		else
+			newState = 1; // asistente
+		
+		$http.get("rest/landing/participantState/"+participant.eventParticipantId+"?state="+newState).success(function(response){
+			if(response.code == 200){
+				participant.state = newState;
+			}else{
+				toastr.error('No se pudo completar la solicitud');
+			}
+		});
 	}
-	
-	//--------------------------- CANCEL INTERVALS
-	
-	$scope.$on('$destroy', function() {
-		if($scope.imagesInterval != null)
-			$interval.cancel($scope.imagesInterval);
-		
-		if($scope.paticipantsInterval != null)
-			$interval.cancel($scope.paticipantsInterval);
-		
-		if($scope.commentInterval != null)
-			$interval.cancel($scope.commentInterval);
-	});
 	
 	//--------------------------- ASSIST
 	
