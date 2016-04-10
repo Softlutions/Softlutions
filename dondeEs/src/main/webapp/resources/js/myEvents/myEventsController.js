@@ -146,14 +146,28 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
+	$scope.validateEvent = function(eventDate,eventState,index){
+		if(eventState!=0){
+			var date = new Date();
+			var validDate = new Date(eventDate);
+			validDate.setHours(validDate.getHours()-$scope.HOURS_BEFORE_EVENT);
+			if(date<validDate)
+				$("#auctionService"+index).show();
+			else
+				$("#auctionService"+index).hide();
+		}else
+			$("#auctionService"+index).hide();
+	}
+	
 	$scope.auctionEventServices = function(event){
 		var date = new Date();
-		date.setDate(date.getDate() + 1);
+		var maxdate = new Date(event.publishDate);
+		maxdate.setHours(maxdate.getHours()-6);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
             minDate: date,
-            maxDate: event.publishDate
+            maxDate: maxdate
         });
 		$scope.selectedEvent = event;
 	}
@@ -174,7 +188,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			auctionId:id
 		}
 		$http({method: 'PUT',url:'rest/protected/auction/finishAuction', data:dataCreate}).success(function(response) {
-			console.log(response);
 			$("#finishAuctionId-"+id).text("Finalizada");
 			$("#finishAuctionId-"+id).removeClass("btn-danger");
 			$("#finishAuctionId-"+id).addClass("btn-warning");
