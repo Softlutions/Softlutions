@@ -27,6 +27,21 @@ public class AuctionController {
 	
 	/**
 	 * @author Juan Carlos Sánchez G. (Autor)
+	 * @param auctionId Peticion que contiene la información de la subasta por consultar.
+	 * @return response Respuesta del servidor de la petición.
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getAuctionById/{auctionId}", method = RequestMethod.GET)
+	public AuctionResponse getAuctionById(@PathVariable("auctionId") int auctionId){
+		AuctionResponse response = new AuctionResponse();
+		
+		response.setAuction(auctionServiceInterface.getAuctionById(auctionId));
+		response.setCode(200);
+		return response;
+	}
+	
+	/**
+	 * @author Juan Carlos Sánchez G. (Autor)
 	 * @author Ernesto Mendez A. (Contribuyente)
 	 * @param auction Peticion que contiene la información de la subasta por crear.
 	 * @return response Respuesta del servidor de la petición.

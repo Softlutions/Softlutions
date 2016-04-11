@@ -8,7 +8,9 @@
 			<h5>Subastas del evento</h5>
 			
 			<div class="pull-right">
-				<a class="btn btn-primary btn-xs pull-right" ng-click="auctionEventServices(event); catalogsList()" 
+				<a class="btn btn-primary btn-xs pull-right" 
+					ng-show="event.state != 0" ng-if="!$parent.permissions.isAdmin"
+					ng-click="catalogsList(); auctionEventServices()" 
 					data-toggle="modal" data-target="#modalAuctionEventServices">Subastar servicios</a>
 			</div>
 		</div>
@@ -16,7 +18,7 @@
 			<div ng-hide="auctionsEvent.length">
 				<p>No hay subastas para este evento</p>
 			</div>
-			<table class="table table-hover table-responsive" ng-show="auctionsEvent.length">
+			<table class="table table-hover table-responsive" ng-show="auctionsEvent.length" ng-table="auctionsEventTable">
 				<thead>
 					<tr>
 						<th class="col-sm-3">Nombre</th>
@@ -26,8 +28,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="auction in auctionsEvent">
-						<td>{{auction.name}}</td>
+					<tr ng-repeat="auction in $data">
+						<td sortable="'name'">{{auction.name}}</td>
 						<td>{{auction.description}}</td>
 						<td>{{auction.date | date:'dd-MM-yyyy hh:mma'}}</td>
 						<td><a class="btn btn-primary btn-sm" ng-click="loadAuctionServices($index); showServiceList();">
@@ -50,8 +52,10 @@
 	</div>
 </div>
 					
-<div class="col-sm-12" ng-show="serviceList == true">
-	<button ng-click="hideServiceList()" class="btn btn-primary"><i class="fa fa-reply"></i> Volver</button>
+<div class="col-sm-12" ng-show="serviceList == true">	
+	<a class="btn btn-primary btn-sm pull-left" ng-click="hideServiceList()">
+		<i class="fa fa-reply"></i> Volver</a>
+	
 	<div class="ibox float-e-margins">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
@@ -61,7 +65,7 @@
 				<div ng-hide="auctionServices.length">
 					<p>No hay servicios para esta subasta</p>
 				</div>
-				<table class="table table-hover table-responsive" ng-show="auctionServices.length">
+				<table class="table table-hover table-responsive" ng-show="auctionServices.length" ng-table="auctionServicesTable">
 					<thead>
 						<tr>
 							<th>Descripción de la oferta</th>
@@ -73,9 +77,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="service in auctionServices">
+						<tr ng-repeat="service in $data">
 							<td>{{service.description}}</td>
-							<td>₡{{service.price}}</td>
+							<td sortable="'price'">₡{{service.price}}</td>
 							<td>{{service.date | date:'dd-MM-yyyy'}}</td>
 							<td>{{service.service.name}}</td>
 							<td>{{service.service.description}}</td>
@@ -96,55 +100,52 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Crear subasta para un servicio del
-					evento</h4>
+				<h4 class="modal-title">Crear subasta para un servicio del evento</h4>
 			</div>
 			
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-12">
-						<form class="form-horizontal">
-						
+			<form class="form-horizontal" name="formCreateAuction" ng-submit="formCreateAuction.$valid? createAuction():validationError()">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12">
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Nombre</label>
 								<div class="col-lg-10">
 									<input type="text" placeholder="Nombre" class="form-control"
-										ng-model="tempAuction.name">
+										ng-model="tempAuction.name" ng-maxlength="255" required>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-lg-2 control-label">Tipo de servicio a
-									subastar</label>
+								<label class="col-lg-2 control-label">Servicio a subastar</label>
 								<div class="col-lg-10">
 									<select id="cboAuctionCatalogs" class="form-control"
 										ng-options="c as c.name for c in catalogs"
-										ng-model="tempAuction.selected"></select>
+										ng-model="tempAuction.selected" required></select>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Descripción</label>
 								<div class="col-lg-10">
-									<textarea rows="5" placeholder="Descripción"
-										class="form-control" ng-model="tempAuction.description"></textarea>
+									<textarea rows="5" placeholder="Descripción" ng-maxlength="255"
+										class="form-control" ng-model="tempAuction.description" required></textarea>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Fecha de finalización</label>
 								<div class="col-lg-10">
-									<input type='text' class="form-control" ng-model="tempAuction.date" id='datetimepicker' />
+									<input type='text' class="form-control" id='datetimepicker'
+									placeholder="Haga click para seleccionar fecha" required/>
 								</div>
-							</div>
-						</form>
-					</div>
+							</div>								
+						</div>
+					</div>	
 				</div>	
-			</div>	
-			
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary"
-							id="btnCreateAuction" ng-click="createAuction()">Crear
-								subasta</button>
-			</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-primary">Crear subasta</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

@@ -1,5 +1,5 @@
 <div class="container">
-	<div ng-show="step == 0" class="col-lg-11">
+	<div class="col-lg-11">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h4>Subastas disponibles</h4>
@@ -14,7 +14,7 @@
 					<thead>
 						<tr>
 							<th class="col-lg-3">Nombre</th>
-							<th class="col-lg-5">Descripción</th>
+							<th class="col-lg-6">Descripción</th>
 							<th class="col-lg-2">Fecha de finalización</th>
 							<th></th>
 						</tr>
@@ -31,8 +31,8 @@
 										Acción <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a ng-click="listParticipants(auction)">Ver particiantes</a></li>
-										<li><a id="liParticipate-{{$index}}" ng-if="$parent.permissions.isPrestatario" 
+										<li><a href="/dondeEs/app#/auctionParticipants/{{auction.auctionId}}">Ver particiantes</a></li>
+										<li><a id="liParticipate-{{$index}}" ng-show="$parent.permissions.isPrestatario" 
 											   data-toggle="modal" data-target="#registerModal" ng-click="loadServices()">Participar</a></li>
 									</ul>
 								</div>
@@ -43,39 +43,6 @@
 			</div>
 			<div ng-hide="tempAuctionList.length != 0" class="ibox-content">
 				<p>No hay subastas disponibles.</p>
-			</div>
-		</div>
-	</div>
-	
-	<div ng-show="step == 1" class="col-lg-11">
-		<button type="button" class="btn btn-primary pull-left" ng-click="step = 0"> <i class="fa fa-reply"></i>Volver</button>
-		<div class="ibox float-e-margins">
-			<div class="ibox-title">
-			<button type="button" class="btn btn-primary btn-xs pull-right" id="btnParticipate" ng-click="loadServices()"
-					ng-if="$parent.permissions.isPrestatario" data-toggle="modal" data-target="#registerModal">Participar</button>
-				<h4>Participantes de la subasta</h4>
-			</div>
-			<div class="ibox-content" ng-show="auctionServices.length" >
-				<table class="table table-hover" ng-table="auctionServicesTable">
-					<thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Descripción</th>
-							<th>Precio</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody ng-repeat="service in $data">
-						<tr>
-							<td>{{ service.service.name }}</td>
-							<td>{{ service.description }}</td>
-							<td>{{ service.price | currency:"₡":0}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="ibox-content" ng-hide="auctionServices.length" >
-				<p>No hay participantes registrados.</p>
 			</div>
 		</div>
 	</div>
@@ -102,20 +69,21 @@
 							<label class="col-lg-2 control-label">Descripción</label>
 							<div class="col-lg-10">
 								<textarea rows="5" placeholder="Descripción" class="form-control"
-									ng-model="auctionService.description" required>
+									ng-model="auctionService.description" ng-maxlength="255" autofocus required>
 								</textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Precio</label>
 							<div class="col-lg-10">
-								<input type="number" placeholder="Precio" min="0" class="form-control"
+								<input type="text" ng-keyup="formatPrice(auctionService.price)" placeholder="Precio" min="0" class="form-control"
 									ng-model="auctionService.price" required>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary">{{$parent.permissions.isPrestatario ? 'Participar' : 'No'}}</button>
+						<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-sm btn-primary"><b>{{$parent.permissions.isPrestatario ? 'Participar' : 'No'}}</b></button>
 					</div>
 				</form>
 			</div>

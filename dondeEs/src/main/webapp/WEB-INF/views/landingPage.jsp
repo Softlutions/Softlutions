@@ -35,7 +35,6 @@
 	</head>
 
 	<body id="page-top" class="landing-page">
-	
 		<div ng-view></div>
 	
 		<!-- Mainly scripts -->

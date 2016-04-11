@@ -6,8 +6,8 @@ angular
 			templateUrl : 'resources/auction/auction.html',
 			controller : 'AuctionsCtrl'
 		});
-	} ])
-	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval',function($scope, $http, ngTableParams, $interval) {
+	}])
+	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval', '$filter', '$window',function($scope, $http, ngTableParams, $interval, $filter, $window) {
 		$scope.$parent.pageTitle = "Donde es - Subastas de evento";
 		$scope.selectedCatalogId = "";
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -62,7 +62,7 @@ angular
 			$scope.auctionsTable = new ngTableParams(params, settings);
 			
 			// ------------------------------
-
+			
 			$scope.auctionsInterval = $interval(function(){
 				getAllAuctions();
 			}, 3000);
@@ -72,7 +72,7 @@ angular
 			$http.get('rest/protected/serviceCatalog/getAllCatalogService').success(function(response) {
 				$scope.catalogs = response.serviceCatalogList;
 			});
-
+			
 			$http.get('rest/protected/service/getServiceCatalogIdByProvider/'+$scope.loggedUser.userId).success(function(response) {
 				if(response.serviceLists.length != 0){	
 					var x;
@@ -82,7 +82,7 @@ angular
 				}
 			});
 		});
-			
+		
 		$scope.validateService = function(serviceCatalogId){
 			var existe = $scope.loggedUserServiceCatalogs.indexOf(serviceCatalogId);
 			return (existe >= 0);
@@ -98,6 +98,15 @@ angular
 			else
 				$scope.showError = true;
 		});
+		
+		$scope.formatPrice = function(model){
+			if(model==null) model = 0;
+			model = model.replace(".00", "");
+			model = model.replace("₡", "");
+			model = model.replace(/,/g, "");
+			var formatPrice = $filter('currency')(model, '₡', 2);
+			$scope.auctionService.price = formatPrice;
+		}
 		
 		$scope.validatelistItem = function(auction,index){
 			$scope.selectedAuction = auction;
@@ -203,16 +212,11 @@ angular
 					auction : $scope.selectedAuction,
 					service : $scope.auctionService.service
 				}
-				
 				$http({method: 'POST',url:'rest/protected/auctionService/createAuctionService', data:newAuctionService, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-					$scope.auctionServices.push(newAuctionService);
-					$scope.auctionServicesTable.reload();
 					$("#registerModal").modal("toggle");
-					$scope.auctionService = {};
-					$scope.listForm = true;
-					toastr.success('Se ha incorporado a la subasta!')
+					toastr.success('Se ha incorporado a la subasta!');
+					setTimeout(function(){ $window.location.href = "app#/auctionParticipants/"+$scope.selectedAuction.auctionId; }, 500);				
 				});
-				$scope.listForm = true;
 			}
 		};	
 }]);

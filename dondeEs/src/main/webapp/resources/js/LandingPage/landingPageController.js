@@ -6,8 +6,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', 
-	                                		function($scope, $http, $cookies, $rootScope, $location){
+	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$filter',
+	                                		function($scope, $http, $cookies, $rootScope, $location, $filter){
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		if ($cookies.getObject("goToEventsPublish") == null) {
 			$cookies.putObject("goToEventsPublish", false);
@@ -19,6 +19,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			password : "",
 			isCript: false
 		};
+		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		$scope.userCompany={};
 		$scope.loginNormalPage = false;
 		
@@ -82,7 +83,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						"name" : response.firstName,
 						"lastName" : response.lastName,
 						"email" : response.email,
-						"role" : response.role
+						"role" : response.role,
+						"state" : response.state
 					};
 					
 					localStorage.setItem("loggedUser", JSON.stringify(responseUser));
@@ -124,8 +126,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 								window.location.href = "/dondeEs/app#/index";
 								break;
 							case 4:
-								$("#modalLogin").modal("toggle");
-								$scope.loggedUser = responseUser;
+								window.location.reload();
 								break;
 						}
 					}
@@ -159,12 +160,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		
-		$scope.saveUser = function(user) {
+		$scope.saveUser = function(newUser) {
 			var userRequest = {
-				user : $scope.user
+				user : $scope.newUser
 			}
-			if($scope.user.name != null && $scope.user.email != null && $scope.user.password.length > 7 && $scope.user.password!=null){
-				if($scope.user.password != $scope.confirmPassword){
+			if ($scope.newUser.name != null && $scope.newUser.email != null && $scope.newUser.password.length > 7 && $scope.newUser.password!=null){
+				if($scope.newUser.password != $scope.newUser.confirmPassword){
 					 toastr.error('Las contraseñas no coinciden', 'Error');
 				}else{
 					$http.post("rest/login/create",userRequest) 
@@ -172,7 +173,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						if (response.code == 200) {
 							$("#createUserForm").modal('hide');
 							$("#createCompanyForm").modal('hide');
-							$scope.user={};
+							$scope.newUser={};
 							$scope.confirmPassword='';
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
@@ -192,6 +193,11 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 
 		            }, 1300);
 			}
+		}
+		
+		$scope.hideCreateUserForm  = function(){
+			$("#createUserForm").modal('hide');
+			$scope.newUser={};
 		}
 		
 		//SAVE COMPANY
@@ -393,8 +399,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 							$scope.event = response.eventPOJO;
 						});
-						toastr.success(response.codeMessage);
-						setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+						if(event.state == 0){
+							toastr.error("El evento ha sido cancelado", 'Error');
+						}else{
+							toastr.success(response.codeMessage);
+							setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
+						}
 				}else{
 					toastr.error(response.codeMessage, 'Error');
 					window.location.href = "#/landingPage";
@@ -471,8 +481,5 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		//END ANSWER INVITATION
-		
-		
-		
-		
+
 	}]);

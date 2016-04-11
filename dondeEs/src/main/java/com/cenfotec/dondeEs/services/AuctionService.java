@@ -189,4 +189,24 @@ public class AuctionService implements AuctionServiceInterface{
 		return state;
 	}
 
+	@Override
+	public AuctionPOJO getAuctionById(int auctionId) {
+		Auction auction = auctionRepository.findOne(auctionId);
+		AuctionPOJO auctionPOJO = new AuctionPOJO();
+		
+		auctionPOJO.setAuctionId(auction.getAuctionId());
+		auctionPOJO.setDate(auction.getDate());
+		auctionPOJO.setDescription(auction.getDescription());
+		auctionPOJO.setName(auction.getName());
+		auctionPOJO.setState(auction.getState());
+		
+		ServiceCatalogPOJO serviceCatalogPOJO = new ServiceCatalogPOJO();
+		serviceCatalogPOJO.setServiceCatalogId(auction.getServiceCatalog().getServiceCatalogId());
+		serviceCatalogPOJO.setName(auction.getServiceCatalog().getName());
+		auctionPOJO.setServiceCatalog(serviceCatalogPOJO);
+		
+		
+		return auctionPOJO;
+	}
+
 }
