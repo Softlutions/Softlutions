@@ -34,7 +34,7 @@ app.factory('MarkerCreatorService', function () {
     function createByCoords(latitude, longitude, successCallback) {
         var marker = create(latitude, longitude);
         invokeSuccessCallback(successCallback, marker);
-    } 	
+    } 
 
     function createByAddress(address, successCallback) {
         var geocoder = new google.maps.Geocoder();
@@ -87,11 +87,9 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	    return this;
 	}
 	
-	$('#eventDatePicker').datetimepicker({
-    	minDate: new Date().addHours($scope.HOURS_BEFORE_EVENT),
-    	locale: 'es',
-        format: 'LLLL'
-    });
+		$(function () {
+            $('#datetimepicker4').datetimepicker();
+        });
 	
 	$scope.eventForm = false;
 	$scope.tempAuction = {};
@@ -148,7 +146,7 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 						'eventPlaceName':$scope.tempEvent.placeName,
 						'placeLatitude':$scope.map.center.latitude,
 						'placeLongitude':$scope.map.center.longitude, 
-						'publishDate':$scope.Date,
+						'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
 						'loggedUser':$scope.loggedUser.userId
 					},
 					file: $scope.tempEvent.originalFile
