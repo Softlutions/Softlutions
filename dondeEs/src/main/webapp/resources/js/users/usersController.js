@@ -130,7 +130,8 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			email: $scope.users.email,
 			phone : $scope.users.phone,
 			userType: $scope.users.userType,
-			role : $scope.currentRol
+			role : $scope.objRequest,
+			state : 1
 		}
 		
 
