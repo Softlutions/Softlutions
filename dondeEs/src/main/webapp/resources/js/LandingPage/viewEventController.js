@@ -12,6 +12,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 .controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', '$cookies', "$interval", function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter, $cookies, $interval) {
 	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 	$scope.DEFAULT_USER_IMAGE = "http://bootdey.com/img/Content/user_1.jpg";
+	$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
 	$scope.commentPreviewFile = null;
 	$scope.eventParticipant = null;
 	$scope.commentFile = null;
@@ -20,11 +21,14 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	
 	$scope.event = null;
 	$scope.images = [];
+	$scope.email = "";
 	$scope.view = 0;
 	
 	$scope.files = [];
 	$scope.sending = false;
 	$scope.previewFiles = [];
+	$scope.carouselImages = [];
+	$scope.refeshInterval = null;
 	$scope.progressPercentaje = 0;
 	$scope.showUploadField = false;
 	
@@ -42,6 +46,62 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		});
 	}
 	
+	$scope.changeView = function(view){
+		$("#btnView"+$scope.view).removeClass("btn-info");
+		$scope.view = view;
+		$("#btnView"+view).addClass("btn-info");
+		
+		if($scope.refeshInterval != null)
+			$interval.cancel($scope.refeshInterval);
+		
+		if(view == 2){
+			$scope.refeshInterval = $interval(function() {
+				$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
+					var filteredList = [];
+					responseImgs.images.forEach(function(entry){
+						if(entry.eventParticipant.state == 1 || entry.eventParticipant.state == 2)
+							filteredList.push(entry);
+					});
+					
+					$scope.images = filteredList;
+				});
+		    }, 3000);
+		}
+		
+		if(view == 1){
+			$scope.refeshInterval = $interval(function() {
+				$http.get('rest/landing/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
+					var filteredList = [];
+					response.eventParticipantsList.forEach(function(entry){
+						if(entry.state != 0)
+							filteredList.push(entry);
+					});
+					$scope.participants = filteredList;
+				});
+		    }, 3000);
+		}
+		
+		if(view == 0){
+			$scope.refeshInterval = $interval(function() {
+				$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
+					var filteredList = [];
+					response.commentList.reverse().forEach(function(entry){
+						if(entry.eventParticipant.state == 1 || entry.eventParticipant.state == 2)
+							filteredList.push(entry);
+					});
+					
+					$scope.commentList = filteredList;
+					$scope.commentsTable.reload();
+				});
+		    }, 3000);
+		}
+	}
+	
+	$scope.$on('$destroy', function() {
+		if($scope.refeshInterval != null)
+			$interval.cancel($scope.refeshInterval);
+	});
+	
 	// --------------------------- LOAD EVENT DATA
 	
 	$http.get("rest/landing/getEventById/"+$location.search().view).success(function(response){
@@ -58,38 +118,34 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	});
 	
 	function loadData(){
-		$scope.imagesInterval = $interval(function() {
-			$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
-				$scope.images = responseImgs.images;
-				console.log($scope.images);
-			});
-	    }, 3000);
-		
-		$scope.paticipantsInterval = $interval(function() {
-			$http.get('rest/protected/eventParticipant/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
-				$scope.participants = response.eventParticipantsList;
-				
-				console.log($scope.participants);
-				
-				//$scope.participantsTable.reload();
-			});
-	    }, 3000);
-		
-		$scope.commentInterval = $interval(function() {
-			$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
-				$scope.commentList = response.commentList.reverse();
-				$scope.commentsTable.reload();
-			});
-	    }, 3000);
-		
-		//----------------------
-		
 		$http.get("rest/landing/getImagesByEventId/"+$scope.event.eventId).success(function(responseImgs){
-			$scope.images = responseImgs.images;
+			var filteredList = [];
+			responseImgs.images.forEach(function(entry){
+				if(entry.eventParticipant.state == 1 || entry.eventParticipant.state == 2)
+					filteredList.push(entry);
+			});
+			
+			$scope.images = filteredList;
+			$scope.carouselImages = $scope.images;
+		});
+		
+		$http.get('rest/landing/getAllEventParticipants/'+$scope.event.eventId).success(function(response) {
+			var filteredList = [];
+			response.eventParticipantsList.forEach(function(entry){
+				if(entry.state != 0)
+					filteredList.push(entry);
+			});
+			$scope.participants = filteredList;
 		});
 		
 		$http.get('rest/landing/getCommentsByEvent/'+$scope.event.eventId).success(function(response) {
-			$scope.commentList = response.commentList.reverse();
+			var filteredList = [];
+			response.commentList.reverse().forEach(function(entry){
+				if(entry.eventParticipant.state == 1 || entry.eventParticipant.state == 2)
+					filteredList.push(entry);
+			});
+			
+			$scope.commentList = filteredList;
 			
 			var params = {
 				page: 1,
@@ -113,6 +169,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			$scope.commentsTable = new ngTableParams(params, settings);
 		});
 		
+		$scope.changeView(0);
 		// --------------------------- GET PARTICIPANT, ONLY IF A USER IS ALREADY LOGUED
 		
 		if($scope.loggedUser != null){
@@ -139,19 +196,23 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	
 	//--------------------------- INAPPOSITE
 	
-	$scope.inapposite = function(img){
+	$scope.blockedParticipantsFilter = function(participant){
+		return participant.state == 3 || participant.state == 4;
+	}
+	
+	$scope.inappositeImg = function(img){
 		$http.get("rest/landing/deleteImage/"+img.eventImageId).success(function(response){
 			if(response.code == 200){
 				$scope.images.splice($scope.images.indexOf(img), 1);
 				toastr.warning('La imagen fue reportada');
 				
-				$http.get("rest/landing/reportParticipant/"+img.eventParticipant.eventParticipantId).success(function(response){
+				/*$http.get("rest/landing/reportParticipant/"+img.eventParticipant.eventParticipantId).success(function(response){
 					if(response.code == 200){
 						toastr.warning('Usuario reportado');
 					}else{
 						toastr.warning('No se pudo reportar el usuario');
 					}
-				});
+				});*/
 			}else{
 				toastr.warning('No se pudo reportar la imagen');
 			}
@@ -162,14 +223,14 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		$http.get("rest/landing/deleteImage/"+img.eventImageId).success(function(response){
 			if(response.code == 200){
 				$scope.images.splice($scope.images.indexOf(img), 1);
-				toastr.warning('La imagen fue reportada');
+				toastr.warning('La imagen fue eliminada');
 			}else{
-				toastr.warning('No se pudo reportar la imagen');
+				toastr.warning('No se pudo eliminar la imagen');
 			}
 		});
 	}
 	
-	$scope.removecomment = function(comment){
+	$scope.removeComment = function(comment){
 		$http.get("rest/landing/deleteComment/"+comment.commentId).success(function(response){
 			if(response.code == 200){
 				$scope.commentList.splice($scope.commentList.indexOf(comment), 1);
@@ -180,29 +241,57 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			}
 		});
 	}
-
-	//--------------------------- INTERVALS
 	
-	$scope.$on('$destroy', function() {
-		if($scope.imagesInterval != null)
-			$interval.cancel($scope.imagesInterval);
+	$scope.participantState = function(participant){
+		var newState;
 		
-		if($scope.paticipantsInterval != null)
-			$interval.cancel($scope.paticipantsInterval);
+		if(participant.state == 1) // pendiente
+			newState = 3; // pendiente-bloqueado
+		else if(participant.state == 2) // asistente
+			newState = 4; // asistente-bloqueado
+		else if(participant.state == 3) // pendiente-bloqueado
+			newState = 1; // pendiente
+		else
+			newState = 2; // asistente
 		
-		if($scope.commentInterval != null)
-			$interval.cancel($scope.commentInterval);
-	});
+		$http.get("rest/landing/participantState/"+participant.eventParticipantId+"?state="+newState).success(function(response){
+			if(response.code == 200){
+				participant.state = newState;
+			}else{
+				toastr.error('No se pudo completar la solicitud');
+			}
+		});
+	}
 	
 	//--------------------------- ASSIST
+	//0 no asiste, 1 pendiente, 2 asiste, 3 bloqueado pendiente, 4 bloqueado asiste
+	$scope.invite = function(){
+		$scope.email = "";
+		
+		$http({method: 'POST',url:'rest/landing/sendEmailInvitation?eventId='+$scope.event.eventId, data:{listSimple:[$scope.email]}, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
+			console.log(response);
+			toastr.success('Invitación enviada');
+		}).error(function(response){
+			 toastr.error('No se pudo enviar la invitación');
+		})
+	}
 	
 	$scope.assist = function(){
 		if($scope.loggedUser == null){
 			window.location.href="#/landingPage?p=login&event="+$scope.event.eventId+"&assist";
+		}else if($scope.eventParticipant != null && $scope.eventParticipant.state == 0){
+			$http.get("rest/landing/participantState/"+$scope.eventParticipant.eventParticipantId+"?state="+2).success(function(response){
+				if(response.code == 200){
+					$scope.eventParticipant.state = 2;
+				}else{
+					toastr.error('No se pudo completar la solicitud');
+				}
+			});
 		}else if($scope.eventParticipant == null){
 			$http.get("rest/landing/createParticipant?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
 				if(response.code == 200){
 					$scope.eventParticipant = response.eventParticipant;
+					console.log($scope.eventParticipant);
 				}else if(response.code == 202){
 					toastr.warning('Ya estas participando en este evento');
 				}

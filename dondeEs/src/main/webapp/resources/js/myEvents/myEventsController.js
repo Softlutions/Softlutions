@@ -68,7 +68,9 @@ app.factory('MarkerCreatorService', function () {
 
 });
 
-app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams) { 
+app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 
+                                	'WizardHandler', 'ngTableParams', function($scope, $http, $upload, 
+                                				MarkerCreatorService, $filter, WizardHandler, ngTableParams) { 
 	$scope.$parent.pageTitle = "Donde es - Mis eventos";
 	$scope.eventForm = false;
 	$scope.address = '';
@@ -144,14 +146,28 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
+	$scope.validateEvent = function(eventDate,eventState,index){
+		if(eventState!=0){
+			var date = new Date();
+			var validDate = new Date(eventDate);
+			validDate.setHours(validDate.getHours()-$scope.HOURS_BEFORE_EVENT);
+			if(date<validDate)
+				$("#auctionService"+index).show();
+			else
+				$("#auctionService"+index).hide();
+		}else
+			$("#auctionService"+index).hide();
+	}
+	
 	$scope.auctionEventServices = function(event){
 		var date = new Date();
-		date.setDate(date.getDate() + 1);
+		var maxdate = new Date(event.publishDate);
+		maxdate.setHours(maxdate.getHours()-6);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
             minDate: date,
-            maxDate: event.publishDate
+            maxDate: maxdate
         });
 		$scope.selectedEvent = event;
 	}
@@ -172,7 +188,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			auctionId:id
 		}
 		$http({method: 'PUT',url:'rest/protected/auction/finishAuction', data:dataCreate}).success(function(response) {
-			console.log(response);
 			$("#finishAuctionId-"+id).text("Finalizada");
 			$("#finishAuctionId-"+id).removeClass("btn-danger");
 			$("#finishAuctionId-"+id).addClass("btn-warning");
@@ -258,6 +273,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			}
 		});
 		
+	}
+	
+	$scope.showCreateEventForm = function(){
+		window.location.href = "app#/eventWizard";
 	}
 	
 	$scope.prepublishEventById = function(event){
@@ -670,77 +689,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
         $scope.map.control.refresh({latitude: marker.latitude,
             							longitude: marker.longitude});
     }
-    
- //#REGION ASISTENTE DE CREACION
-    
-    $scope.showCreateEventForm = function(estado){
-    	if(estado) $scope.eventsWizard = true;
-    	else $scope.eventsWizard = false;
-    }
-    
-    
-    $scope.createEventAsistente = function() {
-		$scope.upload = $upload
-			.upload(
-				{
-					url : 'rest/protected/event/createEvent',
-					data : {
-						'name':$scope.tempEvent.name,
-						'description':$scope.tempEvent.desc,
-						'largeDescription':$scope.tempEvent.largeDesc,
-						'eventType':$scope.tempEvent.type,
-						'eventPlaceName':$scope.tempEvent.placeName,
-						'placeLatitude':$scope.map.center.latitude,
-						'placeLongitude':$scope.map.center.longitude, 
-						'publishDate':new Date($('#eventDatePicker').data("DateTimePicker").date()).toString(),
-						'loggedUser':$scope.loggedUser.userId,
-					},
-					file : $scope.tempEvent.originalFile,
-				})
-			.progress(
-				function(evt) {})
-			.success(
-				function(response) {
-					$scope.globalEventId  = response.eventPOJO.eventId;
-					if (response.code == 200) {
-						$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-							if (response.code == 200) {
-								if (response.eventList.length > 0) {
-									$scope.events = response.eventList;
-									
-							    	$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
-										if (response.code == 200) {
-											if (response.auctionList != null && response.auctionList != {}) {
-												$scope.auctionsEvent = response.auctionList;
-												WizardHandler.wizard().next();
-											} else {
-										    	toastr.warning('Subastas del evento', 'No se encontraron subastas del evento.');
-											}
-										} else {
-									    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
-										}
-									});
-							    	
-							    	toastr.success('Eventos del usuario', 'El evento se publicó con éxito.');
-								} else {
-							    	toastr.warning('Eventos del usuario', 'No se encontraron eventos.');
-								}
-							} else {
-						    	toastr.warning('Eventos del usuario', 'No se pudieron actualizar los datos en pantalla sin embargo el evento se creó con éxito.');
-							}			
-						});
-						
-					} else {
-				    	toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
-					}
-					
-					$scope.resetCreateEvent();
-				})
-			.error(function(msj){
-				console.log(msj);
-			});
-	};
-    
+
+     //#REGION ASISTENTE DE CREACION
     
     $scope.auctionsEvent = [];
 	$scope.auctionServices = [];
@@ -751,11 +701,11 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.showServiceList = function () {
 		$scope.serviceList  = true;
 	}
-	
+
 	$scope.hideServiceList = function () {
 		$scope.serviceList  = false;
 	}
-		
+	
 	$http.get('rest/protected/auction/getAllAuctionByEvent/'+3).success(function(response) {
 		if (response.code == 200) {
 			if (response.auctionList != null && response.auctionList != {}) {
@@ -804,8 +754,5 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$("#modal-form").modal("toggle");
 	}
 	  //#ENDREGION ASISTENTE DE CREACION
-    
-    
-    
-    
+	
 }]);
