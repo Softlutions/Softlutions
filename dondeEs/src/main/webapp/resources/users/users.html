@@ -7,31 +7,44 @@
 				data-toggle="modal" data-target="#modal-form">Registrar usuario</a>
 		</div>
 		<div class="ibox-content">
-			<table class="table table-hover table-responsive" ng-table="usersTable">
-				<thead>
-					<tr>
-						<th>Usuario</th>
-						<th>Email</th>
-						<th>Teléfono</th>
-						<th>Rol</th>
-						<th>Tipo</th>
-						<th>Estado</th>
-					</tr>
-				</thead>
-				<tbody ng-init="check = false">
-					<tr ng-repeat="user in $data">
-						<td sortable="'name'">{{user.name}} {{user.lastName1}} {{user.lastName2}}</td>
-						<td>{{user.email}}</td>
-						<td>{{user.phone}}</td>
-						<td>{{user.role.name}}</td>
-						<td>{{user.userType.name}}</td>
-						<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
-						<td> <button data-toggle="modal" class="hide btn btn-primary btn-xs pull-right"
-						data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user)">Modificar usuario</button>
-						 </td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="row">
+				<form class="form-inline pull-right">
+					<div class="form-group">
+						<input type="search" placeholder="Buscar..." class="form-control col-xs-6" ng-model="criteria" ng-change="search(criteria)"/>
+					</div>
+				</form>
+			</div>
+			
+			<div class="row">
+				<table ng-show="$data.length > 0" class="table table-hover table-responsive" ng-table="usersTable">
+					<thead>
+						<tr>
+							<th>Usuario</th>
+							<th>Email</th>
+							<th>Teléfono</th>
+							<th>Rol</th>
+							<th>Tipo</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody ng-init="check = false">
+						<tr ng-repeat="user in $data">
+							<td sortable="'name'">{{user.name}} {{user.lastName1}} {{user.lastName2}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.phone}}</td>
+							<td>{{user.role.name}}</td>
+							<td>{{user.userType.name}}</td>
+							<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
+							<td> <button data-toggle="modal" class="hide btn btn-primary btn-xs pull-right"
+							data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user)">Modificar usuario</button>
+							 </td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-hide="!emptyTable">
+					<p>No hay resultados con este criterio de búsqueda</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="modal-form" class="modal fade" aria-hidden="true">

@@ -41,6 +41,7 @@ public class EventParticipantService implements EventParticipantServiceInterface
 				UserPOJO userPojo = new UserPOJO();
 				userPojo.setUserId(ep.getUser().getUserId());
 				userPojo.setName(ep.getUser().getName());
+				userPojo.setImage(ep.getUser().getImage());
 				userPojo.setLastName1(ep.getUser().getLastName1());
 				userPojo.setLastName2(ep.getUser().getLastName2());
 				eventParticipantPOJO.setUser(userPojo);
@@ -115,5 +116,18 @@ public class EventParticipantService implements EventParticipantServiceInterface
 			nparticipantId = eventParticipantRepository.save(eventParticipant).getEventParticipantId();
 		
 		return nparticipantId;
+	}
+
+	@Override
+	@Transactional
+	public Boolean participantState(int participantId, byte state) {
+		EventParticipant ep = eventParticipantRepository.findOne(participantId);
+		boolean isBlocked;
+		
+		if(isBlocked = (ep != null)){
+			ep.setState(state);
+		}
+		
+		return isBlocked;
 	}
 }

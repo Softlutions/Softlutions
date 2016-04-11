@@ -1,77 +1,82 @@
 'use strict';
-angular
-		.module('dondeEs.ContractModule', ['ngRoute'])
-		.config([ '$routeProvider', function($routeProvider) {
-			$routeProvider.when('/Contracts', {
-				templateUrl : 'resources/listContracts/listContracts.html',
-				controller : 'ContractsCtrl'
-			});
-		} ])
-		.controller('ContractsCtrl',['$scope','$http',function($scope, $http) {
-			$scope.$parent.pageTitle = "Donde es - Contratos";
+angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
+	.config([ '$routeProvider', function($routeProvider) {
+		$routeProvider.when('/Contracts/:eventId', {
+			templateUrl : 'resources/listContracts/listContracts.html',
+			controller : 'ContractsCtrl'
+		});
+	}])
+	.controller('ContractsCtrl',['$scope', '$http', '$routeParams', 'ngTableParams', '$filter', function($scope, $http, $routeParams, ngTableParams, $filter) {
+		$scope.$parent.pageTitle = "Donde es - Contratos";
 		$scope.chartValues = null;
+		$scope.serviceContacts = [];
 		
-		$scope.listContracts = function(idEvent){s
-			$http.get("rest/protected/serviceContact/getAllServiceContact/"+idEvent).success(function(response){
+		var eventId = $routeParams.eventId;
+		
+		if(eventId >= 0){
+			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
 				
-				if($scope.serviceContacts.length == 0){
-					$('#errorMessage').removeClass('hidden');
-					$('#contractTable').addClass('hidden');
-					$('#contracts-state-chart').addClass('hidden');
-				}else{
-					$('#contractTable').removeClass('hidden');
-					$('#errorMessage').addClass('hidden');
+				/*for(var i=0;i<10;i++){
+					var original = $scope.serviceContacts[i%$scope.serviceContacts.length];
+					var temp = {};
+					temp.service = {};
+					
+					temp.serviceContractId = original.serviceContractId;
+					temp.service.name = original.service.name;
+					temp.state = original.state;
+					temp.comment = original.comment;
+					
+					if(temp.serviceContractId % 2 == 0){
+						temp.state = 1;
+					}else{
+						if(Math.random() <= 0.5){
+							temp.state = 0;
+						}else{
+							temp.state = 2;
+						}
+					}
+					
+					$scope.serviceContacts.push(temp);
+				}*/
+				
+				var params = {
+					page: 1,
+					count: 8,
+					sorting: {name: "asc"}
+				};
+				
+				var settings = {
+					total: $scope.serviceContacts.length,	
+					counts: [],	
+					getData: function($defer, params){
+						var fromIndex = (params.page() - 1) * params.count();
+						var toIndex = params.page() * params.count();
+						
+						var subList = $scope.serviceContacts.slice(fromIndex, toIndex);
+						var sortedList = $filter('orderBy')(subList, params.orderBy());
+						$defer.resolve(sortedList);
+					}
+				};
+				
+				$scope.contractsTable = new ngTableParams(params, settings);
+				
+				if($scope.serviceContacts.length > 0){
 					$scope.refreshChart();
 				}
 			});
-		}
-		
-		$scope.serviceInfo = function(){
-			$http.get("rest/protected/service/getService/1").success(function(response){
-				$scope.service = response.service;
-			})
-		}
-		
-		$scope.eventInfo = function(){
-			
-			$http.get("rest/protected/service/getService/2").success(function(response){
-				$scope.service = response.service;
-			})
-		}
-		
-		$scope.contractService = function(){
-			var service = {
-					service:$scope.service,
-					comment:$('#comment').val(),
-					state:0,
-					event:{
-						eventId:"1",
-						description:"despelote",
-						name:"fiesta cenfotec",
-						user:{
-							userId:2,
-							email:"def@ghi.com",
-							password:"def"
-						}
-					}
-			};
-			
-			$http({method: 'POST',url:'rest/protected/serviceContact/createServiceContact', data:service, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-				$('#myModal').modal('toggle');
-				
-			})	
 		}
 		
 		$scope.cancel = function(serviceContact){
 			$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
 				if(response.code == 200){
 					serviceContact.state = 2;
-
-					$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
-					$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
-					$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
-					$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
+					
+					var btn = $("#btnCancelService-"+serviceContact.serviceContractId);
+					btn.text("Cancelado");
+					btn.removeClass("btn-dangerr");
+					btn.addClass("btn-default");
+					btn.prop("disabled", true);
 					
 					$scope.refreshChart();
 				}
@@ -111,8 +116,10 @@ angular
 				           { label: "Cancelados", value: contractsCanceled }
 		            ],
 				    resize: false,
-				    colors: ['#87d6c6', '#54cdb4','#1ab394'],
+				    colors: ['#8a6d3b', '#3c763d', '#a94442'],
 				});
 			}
 		}
+		
+		$scope.refreshChart();
 }]);

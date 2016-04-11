@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +23,15 @@ import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.contracts.ServiceContactRequest;
 import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
 import com.cenfotec.dondeEs.ejb.Comment;
+import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
+import com.cenfotec.dondeEs.ejb.OfflineUser;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
+import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
+import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
 import com.cenfotec.dondeEs.services.CommentServiceInterface;
 import com.cenfotec.dondeEs.services.EventImageServiceInterface;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
@@ -52,19 +58,20 @@ public class LandingPageController {
 	private UserServiceInterface userServiceInterface;
 	@Autowired
 	private ServiceContactInterface serviceContactInterface;
+	@Autowired
+	private UserServiceInterface userserviceInterface;
+	@Autowired
+	private JavaMailSender mailSender;
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param eventParticipantId
-	 *            id del participante del evento asociado
-	 * @param file
-	 *            archivo de imagen a subir
+	 * @param eventParticipantId id del participante del evento asociado
+	 * @param file archivo de imagen a subir
 	 * @return si la operacion fue efectiva o no
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST)
-	public EventImageResponse saveImage(@RequestParam("eventParticipantId") int eventParticipantId,
-			@RequestParam("file") MultipartFile file) {
+	public EventImageResponse saveImage(@RequestParam("eventParticipantId") int eventParticipantId, @RequestParam("file") MultipartFile file) {
 		EventImageResponse response = new EventImageResponse();
 
 		if (eventImageServiceInterface.saveImage(eventParticipantId, file)) {
@@ -80,9 +87,7 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param id
-	 *            id del evento del cual se desea objetener las imagenes
-	 *            asociadas
+	 * @param eventId id del evento del cual se desea objetener las imagenes asociadas
 	 * @return Lista de imagenes del evento
 	 * @version 1.0
 	 */
@@ -97,8 +102,7 @@ public class LandingPageController {
 
 	/**
 	 * @author Juan Carlos Sánchez G.
-	 * @param eventId
-	 *            Peticion que contiene la información del comentario por crear.
+	 * @param eventId Peticion que contiene la información del comentario por crear.
 	 * @return Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
@@ -113,19 +117,14 @@ public class LandingPageController {
 	/**
 	 * @author Juan Carlos Sánchez G. (Autor)
 	 * @author Ernesto Mendez A. (Subir imagen)
-	 * @param participantId
-	 *            id del participante que comenta
-	 * @param content
-	 *            texto del comentario
-	 * @param file
-	 *            (opcional) archivo de si comenta con una imagen
+	 * @param participantId id del participante que comenta
+	 * @param content texto del comentario
+	 * @param file (opcional) archivo de si comenta con una imagen
 	 * @return Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/saveComment", method = RequestMethod.POST)
-	public CommentResponse saveComment(@RequestParam("participantId") int participantId,
-			@RequestParam("content") String content,
-			@RequestParam(value = "file", required = false) MultipartFile file) {
+	public CommentResponse saveComment(@RequestParam("participantId") int participantId, @RequestParam("content") String content, @RequestParam(value = "file", required = false) MultipartFile file) {
 		CommentResponse response = new CommentResponse();
 
 		Comment comment = new Comment();
@@ -150,10 +149,85 @@ public class LandingPageController {
 
 		return response;
 	}
-
+	
 	/**
-	 * @param eventId
-	 *            id del evento a consultar
+	 * @param commentId id del comentario a eliminar
+	 * @return si la operacion fue exitosa
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/deleteComment/{commentId}", method = RequestMethod.GET)
+	public CommentResponse deleteComment(@PathVariable int commentId){
+		CommentResponse response = new CommentResponse();
+		
+		if(commentServiceInterface.deleteComment(commentId)){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Comment not found");
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param imageId id de la imagen a eliminar
+	 * @return si la operacion fue exitosa
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/deleteImage/{imageId}", method = RequestMethod.GET)
+	public EventImageResponse deleteImage(@PathVariable int imageId){
+		EventImageResponse response = new EventImageResponse();
+		
+		if(eventImageServiceInterface.deleteImage(imageId)){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Image not found");
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * @Author Juan Carlos Sánchez G.
+	 * @param idEvent Id del evento del que se listarán los participantes.
+	 * @return response Respuesta del servidor de la petición que incluye la lista de participantes del evento.
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getAllEventParticipants/{idEvent}", method = RequestMethod.GET)
+	public EventParticipantResponse getAllEventParticipants(@PathVariable("idEvent") int idEvent){
+		EventParticipantResponse response = new EventParticipantResponse();
+		response.setEventParticipantsList(eventParticipantServiceInterface.getAllEventParticipants(idEvent));
+		return response;
+	}
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param participantId id del usuario a bloquear para este evento
+	 * @param state nuevo estado del participante
+	 * @return si la operacion fue exitosa
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/participantState/{participantId}", method = RequestMethod.GET)
+	public EventImageResponse participantState(@PathVariable int participantId, @RequestParam("state") byte state){
+		EventImageResponse response = new EventImageResponse();
+		
+		if(eventParticipantServiceInterface.participantState(participantId, state)){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+		}else{
+			response.setCode(500);
+			response.setCodeMessage("Internal error");
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * @param eventId id del evento a consultar
 	 * @return evento consultado
 	 * @version 1.0
 	 */
@@ -175,16 +249,13 @@ public class LandingPageController {
 
 	/**
 	 * @autor Ernesto Mendez A.
-	 * @param userId
-	 *            id del usuario logueado
-	 * @param eventId
-	 *            evento en el que participa
+	 * @param userId id del usuario logueado
+	 * @param eventId evento en el que participa
 	 * @return respuesta del servidor
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/getEventParticipantByUserAndEvent", method = RequestMethod.GET)
-	public EventParticipantResponse getEventParticipantByUserAndEvent(@RequestParam("userId") int userId,
-			@RequestParam("eventId") int eventId) {
+	public EventParticipantResponse getEventParticipantByUserAndEvent(@RequestParam("userId") int userId, @RequestParam("eventId") int eventId) {
 		EventParticipantResponse response = new EventParticipantResponse();
 		EventParticipantPOJO participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
 
@@ -202,15 +273,12 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param userId
-	 *            id del usuario en sesion
-	 * @param eventId
-	 *            id del evento
+	 * @param userId id del usuario en sesion
+	 * @param eventId  id del evento
 	 * @return id del nuevo participante
 	 */
 	@RequestMapping(value = "/createParticipant", method = RequestMethod.GET)
-	public EventParticipantResponse createParticipant(@RequestParam("userId") int userId,
-			@RequestParam("eventId") int eventId) {
+	public EventParticipantResponse createParticipant(@RequestParam("userId") int userId, @RequestParam("eventId") int eventId) {
 		EventParticipantResponse response = new EventParticipantResponse();
 		EventParticipantPOJO participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
 
@@ -230,9 +298,8 @@ public class LandingPageController {
 				response.setCode(404);
 				response.setCodeMessage("User or event not found!");
 			} else {
-				participant = new EventParticipantPOJO();
-				participant.setEventParticipantId(nparticipantId);
-
+				participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
+				
 				response.setCode(200);
 				response.setCodeMessage("Success");
 				response.setEventParticipant(participant);
@@ -244,19 +311,13 @@ public class LandingPageController {
 
 	/**
 	 * @author Antoni Ramirez Montano
-	 * @param nameUser
-	 *            criterio a consultar
-	 * @param namePlace
-	 *            criterio a consultar
-	 * @param name
-	 *            criterio a consultar
-	 * @param publishDate
-	 *            criterio a consultar
+	 * @param nameUser criterio a consultar
+	 * @param namePlace criterio a consultar
+	 * @param name criterio a consultar
 	 * @return lista de eventos basados en los criterios
 	 */
 	@RequestMapping(value = "/getEventByParams/{nameUser}/{name}/{namePlace}", method = RequestMethod.GET)
-	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name,
-			@PathVariable("namePlace") String namePlace) {
+	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name, @PathVariable("namePlace") String namePlace) {
 		EventResponse e = new EventResponse();
 		e.setEventList(eventServiceInterface.getAllByParam(nameUser, name, namePlace, (byte) 3));
 		e.setCode(200);
@@ -290,8 +351,7 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param top
-	 *            cantidad de items que tendra la lista top
+	 * @param top cantidad de items que tendra la lista top
 	 * @return lista con los eventos con mas participantes
 	 * @version 1.0
 	 */
@@ -314,7 +374,6 @@ public class LandingPageController {
 	 * @return
 	 * @version 1.0
 	 */
-	// get event by id
 	@RequestMapping(value = "/getEventByEncryptId/{idEvent}", method = RequestMethod.GET)
 	public EventResponse getEventByEncryptId(@PathVariable("idEvent") String id) {
 		EventResponse response = new EventResponse();
@@ -334,20 +393,15 @@ public class LandingPageController {
 
 	/**
 	 * @author Antoni Ramirez Montano
-	 * @param id
-	 *            del participante a modificar
-	 * @param state
-	 *            se recibe la respuesta si va asistir
-	 * @param comment
-	 *            espacio para agregar algun mensaje con respecto al evento
+	 * @param id del participante a modificar
+	 * @param state se recibe la respuesta si va asistir
+	 * @param comment espacio para agregar algun mensaje con respecto al evento
 	 * @return retorna el response que tiene el estado del url
 	 * @throws ParseException
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/updateEventParticipant/{id}", method = RequestMethod.PUT)
-	public EventParticipantResponse updateEventParticipant(@PathVariable("id") String id,
-			@QueryParam("state") byte state, @QueryParam("comment") String comment) throws ParseException {
-
+	public EventParticipantResponse updateEventParticipant(@PathVariable("id") String id, @QueryParam("state") byte state, @QueryParam("comment") String comment) throws ParseException {
 		EventParticipantResponse response = new EventParticipantResponse();
 
 		int idParticipant = Integer.parseInt(AES.base64decode(id));
@@ -430,25 +484,93 @@ public class LandingPageController {
 		return response;
 	}
 	
+	/**
+	 * @param eventParticipant Id encriptado del participante solicitado
+	 * @param state nuevo estado del participante
+	 * @return El participante y su estado
+	 * @version 1.1
+	 */
 	@RequestMapping(value = "/getPaticipant/{eventParticipant}/{state}", method = RequestMethod.POST)
 	public ServiceContactResponse getPaticipant(@PathVariable String eventParticipant, @PathVariable byte state) {
 		int idParticipant = Integer.parseInt(AES.base64decode(eventParticipant));
 		ServiceContactResponse response = new ServiceContactResponse();
 		EventParticipant objEventParticipant = eventParticipantServiceInterface.findById(idParticipant);
-
-		if (objEventParticipant.getState() == 1) {
-			objEventParticipant.setState(state);
-			response.setCode(200);
-			response.setCodeMessage("Te han invitado a un evento");
-		} else if(objEventParticipant.getState() == 2){
-			response.setCode(201);
-			response.setCodeMessage("Ya confirmaste!");
+		
+		if(objEventParticipant.getState() != 3 && objEventParticipant.getState() != 4) {
+			if (objEventParticipant.getState() == 1) {
+				objEventParticipant.setState(state);
+				response.setCode(200);
+				response.setCodeMessage("Te han invitado a un evento");
+			}else if(objEventParticipant.getState() == 2){
+				response.setCode(201);
+				response.setCodeMessage("Ya confirmaste!");
+			}else if(objEventParticipant.getState() == 0){
+				response.setCode(202);
+				response.setCodeMessage("Ya cancelaste!");
+			}
+		}else{
+			response.setCode(203);
+			response.setCodeMessage("Fuiste bloqueado por el promotor");
 		}
-		else if(objEventParticipant.getState() == 0){
-			response.setCode(202);
-			response.setCodeMessage("Ya cancelaste!");
-		}
+		
 		return response;
 	}
 
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param to parametro con el que se recibe la lista de correos
+	 * @param eventId se recibe el id del evento para el cual han sido invitados
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
+	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		String subject = "Invitación a un evento";
+		String text;
+		try {
+
+			// To get the array of addresses
+			for (String email : to.getListSimple()) {
+
+				EventParticipantResponse response = new EventParticipantResponse();
+
+				EventParticipant eventParticipant = new EventParticipant();
+				eventParticipant.setEvent(new Event());
+				eventParticipant.getEvent().setEventId(eventId);
+				eventParticipant.setState((byte) 1);
+				User user = userserviceInterface.findByEmail(email);
+				
+				if (user != null) {
+					eventParticipant.setUser(user);
+				} else {
+					OfflineUser offlineUser = new OfflineUser();
+					offlineUser.setEmail(email);
+					eventParticipant.setOfflineUser(offlineUser);
+				}
+				eventParticipant.setInvitationDate(new Date());
+				Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
+
+				if (stateResponse) {
+					response.setCode(200);
+				} else {
+					response.setCodeMessage("Something is wrong");
+				}
+
+				text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
+						+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
+						+ "&eventParticipantId="
+						+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
+
+				mailMessage.setTo(email);
+				mailMessage.setText(text);
+				mailMessage.setSubject(subject);
+				mailSender.send(mailMessage);
+
+			}
+
+		} catch (Exception ae) {
+			ae.printStackTrace();
+		}
+	}
 }
