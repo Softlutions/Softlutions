@@ -10,6 +10,7 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		[ '$scope', '$http', 'ngTableParams', '$filter', '$routeParams',
 				function($scope, $http, ngTableParams, $filter, $routeParams) {
 			$scope.$parent.pageTitle = "Donde es - Servicios disponibles";
+			$scope.isCatalog=false;
 			$scope.requestObject={};
 			$scope.currentCatalogId;
 			$scope.init = function() {
@@ -29,6 +30,8 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		    $scope.init();
 		    
 		    $scope.getServicesByCatalog = function(pcurrentCatalogId){
+		    	$scope.isCatalog=true;
+				
 		    	$http.get('rest/protected/service/getServiceByCatalog/' + pcurrentCatalogId)
 				.success(function(response) {
 													$scope.services = response.serviceLists;

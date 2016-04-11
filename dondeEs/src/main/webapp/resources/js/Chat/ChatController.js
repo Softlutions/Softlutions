@@ -23,6 +23,8 @@ angular
 							$scope.showError = true;
 							$scope.messages= {};
 							$scope.isChat= false;
+							$scope.imageGroup = "resources/img/default_group.png"
+							$scope.imageProfile = "resources/img/default-profile.png";
 							$scope.loggedUser = JSON.parse(localStorage
 									.getItem("loggedUser"));
 							
@@ -101,7 +103,7 @@ angular
 							}
 
 							
-							$scope.sendMessage = function(event) {
+							$scope.sendMessage = function() {
 
 								var dataCreate = {
 									user : $scope.loggedUser,
@@ -147,4 +149,10 @@ angular
 											}, 1300);
 								}
 							}
+							
+							$(document.body).delegate('input:text', 'keypress', function(e) {
+							    if (e.which === 13) { // if is enter
+							    	$scope.sendMessage();
+							    }
+							});
 						} ])

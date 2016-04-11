@@ -6,8 +6,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$filter',
-	                                		function($scope, $http, $cookies, $rootScope, $location, $filter){
+	.controller('LandingPageCtrl', ['$scope', 'Upload', '$http', '$cookies', '$rootScope', '$location', '$filter',
+	                                		function($scope, Upload, $http, $cookies, $rootScope, $location, $filter){
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 		if ($cookies.getObject("goToEventsPublish") == null) {
 			$cookies.putObject("goToEventsPublish", false);
@@ -201,6 +201,44 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		}
 		
 		//SAVE COMPANY
+		
+		$scope.attach = function(file) {
+			  if(file != null){
+				  var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+					  if(regex.test(file.name.toLowerCase())){
+						  $scope.companyFile = file;
+						   
+						  var reader = new FileReader();
+							  reader.onload = function(e){
+							  $scope.companyPreviewFile = e.target.result;
+							  $scope.$apply();
+						  }
+						   
+						  reader.readAsDataURL(file);
+					 }else{
+					  $scope.companyPreviewFile = null;
+					  $scope.companyFile = null;
+					  toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
+				     }
+			  }
+		}
+		
+		$scope.insertCompanyImage = function(){
+			Upload.upload({
+			 	url: 'rest/landing/insertCompanyImage',
+			 	data: {
+			 	"email": $scope.user.email,
+			 	"file": $scope.companyFile
+			 	}
+			 	}).then(function(resp) {
+			 	if(resp.status == 200){
+			 		
+			 	}else{
+			 		toastr.error('No se pudo publicar el comentario');
+			 	}
+			 	}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});
+		}
+		
 		$scope.saveCompany = function(user) {
 			$scope.user.email = $scope.userCompany.email;
 			$scope.user.password = $scope.userCompany.password;
@@ -215,6 +253,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
+							$scope.insertCompanyImage();
 							$("#createCompanyForm").modal('hide');
 							$scope.user={};
 							$scope.confirmPassword='';
@@ -237,7 +276,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		            }, 1300);
 			}
 		}
-		
+		// END SAVE COMPANY
 		$(document).ready(function(){
 			$('.numbersOnly').keyup(function () { 
 			    this.value = this.value.replace(/[^0-9\.]/g,'');

@@ -52,7 +52,8 @@
 												contratos</a></li>
 										<li><a href="/dondeEs/app#/eventParticipants/{{event.eventId}}">Listar
 												participantes</a></li>
-										<li id="auctionService{{$index}}" ng-if="!$parent.permissions.isAdmin"><a
+										<li id="auctionService{{$index}}" ng-show="event.state!==0"
+											ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
