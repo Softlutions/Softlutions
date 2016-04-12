@@ -114,7 +114,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							setTimeout(function(){ window.location.href = url; }, 500);
 						}
 					}else{
-						if($scope.loggedUser.state == 2){
+						if($scope.loggedUser != null && $scope.loggedUser.state == 2){
 							window.location.href = "#/changePassword";
 						}else{
 							switch (responseUser.role.roleId) {
