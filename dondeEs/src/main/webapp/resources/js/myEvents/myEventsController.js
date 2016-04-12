@@ -739,4 +739,11 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			});
 		}
     }    
+    
+    angular.element(document).ready(function(){
+		if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+			toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+			setTimeout(function(){window.location.href = "/dondeEs/#/changePassword";}, 2000);
+		}
+	});
 }]);
