@@ -8494,3 +8494,8 @@ textarea {
     color: #555555;
     cursor: default;
 }
+
+.changePasswordForm{
+	margin-top: 16em !important;
+	border: 1px solid #2f4050 !important;
+}

@@ -149,6 +149,7 @@
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 	<script src="resources/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="resources/bower_components/braintree-web/dist/braintree.js"></script>
 
 
 	<!-- Jquery Validate -->

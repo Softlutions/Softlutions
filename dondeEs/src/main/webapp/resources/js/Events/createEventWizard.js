@@ -379,7 +379,6 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 		}).error(function(response){
 			toastr.error("Error", "No se pudo contratar el servicio");
 		});
-		
 		$("#modal-form").modal("toggle");
 	}
 	

@@ -106,11 +106,12 @@ angular
 		};
 		
 		$scope.joinAuction = function(){	
+			var price = $scope.auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
 			var newAuctionService = {
 					acept : 1,
 					date : new Date(),
 					description : $scope.auctionService.description,
-					price : $scope.auctionService.price,
+					price : price,
 					auction : $scope.selectedAuction,
 					service : $scope.auctionService.service
 			}
