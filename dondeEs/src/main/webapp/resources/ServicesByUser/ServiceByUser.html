@@ -1,44 +1,47 @@
 
-	<div class="col-lg-12">
-		<div class="ibox float-e-margins">
-			<div class="ibox-title">
-				<h5>{{$parent.permissions.isAdmin? 'Servicios':'Mis
-					servicios'}}</h5>
-				<a ng-if="!$parent.permissions.isAdmin" data-toggle="modal" ng-click="setCreate()"
-					class="btn btn-primary btn-xs pull-right" data-target="#modal-form">Registrar
-					servicio</a>
-			</div>
-			<div ng-show="services.length" class="ibox-content ">
-				<table class="table table-hover" ng-table="servicesTable">
-					<thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Descripción</th>
-							<th>Categoría</th>
-							<th>Estado</th>
+<div class="col-lg-12">
+	<div class="ibox float-e-margins">
+		<div class="ibox-title">
+			<h5>{{$parent.permissions.isAdmin? 'Servicios':'Mis servicios'}}</h5>
+			<a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
+				ng-click="setCreate()" class="btn btn-primary btn-xs pull-right"
+				data-target="#modal-form">Registrar servicio</a>
+				<div class="form-group">
+					<input type="text" ng-model="search.name"
+						placeholder="Buscar servicio" class="form-control">
+				</div>
+		</div>
+		<div ng-show="services.length" class="ibox-content ">
+			<table class="table table-hover" ng-table="servicesTable">
+				<thead>
+					<tr>
+						<th>Nombre</th>
+						<th>Descripción</th>
+						<th>Categoría</th>
+						<th>Estado</th>
 						<th></th>
-						</tr>
-					</thead>
-					<tbody ng-repeat="service in $data">
-						<tr>
-							<td sortable="'name'">{{service.name}}</td>
-							<td>{{service.description}}</td>
-							<td>{{service.serviceCatalog.name}}</td>
-							<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
+					</tr>
+				</thead>
+				<tbody ng-repeat="service in $data | filter:search:strict">
+					<tr>
+						<td sortable="'name'">{{service.name}}</td>
+						<td>{{service.description}}</td>
+						<td>{{service.serviceCatalog.name}}</td>
+						<td>{{(((service.state)==0)? "Suspendido":"Activo")}}</td>
 						<td>
-							<button class="btn btn-primary btn-xs" data-toggle="modal" ng-click="loadInfo(service)"
-									data-target="#modal-form">Modificar</button>
+							<button class="btn btn-primary btn-xs" data-toggle="modal"
+								ng-click="loadInfo(service)" data-target="#modal-form">Modificar</button>
 						</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div ng-hide="services.length" class="ibox-content">
-				<p>No hay servicios disponibles.</p>
-			</div>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div ng-hide="services.length" class="ibox-content">
+			<p>No hay servicios disponibles.</p>
 		</div>
 	</div>
-		
+</div>
+
 <div id="modal-form" class="modal fade" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -47,51 +50,60 @@
 				<h3 ng-show="creating" class="modal-title">Registrar servicio</h3>
 				<h3 ng-hide="creating" class="modal-title">Modificar servicio</h3>
 			</div>
-			<div class="modal-body">
-				<form role="form" ng-init="service">
+			<form role="form" ng-init="service" name="formCreateService"
+				ng-submit="formCreateService.$valid? saveService($event):validationError()">
+
+				<div class="modal-body">
 					<div class="form-group">
-						<label class="font-normal"><strong>Categoría</strong></label>
-						<select class="form-control"
-							name="serviceCatalog" id="serviceCatalog"
-							class="form-control"
-							ng-model="requestObject"
+						<label class="font-normal"><strong>Categoría</strong></label> <select
+							class="form-control" name="serviceCatalog" id="serviceCatalog"
+							class="form-control" ng-model="requestObject"
 							ng-options="ta as ta.name for ta in serviceCatalogList track by ta.serviceCatalogId ">
 						</select>
 					</div>
 					<div class="form-group">
-						<label class="font-normal"><strong>Nombre</strong></label>
-						<input type="text" id="nombre" class="form-control"
-							placeholder="Nombre" ng-model="objService.name" required />
-						<span ng-show="onError && createRentForm.name.$error.required"
+						<label class="font-normal"><strong>Nombre</strong></label> <input
+							type="text" id="nombre" class="form-control" placeholder="Nombre"
+							ng-model="objService.name" required /> <span
+							ng-show="onError && createRentForm.name.$error.required"
 							class="help-inline" ng-maxlength="255">Required </span>
 					</div>
 					<div class="form-group">
 						<label class="font-normal"><strong>Descripción</strong></label>
-						<textarea rows="5" style="resize: none"
-							placeholder="Descripción" class="form-control"
-							ng-model="objService.description" ng-maxlength="255" required></textarea>
+						<textarea rows="5" style="resize: none" placeholder="Descripción"
+							class="form-control" ng-model="objService.description"
+							ng-maxlength="255" required></textarea>
 					</div>
 					<div ng-hide="creating">
 						<div class="form-group">
-							<label class="font-normal"><strong>Estado</strong></label>
-							<select class="form-control m-b" ng-model="objService.state" id="updateSelect">
+							<label class="font-normal"><strong>Estado</strong></label> <select
+								class="form-control m-b" ng-model="objService.state"
+								id="updateSelect">
 								<option value="1">Activo</option>
-   								<option value="0">Suspendido</option>
+								<option value="0">Suspendido</option>
 							</select>
-						</div>						
-					</div>									
-				</form>
-			</div>
-			<div class="modal-footer">
-				<div ng-show="creating" class="form-group">
-					<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
-					<button class="btn btn-sm btn-primary pull-right" type="submit" ng-click="saveService($event)"><strong>Guardar</strong></button>
+						</div>
+					</div>
+
 				</div>
-				<div ng-hide="creating" class="form-group">
-					<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
-					<button class="btn btn-sm btn-primary" ng-click="updateService($event,$index)">	<strong>Guardar</strong></button>
+				<div class="modal-footer">
+					<div ng-show="creating" class="form-group">
+						<button type="button" class="btn btn-sm btn-danger"
+							data-dismiss="modal">Cancelar</button>
+						<button class="btn btn-sm btn-primary pull-right" type="submit">
+							<strong>Guardar</strong>
+						</button>
+					</div>
+					<div ng-hide="creating" class="form-group">
+						<button type="button" class="btn btn-sm btn-danger"
+							data-dismiss="modal">Cancelar</button>
+						<button class="btn btn-sm btn-primary"
+							ng-click="updateService($event,$index)">
+							<strong>Guardar</strong>
+						</button>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>

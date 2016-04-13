@@ -9,38 +9,50 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 	$scope.$parent.pageTitle = "Donde es - Usuarios";
 	$scope.users = [];
 	$scope.objRequest={};
+	$scope.emptyTable = false;
+	$scope.isCompany;
 	// list Users
 	$http.get("rest/protected/users/getAll").success(function(response){
 		if(response.code == 200){
 			$scope.users = response.listUser;
-
-			// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
-			var params = {
-				page: 1,	// PAGINA INICIAL
-				count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-				sorting: {name: "asc"}
-			};
-			
-			var settings = {
-				total: $scope.users.length,	
-				counts: [],	
-				getData: function($defer, params){
-					var fromIndex = (params.page() - 1) * params.count();
-					var toIndex = params.page() * params.count();
-					
-					var subList = $scope.users.slice(fromIndex, toIndex);
-					var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
-					$defer.resolve(sortedList);
-				}
-			};
-			
-			$scope.usersTable = new ngTableParams(params, settings);
+			pagination($scope.users);
 		}
-			
 	}).error(function(response){
 		toastr.error("No se pudo cargar los datos");
 		console.log("error" + response.message);
 	});
+	
+	$scope.search = function(criteria){
+		if($scope.users.length > 0){
+			var newList = $filter('filter')($scope.users, criteria);
+			$scope.emptyTable = (newList.length == 0);
+			pagination(newList);
+		}
+	}
+	
+	function pagination(userList){
+		// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
+		var params = {
+			page: 1,	// PAGINA INICIAL
+			count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
+			sorting: {name: "asc"}
+		};
+		
+		var settings = {
+			total: userList.length,	
+			counts: [],	
+			getData: function($defer, params){
+				var fromIndex = (params.page() - 1) * params.count();
+				var toIndex = params.page() * params.count();
+				
+				var subList = userList.slice(fromIndex, toIndex);
+				var sortedList = $filter('orderBy')(subList, params.orderBy());	// SOLO SI VAN A ORDENAR POR ALGUN CAMPO
+				$defer.resolve(sortedList);
+			}
+		};
+		
+		$scope.usersTable = new ngTableParams(params, settings);
+	}
 	
 	// change user state
 	$scope.userState = function(userId, check){
@@ -88,11 +100,12 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 	// get roles
 	$http.get('rest/protected/role/getAll').success( function(response) {
 		$scope.roles = response.listRole;
-		$scope.objRequest.roleId = $scope.roles[0].roleId 
+		$scope.objRequest.roleId = $scope.roles[0].roleId
+		$scope.objRequest.name = $scope.roles[0].name
 	});
 	
 	//update user
-	$scope.loadInfo= function (user){
+	$scope.loadInfo= function (user, index){
 		$scope.users.name = user.name,
 		$scope.users.userId = user.userId,
 		$scope.users.lastName1 = user.lastName1,
@@ -100,7 +113,12 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 		$scope.users.email = user.email,
 		$scope.users.phone = user.phone,
 		$scope.users.userType = user.userType
-		
+
+		if($scope.users.lastName1 != null){
+			$scope.isCompany = true;
+		}else{
+			$scope.isCompany = false;
+		}
 	}
 	
 	$scope.updateUser= function(event){
@@ -112,11 +130,18 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 			email: $scope.users.email,
 			phone : $scope.users.phone,
 			userType: $scope.users.userType,
-			role : $scope.objRequest
+			role : $scope.objRequest,
+			state : 1
 		}
+		
+
 		$http.put('rest/protected/users/updateUser',dataUpdate).success(function(response) {
-			console.log('ok');
 		});
+	}
+	
+	//validation error
+	$scope.validationError = function(){
+		toastr.warning('Algunos campos no cumplen con los requisitos');
 	}
 	
 }]);

@@ -7,6 +7,7 @@ angular
 		});
 	}])
 	.controller('ServicesByUserCtrl',['$scope','$http','ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
+		$scope.$parent.pageTitle = "Donde es - Mis servicios";
 		$scope.users = [];
 		$scope.services = [];
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -134,4 +135,9 @@ angular
 				$("#modal-form").modal('toggle');
 			});
 		};
+		
+		//validation error
+		$scope.validationError = function(){
+			toastr.warning('Algunos campos no cumplen con los requisitos');
+		}
 	}]);

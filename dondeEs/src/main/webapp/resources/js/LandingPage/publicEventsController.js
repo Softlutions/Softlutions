@@ -112,7 +112,7 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 		
 		var params = {
 			page: 1,
-			count: 2,
+			count: 15,
 			sorting: {publishDate: "desc"}
 		};
 		

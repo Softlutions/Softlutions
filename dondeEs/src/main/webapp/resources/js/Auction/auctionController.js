@@ -10,9 +10,9 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 }])
 
 .controller('auctionsEventCtrl', ['$scope','$http','$location','$routeParams', '$window', '$timeout', 
-                                  		'ngTableParams', '$filter',
+                                  		'ngTableParams', '$filter', '$interval', 
                                   			function($scope, $http, $location, $routeParams, $window, 
-                                  						$timeout, ngTableParams, $filter) {	
+                                  						$timeout, ngTableParams, $filter, $interval) {	
 	$scope.$parent.pageTitle = "Donde es - Subastas disponibles";
 	$scope.auctionsEvent = [];
 	$scope.auctionServices = [];
@@ -36,6 +36,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	}
 	
 	$scope.hideServiceList = function () {
+		$interval.cancel($scope.refreshInterval);
 		$scope.serviceList  = false;
 	}
 	
@@ -69,12 +70,17 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 			} else {
 		    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
 			}
-		});		
+		});
 	}
+	
+	$scope.$on('$destroy', function() {
+		$interval.cancel($scope.refreshInterval);
+	});
 	
 	$scope.getAllAuctionByEvent();
 	
-	$scope.loadAuctionServices = function (index) {		
+	$scope.loadAuctionServices = function (index) {
+		$interval.cancel($scope.refreshInterval);
 		$scope.auctionServices = $scope.auctionsEvent[index].auctionServices;
 		
 		var params = {
@@ -107,6 +113,12 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 					$("#auctionParticipant-"+entry.auctionServicesId).text("Contratado");
 			});
 		});
+		
+		$scope.refreshInterval = $interval(function(){
+			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$scope.auctionsEvent[index].auctionId).success(function(response) {
+				$scope.auctionServices = response.auctionServiceList;
+			});
+		}, 3000);
 	}
 	
 	$scope.goToServiceProviderProfile = function () {
@@ -174,17 +186,17 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	$scope.createAuction = function(){
 		if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
 			toastr.error('Debe ingresar todos los datos!');
-		}else{			
+		}else{
 			var date = new Date($('#datetimepicker').data("DateTimePicker").date());
 			var auction = {
-					name: $scope.tempAuction.name,
-					description: $scope.tempAuction.description,
-					date: date,
-					state: 1,
-					event: $scope.selectedEvent,
-					serviceCatalog: $scope.tempAuction.selected
-			}
-			
+				name: $scope.tempAuction.name,
+				description: $scope.tempAuction.description,
+				date: date,
+				state: 1,
+				event: $scope.selectedEvent,
+				serviceCatalog: $scope.tempAuction.selected
+			};
+		
 			$http({method: 'POST',url:'rest/protected/auction/createAuction', data:auction, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 				$('#modalAuctionEventServices').modal('toggle');
 				$scope.tempAuction = {};
@@ -194,7 +206,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 				$scope.getAllAuctionByEvent();
 				
 		    	setTimeout(function(){$('#modalAuctionsByEvent').modal('show')}, 900);
-			});	
+			});
 		}
 	}	
 }]);

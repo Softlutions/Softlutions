@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cenfotec.dondeEs.ejb.Comment;
@@ -57,7 +58,10 @@ public class CommentService implements CommentServiceInterface {
 			commentPOJO.setContent(c.getContent());
 			commentPOJO.setImage(c.getImage());
 			commentPOJO.setDate(c.getDate());
+			
 			EventParticipantPOJO eventParticipantPOJO = new EventParticipantPOJO();
+			eventParticipantPOJO.setState(c.getEventParticipant().getState());
+			
 			if(c.getEventParticipant().getUser() != null){
 				UserPOJO userPOJO = new UserPOJO();
 				userPOJO.setName(c.getEventParticipant().getUser().getName());
@@ -66,11 +70,13 @@ public class CommentService implements CommentServiceInterface {
 				userPOJO.setImage(c.getEventParticipant().getUser().getImage());
 				eventParticipantPOJO.setUser(userPOJO);
 			}
+			
 			if(c.getEventParticipant().getOfflineUser() != null){
 				OfflineUserPOJO offlineUserPOJO = new OfflineUserPOJO();
 				offlineUserPOJO.setEmail(c.getEventParticipant().getOfflineUser().getEmail());
 				eventParticipantPOJO.setOfflineUser(offlineUserPOJO);
 			}
+			
 			commentPOJO.setEventParticipant(eventParticipantPOJO);
 			commentPOJOList.add(commentPOJO);
 			
@@ -78,5 +84,15 @@ public class CommentService implements CommentServiceInterface {
 		return commentPOJOList;
 	}
 	
-	
+	@Override
+	@Transactional
+	public Boolean deleteComment(int commentId) {
+		boolean isDeleted = false;
+		Comment comment = commentRepository.findOne(commentId);
+		
+		if(isDeleted = (comment != null))
+			commentRepository.delete(comment);
+		
+		return isDeleted;
+	}
 }

@@ -12,4 +12,6 @@ public interface CommentServiceInterface {
 	Boolean saveComment(Comment comment, MultipartFile file);
 
 	List<CommentPOJO> getCommentsByEvent(int eventId);
+
+	Boolean deleteComment(int commentId);
 }

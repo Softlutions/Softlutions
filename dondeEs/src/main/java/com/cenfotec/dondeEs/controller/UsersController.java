@@ -84,7 +84,11 @@ public class UsersController {
 		
 		return us;
 	}
-	
+	/**
+	 * 
+	 * @param ur
+	 * @return
+	 */
 	@RequestMapping(value ="/updateUser", method = RequestMethod.PUT)
 	public UserResponse updateUser(@RequestBody User ur){	
 		UserResponse us = new UserResponse();

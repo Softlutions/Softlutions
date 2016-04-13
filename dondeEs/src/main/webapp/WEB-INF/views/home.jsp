@@ -145,7 +145,7 @@
 	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
 	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
-		<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
+	<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
 	<script src="resources/bower_components/sweetalert/dist/sweetalert.min.js"></script>
