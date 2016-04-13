@@ -33,7 +33,8 @@ public class ReportController {
 		ParticipationOnEventsResponse response = new ParticipationOnEventsResponse();
 		
 		try {
-			
+			response.setResultParticipationOnEvents(reportServiceInterface.getParticipationOnEvents(serviceProviderId, 
+																										dateBegin, dateEnd)); 
 			response.setCode(200);
 			
 		} catch (Exception e) {

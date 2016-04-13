@@ -267,4 +267,24 @@ public class UserService implements UserServiceInterface {
 		
 		return changed;
 	}
+	
+	@Override
+	public List<UserPOJO> getAllServiceProviderNames() {
+		List<User> usersList = userRepository.findByRoleRoleId(2);
+		List<UserPOJO> usersListPOJO = new ArrayList<>();
+
+		usersList.stream().forEach(u -> {
+			UserPOJO userPOJO = new UserPOJO();
+			userPOJO.setUserId(u.getUserId());
+			userPOJO.setName(u.getName());
+			userPOJO.setLastName1(u.getLastName1());
+			userPOJO.setLastName2(u.getLastName2());
+			userPOJO.setEmail(null);
+			userPOJO.setPhone(null);
+			
+			usersListPOJO.add(userPOJO); 
+		});
+		
+		return usersListPOJO;
+	}
 }

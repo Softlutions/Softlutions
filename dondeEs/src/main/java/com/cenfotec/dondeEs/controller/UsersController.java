@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.ejb.User;
@@ -106,5 +107,26 @@ public class UsersController {
 		return us;
 	}
 	
-	
+	/**
+	 * Lista el nombre y el id de todos los prestatarios registrados.
+	 * @author Enmanuel García González.
+	 * @return Lista de pretatarios con su id y nombre.
+	 * @version 1.0
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value ="/getAllServiceProviderNames", method = RequestMethod.GET)
+	public UserResponse getAllServiceProviderNames(){	
+		UserResponse response = new UserResponse();
+		
+		try {
+			response.setListUser(userServiceInterface.getAllServiceProviderNames());																							 
+			response.setCode(200);
+			
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setCodeMessage(e.toString());
+			e.printStackTrace();
+
+		} finally { return response; }
+	}
 }
