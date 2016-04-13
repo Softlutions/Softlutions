@@ -201,6 +201,7 @@ angular
 		};
 		
 		$scope.joinAuction = function(){
+		var price = $scope.auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
 			if($scope.auctionService.description == null || $scope.auctionService.price == null || $scope.auctionService.service == null){
 				toastr.error('Debe ingresar todos los datos!');
 			}else{

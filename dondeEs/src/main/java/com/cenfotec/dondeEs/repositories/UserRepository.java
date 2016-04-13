@@ -18,4 +18,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	List<Service> getServicesByUser(int id);
 
 	User findByUserId(int id);
+	
+	List<User> findByRoleRoleId(int role);
 }

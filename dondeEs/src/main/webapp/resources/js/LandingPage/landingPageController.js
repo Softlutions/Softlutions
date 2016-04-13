@@ -1,5 +1,5 @@
 'use strict';
-angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.viewEvent', 'landingPageModule.events'])
+angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.viewEvent', 'landingPageModule.events', 'landingPageModule.changePassword'])
 	.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/landingPage', {
 			templateUrl : 'resources/landingPage/landingPage.html',
@@ -115,7 +115,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							setTimeout(function(){ window.location.href = url; }, 500);
 						}
 					}else{
-						switch (responseUser.role.roleId) {
+						if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+							window.location.href = "#/changePassword";
+						}else{
+							switch (responseUser.role.roleId) {
 							case 1:
 								window.location.href = "/dondeEs/app#/users";
 								break;
@@ -128,6 +131,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							case 4:
 								window.location.reload();
 								break;
+							}
 						}
 					}
 				}else{
@@ -520,5 +524,15 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		}
 		//END ANSWER INVITATION
+		
+		
+		angular.element(document).ready(function(){
+			if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+				toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+				setTimeout(function(){window.location.href = "#/changePassword";}, 2000);
+			}
+		});
 
+		
+		
 	}]);
