@@ -87,4 +87,12 @@ public interface UserServiceInterface {
 	 * @version 1.0
 	 */
 	UserPOJO getUserById(int userId);
+	
+	/**
+	 * Lista el nombre y el id de todos los prestatarios registrados.
+	 * @author Enmanuel García González. 
+	 * @return Lista de pretatarios con su id y nombre.
+	 * @version 1.0
+	 */
+	List<UserPOJO> getAllServiceProviderNames();
 }
