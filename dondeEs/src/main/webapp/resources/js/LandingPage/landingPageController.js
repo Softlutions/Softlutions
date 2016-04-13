@@ -234,9 +234,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			 	if(resp.status == 200){
 			 		
 			 	}else{
-			 		toastr.error('No se pudo publicar el comentario');
+//			 		toastr.error('No se pudo publicar el comentario');
 			 	}
-			 	}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});
+			 	}, function(err) {  }, function(prog) {});
 		}
 		
 		$scope.saveCompany = function(user) {

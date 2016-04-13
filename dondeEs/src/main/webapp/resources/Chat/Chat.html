@@ -10,8 +10,8 @@
 						<div class="users-list">
 							<div class="chat-user" ng-repeat="chat in chats"
 								ng-click="getAllMessage(chat.chatId); getEventName(chat.event.name)">
-								<img class="chat-avatar"  ng-src="{{chat.event.image	 || imageGroup }}"
-									alt="">
+								<img class="chat-avatar"
+									ng-src="{{chat.event.image	 || imageGroup }}" alt="">
 
 								<div class="chat-user-name">
 									<a>{{chat.event.name}}</a>
@@ -33,14 +33,16 @@
 						<div
 							ng-class="(message.user.userId == loggedUser.userId) ? 'chat-message left': 'chat-message right'"
 							ng-repeat="message in messages">
-							<img class="message-avatar" src="{{chat.user.image || imageProfile}}"
-								alt="">
+							<img class="message-avatar"
+								src="{{chat.user.image || imageProfile}}" alt="">
 
 							<div class="message">
 								<a class="message-author"> {{message.user.name}} </a> <span
 									class="message-date">{{message.time | date:"MM/dd/yyyy
 									'a las' h:mma"}} </span> {{message.content}}<span
-									class="message-content"></span>
+									class="message-content"></span> <img
+									ng-if="message.image != null" class="center-block"
+									ng-src="{{message.image}}" width="300px" height="250px" />
 							</div>
 						</div>
 
@@ -49,12 +51,25 @@
 						<div class="col-lg-12">
 							<div class="chat-message-form">
 								<div class="input-group">
-									<input type="text" placeholder="Escribe aquí tu mensaje..."
-										ng-model="objMessage.content" class="form-control"> <span
+									<textarea type="text" placeholder="Escribe aquí tu mensaje..."
+										ng-model="objMessage.content" rows="1" ng-maxlength="255" class="form-control"></textarea> <span
 										class="input-group-btn">
 										<button type="button" class="btn btn-primary"
 											ng-click="sendMessage()">Enviar</button>
 									</span>
+								</div>
+								<div class="form-group">
+
+									<div class="button" ngf-select="attach($file)">
+										<label class="btn btn-default pull-right fa fa-camera"
+											data-toggle="tooltip" title="Adjuntar imagen"></label>
+									</div>
+									<label class="btn btn-default pull-right fa fa-trash"
+										data-toggle="tooltip" title="Quitar imagen adjunta"
+										ng-click="chatPreviewFile = null; chatFile = null;"
+										ng-show="chatFile != null"></label> <img
+										ng-if="chatPreviewFile != null" ng-src={{chatPreviewFile}}
+										class="center-block" with="150px" height="100px" /><br />
 								</div>
 							</div>
 						</div>

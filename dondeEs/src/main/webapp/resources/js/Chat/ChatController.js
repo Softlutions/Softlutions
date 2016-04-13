@@ -12,8 +12,8 @@ angular
 				[
 						'$scope',
 						'$http',
-						'$location','$interval','$timeout',
-						function($scope, $http, $location, $interval, $timeout) {
+						'$location','Upload','$interval','$timeout',
+						function($scope, $http, $location, Upload, $interval, $timeout) {
 							$scope.$parent.pageTitle = "Donde es - Chats";
 							$("#messageByChat").hide();
 							$scope.objMessage = {};
@@ -102,32 +102,62 @@ angular
 								}
 							}
 
+							$scope.attach = function(file) {
+								  if(file != null){
+									  var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+										  if(regex.test(file.name.toLowerCase())){
+											  $scope.chatFile = file;
+											   
+											  var reader = new FileReader();
+												  reader.onload = function(e){
+												  $scope.chatPreviewFile = e.target.result;
+												  $scope.$apply();
+											  }
+											   
+											  reader.readAsDataURL(file);
+										 }else{
+										  $scope.chatPreviewFile = null;
+										  $scope.chatFile = null;
+										  toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
+									     }
+								  }
+							}
 							
 							$scope.sendMessage = function() {
 
 								var dataCreate = {
 									user : $scope.loggedUser,
 									chat : $scope.chat,
-									content : $scope.objMessage.content
-
+									content : $scope.objMessage.content,
+									image : $scope.chatFile
 								}
-								if ($scope.objMessage.content != null && $scope.objMessage.content != '') {
+								if ($scope.objMessage.content != null && $scope.objMessage.content != undefined  && $scope.objMessage.content != "" && $scope.objMessage.content != '' || $scope.chatFile != undefined || $scope.chatFile != null) {
 										if($scope.chat != null){
-									$http(
-											{
-												method : 'POST',
-												url : 'rest/protected/message/createMessage',
-												data : dataCreate,
-												headers : {
-													'Content-Type' : 'application/json'
-												}
-											})
-											.success(
-													function(response) {
-														$scope.messages = $scope.messages
-																.concat(dataCreate);
-														$scope.objMessage.content=''
-													})
+											if($scope.objMessage.content == undefined){
+												$scope.objMessage.content = '';
+											}
+											if($scope.chatFile == undefined){
+												$scope.chatFile = null;
+											}
+											Upload.upload({
+											 	url: 'rest/protected/message/insertImageChat',
+											 	
+											 	data: {
+											 	"idChat": $scope.chat.chatId,
+											 	"idUser": $scope.loggedUser.userId,
+											 	"file": $scope.chatFile,
+											 	"content":$scope.objMessage.content
+											 	}
+											 	}).then(function(resp) {
+												 	if(resp.status == 200){
+												 		$scope.messages = $scope.messages
+														.concat(dataCreate);
+												 		$scope.objMessage.content='';
+												 		$scope.chatFile = null;
+												 		$scope.chatPreviewFile = null;
+												 	}else{
+												 	}
+												 	}, function(err) {  }, function(prog) {});
 										}else{
 											setTimeout(
 											function() {
