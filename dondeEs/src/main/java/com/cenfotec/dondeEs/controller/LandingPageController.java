@@ -3,6 +3,7 @@ package com.cenfotec.dondeEs.controller;
 import java.text.ParseException;
 import java.util.Date;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.cenfotec.dondeEs.contracts.EventParticipantResponse;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.contracts.ServiceContactRequest;
 import com.cenfotec.dondeEs.contracts.ServiceContactResponse;
+import com.cenfotec.dondeEs.contracts.UserResponse;
 import com.cenfotec.dondeEs.ejb.Comment;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
@@ -38,6 +40,7 @@ import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 import com.cenfotec.dondeEs.services.ServiceContactInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
+import com.cenfotec.dondeEs.utils.Utils;
 
 /**
  * Handles requests for the application home page.
@@ -59,19 +62,24 @@ public class LandingPageController {
 	@Autowired
 	private ServiceContactInterface serviceContactInterface;
 	@Autowired
+	private ServletContext servletContext;
+	@Autowired
 	private UserServiceInterface userserviceInterface;
 	@Autowired
 	private JavaMailSender mailSender;
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param eventParticipantId id del participante del evento asociado
-	 * @param file archivo de imagen a subir
+	 * @param eventParticipantId
+	 *            id del participante del evento asociado
+	 * @param file
+	 *            archivo de imagen a subir
 	 * @return si la operacion fue efectiva o no
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/saveImage", method = RequestMethod.POST)
-	public EventImageResponse saveImage(@RequestParam("eventParticipantId") int eventParticipantId, @RequestParam("file") MultipartFile file) {
+	public EventImageResponse saveImage(@RequestParam("eventParticipantId") int eventParticipantId,
+			@RequestParam("file") MultipartFile file) {
 		EventImageResponse response = new EventImageResponse();
 
 		if (eventImageServiceInterface.saveImage(eventParticipantId, file)) {
@@ -87,7 +95,9 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param eventId id del evento del cual se desea objetener las imagenes asociadas
+	 * @param eventId
+	 *            id del evento del cual se desea objetener las imagenes
+	 *            asociadas
 	 * @return Lista de imagenes del evento
 	 * @version 1.0
 	 */
@@ -102,7 +112,8 @@ public class LandingPageController {
 
 	/**
 	 * @author Juan Carlos Sánchez G.
-	 * @param eventId Peticion que contiene la información del comentario por crear.
+	 * @param eventId
+	 *            Peticion que contiene la información del comentario por crear.
 	 * @return Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
@@ -117,14 +128,19 @@ public class LandingPageController {
 	/**
 	 * @author Juan Carlos Sánchez G. (Autor)
 	 * @author Ernesto Mendez A. (Subir imagen)
-	 * @param participantId id del participante que comenta
-	 * @param content texto del comentario
-	 * @param file (opcional) archivo de si comenta con una imagen
+	 * @param participantId
+	 *            id del participante que comenta
+	 * @param content
+	 *            texto del comentario
+	 * @param file
+	 *            (opcional) archivo de si comenta con una imagen
 	 * @return Respuesta del servidor de la petición.
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/saveComment", method = RequestMethod.POST)
-	public CommentResponse saveComment(@RequestParam("participantId") int participantId, @RequestParam("content") String content, @RequestParam(value = "file", required = false) MultipartFile file) {
+	public CommentResponse saveComment(@RequestParam("participantId") int participantId,
+			@RequestParam("content") String content,
+			@RequestParam(value = "file", required = false) MultipartFile file) {
 		CommentResponse response = new CommentResponse();
 
 		Comment comment = new Comment();
@@ -149,48 +165,50 @@ public class LandingPageController {
 
 		return response;
 	}
-	
+
 	/**
-	 * @param commentId id del comentario a eliminar
+	 * @param commentId
+	 *            id del comentario a eliminar
 	 * @return si la operacion fue exitosa
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/deleteComment/{commentId}", method = RequestMethod.GET)
-	public CommentResponse deleteComment(@PathVariable int commentId){
+	public CommentResponse deleteComment(@PathVariable int commentId) {
 		CommentResponse response = new CommentResponse();
-		
-		if(commentServiceInterface.deleteComment(commentId)){
+
+		if (commentServiceInterface.deleteComment(commentId)) {
 			response.setCode(200);
 			response.setCodeMessage("Success");
-		}else{
+		} else {
 			response.setCode(404);
 			response.setCodeMessage("Comment not found");
 		}
-		
+
 		return response;
 	}
-	
+
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param imageId id de la imagen a eliminar
+	 * @param imageId
+	 *            id de la imagen a eliminar
 	 * @return si la operacion fue exitosa
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/deleteImage/{imageId}", method = RequestMethod.GET)
-	public EventImageResponse deleteImage(@PathVariable int imageId){
+	public EventImageResponse deleteImage(@PathVariable int imageId) {
 		EventImageResponse response = new EventImageResponse();
-		
-		if(eventImageServiceInterface.deleteImage(imageId)){
+
+		if (eventImageServiceInterface.deleteImage(imageId)) {
 			response.setCode(200);
 			response.setCodeMessage("Success");
-		}else{
+		} else {
 			response.setCode(404);
 			response.setCodeMessage("Image not found");
 		}
-		
+
 		return response;
 	}
-	
+
 	/**
 	 * @Author Juan Carlos Sánchez G.
 	 * @param idEvent Id del evento del que se listarán los participantes.
@@ -218,16 +236,17 @@ public class LandingPageController {
 		if(eventParticipantServiceInterface.participantState(participantId, state)){
 			response.setCode(200);
 			response.setCodeMessage("Success");
-		}else{
+		} else {
 			response.setCode(500);
 			response.setCodeMessage("Internal error");
 		}
-		
+
 		return response;
 	}
-	
+
 	/**
-	 * @param eventId id del evento a consultar
+	 * @param eventId
+	 *            id del evento a consultar
 	 * @return evento consultado
 	 * @version 1.0
 	 */
@@ -254,13 +273,16 @@ public class LandingPageController {
 
 	/**
 	 * @autor Ernesto Mendez A.
-	 * @param userId id del usuario logueado
-	 * @param eventId evento en el que participa
+	 * @param userId
+	 *            id del usuario logueado
+	 * @param eventId
+	 *            evento en el que participa
 	 * @return respuesta del servidor
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/getEventParticipantByUserAndEvent", method = RequestMethod.GET)
-	public EventParticipantResponse getEventParticipantByUserAndEvent(@RequestParam("userId") int userId, @RequestParam("eventId") int eventId) {
+	public EventParticipantResponse getEventParticipantByUserAndEvent(@RequestParam("userId") int userId,
+			@RequestParam("eventId") int eventId) {
 		EventParticipantResponse response = new EventParticipantResponse();
 		EventParticipantPOJO participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
 
@@ -283,7 +305,8 @@ public class LandingPageController {
 	 * @return id del nuevo participante
 	 */
 	@RequestMapping(value = "/createParticipant", method = RequestMethod.GET)
-	public EventParticipantResponse createParticipant(@RequestParam("userId") int userId, @RequestParam("eventId") int eventId) {
+	public EventParticipantResponse createParticipant(@RequestParam("userId") int userId,
+			@RequestParam("eventId") int eventId) {
 		EventParticipantResponse response = new EventParticipantResponse();
 		EventParticipantPOJO participant = eventParticipantServiceInterface.findByUserAndEvent(userId, eventId);
 
@@ -296,7 +319,7 @@ public class LandingPageController {
 			eventParticipant.setUser(userServiceInterface.findById(userId));
 			eventParticipant.setEvent(eventServiceInterface.getEventById(eventId));
 			eventParticipant.setState((byte) 2);
-			
+
 			int nparticipantId = eventParticipantServiceInterface.createParticipant(eventParticipant);
 
 			if (nparticipantId == 0) {
@@ -316,13 +339,17 @@ public class LandingPageController {
 
 	/**
 	 * @author Antoni Ramirez Montano
-	 * @param nameUser criterio a consultar
-	 * @param namePlace criterio a consultar
-	 * @param name criterio a consultar
+	 * @param nameUser
+	 *            criterio a consultar
+	 * @param namePlace
+	 *            criterio a consultar
+	 * @param name
+	 *            criterio a consultar
 	 * @return lista de eventos basados en los criterios
 	 */
 	@RequestMapping(value = "/getEventByParams/{nameUser}/{name}/{namePlace}", method = RequestMethod.GET)
-	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name, @PathVariable("namePlace") String namePlace) {
+	public EventResponse getEventByParams(@PathVariable("nameUser") String nameUser, @PathVariable("name") String name,
+			@PathVariable("namePlace") String namePlace) {
 		EventResponse e = new EventResponse();
 		e.setEventList(eventServiceInterface.getAllByParam(nameUser, name, namePlace, (byte) 3));
 		e.setCode(200);
@@ -356,7 +383,8 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param top cantidad de items que tendra la lista top
+	 * @param top
+	 *            cantidad de items que tendra la lista top
 	 * @return lista con los eventos con mas participantes
 	 * @version 1.0
 	 */
@@ -398,15 +426,19 @@ public class LandingPageController {
 
 	/**
 	 * @author Antoni Ramirez Montano
-	 * @param id del participante a modificar
-	 * @param state se recibe la respuesta si va asistir
-	 * @param comment espacio para agregar algun mensaje con respecto al evento
+	 * @param id
+	 *            del participante a modificar
+	 * @param state
+	 *            se recibe la respuesta si va asistir
+	 * @param comment
+	 *            espacio para agregar algun mensaje con respecto al evento
 	 * @return retorna el response que tiene el estado del url
 	 * @throws ParseException
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/updateEventParticipant/{id}", method = RequestMethod.PUT)
-	public EventParticipantResponse updateEventParticipant(@PathVariable("id") String id, @QueryParam("state") byte state, @QueryParam("comment") String comment) throws ParseException {
+	public EventParticipantResponse updateEventParticipant(@PathVariable("id") String id,
+			@QueryParam("state") byte state, @QueryParam("comment") String comment) throws ParseException {
 		EventParticipantResponse response = new EventParticipantResponse();
 
 		int idParticipant = Integer.parseInt(AES.base64decode(id));
@@ -435,11 +467,12 @@ public class LandingPageController {
 		}
 		return response;
 	}
-	
-/**
+
+	/**
 	 * @Author Alejandro Bermudez Vargas
-	 * @param ServiceContactRequest serviceContactRequest
-	 * @return Retonrna el resultado de dicha  respuesta
+	 * @param ServiceContactRequest
+	 *            serviceContactRequest
+	 * @return Retonrna el resultado de dicha respuesta
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/getServiceContact", method = RequestMethod.POST)
@@ -449,27 +482,26 @@ public class LandingPageController {
 		ServiceContactResponse response = new ServiceContactResponse();
 		ServiceContact serviceContact = serviceContactInterface
 				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
-		
+
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
 			response.setCodeMessage("Tienes una solicitud pendiente");
-		} else if(serviceContact.getState() == 2){
+		} else if (serviceContact.getState() == 2) {
 			response.setCode(201);
 			response.setCodeMessage("Ya confirmaste!");
-		}
-		else if(serviceContact.getState() == 1){
+		} else if (serviceContact.getState() == 1) {
 			response.setCode(202);
 			response.setCodeMessage("Ya cancelaste!");
 		}
 		return response;
 	}
-	
-	
+
 	/**
 	 * @Author Alejandro Bermudez Vargas
-	 * @param ServiceContactRequest serviceContactRequest
-	 * @return Retonrna el resultado de dicha  respuesta
+	 * @param ServiceContactRequest
+	 *            serviceContactRequest
+	 * @return Retonrna el resultado de dicha respuesta
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/answerContract", method = RequestMethod.POST)
@@ -482,8 +514,10 @@ public class LandingPageController {
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
-			if(serviceContactRequest.getState() == 2) response.setCodeMessage("Solicitud aceptada");
-			if(serviceContactRequest.getState() == 1) response.setCodeMessage("Solicitud no aceptada");
+			if (serviceContactRequest.getState() == 2)
+				response.setCodeMessage("Solicitud aceptada");
+			if (serviceContactRequest.getState() == 1)
+				response.setCodeMessage("Solicitud no aceptada");
 		}
 		serviceContactInterface.saveServiceContact(serviceContact);
 		return response;
@@ -580,5 +614,23 @@ public class LandingPageController {
 		}
 		
 		return resp;
+	}
+	@RequestMapping(value = "/insertCompanyImage", method = RequestMethod.POST)
+	public UserResponse insertUserImage(@RequestParam("email") String email, @RequestParam("file") MultipartFile file) {
+		UserResponse us = new UserResponse();
+		User u = userServiceInterface.findByEmail(email);
+		String image = Utils.writeToFile(file, servletContext);
+		if (image != null)
+			u.setImage(image);
+		Boolean nuserId = userServiceInterface.updateUser(u);
+		if (nuserId) {
+			us.setCode(200);
+			us.setCodeMessage("User update succesfully");
+		} else {
+			us.setCode(400);
+			us.setCodeMessage("El usuario ya existe en la base de datos!");
+		}
+
+		return us;
 	}
 }

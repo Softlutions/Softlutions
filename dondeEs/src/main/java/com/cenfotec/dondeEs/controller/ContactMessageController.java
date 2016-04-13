@@ -28,7 +28,7 @@ public class ContactMessageController {
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-	public void sendMessage(@RequestBody MessageRequest message) {
+	public BaseResponse sendMessage(@RequestBody MessageRequest message) {
 		BaseResponse response = new BaseResponse();
 		
 		try {
@@ -45,10 +45,12 @@ public class ContactMessageController {
 			mailSender.send(mailMessage);
 			
 			response.setCode(200);
+			return response;
 		} catch (Exception e) {
 			response.setCode(500);
 			response.setErrorMessage(e.toString());
 			e.printStackTrace();
+			return response;
 		}
 	}
 }

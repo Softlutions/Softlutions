@@ -238,7 +238,7 @@
 		<div class="ibox-title">
 	    	<h4>Galería</h4>
 	 	</div>
-		<div class="row">
+		<div class="row" ng-hide="loggedUser == null">
 			<div class="center-block" style="width: 80%" ng-show="(eventParticipant != null && (eventParticipant.state == 1 || eventParticipant.state == 2)) || loggedUser.userId == event.user.userId">
 				<div class="row">
 					<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
