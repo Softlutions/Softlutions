@@ -87,6 +87,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	    return this;
 	}
 	
+	$scope.selectedEvent = {};
 	$scope.eventForm = false;
 	$scope.tempAuction = {};
 	
@@ -274,48 +275,51 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 		
 	}
+	
 	$scope.showCreateEventForm = function(){
 		window.location.href = "app#/eventWizard";
 	}
 	
-	
 	$scope.prepublishEventById = function(event){
-		$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
-			if (response.code == 200) {
-				
-				$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
-					if (response.code == 200) {
-						event.state = 2;
-						$scope.events = response.eventList;
-						window.location.href = "/dondeEs/app#/#";
-						toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
-					} else {
-						toastr.warning('Prepublicación del evento');
-					}
-					
-				});
-			} else {
-				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
-			} 
+		swal({
+			  title: "¿Está seguro?",
+			  text: "Una vez prepublicado el evento, se crea un chat con los servicios contratados y no se pueden agregar más participantes. ",
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Prepublicar evento",
+			  cancelButtonText: "Cancelar",
+			  closeOnConfirm: false,
+			  closeOnCancel: false
+			},function(isConfirm){
+				if(isConfirm){
+					$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
+						if (response.code == 200) {
+							
+							$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
+								if (response.code == 200) {
+									event.state = 2;
+									$scope.events = response.eventList;
+									window.location.href = "/dondeEs/app#/#";
+									toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+								} else {
+									
+								}
+								
+							});
+						} else {
+							toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
+						}
+					})
+				}else{
+					swal("Cancelado", "Se ha cancelado la prepublicación del evento", "error");
+				}
+
 		});
 
 	}
 	
-	$scope.listContracts = function(eventId){
-		$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
-				$scope.serviceContacts = response.listContracts;
-				if($scope.serviceContacts.length == 0){
-					$('#errorMessage').removeClass('hidden');
-					$('#contractTable').addClass('hidden');
-				}else{
-					$('#contractTable').removeClass('hidden');
-					$('#errorMessage').addClass('hidden');
-					$scope.refreshChart();
-				}
-			});
-	}
-	
-	 $scope.geteventById = function(eventId){
+	$scope.geteventById = function(eventId){
 		$scope.eventId = eventId;
 	};
 	
@@ -420,26 +424,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		$scope.requestObject = {"eventId":event.eventId};
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
 			if (response.code == 200) {
-				window.location.href = "/dondeEs/app#/#";
+				toastr.success('Publicación del evento', 'Evento publicado correctamente!');
+				$('#modal-publishEvent').modal('hide');
+				setTimeout(function(){window.location.href = "/dondeEs/app#/#";}, 1000)	
 			} else {
 				toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');
 			} 
 		});	
-	}
-	
-	$scope.cancel = function(serviceContact){
-		$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
-			if(response.code == 200){
-				serviceContact.state = 2;
-
-				$("#btnCancelService-"+serviceContact.serviceContractId).text("Cancelado");
-				$("#btnCancelService-"+serviceContact.serviceContractId).removeClass("btn-danger");
-				$("#btnCancelService-"+serviceContact.serviceContractId).addClass("btn-warning");
-				$("#btnCancelService-"+serviceContact.serviceContractId).prop("disabled", true);
-				
-				$scope.refreshChart();
-			}
-		});
 	}
 	
 	$scope.cancelEvent = function(event){  
@@ -702,48 +693,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
             							longitude: marker.longitude});
     }
     
-    $scope.refreshChart = function(){
-		var contractsLeft = 0;
-		var contractsOk = 0;
-		var contractsCanceled = 0;
-		
-		$('#contracts-state-chart').removeClass('hidden');
-		
-		angular.forEach($scope.serviceContacts, function(value){
-			if(value.state == 0)
-				contractsLeft++;
-				
-			if(value.state == 1)
-				contractsOk++;
-			
-			if(value.state == 2)
-				contractsCanceled++;
-		});
-		
-		if($scope.chartValues != null){
-			$scope.chartValues.setData([
-				{ label: "Pendientes", value: contractsLeft },
-				{ label: "Concretados", value: contractsOk },
-				{ label: "Cancelados", value: contractsCanceled }
-			]);
-		}else if(contractsLeft > 0 || contractsOk > 0 || contractsCanceled > 0){
-			$scope.chartValues = Morris.Donut({
-			    element: 'contracts-state-chart',
-			    data: [
-			           { label: "Pendientes", value: contractsLeft },
-			           { label: "Concretados", value: contractsOk },
-			           { label: "Cancelados", value: contractsCanceled }
-	            ],
-			    resize: false,
-			    colors: ['#87d6c6', '#54cdb4','#1ab394'],
-			});
-		}
-    }    
     
-    angular.element(document).ready(function(){
-		if($scope.loggedUser != null && $scope.loggedUser.state == 2){
-			toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
-			setTimeout(function(){window.location.href = "/dondeEs/#/changePassword";}, 2000);
-		}
-	});
+    $scope.selectEvent = function(event){
+    	$scope.selectedEvent = event;
+    	$('#modal-publishEvent').modal('show');
+    }
+
 }]);

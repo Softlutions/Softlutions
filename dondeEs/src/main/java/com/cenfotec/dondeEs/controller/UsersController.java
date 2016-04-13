@@ -19,6 +19,7 @@ public class UsersController {
 	
 	@Autowired private UserServiceInterface userServiceInterface;
 	@Autowired private UserTypeServiceInterface userTypeService;
+	
 	/**
 	 * @author Ernesto Méndez A.
 	 * @return Lista de usuarios y servicios
@@ -82,7 +83,11 @@ public class UsersController {
 		
 		return us;
 	}
-	
+	/**
+	 * 
+	 * @param ur
+	 * @return
+	 */
 	@RequestMapping(value ="/updateUser", method = RequestMethod.PUT)
 	public UserResponse updateUser(@RequestBody User ur){	
 		UserResponse us = new UserResponse();
@@ -100,4 +105,6 @@ public class UsersController {
 		
 		return us;
 	}
+	
+	
 }

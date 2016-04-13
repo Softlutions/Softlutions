@@ -1,12 +1,10 @@
 package com.cenfotec.dondeEs.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.cenfotec.dondeEs.ejb.Permission;
 import com.cenfotec.dondeEs.repositories.PermissionRepository;

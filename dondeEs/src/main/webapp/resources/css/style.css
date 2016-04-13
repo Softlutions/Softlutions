@@ -8495,6 +8495,76 @@ textarea {
     cursor: default;
 }
 
+.dropdown-menu-landing {
+  border: medium none;
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+  display: none;
+  float: left;
+  font-size: 12px;
+  left: 0;
+  padding: 0;
+  position: absolute;
+  text-shadow: none;
+  top: 100%;
+}
+
+.nav2 > div > label {
+  color: #a7b1c2;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.nav2 > div > label:hover,
+.nav2 > div > label:focus {
+  color: #1ab394;
+}
+
+.normalListStyle {
+	list-style-type: none;
+}
+
+#lightBoxGallery > li {
+	margin: 10px;
+	display: inline-block;
+	width: 150px;
+	height: 140px;
+}
+
+.pointerCursor {
+	cursor: pointer;
+}
+
+#lightBoxGallery > li > a > img {
+	width: 150px;
+	height: 125px;
+}
+
+.participantsList > li {
+	margin: 10px;
+	display: inline-block;
+	width: 160px;
+	height: 160px;
+}
+
+.participantsList > li > img {
+	display: inline-block;
+	width: 150px;
+	height: 125px;
+}
+
+.participantsContainer {
+	margin-bottom: 100px;
+}
+
+.participantsContainer > h1 {
+	display: inline;
+}
+
+.leftMargin {
+	margin: 0px 50px;
+}
+
 .changePasswordForm{
 	margin-top: 16em !important;
 	border: 1px solid #2f4050 !important;
