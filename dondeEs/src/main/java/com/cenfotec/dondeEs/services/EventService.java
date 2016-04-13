@@ -1,7 +1,6 @@
 package com.cenfotec.dondeEs.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -131,46 +130,53 @@ public class EventService implements EventServiceInterface {
 
 	@Override
 	public EventPOJO eventById(int idEvent) {
-
-		// Event
 		Event event = eventRepository.findOne(idEvent);
-		EventPOJO eventPOJO = new EventPOJO();
-		eventPOJO.setEventId(event.getEventId());
-		eventPOJO.setDescription(event.getDescription());
-		eventPOJO.setImage(event.getImage());
-		eventPOJO.setLargeDescription(event.getLargeDescription());
-		eventPOJO.setName(event.getName());
-		eventPOJO.setPrivate_(event.getPrivate_());
-		eventPOJO.setPublishDate(event.getPublishDate());
-		eventPOJO.setRegisterDate(event.getRegisterDate());
-		eventPOJO.setState(event.getState());
-
-		if (event.getPlace() != null) {
-			Place place = event.getPlace();
-			PlacePOJO placePOJO = new PlacePOJO();
-			placePOJO.setPlaceId(place.getPlaceId());
-			placePOJO.setLatitude(place.getLatitude());
-			placePOJO.setLongitude(place.getLongitude());
-			placePOJO.setName(place.getName());
-			eventPOJO.setPlace(placePOJO);
+		EventPOJO eventPOJO = null;
+		
+		if(event != null){
+			eventPOJO = new EventPOJO();
+			eventPOJO.setEventId(event.getEventId());
+			eventPOJO.setDescription(event.getDescription());
+			eventPOJO.setImage(event.getImage());
+			eventPOJO.setLargeDescription(event.getLargeDescription());
+			eventPOJO.setName(event.getName());
+			eventPOJO.setPrivate_(event.getPrivate_());
+			eventPOJO.setPublishDate(event.getPublishDate());
+			eventPOJO.setRegisterDate(event.getRegisterDate());
+			eventPOJO.setState(event.getState());
+			
+			if(event.getPlace() != null){
+				Place place = event.getPlace();
+				PlacePOJO placePOJO = new PlacePOJO();
+				placePOJO.setPlaceId(place.getPlaceId());
+				placePOJO.setLatitude(place.getLatitude());
+				placePOJO.setLongitude(place.getLongitude());
+				placePOJO.setName(place.getName());
+				eventPOJO.setPlace(placePOJO);
+			}
+			
+			if(event.getUser() != null){
+				User user = event.getUser();
+				UserPOJO userPOJO = new UserPOJO();
+				userPOJO.setUserId(user.getUserId());
+				userPOJO.setEmail(user.getEmail());
+				userPOJO.setImage(user.getImage());
+				userPOJO.setLastName1(user.getLastName1());
+				userPOJO.setLastName2(user.getLastName2());
+				userPOJO.setName(user.getName());
+				userPOJO.setPassword(user.getPassword());
+				userPOJO.setPhone(user.getPhone());
+				
+				if(user.getState() == 1)
+					userPOJO.setState(true);
+				
+				if(user.getState() == 0)
+					userPOJO.setState(false);
+				
+				eventPOJO.setUser(userPOJO);
+			}
 		}
-		if (event.getUser() != null) {
-			User user = event.getUser();
-			UserPOJO userPOJO = new UserPOJO();
-			userPOJO.setUserId(user.getUserId());
-			userPOJO.setEmail(user.getEmail());
-			userPOJO.setImage(user.getImage());
-			userPOJO.setLastName1(user.getLastName1());
-			userPOJO.setLastName2(user.getLastName2());
-			userPOJO.setName(user.getName());
-			userPOJO.setPassword(user.getPassword());
-			userPOJO.setPhone(user.getPhone());
-			if (user.getState() == 1)
-				userPOJO.setState(true);
-			if (user.getState() == 0)
-				userPOJO.setState(false);
-			eventPOJO.setUser(userPOJO);
-		}
+		
 		return eventPOJO;
 	}
 

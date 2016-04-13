@@ -104,7 +104,7 @@
 			            			<h3 class="text-center"><small>{{($index+1)+'. '}}</small>{{event.name}}</h3>
 		            			</div>
 		           				<div class="panel-body">
-		           					<img src="{{event.image}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
+		           					<img ng-src="{{event.image || DEFAULT_EVENT_IMAGE}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
 			            			<p class="text-center">
 				            			<strong>{{event.place.name}}</strong><br/>
 				            			{{event.publishDate | date: 'EEE dd MMM yyyy hh:mma'}}
@@ -163,7 +163,7 @@
 					
 					<div class="form-group">
 						<label class="control-label">Mensaje</label>
-						<textarea ng-model="message" class="form-control" rows="5" required></textarea>
+						<textarea ng-model="message" class="form-control" rows="5" maxlength="1000" required></textarea>
 					</div>
 
 					<div class="form-group">
@@ -172,7 +172,7 @@
 				</form>
             </div>
         </div>
-        <div class="row">
+        <!--div class="row">
             <div class="col-lg-12 text-center">
             	<p>Contáctanos también en redes sociales</p>
                 <ul class="list-inline social-icon">
@@ -184,7 +184,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div-->
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
                 <strong>Copyright</strong> Softlutions &copy; 2016
