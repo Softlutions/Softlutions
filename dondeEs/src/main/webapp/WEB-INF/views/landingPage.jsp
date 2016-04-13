@@ -80,5 +80,6 @@
 		<script src="resources/js/LandingPage/landingPageController.js"></script>
 		<script src="resources/js/LandingPage/viewEventController.js"></script>
 		<script src="resources/js/LandingPage/publicEventsController.js"></script>
+		<script src="resources/js/LandingPage/changePasswordController.js"></script>
 	</body>
 </html>
