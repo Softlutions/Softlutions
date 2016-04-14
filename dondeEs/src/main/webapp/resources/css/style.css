@@ -8547,10 +8547,11 @@ textarea {
 	height: 160px;
 }
 
-.participantsList > li > img {
-	display: inline-block;
-	width: 150px;
-	height: 125px;
+.participantsList > li > div > div > img {
+	display: block;
+	margin: 10px auto;
+	width: 100px;
+	height: 100px;
 }
 
 .participantsContainer {
@@ -8568,4 +8569,8 @@ textarea {
 .changePasswordForm{
 	margin-top: 16em !important;
 	border: 1px solid #2f4050 !important;
+}
+
+.cancelButtonMargin {
+	margin-right: 10px;
 }

@@ -27,6 +27,7 @@
 <link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
 <link href="resources/bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet">
+<link href="resources/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -150,7 +151,10 @@
 	<script src="resources/js/Commons/directives.js"></script>
 	<script src="resources/bower_components/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="resources/bower_components/braintree-web/dist/braintree.js"></script>
-
+	
+	<script src="resources/js/plugins/ladda/spin.min.js"></script>
+   	<script src="resources/js/plugins/ladda/ladda.min.js"></script>
+   	<script src="resources/js/plugins/ladda/ladda.jquery.min.js"></script>
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
@@ -179,6 +183,7 @@
 	<script src="resources/js/Auction/AuctionParticipantsController.js"></script>
 	<script src="resources/js/Report/ReportController.js"></script>
 	<script src="resources/js/users/UserProfileController.js"></script>
+	<script src="resources/js/Events/createSimpleEventController.js"></script>
 	
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>

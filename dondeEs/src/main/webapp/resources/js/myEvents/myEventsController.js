@@ -635,12 +635,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
         format: 'LLLL'
     });
 	
-	$('#eventDatePicker2').datetimepicker({
-    	minDate: new Date().addHours($scope.HOURS_BEFORE_EVENT),
-    	locale: 'es',
-        format: 'LLLL'
-    });
-	
 	$scope.hiddenEventForm = function () {
 		$scope.eventForm  = false;
 		$scope.eventInEdition = false;

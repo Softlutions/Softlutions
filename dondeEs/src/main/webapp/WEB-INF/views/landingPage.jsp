@@ -32,6 +32,7 @@
 		<link href="resources/css/plugins/slick/slick-theme.css" rel="stylesheet">
     	<link href="resources/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
 		<link href="resources/bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet">
+		<link href="resources/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 	</head>
 
 	<body id="page-top" class="landing-page">
@@ -75,6 +76,10 @@
 		<script src="resources/bower_components/toastr/toastr.js"></script>
 		
 		<script src="resources/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+		
+		<script src="resources/js/plugins/ladda/spin.min.js"></script>
+    	<script src="resources/js/plugins/ladda/ladda.min.js"></script>
+    	<script src="resources/js/plugins/ladda/ladda.jquery.min.js"></script>
 		
 		<!-- Controllers -->
 		<script src="resources/js/LandingPage/landingPageController.js"></script>

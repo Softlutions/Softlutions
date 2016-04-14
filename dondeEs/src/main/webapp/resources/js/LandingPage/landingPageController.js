@@ -9,6 +9,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 	.controller('LandingPageCtrl', ['$scope', 'Upload', '$http', '$cookies', '$rootScope', '$location', '$filter',
 	                                		function($scope, Upload, $http, $cookies, $rootScope, $location, $filter){
 		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 		$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
 		
 		if ($cookies.getObject("goToEventsPublish") == null) {
@@ -27,6 +28,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		
 		$scope.tempRedirect = {};
 		$scope.topEvents = [];
+		$scope.modalUser = {};
 		
 		$scope.user = {
 			email : "",
@@ -428,9 +430,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			if(response.code == 200){
 				$scope.topEvents = response.eventList;
 			}
-		})
-		
-		
+		});
 		
 		//#region ASNWER CONTRACT
 		
@@ -534,7 +534,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				setTimeout(function(){window.location.href = "#/changePassword";}, 2000);
 			}
 		});
-
 		
-		
+		$scope.viewProfile = function(user){
+			$scope.modalUser = user;
+			$("#userProfileModal").modal("toggle");
+		}
 	}]);
