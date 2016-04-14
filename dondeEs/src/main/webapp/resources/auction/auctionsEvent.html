@@ -23,6 +23,7 @@
 					<tr>
 						<th class="col-sm-3">Nombre</th>
 						<th>Descripción</th>
+						<th>Tipo</th>
 						<th class="col-sm-3">Fecha de finalización</th>
 						<th>Opciones</th>
 					</tr>
@@ -31,6 +32,7 @@
 					<tr ng-repeat="auction in $data">
 						<td sortable="'name'">{{auction.name}}</td>
 						<td>{{auction.description}}</td>
+						<td>{{auction.serviceCatalog.name}}</td>
 						<td>{{auction.date | date:'dd-MM-yyyy hh:mma'}}</td>
 						<td><a class="btn btn-primary btn-sm" ng-click="loadAuctionServices($index); showServiceList();">
 							Ver servicios</a></td>

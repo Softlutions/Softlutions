@@ -45,7 +45,6 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 			if (response.code == 200) {
 				if (response.auctionList != null && response.auctionList != {}) {
 					$scope.auctionsEvent = response.auctionList;
-					
 					var params = {
 							page: 1,	
 							count: 10,

@@ -14,8 +14,8 @@ import com.cenfotec.dondeEs.services.ReportServiceInterface;
 @RequestMapping(value = "rest/protected/report")
 public class ReportController {
 	
-
-	@Autowired private ReportServiceInterface reportServiceInterface;
+	//@Autowired 
+	//private ReportServiceInterface reportServiceInterface;
 	
 	/**
 	 * Consulta la cantidad de veces que un prestatario participó en eventos, puede filtrar 
@@ -33,8 +33,8 @@ public class ReportController {
 		ParticipationOnEventsResponse response = new ParticipationOnEventsResponse();
 		
 		try {
-			response.setResultParticipationOnEvents(reportServiceInterface.getParticipationOnEvents(serviceProviderId, 
-																										dateBegin, dateEnd)); 
+		//	response.setResultParticipationOnEvents(reportServiceInterface.getParticipationOnEvents(serviceProviderId, 
+			//																							dateBegin, dateEnd)); 
 			response.setCode(200);
 			
 		} catch (Exception e) {
