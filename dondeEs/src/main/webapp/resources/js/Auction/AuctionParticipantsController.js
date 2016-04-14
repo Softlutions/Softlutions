@@ -9,14 +9,35 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable'])
   });
 }])
 
-.controller('auctionParticipantsCtrl', ['$scope','$http','$routeParams','ngTableParams','$filter',function($scope,$http,$routeParams,ngTableParams,$filter){
+.controller('auctionParticipantsCtrl', ['$scope','$http','$routeParams','ngTableParams','$filter','$interval',function($scope,$http,$routeParams,ngTableParams,$filter,$interval){
+	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 	$scope.$parent.pageTitle = "Donde es - Participantes de subasta";
 	$scope.selectedAuction = {};
 	$scope.loggedUserServiceCatalogs = [];
 	$scope.auctionService = {};
+	$scope.auctionServices = [];
+	
+	var params = {
+		page: 1,	// PAGINA INICIAL
+		count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
+		sorting: {date: "desc"}
+	};
+	
+	var settings = {
+		total: $scope.auctionServices.length,	
+		counts: [],	
+		getData: function($defer, params){
+			var fromIndex = (params.page() - 1) * params.count();
+			var toIndex = params.page() * params.count();						
+			var subList = $scope.auctionServices.slice(fromIndex, toIndex);
+			var sortedList = $filter('orderBy')(subList, params.orderBy());
+			$defer.resolve(sortedList);
+		}
+	};
+	
+	$scope.auctionServicesTable = new ngTableParams(params, settings);
 	
 	angular.element(document).ready(function () {
-		
 		$http.get('rest/protected/auction/getAuctionById/'+$routeParams.id).success(function(response) {
 			$scope.selectedAuction = response.auction;	
 		});
@@ -28,36 +49,43 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable'])
 					$scope.loggedUserServiceCatalogs.push(response.serviceLists[x].serviceCatalog.serviceCatalogId);
 				}
 			}
-			if($scope.loggedUserServiceCatalogs.indexOf($scope.selectedAuction.serviceCatalog.serviceCatalogId)>=0)
-				$("#btnParticipate").removeAttr("disabled");
-			else{
-				$("#btnParticipate").attr("disabled","true");
-				toastr.error("El botón participar está deshabilitado porque el usuario no posee ningún servicio del requerido en la subasta");
+			
+			if($scope.selectedAuction.serviceCatalog != null && $scope.loggedUser.role.roleId == 2){
+				if($scope.loggedUserServiceCatalogs.indexOf($scope.selectedAuction.serviceCatalog.serviceCatalogId)>=0)
+					$("#btnParticipate").removeAttr("disabled");
+				else{
+					$("#btnParticipate").attr("disabled","true");
+					toastr.error("El botón participar está deshabilitado porque el usuario no posee ningún servicio del requerido en la subasta");
+				}
 			}
 		});
-
+		
+		$scope.refreshInterval = $interval(function(){
+			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$routeParams.id).success(function(response) {
+				$scope.auctionServices = response.auctionServiceList;
+				$scope.auctionServicesTable.reload();
+			});
+		}, 3000);
+		
 		$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$routeParams.id).success(function(response) {
 			$scope.auctionServices = response.auctionServiceList;
-			var params = {
-					page: 1,	// PAGINA INICIAL
-					count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-					sorting: {date: "desc"}
-			};
-			var settings = {
-				total: $scope.auctionServices.length,	
-				counts: [],	
-				getData: function($defer, params){
-					var fromIndex = (params.page() - 1) * params.count();
-					var toIndex = params.page() * params.count();						
-					var subList = $scope.auctionServices.slice(fromIndex, toIndex);
-					var sortedList = $filter('orderBy')(subList, params.orderBy());
-					$defer.resolve(sortedList);
-				}
-			};	
-			$scope.auctionServicesTable = new ngTableParams(params, settings);
-		});	
+			$scope.auctionServicesTable.reload();
+		});
 		
 	});	
+	
+	$scope.formatPrice = function(model){
+		if(model==null) model = 0;
+		model = model.replace(".00", "");
+		model = model.replace("₡", "");
+		model = model.replace(/,/g, "");
+		var formatPrice = $filter('currency')(model, '₡', 2);
+		$scope.auctionService.price = formatPrice;
+	}
+	
+	$scope.$on('$destroy', function() {
+		$interval.cancel($scope.refreshInterval);
+	});
 	
 	$scope.loadServices = function(){
 		$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.selectedAuction.serviceCatalog.serviceCatalogId ).success(function(response) {
@@ -71,11 +99,12 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable'])
 	}
 	
 	$scope.joinAuction = function(){	
+		var price = $scope.auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
 		var newAuctionService = {
 				acept : 1,
 				date : new Date(),
 				description : $scope.auctionService.description,
-				price : $scope.auctionService.price,
+				price : price,
 				auction : $scope.selectedAuction,
 				service : $scope.auctionService.service
 		}

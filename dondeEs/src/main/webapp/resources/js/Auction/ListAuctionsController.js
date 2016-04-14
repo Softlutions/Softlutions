@@ -108,6 +108,9 @@ angular
 			$scope.auctionService.price = formatPrice;
 		}
 		
+		
+		
+		
 		$scope.validatelistItem = function(auction,index){
 			$scope.selectedAuction = auction;
 			if($scope.validateService(auction.serviceCatalog.serviceCatalogId))
@@ -209,7 +212,7 @@ angular
 					acept : 1,
 					date : new Date(),
 					description : $scope.auctionService.description,
-					price : $scope.auctionService.price,
+					price : price,
 					auction : $scope.selectedAuction,
 					service : $scope.auctionService.service
 				}

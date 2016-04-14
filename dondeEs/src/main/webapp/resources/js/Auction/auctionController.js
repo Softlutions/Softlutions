@@ -19,8 +19,9 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	$scope.catalogs = [];
 	$scope.tempAuction = {};
 	$scope.event = {};
+	$scope.eventId = $routeParams.id;
 	
-	$http.get('rest/landing/getEventById/'+$routeParams.id).success(function(response) {
+	$http.get('rest/landing/getWhateverEventById/'+$routeParams.id).success(function(response) {
 		if (response.code == 200) {
 			$scope.event = response.eventPOJO;
 		} else {
@@ -40,42 +41,49 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 		$scope.serviceList  = false;
 	}
 	
+	var params = {
+		page: 1,	
+		count: 10,
+		sorting: {name: "asc"}
+	};
+		
+	var settings = {
+		total: $scope.auctionsEvent.length,	
+		counts: [],	
+		getData: function($defer, params){
+			var fromIndex = (params.page() - 1) * params.count();
+			var toIndex = params.page() * params.count();
+			
+			var subList = $scope.auctionsEvent.slice(fromIndex, toIndex);
+			var sortedList = $filter('orderBy')(subList, params.orderBy());
+			$defer.resolve(sortedList);
+		}
+	};
+		
+	$scope.auctionsEventTable = new ngTableParams(params, settings);
+	
 	$scope.getAllAuctionByEvent = function() {
 		$http.get('rest/protected/auction/getAllAuctionByEvent/'+$routeParams.id).success(function(response) {
-			if (response.code == 200) {
-				if (response.auctionList != null && response.auctionList != {}) {
+			if(response.code == 200){
+				if(response.auctionList != null && response.auctionList != {}){
 					$scope.auctionsEvent = response.auctionList;
-					
-					var params = {
-							page: 1,	
-							count: 10,
-							sorting: {name: "asc"}
-						};
-						
-					var settings = {
-						total: $scope.auctionsEvent.length,	
-						counts: [],	
-						getData: function($defer, params){
-							var fromIndex = (params.page() - 1) * params.count();
-							var toIndex = params.page() * params.count();
-							
-							var subList = $scope.auctionsEvent.slice(fromIndex, toIndex);
-							var sortedList = $filter('orderBy')(subList, params.orderBy());
-							$defer.resolve(sortedList);
-						}
-					};
-						
-					$scope.auctionsEventTable = new ngTableParams(params, settings);
+					$scope.auctionsEventTable.reload();
 				}
-			} else {
+			}else{
 		    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar las subastas del evento.');
+		    	$interval.cancel($scope.refreshAuctionInterval);
 			}
 		});
 	}
 	
 	$scope.$on('$destroy', function() {
+		$interval.cancel($scope.refreshAuctionInterval);
 		$interval.cancel($scope.refreshInterval);
 	});
+	
+	$scope.refreshAuctionInterval = $interval(function(){
+		$scope.getAllAuctionByEvent();
+	}, 3000);
 	
 	$scope.getAllAuctionByEvent();
 	
@@ -117,6 +125,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 		$scope.refreshInterval = $interval(function(){
 			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$scope.auctionsEvent[index].auctionId).success(function(response) {
 				$scope.auctionServices = response.auctionServiceList;
+				$scope.auctionServicesTable.reload();
 			});
 		}, 3000);
 	}
@@ -164,12 +173,14 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	
 	$scope.auctionEventServices = function(){
 		var date = new Date();
-		date.setDate(date.getDate() + 1);
+		date.setHours(date.getHours()+1);
+		var maxdate = new Date($scope.event.publishDate);
+		maxdate.setHours(maxdate.getHours()-6);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
             minDate: date,
-            maxDate: $scope.event.publishDate
+            maxDate: maxdate
         });
 		$scope.selectedEvent = $scope.event;
 	};

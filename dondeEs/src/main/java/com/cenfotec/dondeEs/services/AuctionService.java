@@ -42,7 +42,7 @@ public class AuctionService implements AuctionServiceInterface{
 		
 	 	return (saveAuction != null);
 	}
-
+	
 	@Override
 	@Transactional
 	public List<AuctionPOJO> getAllAuctionByEvent(int event_id) {
@@ -51,6 +51,9 @@ public class AuctionService implements AuctionServiceInterface{
 		auctions.stream().forEach(e -> {
 			AuctionPOJO auctionPOJO = new AuctionPOJO();
 			BeanUtils.copyProperties(e, auctionPOJO);
+			
+			auctionPOJO.setServiceCatalog(new ServiceCatalogPOJO());
+			auctionPOJO.getServiceCatalog().setName(e.getServiceCatalog().getName());;
 			
 			if (e.getAuctionServices() != null) {
 				List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
@@ -62,7 +65,7 @@ public class AuctionService implements AuctionServiceInterface{
 					asp.setService(new ServicePOJO()); 
 					BeanUtils.copyProperties(as.getService(), asp.getService());
 					asp.getService().setServiceContacts(null);
-					asp.getService().setServiceCatalog(null);
+					asp.getService().setServiceCatalog(null);					
 					
 					asp.getService().setUser(new UserPOJO()); 
 					asp.getService().getUser().setUserId(as.getService().getUser().getUserId());
@@ -205,6 +208,38 @@ public class AuctionService implements AuctionServiceInterface{
 		serviceCatalogPOJO.setName(auction.getServiceCatalog().getName());
 		auctionPOJO.setServiceCatalog(serviceCatalogPOJO);
 		
+		
+		return auctionPOJO;
+	}
+
+	@Override
+	public AuctionPOJO getAllServicesByAuction(int auctionId) {
+		Auction auction = auctionRepository.findOne(auctionId);
+		AuctionPOJO auctionPOJO = new AuctionPOJO();
+		
+		auctionPOJO.setAuctionId(auction.getAuctionId());
+		auctionPOJO.setDate(null);
+		auctionPOJO.setDescription(null);
+		auctionPOJO.setName(null);
+		
+		if (auction.getAuctionServices() != null) {
+			List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
+			
+			auction.getAuctionServices().stream().forEach(a -> {
+				AuctionServicePOJO s = new AuctionServicePOJO();
+				BeanUtils.copyProperties(a, s);
+				
+				s.setService(new ServicePOJO()); 
+				BeanUtils.copyProperties(a.getService(), s.getService());
+				s.getService().setServiceContacts(null);
+				s.getService().setServiceCatalog(null);									
+				s.getService().setUser(null); 
+				
+				auctionServicesPOJO.add(s);
+			});
+		
+			auctionPOJO.setAuctionServices(auctionServicesPOJO);
+		}
 		
 		return auctionPOJO;
 	}

@@ -44,4 +44,6 @@ public interface AuctionServiceInterface {
 
 	AuctionPOJO getAuctionById(int auctionId);
 
+	AuctionPOJO getAllServicesByAuction(int auctionId);
+
 }
