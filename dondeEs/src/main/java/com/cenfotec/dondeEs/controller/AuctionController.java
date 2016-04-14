@@ -161,4 +161,27 @@ public class AuctionController {
 		}
 		return auctionResponse;
 	}
+	
+	/**
+	 * Obtiene todos los servicios de una determinada subasta.
+	 * @author Enmanuel García González 
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value ="/getAllServicesByAuction/{auctionId}", method = RequestMethod.GET)
+	public AuctionResponse getServicesByAuction(@PathVariable("auctionId") int auctionId){
+		AuctionResponse response = new AuctionResponse();
+		
+		try {
+			response.setAuction(auctionServiceInterface.getAllServicesByAuction(auctionId));																					 
+			response.setCode(200);
+			
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setCodeMessage(e.toString());
+			e.printStackTrace();
+
+		} finally { return response; }
+	}
 }

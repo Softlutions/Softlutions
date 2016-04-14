@@ -19,6 +19,7 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	$scope.catalogs = [];
 	$scope.tempAuction = {};
 	$scope.event = {};
+	$scope.eventId = $routeParams.id;
 	
 	$http.get('rest/landing/getWhateverEventById/'+$routeParams.id).success(function(response) {
 		if (response.code == 200) {
