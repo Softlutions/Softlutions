@@ -415,34 +415,36 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
     }
     
 	$scope.commentEvent = function(){
-		if($scope.comment == undefined)
-			$scope.comment = "";
-		
-		var eventComment = {
-			content: $scope.comment,
-			date: new Date(),
-			image: $scope.commentPreviewFile,
-			eventParticipant: $scope.eventParticipant
+		if(($scope.comment != undefined && $scope.comment.length > 0) || $scope.commentFile != null){
+			if($scope.comment == undefined)
+				$scope.comment = "";
+			
+			var eventComment = {
+				content: $scope.comment,
+				date: new Date(),
+				image: $scope.commentPreviewFile,
+				eventParticipant: $scope.eventParticipant
+			}
+			
+			Upload.upload({
+				url: 'rest/landing/saveComment',
+				data: {
+					"participantId": $scope.eventParticipant.eventParticipantId,
+					"content": $scope.comment,
+					"file": $scope.commentFile
+				}
+			}).then(function(resp) {
+				if(resp.status == 200){
+					$scope.commentList.push(eventComment);
+					$scope.commentsTable.reload();
+					$scope.comment = undefined;
+					$scope.commentPreviewFile = null;
+					$scope.commentFile = null;
+				}else{
+					toastr.error('No se pudo publicar el comentario');
+				}
+			}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});	
 		}
-		
-		Upload.upload({
-			url: 'rest/landing/saveComment',
-			data: {
-				"participantId": $scope.eventParticipant.eventParticipantId,
-				"content": $scope.comment,
-				"file": $scope.commentFile
-			}
-		}).then(function(resp) {
-			if(resp.status == 200){
-				$scope.commentList.push(eventComment);
-				$scope.commentsTable.reload();
-				$scope.comment = undefined;
-				$scope.commentPreviewFile = null;
-				$scope.commentFile = null;
-			}else{
-				toastr.error('No se pudo publicar el comentario');
-			}
-		}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});	
 	}
 	
 	$scope.setDate = function(date){

@@ -243,10 +243,34 @@ public class LandingPageController {
 
 		return response;
 	}
-
+	
 	/**
-	 * @param eventId
-	 *            id del evento a consultar
+	 * Consulta cualquier evento por su id.
+	 * @author Enmanuel Garcia Gonzalez 
+	 * @param eventId id del evento a consultar
+	 * @return evento consultado
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/getWhateverEventById/{eventId}", method = RequestMethod.GET)
+	public EventResponse getWhateverEventById(@PathVariable("eventId") int eventId) {
+		EventResponse response = new EventResponse();
+		EventPOJO event = eventServiceInterface.eventById(eventId);
+		
+		if(event != null){
+			response.setEventPOJO(event);
+			response.setCode(200);
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("El evento no a sido publicado o no existe");
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Consultar cualquier evento por su id solo y solo si este ya esta publicado
+	 * @author Ernesto Mendez A.
+	 * @param eventId id del evento a consultar
 	 * @return evento consultado
 	 * @version 1.0
 	 */
