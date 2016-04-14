@@ -52,6 +52,9 @@ public class AuctionService implements AuctionServiceInterface{
 			AuctionPOJO auctionPOJO = new AuctionPOJO();
 			BeanUtils.copyProperties(e, auctionPOJO);
 			
+			auctionPOJO.setServiceCatalog(new ServiceCatalogPOJO());
+			auctionPOJO.getServiceCatalog().setName(e.getServiceCatalog().getName());;
+			
 			if (e.getAuctionServices() != null) {
 				List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();	
 				
@@ -62,7 +65,7 @@ public class AuctionService implements AuctionServiceInterface{
 					asp.setService(new ServicePOJO()); 
 					BeanUtils.copyProperties(as.getService(), asp.getService());
 					asp.getService().setServiceContacts(null);
-					asp.getService().setServiceCatalog(null);
+					asp.getService().setServiceCatalog(null);					
 					
 					asp.getService().setUser(new UserPOJO()); 
 					asp.getService().getUser().setUserId(as.getService().getUser().getUserId());
