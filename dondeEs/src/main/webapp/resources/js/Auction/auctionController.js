@@ -172,12 +172,14 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	
 	$scope.auctionEventServices = function(){
 		var date = new Date();
-		date.setDate(date.getDate() + 1);
+		date.setHours(date.getHours()+1);
+		var maxdate = new Date($scope.event.publishDate);
+		maxdate.setHours(maxdate.getHours()-6);
         $('#datetimepicker').datetimepicker({
         	locale: 'es',
             format: 'LLLL',
             minDate: date,
-            maxDate: $scope.event.publishDate
+            maxDate: maxdate
         });
 		$scope.selectedEvent = $scope.event;
 	};
