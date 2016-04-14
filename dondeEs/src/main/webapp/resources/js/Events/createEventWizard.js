@@ -157,6 +157,7 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 				function(response) {
 					$scope.globalEventId  = response.eventPOJO.eventId;
 					if (response.code == 200) {
+						$scope.publishDate = new Date($('#eventDatePicker').data("DateTimePicker").date());
 						$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 							if (response.code == 200) {
 								if (response.eventList.length > 0) {
@@ -383,13 +384,16 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	}
 	
 	$scope.auctionEventServices = function(){
+		console.log($scope.publishDate);
 		var date = new Date();
-		date.setDate(date.getDate() + 1);
-        $('#datetimepicker').datetimepicker({
-        	locale: 'es',
+		date.setHours(date.getHours()+1);
+		var maxdate = new Date($scope.publishDate);
+		maxdate.setHours(maxdate.getHours()-6);
+        $('#eventDatePicker').datetimepicker({
+        	locale: 'es',	
             format: 'LLLL',
             minDate: date,
-            maxDate: new Date().setDate(date.getDate() + 1)
+            maxDate: maxdate
         });
 	}
 	
