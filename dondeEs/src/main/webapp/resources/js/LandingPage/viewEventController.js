@@ -10,7 +10,11 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 }])
 
 .controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', '$cookies', "$interval", function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter, $cookies, $interval) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	$scope.loggedUser = null;
+	var loginCookie = $cookies.getObject("loggedUser");
+	if(loginCookie != null)
+		$scope.loggedUser = JSON.parse(loginCookie);
+	
 	$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 	$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
 	$scope.commentPreviewFile = null;
@@ -35,15 +39,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	
 	$scope.logout = function(){
 		$http.get("rest/login/logout").success(function(response){
-			var sessionCookie = $cookies.getObject("lastSession");
-			if(sessionCookie != null){
-				sessionCookie["sessionClosed"] = true;
-				$cookies.putObject("lastSession", sessionCookie);
-			}
-			
-			$scope.loggedUser = null;
-			localStorage.setItem("loggedUser", null);
-			window.location.href = "#/landingPage";
+			$cookies.remove("loggedUser");
 		});
 	}
 	

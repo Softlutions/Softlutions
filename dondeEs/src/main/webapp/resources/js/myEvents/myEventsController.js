@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps', 'mgo-angular-wizard', 'ngTable'])
+var app = angular.module('dondeEs.myEvents', ['ngRoute', 'google-maps', 'mgo-angular-wizard', 'ngTable', 'ngCookies'])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/index', {
     templateUrl: 'resources/myEvents/index.html',
@@ -69,8 +69,8 @@ app.factory('MarkerCreatorService', function () {
 });
 
 app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService','$filter', 
-                                	'WizardHandler', 'ngTableParams', function($scope, $http, $upload, 
-                                				MarkerCreatorService, $filter, WizardHandler, ngTableParams) { 
+                                	'WizardHandler', 'ngTableParams', '$cookies', function($scope, $http, $upload, 
+                                				MarkerCreatorService, $filter, WizardHandler, ngTableParams, $cookies) { 
 	$scope.$parent.pageTitle = "Donde es - Mis eventos";
 	$scope.eventForm = false;
 	$scope.address = '';
@@ -105,9 +105,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
 	
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-	if($scope.loggedUser == null)
-		window.location.href = "/dondeEs/#/landingPage";
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 	
 	if(!$scope.$parent.permissions.isAdmin){
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {

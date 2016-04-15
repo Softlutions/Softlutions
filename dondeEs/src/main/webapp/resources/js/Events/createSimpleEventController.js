@@ -1,4 +1,4 @@
-angular.module('dondeEs.simpleEvent', ['ngRoute', 'google-maps', 'mgo-angular-wizard', 'ngTable'])
+angular.module('dondeEs.simpleEvent', ['ngRoute', 'google-maps', 'mgo-angular-wizard', 'ngTable', 'ngCookies'])
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/event', {
 		templateUrl: 'resources/event/createSimpleEvent.html',
@@ -62,8 +62,8 @@ angular.module('dondeEs.simpleEvent', ['ngRoute', 'google-maps', 'mgo-angular-wi
         createByAddress: createByAddress,
         createByCurrentLocation: createByCurrentLocation
     };
-}).controller('SimpleEventCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', '$location', function($scope, $http, $upload, MarkerCreatorService, $location) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+}).controller('SimpleEventCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', '$location', '$cookies', function($scope, $http, $upload, MarkerCreatorService, $location, $cookies) {
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 	$scope.sectionTitle = $location.search().edit == null? "Crear evento":"Modificar evento";
 	$scope.$parent.pageTitle = "Donde es - "+$scope.sectionTitle;
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";

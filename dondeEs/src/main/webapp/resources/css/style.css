@@ -8566,6 +8566,10 @@ textarea {
 	margin: 0px 50px;
 }
 
+.bottomMargin {
+	margin-bottom: 10px;
+}
+
 .changePasswordForm{
 	margin-top: 16em !important;
 	border: 1px solid #2f4050 !important;

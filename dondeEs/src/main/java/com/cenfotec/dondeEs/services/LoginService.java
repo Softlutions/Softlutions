@@ -43,6 +43,7 @@ public class LoginService implements LoginServiceInterface{
 			response.setFirstName(loggedUser.getName());
 			response.setLastName(loggedUser.getLastName1());
 			response.setEmail(loggedUser.getEmail());
+			response.setPhone(loggedUser.getPhone());
 			response.setCriptPass(pass);
 			response.setState(loggedUser.getState());
 			
