@@ -98,7 +98,7 @@
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
-                        <span class="nav-label"><i class="fa fa-sign-out"></i> Cerrar sesión</span>
+                        <span class="nav-label"><i class="fa fa-sign-out"></i> Cerrar sesiï¿½n</span>
                     </button>
 				</nav>
 			</div>
@@ -184,6 +184,7 @@
 	<script src="resources/js/Report/ReportController.js"></script>
 	<script src="resources/js/users/UserProfileController.js"></script>
 	<script src="resources/js/Events/createSimpleEventController.js"></script>
+	<script src="resources/js/Auction/ServicesAuctionEventController.js"></script>
 	
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>

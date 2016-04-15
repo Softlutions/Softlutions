@@ -176,5 +176,4 @@ public class ServiceImplementation implements ServiceInterface {
 		});
 		return listPojo;
 	}
-
 }

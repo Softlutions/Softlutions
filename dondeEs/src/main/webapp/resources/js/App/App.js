@@ -24,6 +24,7 @@ angular.module('dondeEs', [
 	"dondeEs.Report",
 	'dondeEs.userProfile',
 	"dondeEs.simpleEvent"
+	"dondeEs.servicesAuctionEvent"
 ]).config(['$routeProvider','$provide','$httpProvider', 
            			function($routeProvider,$provide,$httpProvider) {
 
