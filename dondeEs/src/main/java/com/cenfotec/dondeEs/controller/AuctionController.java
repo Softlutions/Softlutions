@@ -151,7 +151,7 @@ public class AuctionController {
 		
 		auction.setState((byte)0);
 		
-		Boolean stateAuction = auctionServiceInterface.saveAuction(auction);
+		Boolean stateAuction = auctionServiceInterface.finishAuction(auction);
 		
 		if(stateAuction){
 			auctionResponse.setCode(200);
