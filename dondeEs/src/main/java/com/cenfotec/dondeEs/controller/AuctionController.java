@@ -13,6 +13,7 @@ import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
 import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
+import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -24,6 +25,21 @@ public class AuctionController {
 	
 
 	@Autowired private AuctionServiceInterface auctionServiceInterface;
+	
+	/**
+	 * @author Juan Carlos Sánchez G. (Autor)
+	 * @param auctionId Peticion que contiene la información de la subasta por consultar.
+	 * @return response Respuesta del servidor de la petición.
+	 * @version 1.0
+	 */
+	@RequestMapping(value ="/getAuctionById/{auctionId}", method = RequestMethod.GET)
+	public AuctionResponse getAuctionById(@PathVariable("auctionId") int auctionId){
+		AuctionResponse response = new AuctionResponse();
+		
+		response.setAuction(auctionServiceInterface.getAuctionById(auctionId));
+		response.setCode(200);
+		return response;
+	}
 	
 	/**
 	 * @author Juan Carlos Sánchez G. (Autor)
@@ -136,7 +152,7 @@ public class AuctionController {
 		
 		auction.setState((byte)0);
 		
-		Boolean stateAuction = auctionServiceInterface.saveAuction(auction);
+		Boolean stateAuction = auctionServiceInterface.finishAuction(auction);
 		
 		if(stateAuction){
 			auctionResponse.setCode(200);
@@ -145,5 +161,35 @@ public class AuctionController {
 		}
 		}
 		return auctionResponse;
+	}
+	
+	/**
+	 * Obtiene todos los servicios de una determinada subasta.
+	 * @author Enmanuel García González 
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value ="/getAllServicesByAuction/{auctionId}", method = RequestMethod.GET)
+	public AuctionResponse getServicesByAuction(@PathVariable("auctionId") int auctionId){
+		AuctionResponse response = new AuctionResponse();
+		
+		try {
+			AuctionPOJO auction = auctionServiceInterface.getAllServicesByAuction(auctionId);
+			
+			if(auction != null){
+				response.setAuction(auction);																					 
+				response.setCode(200);
+				response.setCodeMessage("Success");
+			}else{																				 
+				response.setCode(404);
+				response.setCodeMessage("Auction not found!");
+			}
+		} catch (Exception e) {
+			response.setCode(500);
+			response.setCodeMessage(e.toString());
+			e.printStackTrace();
+
+		} finally { return response; }
 	}
 }

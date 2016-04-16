@@ -1,0 +1,48 @@
+<div class="container">
+
+	<div class="col-lg-11">
+		<div class="pull-left">
+			<a class="btn btn-primary pull-right " href="app#/index"> <i
+				class="fa fa-reply">Volver</i>
+			</a>
+		</div>
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h4>Servicios disponibles</h4>
+				<label class="font-normal"><strong>Categoría</strong></label> <select
+					class="form-control m-b" name="serviceCatalog" id="serviceCatalog"
+					ng-change="getServiceByCatalog(selectedCatalog)"
+					ng-model="selectedCatalog"
+					ng-options="ta.serviceCatalogId as ta.name for ta in serviceCatalogList">
+				</select>
+				<div class="form-group" ng-show="isCatalog">
+					<input type="text" ng-model="search.name"
+						placeholder="Buscar servicio" class="form-control">
+				</div>
+			</div>
+			<div class="ibox-content ">
+				<table class="table table-hover" ng-table="servicesTable">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Descripción</th>
+							<th>Proveedor</th>
+						</tr>
+					</thead>
+					<tbody ng-repeat="service in $data | filter:search:strict">
+						<tr>
+							<td sortable="'name'">{{service.name}}</td>
+							<td>{{service.description}}</td>
+							<td>{{service.user.name}} {{service.user.lastName1}}
+								{{service.user.lastName2}}</td>
+							<td>
+								<button class="btn btn-primary btn-xs"
+									ng-click="contactProvider(service)">Contactar</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

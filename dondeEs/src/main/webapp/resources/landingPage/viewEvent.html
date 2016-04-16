@@ -1,0 +1,320 @@
+<div class="navbar-wrapper">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-left col-lg-6">
+					<li><a class="page-scroll" href="#/landingPage">Inicio</a></li>
+					<li><a class="page-scroll" href="#/events">Eventos</a></li>
+					<li><a class="page-scroll" href="#/landingPage?p=testimonials">Opinión</a></li>
+					<li><a class="page-scroll" href="#/landingPage?p=contact">Contacto</a></li>
+					
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 1" href="app#/users">Administrar</a></li>
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 2" href="app#/serviceByUser">Mis servicios</a></li>
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 3" href="app#/index">Mis eventos</a></li>
+				</ul>
+				
+				<div class="nav2 navbar-right col-lg-3">
+					<div ng-show="loggedUser == null">
+						<a class="btn btn-primary btn-sm-normalize-size page-scroll" href="#/landingPage?p=login&event={{event.eventId}}">Iniciar sesión</a>
+					</div>
+					
+					<div ng-hide="loggedUser == null">
+						<label class="page-scroll" ng-click="viewProfile(loggedUser)">{{loggedUser.name}} {{loggedUser.lastName}}</label>
+						<span>|</span>
+						<label class="page-scroll" ng-click="logout()">Cerrar sesión</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
+    <div class="carousel-inner" role="listbox" style="height: 470px;">
+        <div ng-if="images.length > 0" ng-repeat="img in carouselImages" class="item {{$index == 0? 'active':''}}">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>{{event.name}}</h1>
+                    <h3>{{event.place.name}}</h3>
+                    <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
+                    <p>
+                    	<label class="label label-danger" ng-if="event.private_ == 1">Evento privado</label>
+                    	<label class="label label-primary" ng-if="eventParticipant.state >= 1 && event.user.userId != loggedUser.userId">Estas participando</label>
+                        <button class="btn btn-primary" ng-show="eventParticipant == null || eventParticipant.state == 0" ng-click="assist()">PARTICIPAR</button>
+                    </p>
+                </div>
+            	<img src="{{img.image}}" alt="{{img.name}}" width="100%" height="470px"/>
+            </div>
+	    </div>
+	    
+	    <div ng-if="images.length == 0" class="item active">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>{{event.name}}</h1>
+                    <h3>{{event.place.name}}</h3>
+                    <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
+                    <p>
+                    	<label class="label label-danger" ng-if="event.private_ == 1">Evento privado</label>
+                    	<label class="label label-primary" ng-if="eventParticipant.state >= 1 && event.user.userId != loggedUser.userId">Estas participando</label>
+                        <button class="btn btn-primary" ng-show="eventParticipant == null || eventParticipant.state == 0" ng-click="assist()">PARTICIPAR</button>
+                    </p>
+                </div>
+            	<img ng-src="{{event.image || DEFAULT_EVENT_IMAGE}}" alt="{{event.name}}" width="100%" height="470px"/>
+            </div>
+	    </div>
+	    
+	    <a ng-show="images.length > 1" class="left carousel-control" href="#inSlider" target="_self" role="button" data-slide="prev">
+	        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	        <span class="sr-only">Anterior</span>
+	    </a>
+	    <a ng-show="images.length > 1" class="right carousel-control" href="#inSlider" target="_self" role="button" data-slide="next">
+	        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	        <span class="sr-only">Siguiente</span>
+	    </a>
+	</div>
+</div>
+
+<div class="text-center">
+	<button id="btnView0" class="btn btn-sm" data-toggle="tooltip" title="Ver todos los comentarios" ng-click="changeView(0)"><i class="fa fa-comment"></i> Comentarios <span class="label label-primary">{{commentList.length}}</span></button>
+	<button id="btnView1" class="btn btn-sm" data-toggle="tooltip" title="Ver todos los participantes" ng-click="changeView(1)"><i class="fa fa-users"></i> Participantes <span class="label label-primary">{{(participants | filter: {state: 2}).length}}</span></button>
+	<button id="btnView2" class="btn btn-sm" data-toggle="tooltip" title="Ver todas las imágenes" ng-click="changeView(2)"><i class="fa fa-th"></i> Galería <span class="label label-primary">{{images.length}}</span></button>		    
+</div>
+<br/>
+<div class="row">
+	<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 0">
+		 <div class="ibox-title">
+		     <h4>Comentarios</h4>
+		 </div>
+		 <div ng-show="eventParticipant != null && (eventParticipant.state == 1 || eventParticipant.state == 2)" class="containerComment" id="commentDiv">
+			<div class="row">
+				<div class="col-lg-12">
+					<form name="formComment" ng-submit="formComment.$valid? commentEvent():null">
+					 	<div class="form-group">
+					 		<img ng-if="commentPreviewFile != null" ng-src={{commentPreviewFile}} class="center-block" with="250px" height="200px"/><br/>
+					 		<textarea class="form-control" rows="4" placeholder="Escriba su comentario aquí..." name="comment" ng-model="comment" ng-maxlength="255" maxlength="256"></textarea>
+					 		<span class="text-muted pull-left" ng-hide="formComment.comment.$error.maxlength">{{255-comment.length}}</span>
+					 		<span class="pull-left text-danger" ng-show="formComment.comment.$error.maxlength">El comentario es demasiado largo</span>
+							<button type="submit" class="btn btn-primary btn-sm-normalize-size pull-right" >Comentar</button>
+							
+							<div class="button" ngf-select="attach($file)">
+								<label class="btn btn-default pull-right fa fa-camera" data-toggle="tooltip" title="Adjuntar imagen"></label>
+							</div>
+							<label class="btn btn-default pull-right fa fa-trash" data-toggle="tooltip" title="Quitar imagen adjunta" 
+							ng-click="commentPreviewFile = null; commentFile = null;" ng-show="commentFile != null"></label>
+					 	</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-show="eventParticipant.state == 3 || eventParticipant.state == 4">
+			<p class="text-center">Lo sentimos no puedes comentar, el promotor de este evento te a bloqueado</p>
+		</div>
+		<br/>
+		<div class="containerComment">
+			<div class="row">
+				<div class="col-lg-12">
+					<table ng-show="commentList.length > 0" ng-table="commentsTable" style="width: 100%">
+						<thead><tr><th></th></tr></thead>
+						<tbody>
+							<tr ng-repeat="comment in $data">
+								<td>
+									<div class="panel panel-white post panel-shadow">
+						                <div class="post-heading">
+						                    <div class="pull-left image">
+						                        <img ng-src="{{comment.eventParticipant.user.image || DEFAULT_USER_IMAGE}}" class="img-circle avatar">
+						                    </div>
+						                    <div class="pull-right">
+		   										<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right pointerCursor" title="Eliminar" ng-click="removeComment(comment)"></i>
+						                    </div>
+						                    <div class="pull-left meta">
+						                        <div class="title h5">
+						                            <a><b>{{(comment.eventParticipant.user == null)? comment.eventParticipant.offlineUser.email : (comment.eventParticipant.user.name+' '+(comment.eventParticipant.user.lastName1 == null? '':comment.eventParticipant.user.lastName1)+' '+(comment.eventParticipant.user.lastName2 == null? '':comment.eventParticipant.user.lastName2))}}</b></a>
+						                        </div>
+						                        <h6 class="text-muted time" sorteable="'date'">{{setDate(comment.date)}}</h6>
+						                    </div>
+						                </div> 
+						                <div class="post-description"> 
+						                	<img ng-if="comment.image != null" class="center-block" ng-src="{{comment.image}}" width="300px" height="250px"/>
+						                	<br/>
+						                    <p>{{comment.content}}</p>
+						                </div>
+						            </div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+		            
+		            <div ng-show="commentList.length == 0">
+		            	<p class="text text-center">
+		            		Sin comentarios... <br/>
+		            		<strong>Participa y se el primero en comentar!</strong>
+		            	</p>
+		            </div>
+		       </div>
+		   </div>
+		</div>
+	</div>
+	
+	<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 1">
+		<div class="ibox-title" ng-show="eventParticipant == null">
+		    <h4>Participantes</h4>
+		</div>
+		<div class="ibox-title" ng-hide="eventParticipant == null">
+		    <h4>Invita a tus amigos</h4>
+		    
+		    <form class="form-horizontal" name="invitationForm" ng-submit="invitationForm.$valid? invite():null">
+		    	<label class="form-label">A quién deseas invitar?</label>
+		    	<input class="form-control" type="email" ng-model="email" placeholder="Escribe su email aquí" required>
+		    	<button id="laddaSendInvitation" class="ladda-button btn btn-primary btn-sm-normalize-size" data-style="slide-left" type="submit">Invitar</button>
+		    </form>
+		</div>
+		
+		<div class="ibox-content">
+			<div class="participantsContainer">
+				<h1>Asistirán </h1><label class="label">{{assistants.length}}</label>
+				<ul class="normalListStyle participantsList">
+					<li ng-repeat="p in assistants = (participants | filter: {state: 2})">
+						<div>
+				            <div class="m-b-sm">
+				            	<img alt="profileImage" class="img-circle center-block" ng-src="{{p.user.image || DEFAULT_USER_IMAGE}}">
+				            </div>
+				            <p class="font-bold text-center">{{p.user != null? (p.user.name+' '+(p.user.lastName1 != null? p.user.lastName1:'')+' '+(p.user.lastName2 != null? p.user.lastName2:'')):p.offlineUser.email}}</p>
+							<p ng-if="p.user.userId == event.user.userId" class="pull-left leftMargin">Promotor</p>
+							<a ng-if="event.user.userId == loggedUser.userId && event.user.userId != p.user.userId" ng-click="participantState(p)" class="btn btn-xs btn-default pull-right">
+								<i class="fa fa-unlock-alt pointerCursor" title="Bloquear/Desbloquear"></i>
+							</a>
+				        </div>
+					</li>
+				</ul>
+			</div>
+			<div class="participantsContainer">
+				<h1>Pendientes </h1><label class="label">{{left.length}}</label>
+				<ul class="normalListStyle participantsList">
+					<li ng-repeat="p in left = (participants | filter: {state: 1})">
+						<div>
+				            <div class="m-b-sm">
+				            	<img alt="profileImage" class="img-circle center-block" ng-src="{{p.user.image || DEFAULT_USER_IMAGE}}">
+				            </div>
+				            <p class="font-bold text-center">{{p.user != null? (p.user.name+' '+(p.user.lastName1 != null? p.user.lastName1:'')+' '+(p.user.lastName2 != null? p.user.lastName2:'')):p.offlineUser.email}}</p>
+							<a ng-if="event.user.userId == loggedUser.userId" ng-click="participantState(p)" class="btn btn-xs btn-default pull-right">
+								<i class="fa fa-unlock-alt pointerCursor" title="Bloquear/Desbloquear"></i>
+							</a>
+				        </div>
+					</li>
+				</ul>
+				<p ng-hide="left.length > 0">No hay participantes pendientes</p>
+			</div>
+			<div class="participantsContainer" ng-hide="event.user.userId != loggedUser.userId">
+				<h1>Bloqueados </h1><label class="label">{{blocked.length}}</label>
+				<ul class="normalListStyle participantsList">
+					<li ng-repeat="p in blocked = (participants | filter: blockedParticipantsFilter)">
+						<div>
+				            <div class="m-b-sm">
+				            	<img alt="profileImage" class="img-circle center-block" ng-src="{{p.user.image || DEFAULT_USER_IMAGE}}">
+				            </div>
+				            <p class="font-bold text-center">{{p.user != null? (p.user.name+' '+(p.user.lastName1 != null? p.user.lastName1:'')+' '+(p.user.lastName2 != null? p.user.lastName2:'')):p.offlineUser.email}}</p>
+							<a class="btn btn-xs btn-danger pull-right" ng-click="participantState(p)">
+								<i class="fa fa-lock pointerCursor" title="Bloquear/Desbloquear"></i>
+							</a>
+				        </div>
+					</li>
+				</ul>
+				<p ng-hide="blocked.length > 0">No hay usuarios bloqueados o reportados</p>
+			</div>
+		</div>
+	</div>
+	
+	<div class="ibox float-e-margins center-block" style="width: 80%;" ng-hide="view != 2">
+		<div class="ibox-title">
+	    	<h4>Galería</h4>
+	 	</div>
+		<div class="row" ng-hide="loggedUser == null">
+			<div class="center-block" style="width: 80%" ng-show="(eventParticipant != null && (eventParticipant.state == 1 || eventParticipant.state == 2)) || loggedUser.userId == event.user.userId">
+				<div class="row">
+					<div ngf-drop ngf-select ng-model="files" ng-change="loadFiles()" class="drop-box" ngf-drag-over-class="'dragover'" 
+					ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'">
+						<p ng-show="previewFiles.length == 0">Arrastra imágenes, o haz click aquí</p>
+						
+						<img ng-repeat="img in previewFiles" ng-src="{{img.thumbnail}}" width="100px" height="90px"
+						title="{{img.name}} | {{img.size / 1024 | number:2}}Kb"/>
+					</div>
+					
+					<input ng-show="previewFiles.length > 0" type="button" ng-click="upload(previewFiles)" class="btn btn-info pull-right" value="Publicar"/>
+					<input ng-show="previewFiles.length > 0" type="button" ng-click="previewFiles = []; progressPercentaje = 0" style="margin-right: 10px" class="btn btn-danger pull-right" value="Limpiar"/>
+					<h6 ng-show="progressPercentaje > 0">Enviando... {{progressPercentaje}}%</h6>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row" ng-show="eventParticipant.state == 3 || eventParticipant.state == 4">
+			<p class="text-center">Lo sentimos no puedes subir imágenes, el promotor de este evento te a bloqueado</p>
+		</div>
+		
+		<h3>Imágenes</h3>
+		<ul id="lightBoxGallery" class="normalListStyle">
+			<li ng-repeat="img in images">
+				<a href="{{img.image}}" title="Click para expandir" data-gallery="">
+		   			<img src="{{img.image}}" class="image-responsive" alt="{{event.name+'-'+img.name}}">
+		   		</a>
+		   		<i ng-hide="event.user.userId != loggedUser.userId" class="fa fa-times pull-right pointerCursor" title="Eliminar" ng-click="removeImg(img)"></i>
+		   		<!--i class="fa fa-flag pull-right pointerCursor" title="Marcar como inadecuado" ng-click="inappositeImg(img)"></i-->
+			</li>
+		</ul>
+	   	
+	   	<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+		    <div class="slides"></div>
+		    <a class="prev">‹</a>
+		    <a class="next">›</a>
+		    <a class="close">×</a>
+		    <a class="play-pause"></a>
+		    <ol class="indicator"></ol>
+		</div>
+		
+		<div ng-show="images.length == 0">
+	       	<p class="text text-center">
+	       		No hay imágenes... <br/>
+	       		<strong>Participa y se el primero en subir una!</strong>
+	       	</p>
+        </div>
+	</div>
+</div>
+
+	<!-- PERFIL DE USUARIO -->
+<div id="userProfileModal" class="modal fade" aria-hidden="true" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="widget-head-color-box navy-bg p-lg text-center">
+					<div class="m-b-md">
+						<h2 class="font-bold no-margins">{{ modalUser.name + ' ' +
+							((modalUser.lastName1 !== null)? modalUser.lastName1:'') + ' ' +
+							((modalUser.lastName2 !== null)? modalUser.lastName2:'') }}</h2>
+						<small class="userProfileRoleName">{{modalUser.role.name}}</small>
+					</div>
+					<img ng-src="{{modalUser.image || DEFAULT_USER_IMAGE}}" class="img-circle circle-border m-b-md" alt="profile" width="150px" height="150px">
+					
+					<h2>Contacto</h2>
+					<ul class="list-unstyled m-t-md">
+						<li><span class="fa fa-envelope m-r-xs"></span> <label>Email:</label>
+							{{modalUser.email}}</li>
+						<li><span class="fa fa-phone m-r-xs"></span> <label>Teléfono:</label>
+							{{modalUser.phone}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

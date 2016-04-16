@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
+angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload', 'ngCookies'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/eventsPublish', {
@@ -9,8 +9,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
   });
 }])
 
-.controller('eventsPublishCtrl', ['$scope','$http','Upload','$timeout',function($scope,$http,Upload,$timeout) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+.controller('eventsPublishCtrl', ['$scope','$http','Upload','$timeout','$cookies',function($scope,$http,Upload,$timeout,$cookies) {
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 
 	$scope.eventsPublish = [];
 	$scope.requestObject = {"eventsPublish": {}};
@@ -29,7 +29,6 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 		if (response.code == 200) {
 			if (response.eventList != null && response.eventList.length > 0) {
 				$scope.eventsPublish = response.eventList;
-				
 				for (var i=0; i<$scope.eventsPublish.length; i++) {
 					$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 					
@@ -92,7 +91,6 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 					if (response.eventList != null && response.eventList.length > 0) {
 						$scope.eventsPublish = response.eventList;
 						for (var i=0; i<$scope.eventsPublish.length; i++) {
-							console.log($scope.eventsPublish[i].image);
 							$scope.eventsPublish[i].day = $scope.eventsPublish[i].publishDate.substring(8, 10);
 							
 							switch($scope.eventsPublish[i].publishDate.substring(5, 7)) {
@@ -317,8 +315,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
 					date: new Date(),
 					eventParticipant: $scope.eventParticipant
 			}
-			
 			$http({method: 'POST',url:'rest/protected/comment/createComment', data:eventComment, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				console.log(response);
 				if(response.code==200){
 					$scope.commentList.push(eventComment);
 					$scope.comment = undefined;

@@ -1,6 +1,6 @@
 'use strict';
 angular
-		.module('dondeEs.chat', [ 'ngRoute' ])
+		.module('dondeEs.chat', ['ngRoute', 'ngCookies'])
 		.config([ '$routeProvider', function($routeProvider) {
 			$routeProvider.when('/chat', {
 				templateUrl : 'resources/Chat/Chat.html',
@@ -12,8 +12,9 @@ angular
 				[
 						'$scope',
 						'$http',
-						'$location','$interval','$timeout',
-						function($scope, $http, $location, $interval, $timeout) {
+						'$location','$interval','$timeout','$cookies',
+						function($scope, $http, $location, $interval, $timeout, $cookies) {
+							$scope.$parent.pageTitle = "Donde es - Chats";
 							$("#messageByChat").hide();
 							$scope.objMessage = {};
 							$scope.chatCurrent;
@@ -21,8 +22,10 @@ angular
 							$scope.eventNameByChat;
 							$scope.showError = true;
 							$scope.messages= {};
-							$scope.loggedUser = JSON.parse(localStorage
-									.getItem("loggedUser"));
+							$scope.isChat= false;
+							$scope.imageGroup = "resources/img/default_group.png"
+							$scope.imageProfile = "resources/img/default-profile.png";
+							$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 							
 							$http(
 									{
@@ -37,6 +40,10 @@ angular
 						
 							})
 							
+							$scope.$on('$destroy', function() {
+								$scope.stop();
+							});
+							
 							$scope.stop = function(){
 								$interval.cancel($scope.currentInterval);
 							}
@@ -48,30 +55,27 @@ angular
 							}
 							$scope.getEventName= function(eventName){
 								$scope.eventNameByChat = eventName;
-								console.log("asassss " + $scope.eventNameByChat )
 							}
 							$scope.getAllMessage = function(idChat) {
-								
+								$scope.stop();
 								
 								if($scope.chatCurrent == undefined || $scope.chatCurrent != idChat){
 									$scope.chatCurrent = idChat;
-									$scope.currentInterval =$interval($scope.loadMessage(), 5000);
-							
+									$scope.currentInterval = $interval(function() {
+										$scope.loadMessage();
+							        }, 3000);
 								}else{
 									$scope.on();
 								}
 								
 								$scope.loadMessage();
-								
-								$interval(function() {
-									$scope.loadMessage();
-						          }, 500);
-								
 							}
+							
+							$scope.$parent.pageName = "Chats";
 							
 							$scope.loadMessage=function (){
 								var idChat = $scope.chatCurrent;
-								console.log(idChat +" "+new Date());
+								
 								$("#messageByChat").show();
 								$scope.chat = {
 									chatId : idChat
@@ -88,6 +92,7 @@ angular
 									$scope.messages = response.messages;
 //									$timeout($scope.loadMessage(idChat), 50000);
 //									$interval($scope.loadMessage(idChat), 5000);
+									$scope.isChat = true;
 								})
 								if($scope.messages.length == 0){
 									$scope.showError = false;
@@ -96,31 +101,72 @@ angular
 								}
 							}
 
+							$scope.attach = function(file) {
+								  if(file != null){
+									  var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+										  if(regex.test(file.name.toLowerCase())){
+											  $scope.chatFile = file;
+											   
+											  var reader = new FileReader();
+												  reader.onload = function(e){
+												  $scope.chatPreviewFile = e.target.result;
+												  $scope.$apply();
+											  }
+											   
+											  reader.readAsDataURL(file);
+										 }else{
+										  $scope.chatPreviewFile = null;
+										  $scope.chatFile = null;
+										  toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
+									     }
+								  }
+							}
 							
-							$scope.sendMessage = function(event) {
+							$scope.sendMessage = function() {
 
 								var dataCreate = {
 									user : $scope.loggedUser,
 									chat : $scope.chat,
-									content : $scope.objMessage.content
-
+									content : $scope.objMessage.content,
+									image : $scope.chatFile
 								}
-								if ($scope.objMessage.content != null) {
-									$http(
-											{
-												method : 'POST',
-												url : 'rest/protected/message/createMessage',
-												data : dataCreate,
-												headers : {
-													'Content-Type' : 'application/json'
-												}
-											})
-											.success(
-													function(response) {
-														$scope.messages = $scope.messages
-																.concat(dataCreate);
-														$scope.objMessage.content=''
-													})
+								if ($scope.objMessage.content != null && $scope.objMessage.content != undefined  && $scope.objMessage.content != "" && $scope.objMessage.content != '' || $scope.chatFile != undefined || $scope.chatFile != null) {
+										if($scope.chat != null){
+											if($scope.objMessage.content == undefined){
+												$scope.objMessage.content = '';
+											}
+											if($scope.chatFile == undefined){
+												$scope.chatFile = null;
+											}
+											Upload.upload({
+											 	url: 'rest/protected/message/insertImageChat',
+											 	
+											 	data: {
+											 	"idChat": $scope.chat.chatId,
+											 	"idUser": $scope.loggedUser.userId,
+											 	"file": $scope.chatFile,
+											 	"content":$scope.objMessage.content
+											 	}
+											 	}).then(function(resp) {
+												 	if(resp.status == 200){
+												 		$scope.messages = $scope.messages
+														.concat(dataCreate);
+												 		$scope.objMessage.content='';
+												 		$scope.chatFile = null;
+												 		$scope.chatPreviewFile = null;
+												 	}else{
+												 	}
+												 	}, function(err) {  }, function(prog) {});
+										}else{
+											setTimeout(
+											function() {
+												toastr
+														.error(
+																'Seleccione un chat',
+																'Error');
+
+											}, 1300);
+										}
 								} else {
 									setTimeout(
 											function() {
@@ -132,4 +178,10 @@ angular
 											}, 1300);
 								}
 							}
+							
+							$(document.body).delegate('input:text', 'keypress', function(e) {
+							    if (e.which === 13) { // if is enter
+							    	$scope.sendMessage();
+							    }
+							});
 						} ])

@@ -22,4 +22,5 @@ public interface ServiceContactRepository extends CrudRepository<ServiceContact,
 	 */
 	ServiceContact getByServiceServiceIdAndEventEventId(int eventId, int serviceId);
 	ServiceContact getByServiceServiceIdAndEventAuctionsAuctionServicesAuctionServicesId(int eventId, int serviceId);
+	ServiceContact findByServiceServiceIdAndEventEventId(int serviceId, int eventId);
 }

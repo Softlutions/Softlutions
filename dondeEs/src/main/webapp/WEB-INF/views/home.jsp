@@ -6,12 +6,12 @@
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="dondeEs" class="no-js">
+<html lang="en" ng-app="dondeEs" ng-controller="IndexCtrl" class="no-js">
 <!--<![endif]-->
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Donde es | Inicio</title>
+<title>{{pageTitle}}</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
@@ -26,29 +26,27 @@
 <link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
 <link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
+<link href="resources/bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet">
+<link href="resources/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 </head>
 <body>
-	<div id="wrapper" ng-controller="IndexCtrl">
+	<div id="wrapper">
 		<nav class="navbar-default navbar-static-side" role="navigation">
 			<div class="sidebar-collapse">
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
 						<div class="dropdown profile-element">
-							<span> <img alt="image" class="img-circle"
-								src="http://lorempixel.com/32/32" />
+							<span>
+								<img alt="image" class="img-circle center-block" width="60px" height="60px" ng-src="{{loggedUser.image || DEFAULT_USER_IMAGE}}" />
 							</span> <a data-toggle="dropdown" class="dropdown-toggle">
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
 											{{loggedUser.lastName}}</strong>
-								</span> <span class="text-muted text-xs block">{{loggedUser.role.name}}<b
-										class="caret"></b></span>
+								</span> <span class="text-muted text-xs block">{{loggedUser.role.name}}</span>
 							</span>
 							</a>
-							<ul class="dropdown-menu animated fadeInRight m-t-xs">
-								<li ng-click="logout()"><a>Cerrar sesión</a></li>
-							</ul>
 						</div>
-						<div class="logo-element"><i class="fa fa-sign-out"></i></div>
+						<div class="logo-element" ng-click="logout()"><i class="fa fa-sign-out"></i></div>
 					</li>
 					<li ng-show="permissions.gestionarEventosPropios"><a href="#"><i class="fa fa-th-large"></i> <span
 							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
@@ -80,9 +78,15 @@
 							<li><a href="app#/auctions">Subastas disponibles</a></li>
 						</ul>
 					</li>
-					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
-					<span class="nav-label">Contacto</span></a>
+					<li><a ng-click="returnLandingPage()"><i class="glyphicon glyphicon-glass"></i> 
+						<span class="nav-label">Eventos publicados</span></a>
 					</li>
+					<li><a href="app#/reports"><i class="glyphicon glyphicon-list-alt"></i> 
+						<span class="nav-label">Reportes</span></a>
+					</li>	
+					<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 
+						<span class="nav-label">Contacto</span></a>
+					</li>		
 				</ul>
 			</div>
 		</nav>
@@ -93,7 +97,9 @@
 					<div class="navbar-header">
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
-
+					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
+                        <i class="fa fa-sign-out"></i> Cerrar sesión
+                    </button>
 				</nav>
 			</div>
 			<div class="wrapper wrapper-content animated fadeInRight">
@@ -140,11 +146,15 @@
 	<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
 	<script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
-		<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
+	<script src="resources/bower_components/angular-wizard/dist/angular-wizard.js"></script>
 	<script src="resources/js/App/App.js"></script>
 	<script src="resources/js/Commons/directives.js"></script>
-
-
+	<script src="resources/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="resources/bower_components/braintree-web/dist/braintree.js"></script>
+	
+	<script src="resources/js/plugins/ladda/spin.min.js"></script>
+   	<script src="resources/js/plugins/ladda/ladda.min.js"></script>
+   	<script src="resources/js/plugins/ladda/ladda.jquery.min.js"></script>
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
@@ -152,11 +162,13 @@
 	<!-- Morris -->
 	<script src="resources/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="resources/js/plugins/morris/morris.js"></script>
-
+	
+	<script src="resources/js/Events/createEventWizard.js"></script>
 	<script src="resources/js/index/index.js"></script>
 	<script src="resources/js/users/usersController.js"></script>
 	<script src="resources/js/Contracts/ContractsCtrl.js"></script>
 	<script src="resources/js/myEvents/myEventsController.js"></script>
+	<script src="resources/js/ServicesAvailable/ServicesAvailableController.js"></script>
 	<script src="resources/js/ServicesByUsers/ServicesByUserController.js"></script>
 	<script src="resources/js/Events/eventsPublishController.js"></script>
 	<script src="resources/js/AnswerInvitation/answerInvitation.js"></script>
@@ -168,6 +180,11 @@
 	<script src="resources/js/Contact/ContactController.js"></script>
 	<script src="resources/js/EventReminder/EventReminderController.js"></script>
 	<script src="resources/js/EventParticipant/EventParticipantCtrl.js"></script>
+	<script src="resources/js/Auction/AuctionParticipantsController.js"></script>
+	<script src="resources/js/Report/ReportController.js"></script>
+	<script src="resources/js/users/UserProfileController.js"></script>
+	<script src="resources/js/Events/createSimpleEventController.js"></script>
+	<script src="resources/js/Auction/ServicesAuctionEventController.js"></script>
 	
 	<!-- Google Maps -->
 	<script src="http://maps.google.com/maps/api/js?key=AIzaSyDhTmPdseX2jDRUq4svYcpckfvfHGViww0"></script>

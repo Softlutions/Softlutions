@@ -21,7 +21,9 @@ public class Message implements Serializable {
 	private int messageId;
 
 	private String content;
-
+	
+	private String image;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date time;
 
@@ -52,6 +54,14 @@ public class Message implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public Date getTime() {

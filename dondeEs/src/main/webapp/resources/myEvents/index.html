@@ -1,20 +1,20 @@
 <div class="" ng-show="eventForm == false && eventsWizard == false">
-	<div class="col-xs-11">
-		<div class="ibox float-e-margins">
+	<div class="col-xs-12">
+		<div>
 			<div class="ibox-title">
 				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
 			
-				<div class="btn-group pull-right">
-					<button data-toggle="dropdown"
-						class="btn btn-primary btn-xs dropdown-toggle">
+				<div class="btn-group pull-right bottomMargin">
+					<button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">
 						Crear evento <span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu">
-						<li><a ng-if="!$parent.permissions.isAdmin"
-										ng-click="showEventForm()">Sin asistente</a>
+					
+					<ul class="dropdown-menu col-md-3 col-md-pull-9">
+						<li>
+							<a ng-if="!$parent.permissions.isAdmin" href="app#/event">Sin asistente</a>
 						</li>
-						<li><a ng-if="!$parent.permissions.isAdmin" data-toggle="modal"
-										ng-click="showCreateEventForm(true)">Con asistente</a>
+						<li>
+							<a ng-if="!$parent.permissions.isAdmin" ng-click="showCreateEventForm()">Con asistente</a>
 						</li>
 					</ul>
 				</div>
@@ -24,56 +24,53 @@
 						placeholder="Buscar evento" class="form-control">
 				</div>
 			</div>
-
-			<div class="ibox-content">
-				<table class="table table-hover">
+			<div class="ibox-content table-responsive table-myEvents">
+				<table class="table table-hover" ng-table="eventsTable">
 					<thead>
 						<tr>
-							<th>Nombre</th>
+							<th sortable="'name'">Nombre</th>
 							<th>Descripción</th>
 							<th>Lugar</th>
+							<th>Estado</th>
 							<th></th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="event in events | filter:search:strict">
-						<tr>
+					<tbody>
+						<tr ng-repeat="event in $data | filter:search:strict">
 							<td>{{ event.name }}</td>
 							<td>{{ event.description }}</td>
 							<td>{{ event.place.name }}</td>
-
+							<td>{{ event.state == 0? 'Cancelado':(event.state == 1? 'Creado':(event.state == 2? 'Pre-publicado':'Publicado')) }}</td>
 							<td>
 								<div class="btn-group">
-									<button data-toggle="dropdown"
+									<button ng-click="validateEvent(event.publishDate,event.state,$index)" data-toggle="dropdown"
 										class="btn btn-primary btn-xs dropdown-toggle">
 										Acción <span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
-										<li><a ng-click="listContracts(event.eventId)"
-											data-toggle="modal" data-target="#modalListContacts">Listar
+									<ul class="dropdown-menu dropdown-menu-actions-event">
+										<li><a href="app#/Contracts/{{event.eventId}}">Listar
 												contratos</a></li>
 										<li><a href="/dondeEs/app#/eventParticipants/{{event.eventId}}">Listar
 												participantes</a></li>
-										<li ng-if="!$parent.permissions.isAdmin"><a
+										<li id="auctionService{{$index}}" ng-show="event.state!==0"
+											ng-if="!$parent.permissions.isAdmin"><a
 											ng-click="auctionEventServices(event); catalogsList()"
 											data-toggle="modal" data-target="#modalAuctionEventServices">Subastar
 												servicios</a></li>
-
 										<li><a href="/dondeEs/app#/auctionsEvent/{{event.eventId}}">Ver subastas</a></li>
-										<li ng-if="!$parent.permissions.isAdmin"><a type="button"
+										<li ng-show="event.state!==0" ng-if="!$parent.permissions.isAdmin"><a type="button"
 											ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar
 												participantes de evento</a></li>
+										<li><a type="button" href="app#/ServicesAvailable/{{event.eventId}}">Servicios disponibles</a></li>
 										<li><a type="button" href="app#/eventReminder/{{event.eventId}}">Notas</a></li>
-										<li class="divider"></li>
-										<li><a type="button" ng-show="event.state!==0" ng-click="editEvent(event)">Modificar</a></li>
+										<li ng-show="event.state!==0" class="divider"></li>
+										<li ng-show="event.state!==0"><a type="button" href="app#/event?edit={{event.eventId}}">Modificar</a></li>
 										<li ng-show="event.state===1"><a type="button"
-											ng-click="prepublishEventById(event.eventId)" class="text-danger">Prepublicar</a></li>
-										<li ng-show="event.state===2"><a type="button"
-											ng-click="publishEvent(event.eventId)" class="text-danger">Publicar</a></li>
+											ng-click="prepublishEventById(event)" class="text-danger">Prepublicar</a></li>
+										<li ng-show="event.state===2"><a type="button" ng-click="selectEvent(event)">Publicar</a></li>
 										<li ng-show="event.state===3"><a type="button"
-											ng-click="cancelEvent(event.eventId)" class="text-danger">Cancelar</a></li>
-										<li ng-show="event.state===0"><a type="button"
-											disabled class="text-danger">Cancelado</a></li>  
+											ng-click="cancelEvent(event)" class="text-danger">Cancelar</a></li>
 									</ul>
 								</div>
 							</td>
@@ -158,181 +155,61 @@
 
 		<div id="modalAuctionEventServices" class="modal fade" role="dialog">
 			<div class="modal-dialog">
-
-				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Crear subasta para un servicio del
-							evento</h4>
+						<h4 class="modal-title">Crear subasta para un servicio del evento</h4>
 					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-12">
-								<form class="form-horizontal">
-								
+					
+					<form class="form-horizontal" name="formCreateAuction" ng-submit="formCreateAuction.$valid? createAuction():validationError()">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-sm-12">
 									<div class="form-group">
 										<label class="col-lg-2 control-label">Nombre</label>
 										<div class="col-lg-10">
 											<input type="text" placeholder="Nombre" class="form-control"
-												ng-model="tempAuction.name">
+												ng-model="tempAuction.name" ng-maxlength="255" required>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-lg-2 control-label">Tipo de servicio a
-											subastar</label>
+										<label class="col-lg-2 control-label">Servicio a subastar</label>
 										<div class="col-lg-10">
 											<select id="cboAuctionCatalogs" class="form-control"
 												ng-options="c as c.name for c in catalogs"
-												ng-model="tempAuction.selected"></select>
+												ng-model="tempAuction.selected" required></select>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-lg-2 control-label">Descripción</label>
 										<div class="col-lg-10">
-											<textarea rows="5" placeholder="Descripción"
-												class="form-control" ng-model="tempAuction.description"></textarea>
+											<textarea rows="5" placeholder="Descripción" ng-maxlength="255"
+												class="form-control" ng-model="tempAuction.description" required></textarea>
 										</div>
 									</div>
-
+	
 									<div class="form-group">
 										<label class="col-lg-2 control-label">Fecha de finalización</label>
 										<div class="col-lg-10">
-											<input type='text' class="form-control" ng-model="tempAuction.date" id='datetimepicker' />
+											<input type='text' class="form-control" id='datetimepicker'
+											placeholder="Haga click para seleccionar fecha" required/>
 										</div>
-									</div>
-								</form>
-							</div>
+									</div>								
+								</div>
+							</div>	
 						</div>	
-					</div>	
-					
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary"
-							id="btnCreateAuction" ng-click="createAuction()">Crear
-							subasta</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="modalAuctionsByEvent" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<button class="btn btn-success btn-xs pull-right"
-							ng-click="openCreateAuction()">Crear subasta</button>
-						<h4 class="modal-title">Subastas</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-12">
-								<table class="table table-hover table-responsive">
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Fecha de publicación</th>
-											<th>Opciones</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="auction in auctionsEvent">
-											<td>{{auction.name}}</td>
-											<td>{{auction.description}}</td>
-											<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
-											<td>
-												<div>
-													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state == 1"
-														class="btn btn-danger btn-xs"
-														ng-click="finishAuction(auction.auctionId)">Finalizar
-														subasta</button>	
-														
-													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state != 1"
-														class="btn btn-warning btn-xs"
-														ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary">Crear subasta</button>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-info
-							pull-right"
-							ng-click="prepublishEvent()">Prepublicar evento</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div id="modalAuctionsByEvent" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<button class="btn btn-success btn-xs pull-right"
-							ng-click="openCreateAuction()">Crear subasta</button>
-						<h4 class="modal-title">Subastas</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-12">
-								<table class="table table-hover table-responsive">
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Fecha de publicación</th>
-											<th>Opciones</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="auction in auctionsEvent">
-											<td>{{auction.name}}</td>
-											<td>{{auction.description}}</td>
-											<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
-											<td>
-												<div>
-													<a class="btn btn-primary btn-xs"
-														data-toggle="modal" data-target="#modal-form"
-														ng-click="loadAuctionServices($index)">Ver servicios</a>
-													
-													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state == 1"
-														class="btn btn-danger btn-xs"
-														ng-click="finishAuction(auction.auctionId)">Finalizar
-														subasta</button>	
-														
-													<button id="finishAuctionId-{{auction.auctionId}}" ng-if="auction.state != 1"
-														class="btn btn-warning btn-xs"
-														ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-info
-							pull-right"
-							ng-click="prepublishEvent()">Prepublicar evento</button>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
 
 		<div id="servicesOfAuction" class="modal fade" role="dialog">
 			<div class="modal-dialog">
-
-				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -340,6 +217,7 @@
 							ng-click="openAuctions()">Subastas</button>
 						<h4 class="modal-title">Servicios</h4>
 					</div>
+					
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
@@ -378,105 +256,47 @@
 				</div>
 			</div>
 		</div>
-
-		<div id="modalListContacts" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-
-						<h4 class="modal-title">Contratos del evento</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-12">
-								<table class="table table-hover">
-									<thead>
-										<tr>
-											<th>Contrato</th>
-											<th>Estado</th>
-											<th>Comentario</th>
-										</tr>
-									</thead>
-									<tbody ng-repeat="serviceContact in serviceContacts">
-										<tr>
-											<td>{{serviceContact.service.name}}</td>
-											<td>{{(serviceContact.state==0)?
-												"Pendiente":(serviceContact.state==1)?
-												"Concretado":"Cancelado"}}</td>
-											<td>{{serviceContact.comment}}</td>
-			
-											<td ng-if="serviceContact.state != 2">
-												<Button ng-if="!$parent.permissions.isAdmin"
-													id="btnCancelService-{{serviceContact.serviceContractId}}"
-													class="btn btn-danger btn-xs" ng-click="cancel(serviceContact)">Cancelar</Button>
-											</td>
-											<td ng-if="serviceContact.state == 2">
-												<Button
-													id="btnCancelService-{{serviceContact.serviceContractId}}"
-													class="btn btn-warning btn-xs" ng-click="cancel(serviceContact)"
-													disabled>Cancelado</Button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-
-						<!-- Graph morris donut chart -->
-						<div class="ibox">
-							<div class="ibox-title">
-								<h5>Resumen</h5>
-							</div>
-							<div id="contracts-state-chart" class="hidden"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 </div>
 
 <div class="container" ng-show="eventForm == true">
 	<div class="col-xs-11">
-		<div class="form-group">
-			<a class="btn btn-primary pull-right" ng-click="hiddenEventForm()">Volver</a>
-			<h1>Crear evento</h1>	
+		<div class="row">
+			<h1>Crear evento</h1>
+			<a class="btn btn-primary pull-left" ng-click="hiddenEventForm()"><i class="fa fa-reply"></i> Volver</a>
 		</div>		
-	
+		<br/>
 		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEvent():saveEventChanges()):validationError()">
 			<div class="form-group">
-				<label class="col-lg-2 control-label">Nombre</label>
+				<label class="col-lg-2">Nombre</label>
 				<div class="col-lg-10">
 					<input ng-model="tempEvent.name" type="text" class="form-control" maxlength="50" ng-maxlength="50" required/>
 				</div>
 			</div>
 			
 			<div class=form-group>
-				<label class="col-lg-2 control-label">Fecha del evento</label>
+				<label class="col-lg-2">Fecha del evento</label>
 				<div class="col-lg-10">
-					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-init="tempEvent.date = Date()" ng-model="tempEvent.date" id='eventDatePicker' required/>
+					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-model="tempEvent.date" id='eventDatePicker'/>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-lg-2 control-label">Descripción</label>
+				<label class="col-lg-2">Descripción</label>
 				<div class="col-lg-10">
 					<input ng-model="tempEvent.desc" type="text" class="form-control" maxlength="150" ng-maxlength="150" required/>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-lg-2 control-label">Descripción larga</label>
+				<label class="col-lg-2">Descripción larga</label>
 				<div class="col-lg-10">
 					<textarea ng-model="tempEvent.largeDesc" placeholder="(opcional)" class="form-control" rows="5" maxlength="255" ng-maxlength="255"></textarea>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-lg-2 control-label">Tipo de evento</label>
+				<label class="col-lg-2">Tipo de evento</label>
 				<div class="col-lg-10">
 					<div class="radio-inline">
 						<label> <input type="radio" ng-model="tempEvent.type" ng-value="0" checked> Público </label>
@@ -488,7 +308,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-lg-2 control-label">Lugar del evento</label>
+				<label class="col-lg-2">Lugar del evento</label>
 				<div class="col-lg-10">
 					<input ng-model="tempEvent.placeName" placeholder="ej: Parque central" type="text" class="form-control" maxlength="60" ng-maxlength="60" required>
 				</div>
@@ -515,8 +335,10 @@
 				<div class="col-lg-12">
 					<label class='control-label'>Imagen principal</label> 
 					<img ng-src="{{tempEvent.file}}" class="img-responsive img-rounded center-block" width="175px" height="125px"/>
-					<input id="uploadImageEvent" class="btn btn-primary col-lg-4" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
-					<input ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="btn btn-warning col-lg-4" value="Quitar imagen" type="button"/>
+					<label class="fa fa-camera btn btn-primary" data-toggle="tooltip" title="Adjuntar foto principal">
+						<input id="uploadImageEvent" style="display: none;" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
+					</label>
+					<label ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="fa fa-trash btn btn-danger col-lg-4" data-toggle="tooltip" title="Quitar imagen"></label>
 					<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
 				</div>
 			</div>
@@ -529,203 +351,36 @@
 	</div>
 </div>
 
-<!-- ASISTENTE DE CREACIÓN -->
-<wizard on-finish="finishedWizard()"  ng-if="eventsWizard == true"> 
-<wz-step wz-title="Crear evento" class="container" title="Starting">
-<div class="firstStep col-md-12">
- <br>
- <br>
-	<form class="form-horizontal" name="formCreateEvent"
-		ng-submit="formCreateEvent.$valid? ((eventInEdition === null)? createEventAsistente():saveEventChanges()):validationError()">
-		<div class="form-group">
-			<label class="col-lg-2 control-label">Nombre</label>
-			<div class="col-lg-10">
-				<input ng-model="tempEvent.name" type="text" class="form-control"
-					maxlength="50" ng-maxlength="50" required />
-			</div>
-		</div>
+<div id="modal-publishEvent" class="modal fade" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12 b-r">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h3 class="m-t-none m-b">Publicar evento</h3>
+						<h4 class="m-t-none m-b">Costo: ₡5,000.00</h4>
+						<form id="checkout" ng-submit="publishEvent(selectedEvent)">
+							<div id="payment-form"></div>
+							<button type="submit" class="btn btn-primary pull-right">Pagar</button>
+						</form>
+						<script>
+							// We generated a client token for you so you can test out this code
+							// immediately	. In a production-ready integration, you will need to
+							// generate a client token on your server (see section below).
+							var clientToken = "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI3ZDAyMzEwZTlkYWUxMjY0MzIzZGRiMTdiNzliNGY3YWE1NmNjMDFiODkzNGI3MzUzZjdjNTQ0M2VmZDM5YjM4fGNyZWF0ZWRfYXQ9MjAxNi0wNC0xMVQwMTowMzo0Ni42NjQyMjA3NDErMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0=";
 
-		<div class=form-group>
-			<label class="col-lg-2 control-label">Fecha del evento</label>
-			<div class="col-lg-10">
-				<input type='text' class="form-control" data-toggle="tooltip"
-					title="{{HOURS_BEFORE_EVENT}} horas de anticipación"
-					ng-init="tempEvent.date = Date()" ng-model="tempEvent.date"
-					id='eventDatePicker' required />
-			</div>
-		</div>
+							braintree.setup(clientToken, "dropin", {
+								container : "payment-form"
 
-		<div class="form-group">
-			<label class="col-lg-2 control-label">Descripción</label>
-			<div class="col-lg-10">
-				<input ng-model="tempEvent.desc" type="text" class="form-control"
-					maxlength="150" ng-maxlength="150" required />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-lg-2 control-label">Descripción larga</label>
-			<div class="col-lg-10">
-				<textarea ng-model="tempEvent.largeDesc" placeholder="(opcional)"
-					class="form-control" rows="5" maxlength="255" ng-maxlength="255"></textarea>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-lg-2 control-label">Tipo de evento</label>
-			<div class="col-lg-10">
-				<div class="radio-inline">
-					<label> <input type="radio" ng-model="tempEvent.type"
-						ng-value="0" checked> Público
-					</label>
-				</div>
-				<div class="radio-inline">
-					<label> <input type="radio" ng-model="tempEvent.type"
-						ng-value="1"> Privado
-					</label>
+							});
+						</script>
+					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<div class="form-group">
-			<label class="col-lg-2 control-label">Lugar del evento</label>
-			<div class="col-lg-10">
-				<input ng-model="tempEvent.placeName"
-					placeholder="ej: Parque central" type="text" class="form-control"
-					maxlength="60" ng-maxlength="60" required>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-lg-12">
-				<google-map center="map.center" zoom="map.zoom" draggable="true"
-					options="map.options" control="map.control"> <markers
-					models="map.markers" coords="'self'" options="'options'"
-					isLabel='true'> </markers> </google-map>
-				<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir
-					a mi localización</a>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-lg-12">
-				<label class="control-label">Buscar lugar</label> <input
-					class="form-control col-xs-12" type="text"
-					placeholder="San José, Costa Rica" ng-model="tempEvent.address" />
-				<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir
-					a esta dirección</a>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-lg-12">
-				<label class='control-label'>Imagen principal</label> <img
-					ng-src="{{tempEvent.file}}"
-					class="img-responsive img-rounded center-block" width="175px"
-					height="125px" /> <input id="uploadImageEvent"
-					class="btn btn-primary col-lg-4" type="file" name="inputfile"
-					ngf-pattern="'image/*" ngf-max-size="6MB"
-					ng-file-select="onFileSelect($files)"> <input
-					ng-click="tempEvent.file = DEFAULT_IMG"
-					ng-show="tempEvent.file != DEFAULT_IMG"
-					class="btn btn-warning col-lg-4" value="Quitar imagen"
-					type="button" />
-				<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<button id="btnEventFormSubmit" type="submit"
-				class="btn btn-primary pull-right">Crear</button>
-			<a class="btn btn-danger pull-right" ng-click="hiddenEventForm()">Cancelar</a>
-		</div>
-	</form>
 </div>
-</wz-step>
- <wz-step wz-title="Crear subastas" title="Continuing">
- <br>
- <br>
- <br>
- <br>
-	<div class="col-sm-12" ng-show="serviceList == false">
-	<div class="ibox float-e-margins">
-		<div class="ibox-title">
-			<h5>Subastas del evento</h5>
-			<a href="#" class="pull-right btn btn-xs btn-primary">Volver a mis eventos</a>
-		</div>
-		<div class="ibox-content">
-
-			<table class="table table-hover table-responsive">
-				<thead>
-					<tr>
-						<th>Nombre</th>
-						<th>Descripción</th>
-						<th>Fecha de publicación</th>
-						<th>Opciones</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="auction in auctionsEvent">
-						<td>{{auction.name}}</td>
-						<td>{{auction.description}}</td>
-						<td>{{auction.date | date:'dd-MM-yyyy'}}</td>
-						<td><a class="btn btn-primary btn-sm" ng-click="loadAuctionServices($index); showServiceList();">
-							Ver servicios</a></td>
-						<td ng-if="auction.state == 1">
-							<button id="finishAuctionId-{{auction.auctionId}}"
-								class="btn btn-danger btn-sm"
-								ng-click="finishAuction(auction.auctionId)">Finalizar
-								subasta</button>
-						</td>
-						<td ng-if="auction.state != 1">
-							<button id="finishAuctionId-{{auction.auctionId}}"
-								class="btn btn-warning btn-sm"
-								ng-click="finishAuction(auction.auctionId)" disabled>Finalizada</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>		
-	<div class="col-sm-12" ng-show="serviceList == true">
-		<button ng-click="hideServiceList()" class="btn btn-primary">Volver</button>
-		<div class="ibox float-e-margins">
-			<div class="ibox float-e-margins">
-				<div class="ibox-title">
-					<h5>Oferta de servicios</h5>
-				</div>
-				<div class="ibox-content">
-					<table class="table table-hover table-responsive">
-						<thead>
-							<tr>
-								<th>Descripción de la oferta</th>
-								<th>Precio</th>
-								<th>Fecha de publicación</th>
-								<th>Nombre del servicio</th>
-								<th>Descripción del servicio</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="service in auctionServices">
-								<td>{{service.description}}</td>
-								<td>₡{{service.price}}</td>
-								<td>{{service.date | date:'dd-MM-yyyy'}}</td>
-								<td>{{service.service.name}}</td>
-								<td>{{service.service.description}}</td>
-								<td class="text text-info">
-									<button  ng-if="!$parent.permissions.isAdmin"  ng-click="contract(service)"
-										class="btn btn-primary btn-xs">Contratar</button>
-								</td>	
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</wz-step> 
-</wizard>
 
 

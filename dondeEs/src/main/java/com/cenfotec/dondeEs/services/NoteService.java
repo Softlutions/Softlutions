@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cenfotec.dondeEs.ejb.Note;
 import com.cenfotec.dondeEs.pojo.NotePOJO;
+import com.cenfotec.dondeEs.repositories.EventRepository;
 import com.cenfotec.dondeEs.repositories.NoteRepository;
 
 @Service
 public class NoteService implements NoteServiceInterface {
+	
+	@Autowired private EventRepository eventRepository;
 	@Autowired private NoteRepository noteRepository;
 
 	@Override
@@ -38,5 +41,12 @@ public class NoteService implements NoteServiceInterface {
 		});
 		
 		return notesPojo;
+	}
+
+	@Override
+	public void delete(Note note) {
+		note.setEvent(eventRepository.findOne(note.getEvent().getEventId()));
+		noteRepository.delete(note);
+		
 	}
 }

@@ -1,0 +1,19 @@
+<h2 class="text-center">Participación de un prestatario en eventos</h2>
+
+ 
+<div class="row">
+	<form name="formReport1" ng-submit="formReport1.$valid ? generateReport1() : null">
+		<label class="control-label col-xs-1">Filtar por: </label>
+		<label class="control-label col-xs-1">Prestatario </label>
+		<div class="col-xs-3">
+			<select id="cboServiceProvider" class="form-control"
+				ng-options="u as u.serviceProviderName for u in userList track by u.serviceProviderId"
+				ng-model="user.serviceProviderSelected">
+			</select>
+		</div>
+		<button class="btn btn-primary" type="submit">Generar</button>
+	</form>
+</div>
+
+<div id="reportParticipationEvents"></div>
+ 	

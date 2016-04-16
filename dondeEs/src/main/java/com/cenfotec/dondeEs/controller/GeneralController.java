@@ -27,7 +27,7 @@ public class GeneralController {
 	public ModelAndView login(Locale locale, Model model,HttpServletRequest request,HttpServletResponse response) {				
 		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("login");
+		mav.setViewName("landingPage");
 		return mav;
 	}
 	
