@@ -1,6 +1,6 @@
 'use strict';
 angular
-		.module('dondeEs.chat', [ 'ngRoute' ])
+		.module('dondeEs.chat', ['ngRoute', 'ngCookies'])
 		.config([ '$routeProvider', function($routeProvider) {
 			$routeProvider.when('/chat', {
 				templateUrl : 'resources/Chat/Chat.html',
@@ -12,8 +12,8 @@ angular
 				[
 						'$scope',
 						'$http',
-						'$location','$interval','$timeout',
-						function($scope, $http, $location, $interval, $timeout) {
+						'$location','$interval','$timeout','$cookies',
+						function($scope, $http, $location, $interval, $timeout, $cookies) {
 							$scope.$parent.pageTitle = "Donde es - Chats";
 							$("#messageByChat").hide();
 							$scope.objMessage = {};
@@ -25,8 +25,7 @@ angular
 							$scope.isChat= false;
 							$scope.imageGroup = "resources/img/default_group.png"
 							$scope.imageProfile = "resources/img/default-profile.png";
-							$scope.loggedUser = JSON.parse(localStorage
-									.getItem("loggedUser"));
+							$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 							
 							$http(
 									{

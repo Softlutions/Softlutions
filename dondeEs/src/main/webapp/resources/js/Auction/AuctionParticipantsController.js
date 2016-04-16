@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable'])
+angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/auctionParticipants/:id', {
@@ -9,8 +9,8 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable'])
   });
 }])
 
-.controller('auctionParticipantsCtrl', ['$scope','$http','$routeParams','ngTableParams','$filter','$interval',function($scope,$http,$routeParams,ngTableParams,$filter,$interval){
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+.controller('auctionParticipantsCtrl', ['$scope','$http','$routeParams','ngTableParams','$filter','$interval','$cookies',function($scope,$http,$routeParams,ngTableParams,$filter,$interval,$cookies){
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 	$scope.$parent.pageTitle = "Donde es - Participantes de subasta";
 	$scope.selectedAuction = {};
 	$scope.loggedUserServiceCatalogs = [];

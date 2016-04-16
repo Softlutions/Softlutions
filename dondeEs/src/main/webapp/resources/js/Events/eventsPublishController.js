@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
+angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload', 'ngCookies'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/eventsPublish', {
@@ -9,8 +9,8 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload'])
   });
 }])
 
-.controller('eventsPublishCtrl', ['$scope','$http','Upload','$timeout',function($scope,$http,Upload,$timeout) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+.controller('eventsPublishCtrl', ['$scope','$http','Upload','$timeout','$cookies',function($scope,$http,Upload,$timeout,$cookies) {
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 
 	$scope.eventsPublish = [];
 	$scope.requestObject = {"eventsPublish": {}};

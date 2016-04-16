@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('dondeEs.eventWizard', ['ngRoute', 'ngFileUpload', 'ngTable'])
+var app = angular.module('dondeEs.eventWizard', ['ngRoute', 'ngFileUpload', 'ngTable', 'ngCookies'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/eventWizard', {
@@ -69,7 +69,7 @@ app.factory('MarkerCreatorService', function () {
     };
 
 });
-app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', '$timeout',function($scope,$http,$upload,MarkerCreatorService,$filter, WizardHandler, ngTableParams, $timeout) {
+app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorService','$filter', 'WizardHandler', 'ngTableParams', '$timeout', '$cookies',function($scope, $http, $upload, MarkerCreatorService, $filter, WizardHandler, ngTableParams, $timeout, $cookies) {
 	//#REGION ASISTENTE DE CREACION
 	$scope.$parent.pageTitle = "Donde es - Asistente de creación";
 	$scope.eventForm = false;
@@ -108,7 +108,7 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
 	
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 	
 	
 	$scope.onFileSelect = function($files) {

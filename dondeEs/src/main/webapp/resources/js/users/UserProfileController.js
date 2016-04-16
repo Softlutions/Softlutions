@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('dondeEs.userProfile', ['ngRoute']).config(['$routeProvider', function($routeProvider) {
+angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies'])
+	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/userProfile/:id', {
 			templateUrl : 'resources/users/userProfile.html',
 			controller : 'UserProfileCtrl'
 		});
-	}]).controller('UserProfileCtrl', ['$scope', '$http','$routeParams',  function($scope, $http,$routeParams) {
+	}]).controller('UserProfileCtrl', ['$scope', '$http','$routeParams', '$cookies',  function($scope, $http, $routeParams, $cookies) {
 		$scope.$parent.pageTitle = "Donde es - Perfil de usuario";
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 
 		$http.get("rest/protected/users/getUserById/"+$routeParams.id).success(function(response){
 			$scope.user = response.user;

@@ -141,6 +141,23 @@ public class EventController {
 		}
 		return response;
 	}
+	
+	@RequestMapping(value = "/getEventDataById/{eventId}", method = RequestMethod.GET)
+	public EventResponse getEventDataById(@PathVariable("eventId") int eventId) {
+		EventResponse response = new EventResponse();
+		EventPOJO eventPOJO = eventServiceInterface.eventById(eventId);
+		
+		if(eventPOJO != null) {
+			response.setCode(200);
+			response.setCodeMessage("Success");
+			response.setEventPOJO(eventPOJO);
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Event not found");
+		}
+		
+		return response;
+	}
 
 	/***
 	 * Cancela un evento que ha sido previamente publicado.

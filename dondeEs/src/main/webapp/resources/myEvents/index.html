@@ -4,14 +4,14 @@
 			<div class="ibox-title">
 				<h5>{{$parent.permissions.isAdmin?  'Eventos publicados':'Mis eventos'}}</h5>
 			
-				<div class="btn-group pull-right">
+				<div class="btn-group pull-right bottomMargin">
 					<button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">
 						Crear evento <span class="caret"></span>
 					</button>
 					
 					<ul class="dropdown-menu col-md-3 col-md-pull-9">
 						<li>
-							<a ng-if="!$parent.permissions.isAdmin" ng-click="showEventForm()">Sin asistente</a>
+							<a ng-if="!$parent.permissions.isAdmin" href="app#/event">Sin asistente</a>
 						</li>
 						<li>
 							<a ng-if="!$parent.permissions.isAdmin" ng-click="showCreateEventForm()">Con asistente</a>
@@ -65,7 +65,7 @@
 										<li><a type="button" href="app#/ServicesAvailable/{{event.eventId}}">Servicios disponibles</a></li>
 										<li><a type="button" href="app#/eventReminder/{{event.eventId}}">Notas</a></li>
 										<li ng-show="event.state!==0" class="divider"></li>
-										<li ng-show="event.state!==0"><a type="button" ng-click="editEvent(event)">Modificar</a></li>
+										<li ng-show="event.state!==0"><a type="button" href="app#/event?edit={{event.eventId}}">Modificar</a></li>
 										<li ng-show="event.state===1"><a type="button"
 											ng-click="prepublishEventById(event)" class="text-danger">Prepublicar</a></li>
 										<li ng-show="event.state===2"><a type="button" ng-click="selectEvent(event)">Publicar</a></li>

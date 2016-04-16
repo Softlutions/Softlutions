@@ -10,14 +10,19 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 }])
 
 .controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', '$cookies', "$interval", function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter, $cookies, $interval) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-	$scope.DEFAULT_USER_IMAGE = "http://bootdey.com/img/Content/user_1.jpg";
+	$scope.loggedUser = null;
+	var loginCookie = $cookies.getObject("loggedUser");
+	if(loginCookie != null)
+		$scope.loggedUser = JSON.parse(loginCookie);
+	
+	$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 	$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
 	$scope.commentPreviewFile = null;
 	$scope.eventParticipant = null;
 	$scope.commentFile = null;
 	$scope.participants = [];
-	$scope.commentList = [];	
+	$scope.commentList = [];
+	$scope.modalUser = {};
 	
 	$scope.event = null;
 	$scope.images = [];
@@ -34,14 +39,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	
 	$scope.logout = function(){
 		$http.get("rest/login/logout").success(function(response){
-			var sessionCookie = $cookies.getObject("lastSession");
-			if(sessionCookie != null){
-				sessionCookie["sessionClosed"] = true;
-				$cookies.putObject("lastSession", sessionCookie);
-			}
-			
-			$scope.loggedUser = null;
-			localStorage.setItem("loggedUser", null);
+			$cookies.remove("loggedUser");
 			window.location.href = "#/landingPage";
 		});
 	}
@@ -298,14 +296,19 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		var email = $scope.email;
 		$scope.email = "";
 		
+		$("#laddaSendInvitation").ladda().ladda("start");
+		
 		$http({method: 'POST',url:'rest/landing/sendEmailInvitation?eventId='+$scope.event.eventId, data:{listSimple:[email]}, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
 			if(response.code == 200){
 				toastr.success('Invitación enviada');
 			}else{
 				toastr.error('No se pudo enviar la invitación');	
 			}
+			
+			$("#laddaSendInvitation").ladda().ladda("stop");
 		}).error(function(response){
 			 toastr.error('No se pudo enviar la invitación');
+			$("#laddaSendInvitation").ladda().ladda("stop");
 		})
 	}
 	
@@ -452,6 +455,11 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		stringDate = stringDate.substring(4, 24);
 		var m = moment(stringDate,"MMM DD YYYY HH:mm:ss").locale('es');
 		return m.fromNow();
+	}
+	
+	$scope.viewProfile = function(user){
+		$scope.modalUser = user;
+		$("#userProfileModal").modal("toggle");
 	}
 	
 	// --------------------------- SCROLL LOGIC

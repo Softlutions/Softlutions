@@ -9,8 +9,8 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	}])
 	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$filter',
 	                          			function($scope, $http, $cookies, $rootScope, $filter) {
-
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		
 		$scope.pageTitle = "Donde es";
 		$scope.permissions = {
@@ -35,14 +35,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 		
 		$scope.logout = function(){
 			$http.get("rest/login/logout").success(function(response){
-				var sessionCookie = $cookies.getObject("lastSession");
-				if(sessionCookie != null){
-					sessionCookie["sessionClosed"] = true;
-					$cookies.putObject("lastSession", sessionCookie);
-				}
-
-				$scope.loggedUser = null;
-				localStorage.setItem("loggedUser", null);
+				$cookies.remove("loggedUser");
 				window.location.href = "/dondeEs/#/landingPage";
 			});
 		}
@@ -84,7 +77,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 						break;
 					case 10: // Invitado
 						$scope.permissions.invitado = true;
-							break;
+						break;
 				}
 			}
 			
@@ -103,7 +96,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 					break;
 			}
 			
-			$rootScope.$on( "$routeChangeStart", function(event, next, current) {
+			$rootScope.$on("$routeChangeStart", function(event, next, current) {
 			    if($scope.permissions.isPrestatario){
 			    	if(next.originalPath == '/users' || next.originalPath == '/index'){
 			    		window.location.href = "/dondeEs/app#/serviceByUser";
@@ -117,7 +110,6 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			    }	
 			    
 			    if($scope.permissions.isInvitado){
-			    	
 		    		window.location.href = "/dondeEs/#/landingPage";
 			    }	
 			   });

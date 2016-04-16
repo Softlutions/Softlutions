@@ -6,9 +6,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			controller : 'LandingPageCtrl'
 		});
 	}])
-	.controller('LandingPageCtrl', ['$scope', 'Upload', '$http', '$cookies', '$rootScope', '$location', '$filter',
+	.controller('LandingPageCtrl', ['$scope', 'Upload', '$http', '$cookies', '$rootScope', '$location', '$filter', 
 	                                		function($scope, Upload, $http, $cookies, $rootScope, $location, $filter){
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = null;
+		var loginCookie = $cookies.getObject("loggedUser");
+		if(loginCookie != null)
+			$scope.loggedUser = JSON.parse(loginCookie);
+		
+		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 		$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
 		
 		if ($cookies.getObject("goToEventsPublish") == null) {
@@ -21,24 +26,18 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			password : "",
 			isCript: false
 		};
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		
 		$scope.userCompany={};
 		$scope.loginNormalPage = false;
 		
 		$scope.tempRedirect = {};
 		$scope.topEvents = [];
+		$scope.modalUser = {};
 		
 		$scope.user = {
 			email : "",
 			password : ""
 		};
-		
-		var sessionCookie = $cookies.getObject("lastSession");
-		if(sessionCookie != null && sessionCookie.sessionClosed){
-			sessionCookie.sessionClosed = false;
-			$scope.loggedUser = null;
-			$cookies.putObject("lastSession", sessionCookie);
-		}
 		
 		if($cookies.getObject("goToEventsPublish") == true) {
 			$('html,body').animate({scrollTop:$('#eventPublish').height()+460},2e3);
@@ -64,15 +63,17 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		
 		$scope.logout = function(){
 			$http.get("rest/login/logout").success(function(response){
-				var sessionCookie = $cookies.getObject("lastSession");
+				$cookies.remove("loggedUser");
+				$scope.loggedUser = null;
+				/*var sessionCookie = $cookies.getObject("lastSession");
 				if(sessionCookie != null){
 					sessionCookie["sessionClosed"] = true;
 					$cookies.putObject("lastSession", sessionCookie);
 				}
 				
 				$scope.loggedUser = null;
-				localStorage.setItem("loggedUser", null);
-				window.location.href = "#/landingPage";
+				sessionStorage.setItem("loggedUser", null);
+				window.location.href = "#/landingPage";*/
 			});
 		}
 		
@@ -86,11 +87,13 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						"lastName" : response.lastName,
 						"email" : response.email,
 						"role" : response.role,
+						"phone" : response.phone,
+						"image" : response.image,
 						"state" : response.state
 					};
 					
-					localStorage.setItem("loggedUser", JSON.stringify(responseUser));
-					var rememberMe = $('#chkRememberMe').is(':checked');
+					$cookies.putObject("loggedUser", JSON.stringify(responseUser));
+					/*var rememberMe = $('#chkRememberMe').is(':checked');
 					
 					if(rememberMe){
 						var session = {
@@ -100,8 +103,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						
 						var expireDate = new Date();
 						expireDate.setDate(expireDate.getDate() + 7);
-						$cookies.putObject("lastSession", session, {expires: expireDate});
-					}
+						$cookies.putObject("lastSession", session);
+					}*/
 					
 					if($scope.tempRedirect.event != null){
 						if($scope.tempRedirect.public != null){
@@ -428,9 +431,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			if(response.code == 200){
 				$scope.topEvents = response.eventList;
 			}
-		})
-		
-		
+		});
 		
 		//#region ASNWER CONTRACT
 		
@@ -534,7 +535,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				setTimeout(function(){window.location.href = "#/changePassword";}, 2000);
 			}
 		});
-
 		
-		
+		$scope.viewProfile = function(user){
+			$scope.modalUser = user;
+			$("#userProfileModal").modal("toggle");
+		}
 	}]);

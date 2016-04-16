@@ -2,6 +2,7 @@ package com.cenfotec.dondeEs.controller;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.QueryParam;
@@ -407,18 +408,18 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param top
-	 *            cantidad de items que tendra la lista top
+	 * @param top cantidad de items que tendra la lista top
 	 * @return lista con los eventos con mas participantes
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/getTopEvents/{top}", method = RequestMethod.GET)
 	public EventResponse getTopEvents(@PathVariable("top") int top) {
 		EventResponse response = new EventResponse();
-
+		List<EventPOJO> list = eventServiceInterface.getTopEventsByParticipants(top);
+		
 		response.setCode(200);
 		response.setCodeMessage("top events fetch success");
-		response.setEventList(eventServiceInterface.getTopEventsByParticipants(top));
+		response.setEventList(list);
 
 		return response;
 	}
