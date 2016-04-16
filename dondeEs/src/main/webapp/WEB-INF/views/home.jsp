@@ -27,6 +27,7 @@
 <link href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="resources/bower_components/angular-wizard/dist/angular-wizard.css" rel="stylesheet">
 <link href="resources/bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet">
+<link href="resources/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 </head>
 <body>
 	<div id="wrapper">
@@ -35,8 +36,8 @@
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
 						<div class="dropdown profile-element">
-							<span> <img alt="image" class="img-circle"
-								src="http://lorempixel.com/32/32" />
+							<span>
+								<img alt="image" class="img-circle center-block" width="60px" height="60px" ng-src="{{loggedUser.image || DEFAULT_USER_IMAGE}}" />
 							</span> <a data-toggle="dropdown" class="dropdown-toggle">
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
@@ -97,7 +98,7 @@
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
-                        <span class="nav-label"><i class="fa fa-sign-out"></i> Cerrar sesión</span>
+                        <i class="fa fa-sign-out"></i> Cerrar sesión
                     </button>
 				</nav>
 			</div>
@@ -150,7 +151,10 @@
 	<script src="resources/js/Commons/directives.js"></script>
 	<script src="resources/bower_components/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="resources/bower_components/braintree-web/dist/braintree.js"></script>
-
+	
+	<script src="resources/js/plugins/ladda/spin.min.js"></script>
+   	<script src="resources/js/plugins/ladda/ladda.min.js"></script>
+   	<script src="resources/js/plugins/ladda/ladda.jquery.min.js"></script>
 
 	<!-- Jquery Validate -->
 	<script src="resources/js/plugins/validate/jquery.validate.min.js"></script>
@@ -179,6 +183,7 @@
 	<script src="resources/js/Auction/AuctionParticipantsController.js"></script>
 	<script src="resources/js/Report/ReportController.js"></script>
 	<script src="resources/js/users/UserProfileController.js"></script>
+	<script src="resources/js/Events/createSimpleEventController.js"></script>
 	<script src="resources/js/Auction/ServicesAuctionEventController.js"></script>
 	
 	<!-- Google Maps -->

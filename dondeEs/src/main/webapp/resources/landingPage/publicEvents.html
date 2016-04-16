@@ -30,7 +30,7 @@
 					</div>
 					
 					<div ng-hide="loggedUser == null">
-						<label class="page-scroll" ng-click="viewProfile()">{{loggedUser.name}} {{loggedUser.lastName}}</label>
+						<label class="page-scroll" ng-click="viewProfile(loggedUser)">{{loggedUser.name}} {{loggedUser.lastName}}</label>
 						<span>|</span>
 						<label class="page-scroll" ng-click="logout()">Cerrar sesión</label>
 					</div>
@@ -54,7 +54,7 @@
                         registrate y crea<br/>
                         uno ahora mismo</h1>
                     <p>
-                        <a class="btn btn-lg btn-primary" href="#/landingPage?p=singin">REGISTRARSE</a>
+                        <a class="btn btn-lg btn-primary" ng-show="loggedUser == null" href="#/landingPage?p=singin">REGISTRARSE</a>
                     </p>
                 </div>
                 <div class="carousel-image wow zoomIn">
@@ -71,7 +71,7 @@
                     <h1>Promociona tu evento en minutos.</h1>
                     <p>Después de haberlo creado podrás promocionarlo en simples pasos.</p>
                     <p>
-                    	<a class="btn btn-lg btn-primary" data-target="#selectTypeUser" data-toggle="modal">REGISTRARSE</a>
+                    	<a class="btn btn-lg btn-primary" ng-show="loggedUser == null" data-target="#selectTypeUser" data-toggle="modal">REGISTRARSE</a>
                     </p>
                 </div>
             </div>
@@ -100,7 +100,7 @@
     <div class="row">
 		<div class="col-sm-12">
 			<div class="input-group">
-				<button type="button" class="btn btn-primary btn-sm-normalize-size" ng-click="openDivSearch()">Panel de búsqueda</button>
+				<button type="button" class="btn btn-primary btn-sm-normalize-size" ng-click="openDivSearch()">Herramientas de búsqueda</button>
 			</div>
 			<br/>
 			<div ng-show="isOpen">
@@ -156,7 +156,8 @@
 									<p class="desc" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.description }}</p>
 									<p class="desc" data-toggle="collapse" data-target="#demo{{$index}}">{{ event.place.name }}</p>
 									<ul>
-										<li style="width:33%;" ng-click="goToEventPromoterProfile(event.user.userId)">Promotor {{ event.user.name }} {{ event.user.lastName1 }} {{ event.user.lastName2 }}
+										<li style="width:33%;" ng-click="viewProfile(event.user)">
+											Promotor {{ event.user.name }} {{ event.user.lastName1 }} {{ event.user.lastName2 }}
 											<span class="fa fa-male"></span>
 										</li>
 									</ul>
@@ -175,5 +176,35 @@
 	</div>
 	<div ng-hide="eventsPublish.length" class="ibox-content">
 		<p>No hay eventos con ese criterio de busqueda.</p>
+	</div>
+</div>
+
+	<!-- PERFIL DE USUARIO -->
+<div id="userProfileModal" class="modal fade" aria-hidden="true" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="widget-head-color-box navy-bg p-lg text-center">
+					<div class="m-b-md">
+						<h2 class="font-bold no-margins">{{ modalUser.name + ' ' +
+							((modalUser.lastName1 !== null)? modalUser.lastName1:'') + ' ' +
+							((modalUser.lastName2 !== null)? modalUser.lastName2:'') }}</h2>
+						<small class="userProfileRoleName">{{modalUser.role.name}}</small>
+					</div>
+					<img ng-src="{{modalUser.image || DEFAULT_USER_IMAGE}}" class="img-circle circle-border m-b-md" alt="profile" width="150px" height="150px">
+					
+					<h2>Contacto</h2>
+					<ul class="list-unstyled m-t-md">
+						<li><span class="fa fa-envelope m-r-xs"></span> <label>Email:</label>
+							{{modalUser.email}}</li>
+						<li><span class="fa fa-phone m-r-xs"></span> <label>Teléfono:</label>
+							{{modalUser.phone}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

@@ -10,8 +10,14 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 }])
 
 .controller('eventsCtrl', ['$scope', '$http', 'ngTableParams', '$filter', '$cookies', function($scope, $http, ngTableParams, $filter, $cookies) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	$scope.loggedUser = null;
+	var loginCookie = $cookies.getObject("loggedUser");
+	if(loginCookie != null)
+		$scope.loggedUser = JSON.parse(loginCookie);
+	
+	$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
+	$scope.modalUser = {};
 	$scope.eventsPublish = [];
 	$scope.searchByUser;
 	$scope.searchByPlace;
@@ -24,14 +30,7 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 	
 	$scope.logout = function(){
 		$http.get("rest/login/logout").success(function(response){
-			var sessionCookie = $cookies.getObject("lastSession");
-			if(sessionCookie != null){
-				sessionCookie["sessionClosed"] = true;
-				$cookies.putObject("lastSession", sessionCookie);
-			}
-			
-			$scope.loggedUser = null;
-			localStorage.setItem("loggedUser", null);
+			$cookies.remove("loggedUser");
 			window.location.href = "#/landingPage";
 		});
 	}
@@ -144,6 +143,11 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 	    	toastr.error( 'Ocurrió un error al buscar los eventos');
 		}
 	});
+	
+	$scope.viewProfile = function(user){
+		$scope.modalUser = user;
+		$("#userProfileModal").modal("toggle");
+	}
 	
 // --------------------------- SCROLL LOGIC
 	

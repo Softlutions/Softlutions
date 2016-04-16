@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.answerContract', [ 'ngRoute' ])
+angular.module('dondeEs.answerContract', ['ngRoute', 'ngCookies'])
 .config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/answerContract', {
 		templateUrl : 'resources/AnswerContract/AnswerContract.html',
@@ -8,7 +8,7 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 	});
 } ])
 
-.controller('answerContractCtrl', [ '$scope', '$http','$location', function($scope, $http, $location) {
+.controller('answerContractCtrl', [ '$scope', '$http','$location', '$cookies', function($scope, $http, $location, $cookies) {
 	$scope.$parent.pageTitle = "Donde es";
 	
 	$scope.getEventById = function(){
@@ -17,7 +17,7 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 		});
 	}
 	
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 	
 	$scope.accept = function(event){
 		var dataCreate = {

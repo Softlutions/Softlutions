@@ -1,16 +1,17 @@
 'use strict';
 angular
-	.module('dondeEs.serviceByUser',['ngRoute', 'ngTable']).config(['$routeProvider', function($routeProvider) {
+	.module('dondeEs.serviceByUser',['ngRoute', 'ngTable', 'ngCookies'])
+	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/serviceByUser', {
 			templateUrl : 'resources/ServicesByUser/ServiceByUser.html',
 			controller : 'ServicesByUserCtrl'
 		});
 	}])
-	.controller('ServicesByUserCtrl',['$scope','$http','ngTableParams', '$filter', function($scope, $http, ngTableParams, $filter) {
+	.controller('ServicesByUserCtrl',['$scope','$http','ngTableParams', '$filter', '$cookies', function($scope, $http, ngTableParams, $filter, $cookies) {
 		$scope.$parent.pageTitle = "Donde es - Mis servicios";
 		$scope.users = [];
 		$scope.services = [];
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		$scope.requestObject = {};
 		$scope.objService={};
 		$scope.creating = true;
@@ -86,7 +87,7 @@ angular
 					name : $scope.objService.name,
 					description: $scope.objService.description,
 					state: $scope.objService.state,
-					user:$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"))
+					user:$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"))
 			}		
 			if($scope.objService.name != null && $scope.objService.description != null){
 				$("#modal-form").modal('hide');
@@ -125,7 +126,7 @@ angular
 					name : $scope.objService.name,
 					description: $scope.objService.description,
 					state: $scope.objService.state,
-					user:$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"))
+					user:$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"))
 			}
 			$http.put('rest/protected/service/updateService',dataCreate).success(function(response) {
 				var serviceIndex = $scope.services.map(function (x){return x.serviceId}).indexOf(dataCreate.serviceId);

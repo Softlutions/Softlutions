@@ -13,6 +13,7 @@ import com.cenfotec.dondeEs.contracts.AuctionRequest;
 import com.cenfotec.dondeEs.contracts.AuctionResponse;
 import com.cenfotec.dondeEs.contracts.AuctionServiceResponse;
 import com.cenfotec.dondeEs.ejb.Auction;
+import com.cenfotec.dondeEs.pojo.AuctionPOJO;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -174,9 +175,16 @@ public class AuctionController {
 		AuctionResponse response = new AuctionResponse();
 		
 		try {
-			response.setAuction(auctionServiceInterface.getAllServicesByAuction(auctionId));																					 
-			response.setCode(200);
+			AuctionPOJO auction = auctionServiceInterface.getAllServicesByAuction(auctionId);
 			
+			if(auction != null){
+				response.setAuction(auction);																					 
+				response.setCode(200);
+				response.setCodeMessage("Success");
+			}else{																				 
+				response.setCode(404);
+				response.setCodeMessage("Auction not found!");
+			}
 		} catch (Exception e) {
 			response.setCode(500);
 			response.setCodeMessage(e.toString());
