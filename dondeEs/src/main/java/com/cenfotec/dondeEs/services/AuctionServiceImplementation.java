@@ -57,6 +57,7 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 		
 		if(isValid){
 			auctionService.getAuction().setState((byte) 0);
+			auctionService.setAcept((byte) 1);
 			
 			ServiceContact serviceContact = new ServiceContact();
 			serviceContact.setEvent(auctionService.getAuction().getEvent());

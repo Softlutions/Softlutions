@@ -1,16 +1,16 @@
 'use strict';
 angular
-	.module('dondeEs.auctions', ['ngRoute', 'ngTable'])
+	.module('dondeEs.auctions', ['ngRoute', 'ngTable', 'ngCookies'])
 	.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/auctions', {
 			templateUrl : 'resources/auction/auction.html',
 			controller : 'AuctionsCtrl'
 		});
 	}])
-	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval', '$filter', '$window',function($scope, $http, ngTableParams, $interval, $filter, $window) {
+	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval', '$filter', '$window', '$cookies',function($scope, $http, ngTableParams, $interval, $filter, $window, $cookies) {
 		$scope.$parent.pageTitle = "Donde es - Subastas de evento";
 		$scope.selectedCatalogId = "";
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		$scope.loggedUserServiceCatalogs = [];
 		$scope.auctionService = {};
 		$scope.selectedAuction = {};
@@ -108,6 +108,9 @@ angular
 			$scope.auctionService.price = formatPrice;
 		}
 		
+		
+		
+		
 		$scope.validatelistItem = function(auction,index){
 			$scope.selectedAuction = auction;
 			if($scope.validateService(auction.serviceCatalog.serviceCatalogId))
@@ -192,7 +195,7 @@ angular
 		};
 		
 		$scope.displayForm = function(){
-			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+			$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 			$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
 				$scope.services = response.listService;
 			});	
@@ -209,7 +212,7 @@ angular
 					acept : 1,
 					date : new Date(),
 					description : $scope.auctionService.description,
-					price : $scope.auctionService.price,
+					price : price,
 					auction : $scope.selectedAuction,
 					service : $scope.auctionService.service
 				}

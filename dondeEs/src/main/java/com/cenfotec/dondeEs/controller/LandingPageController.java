@@ -2,6 +2,7 @@ package com.cenfotec.dondeEs.controller;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.QueryParam;
@@ -243,10 +244,34 @@ public class LandingPageController {
 
 		return response;
 	}
-
+	
 	/**
-	 * @param eventId
-	 *            id del evento a consultar
+	 * Consulta cualquier evento por su id.
+	 * @author Enmanuel Garcia Gonzalez 
+	 * @param eventId id del evento a consultar
+	 * @return evento consultado
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/getWhateverEventById/{eventId}", method = RequestMethod.GET)
+	public EventResponse getWhateverEventById(@PathVariable("eventId") int eventId) {
+		EventResponse response = new EventResponse();
+		EventPOJO event = eventServiceInterface.eventById(eventId);
+		
+		if(event != null){
+			response.setEventPOJO(event);
+			response.setCode(200);
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("El evento no a sido publicado o no existe");
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Consultar cualquier evento por su id solo y solo si este ya esta publicado
+	 * @author Ernesto Mendez A.
+	 * @param eventId id del evento a consultar
 	 * @return evento consultado
 	 * @version 1.0
 	 */
@@ -254,15 +279,20 @@ public class LandingPageController {
 	public EventResponse getEventById(@PathVariable("eventId") int eventId) {
 		EventResponse response = new EventResponse();
 		EventPOJO event = eventServiceInterface.eventById(eventId);
-
-		if (event != null) {
-			response.setEventPOJO(event);
-			response.setCode(200);
-		} else {
+		
+		if(event != null){
+			if(event.getState() == 3){
+				response.setEventPOJO(event);
+				response.setCode(200);
+			}else{
+				response.setCode(400);
+				response.setCodeMessage("El evento no a sido publicado aún");
+			}
+		}else{
 			response.setCode(404);
-			response.setCodeMessage("Request event not found");
+			response.setCodeMessage("El evento no a sido publicado o no existe");
 		}
-
+		
 		return response;
 	}
 
@@ -378,18 +408,18 @@ public class LandingPageController {
 
 	/**
 	 * @author Ernesto Mendez A.
-	 * @param top
-	 *            cantidad de items que tendra la lista top
+	 * @param top cantidad de items que tendra la lista top
 	 * @return lista con los eventos con mas participantes
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/getTopEvents/{top}", method = RequestMethod.GET)
 	public EventResponse getTopEvents(@PathVariable("top") int top) {
 		EventResponse response = new EventResponse();
-
+		List<EventPOJO> list = eventServiceInterface.getTopEventsByParticipants(top);
+		
 		response.setCode(200);
 		response.setCodeMessage("top events fetch success");
-		response.setEventList(eventServiceInterface.getTopEventsByParticipants(top));
+		response.setEventList(list);
 
 		return response;
 	}
@@ -551,61 +581,64 @@ public class LandingPageController {
 	}
 
 	/**
-	 * @author Antoni Ramirez Montano
+	 * @author Antoni Ramirez Montano (autor)
+	 * @author Ernesto Mendez A. (Modificado)
 	 * @param to parametro con el que se recibe la lista de correos
 	 * @param eventId se recibe el id del evento para el cual han sido invitados
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendEmailInvitation", method = RequestMethod.POST)
-	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
-
+	public EventParticipantResponse sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
+		EventParticipantResponse resp = new EventParticipantResponse();
+		
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		String subject = "Invitación a un evento";
-		String text;
-		try {
-
-			// To get the array of addresses
-			for (String email : to.getListSimple()) {
-
-				EventParticipantResponse response = new EventParticipantResponse();
-
-				EventParticipant eventParticipant = new EventParticipant();
-				eventParticipant.setEvent(new Event());
-				eventParticipant.getEvent().setEventId(eventId);
-				eventParticipant.setState((byte) 1);
-				User user = userserviceInterface.findByEmail(email);
-				
-				if (user != null) {
-					eventParticipant.setUser(user);
-				} else {
-					OfflineUser offlineUser = new OfflineUser();
-					offlineUser.setEmail(email);
-					eventParticipant.setOfflineUser(offlineUser);
-				}
-				eventParticipant.setInvitationDate(new Date());
-				Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
-
-				if (stateResponse) {
-					response.setCode(200);
-				} else {
-					response.setCodeMessage("Something is wrong");
-				}
-
-				text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
-						+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
-						+ "&eventParticipantId="
-						+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
-
-				mailMessage.setTo(email);
-				mailMessage.setText(text);
-				mailMessage.setSubject(subject);
-				mailSender.send(mailMessage);
-
+		
+		try{
+			String email = to.getListSimple().get(0);
+			
+			EventParticipant eventParticipant = new EventParticipant();
+			eventParticipant.setEvent(new Event());
+			eventParticipant.getEvent().setEventId(eventId);
+			eventParticipant.setState((byte) 1);
+			
+			User user = userserviceInterface.findByEmail(email);
+			
+			if(user != null){
+				eventParticipant.setUser(user);
+			}else{
+				OfflineUser offlineUser = new OfflineUser();
+				offlineUser.setEmail(email);
+				eventParticipant.setOfflineUser(offlineUser);
 			}
+			
+			eventParticipant.setInvitationDate(new Date());
+			Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
 
-		} catch (Exception ae) {
+			if(stateResponse){
+				resp.setCode(200);
+				resp.setCodeMessage("Successful");
+			}else{
+				resp.setCode(500);
+				resp.setCodeMessage("Something is wrong");
+			}
+			
+			String text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
+					+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
+					+ "&eventParticipantId="
+					+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
+			
+			mailMessage.setTo(email);
+			mailMessage.setText(text);
+			mailMessage.setSubject(subject);
+			mailSender.send(mailMessage);
+		}catch(Exception ae){
 			ae.printStackTrace();
+			resp.setCode(500);
+			resp.setCodeMessage("Exception was thrown");
 		}
+		
+		return resp;
 	}
 	@RequestMapping(value = "/insertCompanyImage", method = RequestMethod.POST)
 	public UserResponse insertUserImage(@RequestParam("email") String email, @RequestParam("file") MultipartFile file) {

@@ -10,14 +10,19 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 }])
 
 .controller('viewEventCtrl', ['$scope', '$http', '$timeout', 'Upload', '$location', 'ngTableParams', '$filter', '$cookies', "$interval", function($scope, $http, $timeout, Upload, $location, ngTableParams, $filter, $cookies, $interval) {
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-	$scope.DEFAULT_USER_IMAGE = "http://bootdey.com/img/Content/user_1.jpg";
+	$scope.loggedUser = null;
+	var loginCookie = $cookies.getObject("loggedUser");
+	if(loginCookie != null)
+		$scope.loggedUser = JSON.parse(loginCookie);
+	
+	$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 	$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
 	$scope.commentPreviewFile = null;
 	$scope.eventParticipant = null;
 	$scope.commentFile = null;
 	$scope.participants = [];
-	$scope.commentList = [];	
+	$scope.commentList = [];
+	$scope.modalUser = {};
 	
 	$scope.event = null;
 	$scope.images = [];
@@ -34,14 +39,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	
 	$scope.logout = function(){
 		$http.get("rest/login/logout").success(function(response){
-			var sessionCookie = $cookies.getObject("lastSession");
-			if(sessionCookie != null){
-				sessionCookie["sessionClosed"] = true;
-				$cookies.putObject("lastSession", sessionCookie);
-			}
-			
-			$scope.loggedUser = null;
-			localStorage.setItem("loggedUser", null);
+			$cookies.remove("loggedUser");
 			window.location.href = "#/landingPage";
 		});
 	}
@@ -107,13 +105,22 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	$http.get("rest/landing/getEventById/"+$location.search().view).success(function(response){
 		if(response.code == 200){
 			$scope.event = response.eventPOJO;
-			loadData();
+			
+			if($scope.loggedUser == null && $scope.event.private_ == 1){
+				toastr.warning("Este evento es privado", "Favor inicia sesión");
+				window.location.href="#/landingPage";
+			}else
+				loadData();
 		}else{
-			toastr.error('El evento no existe');
+			if(response.code == 200)
+				toastr.warning(response.codeMessage);
+			else
+				toastr.error(response.codeMessage);
+			
 			window.location.href="#/landingPage";
 		}
-	}).error(function(){
-		toastr.error('El evento no existe');
+	}).error(function(response){
+		toastr.error('El evento no a sido publicado o no existe');
 		window.location.href="#/landingPage";
 	});
 	
@@ -176,8 +183,23 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			$http.get("rest/landing/getEventParticipantByUserAndEvent?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
 				if(response.code == 200){
 					$scope.eventParticipant = response.eventParticipant;
+					
+					if($scope.event.private_ == 1){
+						if($scope.eventParticipant.state == 0)
+							toastr.warning("Este evento es privado", "Ya rechazaste la invitación");
+						if($scope.eventParticipant.state == 1)
+							toastr.warning("Este evento es privado", "Primero acepta la invitación que se te envió");
+						if($scope.eventParticipant.state == 3 || $scope.eventParticipant.state == 4)
+							toastr.warning("Este evento es privado", "El promotor que bloqueó");
+						
+						if($scope.eventParticipant.state != 2)
+							window.location.href="#/landingPage";
+					}
 				}else{
-					if($location.search().assist != null){
+					if($scope.event.private_ == 1){
+						toastr.warning("Este evento es privado", "No has sido invidado");
+						window.location.href="#/landingPage";
+					}else if($location.search().assist != null){
 						$http.get("rest/landing/createParticipant?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
 							if(response.code == 200){
 								$scope.eventParticipant = response.eventParticipant;
@@ -189,6 +211,11 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 							}
 						});
 					}
+				}
+			}).error(function(err){
+				if($scope.event.private_ == 1){
+					toastr.warning("Este evento es privado", "No has sido invidado");
+					window.location.href="#/landingPage";
 				}
 			});
 		}
@@ -266,13 +293,22 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	//--------------------------- ASSIST
 	//0 no asiste, 1 pendiente, 2 asiste, 3 bloqueado pendiente, 4 bloqueado asiste
 	$scope.invite = function(){
+		var email = $scope.email;
 		$scope.email = "";
 		
-		$http({method: 'POST',url:'rest/landing/sendEmailInvitation?eventId='+$scope.event.eventId, data:{listSimple:[$scope.email]}, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
-			console.log(response);
-			toastr.success('Invitación enviada');
+		$("#laddaSendInvitation").ladda().ladda("start");
+		
+		$http({method: 'POST',url:'rest/landing/sendEmailInvitation?eventId='+$scope.event.eventId, data:{listSimple:[email]}, headers: {'Content-Type': 'application/json'}}).success(function(response) {	
+			if(response.code == 200){
+				toastr.success('Invitación enviada');
+			}else{
+				toastr.error('No se pudo enviar la invitación');	
+			}
+			
+			$("#laddaSendInvitation").ladda().ladda("stop");
 		}).error(function(response){
 			 toastr.error('No se pudo enviar la invitación');
+			$("#laddaSendInvitation").ladda().ladda("stop");
 		})
 	}
 	
@@ -291,7 +327,6 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 			$http.get("rest/landing/createParticipant?userId="+$scope.loggedUser.userId+"&eventId="+$scope.event.eventId).success(function(response){
 				if(response.code == 200){
 					$scope.eventParticipant = response.eventParticipant;
-					console.log($scope.eventParticipant);
 				}else if(response.code == 202){
 					toastr.warning('Ya estas participando en este evento');
 				}
@@ -363,7 +398,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
     
     $scope.attach = function(file) {
     	if(file != null){
-    		var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+    		var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.png|.gif)$");
     	    if(regex.test(file.name.toLowerCase())){
     	    	$scope.commentFile = file;
     	    	
@@ -383,7 +418,10 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
     }
     
 	$scope.commentEvent = function(){
-		if($scope.comment != undefined){
+		if(($scope.comment != undefined && $scope.comment.length > 0) || $scope.commentFile != null){
+			if($scope.comment == undefined)
+				$scope.comment = "";
+			
 			var eventComment = {
 				content: $scope.comment,
 				date: new Date(),
@@ -408,15 +446,20 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 				}else{
 					toastr.error('No se pudo publicar el comentario');
 				}
-			}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});
-		}		
-	};
+			}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});	
+		}
+	}
 	
 	$scope.setDate = function(date){
 		var stringDate = new Date(date).toString();
 		stringDate = stringDate.substring(4, 24);
 		var m = moment(stringDate,"MMM DD YYYY HH:mm:ss").locale('es');
 		return m.fromNow();
+	}
+	
+	$scope.viewProfile = function(user){
+		$scope.modalUser = user;
+		$("#userProfileModal").modal("toggle");
 	}
 	
 	// --------------------------- SCROLL LOGIC
