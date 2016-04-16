@@ -36,8 +36,8 @@
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
 						<div class="dropdown profile-element">
-							<span> <img alt="image" class="img-circle"
-								src="http://lorempixel.com/32/32" />
+							<span>
+								<img alt="image" class="img-circle center-block" width="60px" height="60px" ng-src="{{loggedUser.image || DEFAULT_USER_IMAGE}}" />
 							</span> <a data-toggle="dropdown" class="dropdown-toggle">
 								<span class="clear"> <span class="block m-t-xs"> <strong
 										class="font-bold">{{loggedUser.name}}
@@ -98,7 +98,7 @@
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"></i> </a>
 					</div>
 					<button class="btn btn-lg btn-default custom-button pull-right" ng-click="logout()">
-                        <span class="nav-label"><i class="fa fa-sign-out"></i> Cerrar sesiï¿½n</span>
+                        <i class="fa fa-sign-out"></i> Cerrar sesión
                     </button>
 				</nav>
 			</div>

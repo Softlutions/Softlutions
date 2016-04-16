@@ -10,6 +10,7 @@ public class LoginResponse extends BaseResponse {
 	private String email;
 	private String criptPass;
 	private String phone;
+	private String image;
 	private byte state;
 	private RolePOJO role;
 
@@ -79,5 +80,13 @@ public class LoginResponse extends BaseResponse {
 
 	public void setRole(RolePOJO role) {
 		this.role = role;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

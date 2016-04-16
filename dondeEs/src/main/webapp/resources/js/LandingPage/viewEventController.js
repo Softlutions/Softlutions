@@ -40,6 +40,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 	$scope.logout = function(){
 		$http.get("rest/login/logout").success(function(response){
 			$cookies.remove("loggedUser");
+			window.location.href = "#/landingPage";
 		});
 	}
 	

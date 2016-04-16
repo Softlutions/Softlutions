@@ -27,8 +27,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			isCript: false
 		};
 		
-		console.log($scope.loggedUser);
-		
 		$scope.userCompany={};
 		$scope.loginNormalPage = false;
 		
@@ -90,6 +88,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 						"email" : response.email,
 						"role" : response.role,
 						"phone" : response.phone,
+						"image" : response.image,
 						"state" : response.state
 					};
 					

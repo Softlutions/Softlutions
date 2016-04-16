@@ -9,7 +9,7 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	}])
 	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$filter',
 	                          			function($scope, $http, $cookies, $rootScope, $filter) {
-
+		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		
 		$scope.pageTitle = "Donde es";

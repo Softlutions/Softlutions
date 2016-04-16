@@ -32,14 +32,6 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 		$http.get("rest/login/logout").success(function(response){
 			$cookies.remove("loggedUser");
 			window.location.href = "#/landingPage";
-			/*var sessionCookie = $cookies.getObject("lastSession");
-			if(sessionCookie != null){
-				sessionCookie["sessionClosed"] = true;
-				$cookies.putObject("lastSession", sessionCookie);
-			}
-			
-			$scope.loggedUser = null;
-			sessionStorage.setItem("loggedUser", null);*/
 		});
 	}
 	
