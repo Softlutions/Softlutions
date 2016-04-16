@@ -52,6 +52,13 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			window.location.href = "/dondeEs/#/events";
 		}
 		
+		angular.element(document).ready(function(){
+			if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+				toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+				setTimeout(function(){window.location.href = "/dondeEs/#/landingPage";}, 2000);
+			}
+		});
+		
 		if($scope.loggedUser != null){
 			for (var i = 0; i < $scope.loggedUser.role.permissions.length; i++) { 
 				switch ($scope.loggedUser.role.permissions[i].permissionId){
