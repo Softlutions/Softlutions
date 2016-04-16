@@ -300,7 +300,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									event.state = 2;
 									$scope.events = response.eventList;
 									window.location.href = "/dondeEs/app#/#";
-									toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+									swal("La prepublicación se hizo con éxito.");
 								} else {
 									
 								}
