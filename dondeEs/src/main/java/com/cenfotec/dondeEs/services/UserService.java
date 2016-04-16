@@ -238,6 +238,7 @@ public class UserService implements UserServiceInterface {
 		userPOJO.setName(usersList.getName());
 		userPOJO.setPhone(usersList.getPhone());
 		userPOJO.setState((usersList.getState() == 1 ? true : false));
+		userPOJO.setImage(usersList.getImage());
 		
 		if (usersList.getRole() != null) {
 			RolePOJO rolePOJO = new RolePOJO();
