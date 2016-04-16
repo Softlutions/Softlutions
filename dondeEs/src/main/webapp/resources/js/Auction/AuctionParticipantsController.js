@@ -20,7 +20,7 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 	var params = {
 		page: 1,	// PAGINA INICIAL
 		count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-		sorting: {date: "desc"}
+		sorting: {price: "asc"}
 	};
 	
 	var settings = {

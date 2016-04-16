@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.userProfile', ['ngRoute']).config(['$routeProvider', function($routeProvider) {
-	.config(['$routeProvider', function($routeProvider) {
+angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/userProfile/:id', {
 			templateUrl : 'resources/users/userProfile.html',
 			controller : 'UserProfileCtrl'
@@ -9,7 +8,7 @@ angular.module('dondeEs.userProfile', ['ngRoute']).config(['$routeProvider', fun
 	}]).controller('UserProfileCtrl', ['$scope', '$http','$routeParams', '$cookies',  function($scope, $http, $routeParams, $cookies) {
 		$scope.DEFAULT_USER_IMAGE = 'resources/img/default-profile.png';
 		$scope.$parent.pageTitle = "Donde es - Perfil de usuario";
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		$scope.img = {};
 
 		$http.get("rest/protected/users/getUserById/"+$routeParams.id).success(function(response){
