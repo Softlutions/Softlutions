@@ -413,6 +413,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$http({method: 'POST',url:'rest/contactMessage/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
 				if (response.code == 200) {
+					$scope.name = "";
+					$scope.email = "";
+					$scope.message = "";
 			    	toastr.success('Contacto', 'El mensaje se envió con éxito.');
 				} else {
 			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');
