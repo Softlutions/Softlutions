@@ -1,16 +1,16 @@
 'use strict';
 angular
-	.module('dondeEs.auctions', ['ngRoute', 'ngTable'])
+	.module('dondeEs.auctions', ['ngRoute', 'ngTable', 'ngCookies'])
 	.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/auctions', {
 			templateUrl : 'resources/auction/auction.html',
 			controller : 'AuctionsCtrl'
 		});
 	}])
-	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval', '$filter', '$window',function($scope, $http, ngTableParams, $interval, $filter, $window) {
+	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval', '$filter', '$window', '$cookies',function($scope, $http, ngTableParams, $interval, $filter, $window, $cookies) {
 		$scope.$parent.pageTitle = "Donde es - Subastas de evento";
 		$scope.selectedCatalogId = "";
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		$scope.loggedUserServiceCatalogs = [];
 		$scope.auctionService = {};
 		$scope.selectedAuction = {};
@@ -195,7 +195,7 @@ angular
 		};
 		
 		$scope.displayForm = function(){
-			$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+			$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 			$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
 				$scope.services = response.listService;
 			});	

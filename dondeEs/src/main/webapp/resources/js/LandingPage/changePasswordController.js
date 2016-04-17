@@ -8,7 +8,7 @@ angular.module('landingPageModule.changePassword', ['ngRoute', 'ngCookies'])
 	}])
 	.controller('LandingChangePasswordController', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$filter',
 	                                		function($scope, $http, $cookies, $rootScope, $location, $filter){
-		$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		console.log($scope.loggedUser);
 		
 		$scope.changePasswordRequired = function(requiredPassword){
@@ -22,7 +22,7 @@ angular.module('landingPageModule.changePassword', ['ngRoute', 'ngCookies'])
 					.success(function(response){
 						if(response.code == 200){
 							$scope.loggedUser.state = 1;
-							localStorage.setItem("loggedUser", JSON.stringify($scope.loggedUser));
+							sessionStorage.setItem("loggedUser", JSON.stringify($scope.loggedUser));
 							toastr.success(response.codeMessage, 'Exito!');
 							setTimeout(function(){window.location.href = "#/landingPage";}, 2000);
 							//$('#modal-changePassword').modal('hide');
