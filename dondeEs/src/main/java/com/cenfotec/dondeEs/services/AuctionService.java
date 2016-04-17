@@ -44,12 +44,22 @@ public class AuctionService implements AuctionServiceInterface{
 	}
 	
 	@Override
+	public Boolean finishAuction(Auction auction) {
+		Auction saveAuction =  auctionRepository.save(auction);
+	 	return (saveAuction != null);
+	}
+	
+	@Override
 	@Transactional
 	public List<AuctionPOJO> getAllAuctionByEvent(int event_id) {
 		List<Auction> auctions = auctionRepository.findAllByEventEventId(event_id);	
 		List<AuctionPOJO> auctionsPOJO = new ArrayList<AuctionPOJO>();
+		Date date = new Date();
 		auctions.stream().forEach(e -> {
 			AuctionPOJO auctionPOJO = new AuctionPOJO();
+			if(e.getState()==1 && e.getDate().compareTo(date)!=1){
+				e.setState((byte) 2);			
+			}
 			BeanUtils.copyProperties(e, auctionPOJO);
 			
 			auctionPOJO.setServiceCatalog(new ServiceCatalogPOJO());

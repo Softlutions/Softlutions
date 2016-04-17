@@ -243,9 +243,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			 	if(resp.status == 200){
 			 		
 			 	}else{
-			 		toastr.error('No se pudo publicar el comentario');
+//			 		toastr.error('No se pudo publicar el comentario');
 			 	}
-			 	}, function(err) { toastr.error('Para comentar o subir imágenes primero debe indicar que va a participar'); }, function(prog) {});
+			 	}, function(err) {  }, function(prog) {});
 		}
 		
 		$scope.saveCompany = function(user) {
@@ -416,6 +416,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$http({method: 'POST',url:'rest/contactMessage/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
 				if (response.code == 200) {
+					$scope.name = "";
+					$scope.email = "";
+					$scope.message = "";
 			    	toastr.success('Contacto', 'El mensaje se envió con éxito.');
 				} else {
 			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');

@@ -110,7 +110,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	if(!$scope.$parent.permissions.isAdmin){
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			$scope.events = response.eventList;
-			
+
 			// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
 			var params = {
 				page: 1,	// PAGINA INICIAL
@@ -300,7 +300,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									event.state = 2;
 									$scope.events = response.eventList;
 									window.location.href = "/dondeEs/app#/#";
-									toastr.success('Prepublicación del evento', 'La prepublicación se hizo con éxito.');
+									swal("La prepublicación se hizo con éxito.");
 								} else {
 									
 								}
