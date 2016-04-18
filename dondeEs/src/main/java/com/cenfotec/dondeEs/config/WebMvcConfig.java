@@ -1,4 +1,4 @@
-package com.cenfotec.dondeEs;
+package com.cenfotec.dondeEs.config;
 
 import javax.persistence.EntityManagerFactory;
 
@@ -10,6 +10,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+/*
+ * This class is used to configure resource for the app
+ */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
@@ -28,4 +31,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		 resolver.setSuffix(".jsp");
 		 return resolver;
 	 }
+	 
 }
