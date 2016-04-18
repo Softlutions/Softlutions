@@ -437,6 +437,77 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			}
 		});
 		
+		// AUCTION INVITATION
+		
+		if($location.search().aucNotif != null && $scope.loggedUser.role.roleId == 2){
+			var auctionId = $location.search().aucNotif;
+			
+			$http.get("rest/protected/auction/getAuctionByEncrypId/"+auctionId).success(function(response){
+				if(response.code == 200){
+					$scope.auctionInvitation = response.auction;
+					$("#modalAuctionContractInvitation").modal("toggle");
+				}
+			});
+		}
+		
+		$scope.acceptAuctionInvitation = function(){
+			$("#btnAceptAuctionInvitation").ladda().ladda("start");
+			
+			$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.auctionInvitation.serviceCatalog.serviceCatalogId ).success(function(response) {
+				$scope.services = response.serviceLists;
+				$scope.auctionService = {};
+				$scope.auctionService.service = $scope.services[0];
+				$("#btnAceptAuctionInvitation").ladda().ladda("stop");
+				$("#modalAuctionContractInvitation").modal("toggle");
+				$("#firstAuctionTime").modal("toggle");
+			}).error(function(){
+				$("#btnAceptAuctionInvitation").ladda().ladda("stop");
+				toastr.error("Error inesperado al procesar la solicitud", 'Error');
+			});
+		}
+		
+		$scope.noAcceptAuctionInvitation = function(){
+			$("#modalAuctionContractInvitation").modal("toggle");
+			setTimeout(function(){ window.location.href="#/landingPage"; }, 500);
+		}
+		
+		$scope.validationError = function(){
+			toastr.warning('Algunos campos no cumplen con los requisitos');
+		}
+		
+		$scope.formatPrice = function(model){
+			if(model == null || model.lenght == 0) model = 0;
+			model = model.replace(".00", "");
+			model = model.replace("₡", "");
+			model = model.replace(/,/g, "");
+			var formatPrice = $filter('currency')(model, '₡', 2);
+			$scope.auctionService.price = formatPrice;
+		}
+		
+		$scope.joinAuction = function(auctionService){
+			$("#btnCreateAuctionParticipant").ladda().ladda("start");
+			
+			var price = auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
+			var newAuctionService = {
+					acept : 0,
+					date : new Date(),
+					description : auctionService.description,
+					price : price,
+					auction : $scope.auctionInvitation,
+					service : auctionService.service
+			};
+			
+			$http({method: 'POST',url:'rest/protected/auctionService/createAuctionService', data:newAuctionService, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				$("#firstAuctionTime").modal("toggle");
+				toastr.success('Te has incorporado a la subasta!');
+				
+				setTimeout(function(){
+					$("#btnCreateAuctionParticipant").ladda().ladda("start");
+					window.location.href="#/landingPage";
+				}, 500);
+			});
+		};
+		
 		//#region ASNWER CONTRACT
 		
 		if($location.search().eventId != null && $location.search().serviceId){

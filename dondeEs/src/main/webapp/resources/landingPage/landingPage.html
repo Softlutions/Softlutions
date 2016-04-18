@@ -408,9 +408,8 @@
 								<h2 class="font-bold no-margins">{{event.name}}</h2>
 								<small>{{event.place.name}}</small>
 							</div>
-							<img
-								src="http://lorempixel.com/image_output/people-q-c-100-100-1.jpg"
-								class="img-circle circle-border m-b-md" alt="profile">
+							<img ng-src="{{event.image || DEFAULT_EVENT_IMAGE}}" width="150px" height="130px" 
+								class="circle-border m-b-md" alt="{{event.name}}">
 							<div>
 								<span>Correo: {{event.user.email}}</span>
 							</div>
@@ -432,6 +431,79 @@
 		</div>
 	</div>
 </div>
+<!-- MODAL CONTRACT INVITATION -->
+<div id="modalAuctionContractInvitation" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Has sido invitado a participar en la subasta</h4>
+			</div>
+			<div class="modal-body">
+				<h3 class="text-center">{{auctionInvitation.name}}</h3><br/>
+				<p class="text-center">
+					<strong>Finaliza: {{auctionInvitation.date | date:'dd-MM-yyyy hh:mma'}}</strong>
+				</p>
+				<p class="text-center">
+					Breve descripción de la subasta:<br/>
+					{{auctionInvitation.description}}
+				</p><br/><br/>
+				<p class="text-center"><b>¿Deseas aceptar la invitación y participar de esta subasta?</b></p>
+				<div class="text-right">
+					<a class="btn btn-sm btn-danger btn-sm-normalize-size" ng-click="noAcceptAuctionInvitation()">
+						<i class="fa fa-thumbs-down"></i> NO aceptar
+					</a>
+					<a ng-click="acceptAuctionInvitation()" id="btnAceptAuctionInvitation" data-style="slide-left" class="ladda-button btn btn-primary btn-sm-normalize-size">
+						<i class="fa fa-thumbs-up"></i> Aceptar
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="firstAuctionTime" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Has tu primera apuesta</h4>
+			</div>
+			<form class="form-horizontal" name="formJoinAuction" ng-submit="formJoinAuction.$valid ? joinAuction(auctionService) : validationError()">
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Servicio</label>
+						<div class="col-lg-10">
+							<select class="form-control m-b"
+								ng-options="service as service.name for service in services track by service.serviceId"
+								ng-model="auctionService.service">
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Descripción</label>
+						<div class="col-lg-10">
+							<textarea rows="5" placeholder="Descripción" class="form-control"
+								ng-model="auctionService.description" ng-maxlength="255" autofocus required>
+							</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Precio</label>
+						<div class="col-lg-10">
+							<input type="text" ng-keyup="formatPrice(auctionService.price)" placeholder="Precio" min="0" class="form-control"
+								ng-model="auctionService.price" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
+					<button id="btnCreateAuctionParticipant" data-style="slide-left" type="submit" class="ladda-button btn btn-sm btn-primary btn-sm-normalize-size"><b>Participar</b></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <!-- MODAL ANSWER INVITATION -->
 <div id="modalAsnwerInvitation" class="modal fade" role="dialog">
 	<div class="modal-dialog">
@@ -459,7 +531,7 @@
 						</div>
 						<div class="widget-text-box">
 							<h4 class="media-heading" ng-show="isComment">{{nameProvaider}}</h4>
-							<p ng-show="isComment">Te ha invitado a un evento</p>
+							<p ng-show="isComment">Te han invitado a un evento</p>
 							<div class="form-group" ng-show="isComment">
 								<h4 class="media-heading">Comentarios</h4>
 								<textarea rows="5" style="resize: none" type="text"

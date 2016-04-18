@@ -36,7 +36,7 @@ public class AuctionService implements AuctionServiceInterface{
 		
 		if(saveAuction != null){
 			services.forEach(s -> {
-				sendEmailController.sendAuctionInvitationEmail(auction, s.getUser().getEmail(), saveAuction.getEvent());
+				sendEmailController.sendAuctionInvitationEmail(saveAuction, s.getUser().getEmail());
 			});
 		}
 		
