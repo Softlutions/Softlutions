@@ -69,7 +69,7 @@
 							<label class="fa fa-camera btn btn-primary" data-toggle="tooltip" title="Adjuntar foto principal">
 								<input id="uploadImage" style="display: none;" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
 							</label>
-							<label ng-click="img.file = DEFAULT_USER_IMAGE" ng-show="img.thumbnail != DEFAULT_USER_IMAGE" class="fa fa-trash btn btn-danger col-lg-4" data-toggle="tooltip" title="Quitar imagen"></label>
+							<label ng-click="img = {}" ng-show="img.thumbnail != null" class="fa fa-trash btn btn-danger col-lg-4" data-toggle="tooltip" title="Quitar imagen"></label>
 							<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
 						</div>
 					</div>

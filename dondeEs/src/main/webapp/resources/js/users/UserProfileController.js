@@ -5,7 +5,7 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 			templateUrl : 'resources/users/userProfile.html',
 			controller : 'UserProfileCtrl'
 		});
-	}]).controller('UserProfileCtrl', ['$scope', '$http','$routeParams', '$cookies',  function($scope, $http, $routeParams, $cookies) {
+	}]).controller('UserProfileCtrl', ['$scope', '$http','$routeParams', '$cookies', '$upload',  function($scope, $http, $routeParams, $cookies, $upload) {
 		$scope.DEFAULT_USER_IMAGE = 'resources/img/default-profile.png';
 		$scope.$parent.pageTitle = "Donde es - Perfil de usuario";
 		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
@@ -13,6 +13,9 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 
 		$http.get("rest/protected/users/getUserById/"+$routeParams.id).success(function(response){
 			$scope.user = response.user;
+			
+			if($scope.user.image != null)
+				$scope.img.thumbnail = $scope.user.image;
 		});
 		
 		$scope.validationError = function(){
@@ -20,7 +23,6 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 		}
 		
 		$scope.onFileSelect = function($files) {
-			console.log($files);
 		    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.png|.gif)$");
 		    if (regex.test($files[0].name.toLowerCase())) {
 		    	$scope.img.file = $files[0];
@@ -52,20 +54,34 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 				state : $scope.user.state
 			}
 			
-			$http.put('rest/protected/users/updateUser',dataUpdate).success(function(response) {
-				if($scope.img.file != null){
-					$upload.upload({url:'rest/protected/users/uploadUserImage', data:{userId: $scope.loggedUser.userId, file: $scope.img.file}})
-					.progress(function(evt) {})
-					.success(function(response) {
+			$http.put('rest/protected/users/updateUser', dataUpdate).success(function(response) {
+				if(response.code == 200){
+					$scope.loggedUser.name = dataUpdate.name;
+					$scope.loggedUser.lastName = dataUpdate.lastName1;
+					$scope.loggedUser.phone = dataUpdate.phone;
+					$scope.loggedUser.email = dataUpdate.email;
+					
+					if($scope.img.file != null){
+						$upload.upload({url:'rest/protected/users/uploadUserImage', data:{"userId": $scope.loggedUser.userId}, file: $scope.img.file})
+						.progress(function(evt) {})
+						.success(function(response) {
+							$scope.loggedUser.image = $scope.img.thumbnail;
+							$scope.img = {};
+							$("#modal-formUpdate").modal("toggle");
+							toastr.success("Se ha modificado la información del usuario");
+						})
+						.error(function(msj) {
+							$scope.img = {};
+						});
+					}else{
+						$cookies.putObject("loggedUser", JSON.stringify($scope.loggedUser));
 						$scope.img = {};
-					})
-					.error(function(msj) {
-						$scope.img = {};
-					});
+						$("#modal-formUpdate").modal("toggle");
+						toastr.success("Se ha modificado la información del usuario");
+					}
+				}else{
+					toastr.error("No se ha modificado la información del usuario");
 				}
-				
-				$("#modal-formUpdate").modal("toggle");
-				toastr.success("Se ha modificado la información del usuario.");
 			});
 		}
 	}]);

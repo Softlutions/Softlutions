@@ -36,47 +36,34 @@
 				<ul class="nav metismenu" id="side-menu">
 					<li class="nav-header">
 						<div class="dropdown profile-element">
-							<span>
+							<span ng-click="goToProfile()">
 								<img alt="image" class="img-circle center-block" width="60px" height="60px" ng-src="{{loggedUser.image || DEFAULT_USER_IMAGE}}" />
-							</span> <a data-toggle="dropdown" class="dropdown-toggle">
-								<span class="clear"> <span class="block m-t-xs"> <strong
-										class="font-bold">{{loggedUser.name}}
-											{{loggedUser.lastName}}</strong>
-								</span> <span class="text-muted text-xs block">{{loggedUser.role.name}}</span>
-							</span>
+							</span> 
+							<a data-toggle="dropdown" class="dropdown-toggle">
+								<span class="clear" ng-click="goToProfile()">
+									<span class="block m-t-xs">
+										<strong class="font-bold">{{loggedUser.name}} {{loggedUser.lastName}}</strong>
+									</span>
+									<span class="text-muted text-xs block">{{loggedUser.role.name}}</span>
+								</span>
 							</a>
 						</div>
 						<div class="logo-element" ng-click="logout()"><i class="fa fa-sign-out"></i></div>
 					</li>
-					<li ng-show="permissions.gestionarEventosPropios"><a href="#"><i class="fa fa-th-large"></i> <span
-							class="nav-label">Eventos</span> <span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/index">{{permissions.isAdmin?  'Eventos publicados':'Mis eventos'}} </a></li>
-						</ul>
+					<li ng-show="permissions.gestionarEventosPropios"><a href="#"><i class="fa fa-th-large"></i>
+						<span class="nav-label">{{permissions.isAdmin?  'Eventos publicados':'Mis eventos'}} </span></a>
 					</li>
-					<li ng-show="permissions.gestionarUsuarios"><a href="#"><i class="fa fa-user"></i> <span
-							class="nav-label">Usuarios </span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="/dondeEs/app#/users">Lista de usuarios </a></li>
-						</ul>
+					<li ng-show="permissions.gestionarUsuarios"><a href="app#/users"><i class="fa fa-user"></i>
+						<span class="nav-label">Usuarios </span></a>
 					</li>
-					<li ng-show="permissions.gestionarServicios"><a href="#"><i class="fa fa-shopping-cart"></i> <span
-							class="nav-label">Servicios </span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/serviceByUser">{{permissions.isAdmin?  'Servicios':'Mis servicios'}} </a></li>
-						</ul>
+					<li ng-show="permissions.gestionarServicios"><a href="app#/serviceByUser"><i class="fa fa-shopping-cart"></i>
+						<span class="nav-label">{{permissions.isAdmin?  'Servicios':'Mis servicios'}} </span></a>
 					</li>
-					<li><a href="#"><i class="fa fa-comments-o"></i> <span
-							class="nav-label">Chats </span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/chat">Chat</a></li>
-						</ul>
+					<li><a href="app#/chat"><i class="fa fa-comments-o"></i>
+						<span class="nav-label">Chats </span></a>
 					</li>
-					<li ng-show="permissions.gestionarSubastas"><a href="#"><i class="fa fa-money"></i> <span
-							class="nav-label">Subastas </span><span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse">
-							<li><a href="app#/auctions">Subastas disponibles</a></li>
-						</ul>
+					<li ng-show="permissions.gestionarSubastas"><a href="app#/auctions"><i class="fa fa-money"></i>
+						<span class="nav-label">Subastas disponisbles</span></a>
 					</li>
 					<li><a ng-click="returnLandingPage()"><i class="glyphicon glyphicon-glass"></i> 
 						<span class="nav-label">Eventos publicados</span></a>

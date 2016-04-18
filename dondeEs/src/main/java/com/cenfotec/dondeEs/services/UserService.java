@@ -18,6 +18,7 @@ import com.cenfotec.dondeEs.contracts.LoginRequest;
 import com.cenfotec.dondeEs.contracts.UserRequest;
 import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.User;
+import com.cenfotec.dondeEs.ejb.UserType;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.ServiceCatalogPOJO;
 import com.cenfotec.dondeEs.pojo.ServicePOJO;
@@ -36,9 +37,10 @@ public class UserService implements UserServiceInterface {
 	private RoleRepository roleRepository;
 	@Autowired
 	private AuctionRepository auctionRepository;
-
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	private UserTypeServiceInterface userTypeServiceInterface;
 
 	public List<UserPOJO> getAll() {
 		List<User> usersList = userRepository.findAll();
@@ -120,6 +122,8 @@ public class UserService implements UserServiceInterface {
 	 */
 	public Boolean createUser(UserRequest ur) {
 		ur.getUser().setPassword(AES.base64encode(ur.getUser().getPassword()));
+		UserType freeUserType = userTypeServiceInterface.findById(2);
+		ur.getUser().setUserType(freeUserType);
 		if (userRepository.findByEmail(ur.getUser().getEmail()) == null) return saveUser(ur) > 0;
 		return false;
 	}
@@ -169,7 +173,7 @@ public class UserService implements UserServiceInterface {
 		if (user == null) return false;
 		user.setPassword(AES.base64encode(ur.getPassword()));
 		user.setState((byte)1);
-		User nuser = userRepository.save(user);
+		userRepository.save(user);
 		return true;
 	}
 

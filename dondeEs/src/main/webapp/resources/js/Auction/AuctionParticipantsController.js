@@ -42,20 +42,21 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 			$scope.selectedAuction = response.auction;	
 		});
 		
+		
 		$http.get('rest/protected/service/getServiceCatalogIdByProvider/'+$scope.loggedUser.userId).success(function(response) {
 			if(response.serviceLists.length != 0){
 				var x;
 				for(x = 0 ; x < response.serviceLists.length ; x++){
 					$scope.loggedUserServiceCatalogs.push(response.serviceLists[x].serviceCatalog.serviceCatalogId);
 				}
-			}
-			
-			if($scope.selectedAuction.serviceCatalog != null && $scope.loggedUser.role.roleId == 2){
-				if($scope.loggedUserServiceCatalogs.indexOf($scope.selectedAuction.serviceCatalog.serviceCatalogId)>=0)
-					$("#btnParticipate").removeAttr("disabled");
-				else{
-					$("#btnParticipate").attr("disabled","true");
-					toastr.error("El botón participar está deshabilitado porque el usuario no posee ningún servicio del requerido en la subasta");
+			}else{
+				if($scope.selectedAuction.serviceCatalog != null && $scope.loggedUser.role.roleId == 2){
+					if($scope.loggedUserServiceCatalogs.indexOf($scope.selectedAuction.serviceCatalog.serviceCatalogId)>=0)
+						$("#btnParticipate").removeAttr("disabled");
+					else{
+						$("#btnParticipate").attr("disabled","true");
+						toastr.error("El botón participar está deshabilitado porque el usuario no posee ningún servicio del requerido en la subasta");
+					}
 				}
 			}
 		});
@@ -101,7 +102,7 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 	$scope.joinAuction = function(){	
 		var price = $scope.auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
 		var newAuctionService = {
-				acept : 1,
+				acept : 0,
 				date : new Date(),
 				description : $scope.auctionService.description,
 				price : price,

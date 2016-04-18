@@ -35,7 +35,7 @@
 									Contratar
 								</button>
 							</td>
-							<td ng-hide="auction.state != 0 && auctionService.acept == 0" class="text text-info">
+							<td ng-show="auction.state == 0 && auctionService.acept == 1" class="text text-info">
 								<label class="label">Ganador</label>
 							</td>
 							<td ng-hide="auctionService.service.state == 1" class="text text-info">

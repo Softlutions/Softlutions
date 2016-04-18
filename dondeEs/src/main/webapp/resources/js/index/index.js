@@ -46,6 +46,10 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
             }
         });
 		
+		$scope.goToProfile = function(){
+			window.location.href = "/dondeEs/app#/userProfile/"+$scope.loggedUser.userId;
+		}
+		
 		$scope.returnLandingPage = function () {
 			$cookies.putObject("goToEventsPublish", true);
 			window.location.href = "/dondeEs/#/events";

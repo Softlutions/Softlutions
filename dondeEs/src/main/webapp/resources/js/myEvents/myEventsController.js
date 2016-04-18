@@ -110,7 +110,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	if(!$scope.$parent.permissions.isAdmin){
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			$scope.events = response.eventList;
-
+			
 			// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
 			var params = {
 				page: 1,	// PAGINA INICIAL
@@ -145,12 +145,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
-	$scope.validateEvent = function(eventDate,eventState,index){
-		if(eventState!=0){
+	$scope.validateEvent = function(eventDate, eventState, index){
+		if(eventState == 1){
 			var date = new Date();
 			var validDate = new Date(eventDate);
-			validDate.setHours(validDate.getHours()-$scope.HOURS_BEFORE_EVENT);
-			if(date<validDate)
+			validDate.setHours(validDate.getHours() - $scope.HOURS_BEFORE_EVENT);
+			
+			if(date < validDate)
 				$("#auctionService"+index).show();
 			else
 				$("#auctionService"+index).hide();
@@ -264,10 +265,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			}
 		}
 	
-	$scope.prepublishEvent = function(){
-		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 500);
+	$scope.prepublishEvent = function(selectedEvent){
 		$http.get("rest/protected/chat/saveChatEventId/" + $scope.globalEventId).success(function(response){
 			if (response.code == 200) {
+				setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 500);
 				toastr.success('Nuevo chat administrativo', 'Visita la pagina de chats!');
 				$scope.globalEventId = 0;
 			}
