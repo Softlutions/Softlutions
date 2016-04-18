@@ -4,7 +4,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$routeProvider.when('/landingPage', {
 			templateUrl : 'resources/landingPage/landingPage.html',
 			controller : 'LandingPageCtrl'
-		});
+		})
+		.otherwise({
+	        redirectTo: '/landingPage'
+	      });
 	}])
 	.controller('LandingPageCtrl', ['$scope', 'Upload', '$http', '$cookies', '$rootScope', '$location', '$filter', 
 	                                		function($scope, Upload, $http, $cookies, $rootScope, $location, $filter){
