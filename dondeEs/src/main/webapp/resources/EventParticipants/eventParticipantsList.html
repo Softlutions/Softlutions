@@ -1,11 +1,14 @@
 <div class="col-sm-12">
+	<div class="pull-left">
+		<a class="btn btn-primary btn-sm pull-left" href="app#/index"><i class="fa fa-reply"></i> Volver</a>
+	</div>
+
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
 			<h5>Participantes del evento</h5>
 		</div>
 		<div class="ibox-content">
-
-			<table ng-show="participants.length" class="table table-hover table-responsive">
+			<table ng-show="participants.length" class="table table-hover table-responsive" ng-table="participantsTable">
 				<thead>
 					<tr>
 						<th>Nombre</th>
@@ -13,7 +16,7 @@
 						<th>Fecha de envio de la invitación</th>
 					</tr>
 				</thead>
-				<tbody ng-repeat="participant in participants">
+				<tbody ng-repeat="participant in $data">
 					<tr>
 						<td>{{ ((participant.user != null) ?
 							(participant.user.name+" "+participant.user.lastName1+"

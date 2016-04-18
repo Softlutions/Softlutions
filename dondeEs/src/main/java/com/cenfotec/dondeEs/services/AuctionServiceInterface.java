@@ -10,6 +10,13 @@ public interface AuctionServiceInterface {
 
 	Boolean saveAuction(Auction auction);
 	
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param auction objeto a actualizar
+	 * @return si fue exitoso o no la actualizacion
+	 */
+	Boolean finishAuction(Auction auction);
+	
 	/***
 	 * Obtiene todas las subastas de un evento.
 	 * @author Enmanuel García González
@@ -41,5 +48,9 @@ public interface AuctionServiceInterface {
 	 * @version 1.0
 	 */
 	boolean auctionInvitationAnswer(AuctionRequest request);
+
+	AuctionPOJO getAuctionById(int auctionId);
+
+	AuctionPOJO getAllServicesByAuction(int auctionId);
 
 }

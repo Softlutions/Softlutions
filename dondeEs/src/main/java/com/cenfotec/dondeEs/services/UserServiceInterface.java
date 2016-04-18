@@ -21,6 +21,8 @@ public interface UserServiceInterface {
 	 */
 	List<ServicePOJO> getAllService(int idUser);
 	
+	public Boolean updateUser(User u);
+	
 	public int saveUser(UserRequest	 ur);
 	
 	User findByEmail(String email);
@@ -40,6 +42,15 @@ public interface UserServiceInterface {
 	 * @version 1.0
 	 */
 	Boolean updatePassword(LoginRequest ur);
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
+	 * @version 1.0
+	 */
+	Boolean updatePasswordRequired(LoginRequest ur);
 	
 	/***
 	 * Obtiene el usuario de cada servicio ofertado en todas las subastas de un
@@ -67,4 +78,21 @@ public interface UserServiceInterface {
 	 */
 	Boolean changeUserState(int userId, boolean state);
 	Boolean createUser(UserRequest ur);
+	
+	
+	/***
+	 * Obtiene un usuario pojo por su id.
+	 * 
+	 * @author Juan Carlos Sanchez G.
+	 * @version 1.0
+	 */
+	UserPOJO getUserById(int userId);
+	
+	/**
+	 * Lista el nombre y el id de todos los prestatarios registrados.
+	 * @author Enmanuel García González. 
+	 * @return Lista de pretatarios con su id y nombre.
+	 * @version 1.0
+	 */
+	List<UserPOJO> getAllServiceProviderNames();
 }

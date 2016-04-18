@@ -93,6 +93,17 @@ public class UserService implements UserServiceInterface {
 
 		return listPojo;
 	}
+	/**
+	 * @author Antoni Ramirez Montano
+	 * @param u usuario por actualizar
+	 * @return si es falso o no
+	 */
+	public Boolean updateUser(User u){
+		if(u.getPassword()==null)
+			u.setPassword(userRepository.findOne(u.getUserId()).getPassword());
+		User nu = userRepository.save(u);
+		return (nu == null) ? false:true;
+	}
 
 	public int saveUser(UserRequest ur) {
 		User user = new User();
@@ -132,6 +143,7 @@ public class UserService implements UserServiceInterface {
 			String encryptPassword = AES.base64encode(password);
 			String text = "Contraseña restablecida correctamente, tu nueva contraseña es: " + password;
 			user.setPassword(encryptPassword);
+			user.setState((byte)2);
 			mailMessage.setTo(email);
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
@@ -143,6 +155,22 @@ public class UserService implements UserServiceInterface {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * @author Alejandro Bermúdez Vargas
+	 * @exception AddressException no se encuentra la direccion de correo
+	 * @exception MessagingException No encuentra el server.
+	 * @param LoginRequest, tiene un atributo email del usuario
+	 * @version 1.0
+	 */
+	public Boolean updatePasswordRequired(LoginRequest ur) {
+		User user = userRepository.findByEmail(ur.getEmail());
+		if (user == null) return false;
+		user.setPassword(AES.base64encode(ur.getPassword()));
+		user.setState((byte)1);
+		User nuser = userRepository.save(user);
+		return true;
 	}
 
 	@Override
@@ -190,6 +218,43 @@ public class UserService implements UserServiceInterface {
 		return userRepository.findByUserId(id);
 	}
 	
+	/**
+	 * Obtiene un usuario por su id.
+	 * 
+	 * @param userId El id del usuario por consultar
+	 * @return El usuario deseado
+	 * @author Juan Carlos Sanchez G.
+	 * @version 1.0
+	 */
+	
+	public UserPOJO getUserById(int userId) {
+		User usersList = userRepository.findOne(userId);	
+		UserPOJO userPOJO = new UserPOJO();
+		
+		userPOJO.setUserId(usersList.getUserId());
+		userPOJO.setEmail(usersList.getEmail());
+		userPOJO.setLastName1(usersList.getLastName1());
+		userPOJO.setLastName2(usersList.getLastName2());
+		userPOJO.setName(usersList.getName());
+		userPOJO.setPhone(usersList.getPhone());
+		userPOJO.setState((usersList.getState() == 1 ? true : false));
+		userPOJO.setImage(usersList.getImage());
+		
+		if (usersList.getRole() != null) {
+			RolePOJO rolePOJO = new RolePOJO();
+			rolePOJO.setName(usersList.getRole().getName());
+			rolePOJO.setRoleId(usersList.getRole().getRoleId());
+			rolePOJO.setState(usersList.getRole().getState());
+			userPOJO.setRole(rolePOJO);
+		}
+		if (usersList.getUserType() != null) {
+			UserTypePOJO userTypePOJO = new UserTypePOJO();
+			userTypePOJO.setName(usersList.getUserType().getName());
+			userPOJO.setUserType(userTypePOJO);
+		}
+		return userPOJO;
+	}
+	
 	@Override
 	@Transactional
 	public Boolean changeUserState(int userId, boolean state){
@@ -202,5 +267,25 @@ public class UserService implements UserServiceInterface {
 		}
 		
 		return changed;
+	}
+	
+	@Override
+	public List<UserPOJO> getAllServiceProviderNames() {
+		List<User> usersList = userRepository.findByRoleRoleId(2);
+		List<UserPOJO> usersListPOJO = new ArrayList<>();
+
+		usersList.stream().forEach(u -> {
+			UserPOJO userPOJO = new UserPOJO();
+			userPOJO.setUserId(u.getUserId());
+			userPOJO.setName(u.getName());
+			userPOJO.setLastName1(u.getLastName1());
+			userPOJO.setLastName2(u.getLastName2());
+			userPOJO.setEmail(null);
+			userPOJO.setPhone(null);
+			
+			usersListPOJO.add(userPOJO); 
+		});
+		
+		return usersListPOJO;
 	}
 }

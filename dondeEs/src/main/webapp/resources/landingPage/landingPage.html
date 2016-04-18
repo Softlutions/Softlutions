@@ -1,0 +1,582 @@
+<div class="navbar-wrapper">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			</div>
+
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-left col-lg-6">
+					<li><a class="page-scroll" href="#page-top">Inicio</a></li>
+					<li><a class="page-scroll" href="#events">Eventos</a></li>
+					<li><a class="page-scroll" href="#testimonials">Opinión</a></li>
+					<li><a class="page-scroll" href="#contact">Contacto</a></li>
+
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 1" href="app#/users">Administrar</a></li>
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 2" href="app#/serviceByUser">Mis servicios</a></li>
+					<li><a class="page-scroll" ng-if="loggedUser != null && loggedUser.role.roleId == 3" href="app#/index">Mis eventos</a></li>
+				</ul>
+
+				<div class="nav2 navbar-right col-lg-3">
+					<div ng-show="loggedUser == null">
+						<button class="btn btn-primary btn-sm-normalize-size page-scroll" data-toggle="modal" data-target="#modalLogin" ng-click="logout()">Iniciar sesión</button>
+					</div>
+
+					<div ng-hide="loggedUser == null">
+						<label class="page-scroll" ng-click="viewProfile(loggedUser)">{{loggedUser.name}} {{loggedUser.lastName}}</label> <span>|</span> <label class="page-scroll" ng-click="logout()">Cerrar sesión</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
+	<ol class="carousel-indicators">
+		<li data-target="#inSlider" data-slide-to="0" class="active"></li>
+		<li data-target="#inSlider" data-slide-to="1"></li>
+	</ol>
+	<div class="carousel-inner" role="listbox">
+		<div class="item active">
+			<div class="container">
+				<div class="carousel-caption">
+					<h1>
+						¿Quieres crear tu<br/>
+						propio evento?<br/>
+						registrate y crea<br/>
+						uno ahora mismo
+					</h1>
+					<p>
+						<a class="btn btn-lg btn-primary" ng-show="loggedUser == null" ng-click="returnLandingPage()" data-target="#selectTypeUser" data-toggle="modal">REGISTRARSE</a>
+					</p>
+				</div>
+				<div class="carousel-image wow zoomIn">
+					<img src="resources/img/laptop.png" alt="laptop" />
+				</div>
+			</div>
+			<!-- Set background for slide in css -->
+			<div class="header-back one"></div>
+
+		</div>
+		<div class="item">
+			<div class="container">
+				<div class="carousel-caption blank">
+					<h1>Promociona tu evento en minutos.</h1>
+					<p>Después de haberlo creado podrás promocionarlo en simples
+						pasos.</p>
+					<p>
+						<a class="btn btn-lg btn-primary" ng-show="loggedUser == null" data-target="#selectTypeUser" data-toggle="modal">REGISTRARSE</a>
+					</p>
+				</div>
+			</div>
+			<!-- Set background for slide in css -->
+			<div>
+				<img src="resources/img/landing/background.jpg" width="100%"
+					height="470px" />
+			</div>
+		</div>
+	</div>
+	<a class="left carousel-control" href="#inSlider" target="_self"
+		role="button" data-slide="prev"> <span
+		class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span
+		class="sr-only">Previous</span>
+	</a> <a class="right carousel-control" href="#inSlider" target="_self"
+		role="button" data-slide="next"> <span
+		class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span
+		class="sr-only">Next</span>
+	</a>
+</div>
+
+<section id="events" class="container services">
+    <div class="container">
+    	<div class="row">
+	        <div class="col-xs-12" class="center-block">
+	            <p><h1 class="text-center">Top eventos</h1></p>
+	            
+	            <div ng-show="topEvents.length > 0">
+	            	<ul id="topList" ng-repeat="event in topEvents">
+		            	<li class="col-sm-4">
+		            		<div class="panel panel-default">
+		            			<div class="panel-heading">
+			            			<h3 class="text-center"><small>{{($index+1)+'. '}}</small>{{event.name}}</h3>
+		            			</div>
+		           				<div class="panel-body">
+		           					<img ng-src="{{event.image || DEFAULT_EVENT_IMAGE}}" class="img-responsive img-rounded center-block" width="250px" height="200px"/>
+			            			<p class="text-center">
+				            			<strong>{{event.place.name}}</strong><br/>
+				            			{{event.publishDate | date: 'EEE dd MMM yyyy hh:mma'}}
+			            			</p>
+			            			<button class="btn btn-default btn-xs pull-right" ng-click="viewEvent(event)">Ver evento</button>
+		           				</div>
+		            		</div>
+		            	</li>
+		            </ul>
+	            </div>
+			    <div ng-show="topEvents.length == 0" class="row">
+			    	<p><h3 class="text text-center">No hay eventos</h3></p>
+			    </div>
+	        </div>
+	    </div>
+	    
+	    <a href="#/events"><button class="btn btn-warning center-block">Ver mas</button></a><br/>
+    </div>
+</section>
+
+<section id="testimonials" class="navy-section testimonials"
+	style="margin-top: 0" ng-show="loginNormalPage==false">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center wow zoomIn">
+				<i class="fa fa-comment big-icon"></i>
+				<h1>¿Qué estan opinando nuestros usuarios?</h1>
+				<div class="testimonials-text">
+					<i>"Como promotor de eventos nunca había encontrado todo lo que
+						necesitaba con tanta facilidad, es grandioso, y mi evento se
+						promocionó en minutos."</i>
+				</div>
+				<small> <strong>20.03.2016 - Marco López</strong>
+				</small>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="contact" class="contact">
+	<div class="container">
+		<div class="row m-b-lg">
+			<div class="col-xs-6 col-xs-offset-3 text-center">
+				<h1 class="m-t-none m-b">Contacto</h1>
+				<form name="formContact" ng-submit="formContact.$valid ? sendMessage() : null">
+					<div class="form-group">
+						<label class="control-label">Nombre completo</label>
+						<input ng-model="name" type="text" class="form-control" required>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label">Correo</label>
+						<input ng-model="email" type="email" class="form-control" required>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label">Mensaje</label>
+						<textarea ng-model="message" class="form-control" rows="5" maxlength="1000" required></textarea>
+					</div>
+
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Enviar</button>
+					</div>
+				</form>
+            </div>
+        </div>
+        <!--div class="row">
+            <div class="col-lg-12 text-center">
+            	<p>Contáctanos también en redes sociales</p>
+                <ul class="list-inline social-icon">
+                    <li><a href=""><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li><a href=""><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li><a href=""><i class="fa fa-linkedin"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div-->
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+                <strong>Copyright</strong> Softlutions &copy; 2016
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODALS -->
+<!-- MOdal de cambio de contraseña -->
+<div>
+	<div id="updatePasswordModal" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Cambiar contraseña</h3>
+							<form role="form" ng-submit="forgotPassword()" ng-init="user">
+								<div class="form-group">
+									<label>Ingrese su correo por favor</label> <input type="email"
+										ng-model="user.email" required placeholder="Ingresar email"
+										class="form-control">
+								</div>
+								<div>
+									<button
+										class="btn btn-primary pull-right btn-sm-normalize-size"
+										type="submit">
+										<strong>Cambiar contraseña</strong>
+									</button>
+									<button type="button" class="btn btn-sm btn-danger pull-right"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="selectTypeUser" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Seleccione un tipo de registro</h3>
+							<table class="table table-hover">
+								<thead>
+
+								</thead>
+								<tbody>
+									<tr>
+										<td><a data-toggle="modal" ng-click="showSubModal1()">
+												Usuario</a></td>
+										<td><a class="pull-right" data-toggle="modal"
+											ng-click="showSubModal2()">Compañía</a></td>
+									</tr>
+								</tbody>
+							</table>
+							<div>
+								<button type="button"
+									class="btn btn-sm btn-danger pull-right m-t-n-xs"
+									data-dismiss="modal">Cancelar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="createUserForm" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Registrar usuario</h3>
+							<form role="form" ng-submit="saveUser(newUser)" ng-init="newUser">
+								<div class="form-group">
+									<label>Nombre</label> <input type="text" ng-model="newUser.name"
+										placeholder="Ingresar nombre" id="testProbando" required class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Primer apellido</label> <input type="text"
+										ng-model="newUser.lastName1"
+										placeholder="Ingresar primer apellido" required
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Segundo apellido</label> <input type="text"
+										ng-model="newUser.lastName2"
+										placeholder="Ingresar segundo apellido" required
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Email</label> <input type="email" ng-model="newUser.email"
+										required placeholder="Ingresar email" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Contraseña</label> <input type="password"
+										ng-model="newUser.password" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Confirmar contraseña</label> <input type="password"
+										ng-model="newUser.confirmPassword" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Teléfono</label> <input type="text"
+										ng-model="newUser.phone" required placeholder="Ingresar teléfono"
+										class="form-control numbersOnly">
+								</div>
+								<div class="form-group">
+									<label>Seleccione un rol</label> <select
+										class="form-control m-b" id="selectRol" required
+										ng-options="role as role.name for role in roles track by role.roleId"
+										ng-model="newUser.role"></select>
+								</div>
+								<div>
+									<button
+										class="btn btn-sm btn-primary pull-right btn-sm-normalize-size"
+										type="submit">
+										<strong>Guardar</strong>
+									</button>
+									<button type="button"
+										class="btn btn-sm btn-danger pull-right" ng-click="hideCreateUserForm()">Cancelar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="createCompanyForm" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-12 b-r">
+							<h3 class="m-t-none m-b">Registrar compañía</h3>
+							<form role="form" ng-submit="saveCompany(user)" ng-init="user">
+								<div class="form-group">
+									<label>Nombre de la compañía</label> <input type="text"
+										ng-model="user.name" ng-maxlength="255"
+										placeholder="Ingresar nombre" required class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Email</label> <input type="email"
+										ng-model="userCompany.email" required ng-maxlength="255"
+										placeholder="Ingresar email" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Contraseña</label> <input type="password"
+										ng-model="userCompany.password" ng-maxlength="255" required
+										placeholder="Mínimo 8 caracteres" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Confirmar contraseña</label> <input type="password"
+										required ng-model="confirmPassword"
+										placeholder="Confirme su contraseña" ng-maxlength="255"
+										class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Teléfono</label> <input type="text"
+										ng-model="user.phone" required placeholder="Ingresar teléfono"
+										class="form-control numbersOnly" ng-maxlength="255">
+								</div>
+								<div class="form-group">
+									<label>Seleccione un rol</label> <select
+										class="form-control m-b" id="selectRol" required
+										ng-options="role as role.name for role in roles track by role.roleId"
+										ng-model="user.role"></select>
+								</div>
+								<div class="form-group">
+								
+									<div class="button" ngf-select="attach($file)">
+										<label class="btn btn-default pull-right fa fa-camera"
+											data-toggle="tooltip" title="Adjuntar imagen"></label>
+									</div>
+									<label class="btn btn-default pull-right fa fa-trash"
+										data-toggle="tooltip" title="Quitar imagen adjunta"
+										ng-click="companyPreviewFile = null; companyFile = null;"
+										ng-show="companyFile != null"></label>
+										
+										<img ng-if="companyPreviewFile != null" ng-src={{companyPreviewFile}} class="center-block" with="150px" height="100px"/><br/>
+								</div>
+								<div>
+									<button
+										class="btn btn-primary pull-right btn-sm-normalize-size"
+										type="submit">
+										<strong>Guardar</strong>
+									</button>
+									<button type="button" class="btn btn-sm btn-danger pull-right"
+										data-dismiss="modal">Cancelar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- MODAL ANSWER CONTRACT -->
+<div id="modalAsnwerContract" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12" ng-init="getEventById()">
+						<div class="widget-head-color-box navy-bg p-lg text-center">
+							<div class="m-b-md">
+								<h2 class="font-bold no-margins">{{event.name}}</h2>
+								<small>{{event.place.name}}</small>
+							</div>
+							<img
+								src="http://lorempixel.com/image_output/people-q-c-100-100-1.jpg"
+								class="img-circle circle-border m-b-md" alt="profile">
+							<div>
+								<span>Correo: {{event.user.email}}</span>
+							</div>
+						</div>
+						<div class="widget-text-box">
+							<p>Has sido contratado para brindar tus servicios en este
+								evento!</p>
+							<div class="text-right">
+								<a class="btn btn-sm btn-danger btn-sm-normalize-size"
+									ng-click="noAccept(event)"><i class="fa fa-thumbs-down"></i>
+									NO aceptar </a> <a ng-click="accept(event)"
+									class="btn btn-primary btn-sm-normalize-size"><i
+									class="fa fa-thumbs-up"></i> Aceptar</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- MODAL ANSWER INVITATION -->
+<div id="modalAsnwerInvitation" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12" ng-init="geteventByIdInvitation()">
+						<div class="widget-head-color-box navy-bg p-lg text-center">
+							<div class="m-b-md">
+								<h2 class="font-bold no-margins">{{event.name}}</h2>
+								<small>{{event.place.name}}</small>
+							</div>
+							<img ng-src="{{event.image || DEFAULT_EVENT_IMAGE}}"
+								class="img-responsive img-rounded center-block" width="175px"
+								height="105px" alt="profile">
+							<div>
+								<span>Correo: {{event.user.email}}</span>
+							</div>
+							<div>
+								<span>Evento: {{(((event.private_)==0)? "Público":"Privado")}}</span>
+							</div>
+						</div>
+						<div class="widget-text-box">
+							<h4 class="media-heading" ng-show="isComment">{{nameProvaider}}</h4>
+							<p ng-show="isComment">Te ha invitado a un evento</p>
+							<div class="form-group" ng-show="isComment">
+								<h4 class="media-heading">Comentarios</h4>
+								<textarea rows="5" style="resize: none" type="text"
+									id="desciption" class="form-control" placeholder="Comentarios"
+									ng-model="comment"></textarea>
+							</div>
+							<div class="form-group" ng-show="isComment === false">
+								<h4 class="media-heading">Tu respuesta ha sido enviada</h4>
+								<p>{{answer}}</p>
+							</div>
+							<div class="text-right" ng-show="isComment">
+								<button class="btn btn-sm btn-danger btn-sm-normalize-size"
+									id="noAttend" ng-click="createParticipant(0)">
+									<i class="fa fa-thumbs-down"></i> No asistir
+								</button>
+								<button id="attend" ng-click="createParticipant(2)"
+									class="btn btn-sm btn-primary btn-sm-normalize-size">
+									<i class="fa fa-thumbs-up"></i> Asistir
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modalLogin" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div id="loginDiv" class="col-sm-12 b-r">
+						<img class="img-responsive img-rounded center-block"
+							src="resources/img/dondeEsLogo.png" width="90px" height="85px" />
+
+						<div id="errorMsj" class="bg-danger">
+							<h3 class="text-danger text-center">Correo o contraseña
+								incorrectos</h3>
+						</div>
+
+						<div class="form-group">
+							<h1 class="text-center login-title">Iniciar sesión</h1>
+						</div>
+
+						<form class="form-signin" name="formLogin" onSummit="return false"
+							ng-submit="formLogin.$valid ? checkLogin() : null">
+
+							<div class="form-group">
+								<input name="login" autocomplete="on" type="text"
+									class="form-control" placeholder="Correo" autofocus
+									ng-model="user.email" required>
+							</div>
+
+							<div class="form-group">
+								<input name="password" autocomplete="on" type="password"
+									class="form-control" placeholder="Contraseña"
+									ng-model="user.password" required>
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+							</div>
+
+							<!--div class="form-group">
+								<label class="pull-left"> <input id="chkRememberMe"
+									type="checkbox" value="remember-me">Recordarme
+								</label>
+							</div-->
+
+							<div class="form-group">
+								<a class="pull-right" data-toggle="modal"
+									data-target="#updatePasswordModal"
+									ng-click="hiddenModalLogin()">¿Olvidó su contraseña?</a><br />
+								<a class="pull-right" data-toggle="modal"
+									data-target="#selectTypeUser" ng-click="hiddenModalLogin()">Registrarse</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- PERFIL DE USUARIO -->
+<div id="userProfileModal" class="modal fade" aria-hidden="true" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="widget-head-color-box navy-bg p-lg text-center">
+					<div class="m-b-md">
+						<h2 class="font-bold no-margins">{{ modalUser.name + ' ' +
+							((modalUser.lastName1 !== null)? modalUser.lastName1:'') + ' ' +
+							((modalUser.lastName2 !== null)? modalUser.lastName2:'') }}</h2>
+						<small class="userProfileRoleName">{{modalUser.role.name}}</small>
+					</div>
+					<img ng-src="{{modalUser.image || DEFAULT_USER_IMAGE}}" class="img-circle circle-border m-b-md" alt="profile" width="150px" height="150px">
+					
+					<h2>Contacto</h2>
+					<ul class="list-unstyled m-t-md">
+						<li><span class="fa fa-envelope m-r-xs"></span> <label>Email:</label>
+							{{modalUser.email}}</li>
+						<li><span class="fa fa-phone m-r-xs"></span> <label>Teléfono:</label>
+							{{modalUser.phone}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

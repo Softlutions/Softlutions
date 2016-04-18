@@ -7,6 +7,7 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 	  });
 	}])
 	.controller('EventReminderCtrl', ['$scope','$http','$routeParams', function($scope,$http,$routeParams) {
+		$scope.$parent.pageTitle = "Donde es - Mis notas";
 		$scope.notesList;
 		getAllEventRemider();
 		$scope.objNote = {}
@@ -56,13 +57,7 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 		$scope.uploadEventReminderData = function (id, content, state) {
 			$scope.objEventReminderEdit.id = id;
 			$scope.objEventReminderEdit.content = content;
-			if (state == "SinComenzar") {
-				$scope.objEventReminderEdit.state = 0;
-			} else if (state == "Pendiente") {
-				$scope.objEventReminderEdit.state = 1;
-			} else if (state == "Concluido") {
-				$scope.objEventReminderEdit.state = 2;
-			}
+			$scope.objEventReminderEdit.state = state;
 		}
 		
 		$scope.editEventReminder = function () {
@@ -73,35 +68,58 @@ angular.module('dondeEs.eventReminder', ['ngRoute'])
 				event: $scope.event
 			}
 			
-			console.log(dataEdit);
-			
 			$http({method: 'POST',url:'rest/protected/note/saveNote', data:dataEdit, headers: {'Content-Type': 'application/json'}}).success(function(response) {
 				if (response.code == 200) {
 					getAllEventRemider();
 					toastr.success("Notas del evento", "La nota fué modificada con éxito");
+					$("#modal-form").modal("toggle");
 				} else {
 					toastr.success("Notas del evento", "Ocurrió un problema al modificar la nota");
 				}				
 			}); 
 		}
 		
+		$scope.deleteEventReminder = function(note){			
+			swal({
+				  title: "¿Está seguro?",
+				  text: "La nota será borrada por completo del sistema.",
+				  type: "warning",
+				  showCancelButton: true,
+				  confirmButtonColor: "#DD6B55",
+				  confirmButtonText: "Borrar nota",
+				  cancelButtonText: "Cancelar",
+				  closeOnConfirm: false,
+				  closeOnCancel: false
+				},
+				function(isConfirm){
+					if(isConfirm){
+						note.event = {};
+						note.event.eventId = $routeParams.id;
+						if (note.state == "SinComenzar") {
+							note.state = 0;
+						} else if (note.state == "Pendiente") {
+							note.state = 1;
+						} else if (note.state == "Concluido") {
+							note.state = 2;
+						}
+						$http({method: 'DELETE',url:'rest/protected/note/deleteNote', data:note, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+							$scope.notesList.splice($scope.notesList.indexOf(note),1);
+							swal("Nota borrada!", "Su nota ha sido eliminada del sistema.", "success");
+						});
+					}else{
+						swal("Cancelado", "Su nota no ha sido eliminada del sistema", "error");
+					}
+				});
+		};
+		
 		function getAllEventRemider() {
 			$http.get("rest/protected/note/getAllNoteByEvent/"+$routeParams.id).success(function(response){
 				if (response.code == 200) {
 					if (response.notes.length > 0) {
-						for (var i=0; i<response.notes.length; i++) {
-							if (response.notes[i].state == 0) {
-								response.notes[i].state = "SinComenzar";
-							} else if (response.notes[i].state == 1) {
-								response.notes[i].state = "Pendiente";
-							} else if (response.notes[i].state == 2) {
-								response.notes[i].state = "Concluido";
-							}
-						}
 						$scope.notesList = response.notes;
 					}
 				} else {
-					toastr.success('Notas del evento', 'Ocurrió un error al buscar las notas del evento');
+					toastr.error('Notas del evento', 'Ocurrió un error al buscar las notas del evento');
 				}
 			});
 		}

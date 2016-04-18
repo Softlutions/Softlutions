@@ -44,4 +44,11 @@ public interface EventServiceInterface {
 	 * @return retorna true si la operacion fue exitosa, false si no
 	 */
 	boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext);
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param top cantidad de items que retorna la lista
+	 * @return Lista de eventos con mas participantes
+	 */
+	List<EventPOJO> getTopEventsByParticipants(int top);
 }

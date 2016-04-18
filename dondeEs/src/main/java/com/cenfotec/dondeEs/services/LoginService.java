@@ -29,21 +29,24 @@ public class LoginService implements LoginServiceInterface{
 		String pass = lr.isCript()? lr.getPassword():AES.base64encode(lr.getPassword());
 		User loggedUser = loginRepository.findByEmailAndPassword(lr.getEmail(), pass);
 		
-		if(loggedUser == null){
+		if(loggedUser == null || (loggedUser != null && loggedUser.getState() == 0)){
 			response.setCode(401);
 			response.setErrorMessage("Unauthorized user");
 			response.setIdUser(-1);
 			
 			currentSession.setAttribute("idUser", -1);
+			currentSession.invalidate();
 		}else{
 			response.setCode(200);
 			response.setCodeMessage("User authorized");
-			
 			response.setIdUser(loggedUser.getUserId());
 			response.setFirstName(loggedUser.getName());
 			response.setLastName(loggedUser.getLastName1());
 			response.setEmail(loggedUser.getEmail());
+			response.setPhone(loggedUser.getPhone());
+			response.setImage(loggedUser.getImage());
 			response.setCriptPass(pass);
+			response.setState(loggedUser.getState());
 			
 			RolePOJO rolePOJO = new RolePOJO();
 			BeanUtils.copyProperties(loggedUser.getRole(), rolePOJO);
