@@ -107,7 +107,7 @@ public class LoginController {
 	public UserResponse create(@RequestBody UserRequest ur, HttpServletRequest servletRequest,
 			HttpServletResponse servletResponse) {
 		UserResponse us = new UserResponse();
-		ur.getUser().setState(true);
+		ur.getUser().setState((byte) 1);
 		Boolean state = userServiceInterface.createUser(ur);
 		if (state) {
 			us.setCode(200);
@@ -115,7 +115,7 @@ public class LoginController {
 			return us;
 		}
 		us.setCode(400);
-		us.setCodeMessage("El usuario ya existe en la base de datos!");
+		us.setCodeMessage("El correo ya fue usado!");
 		return us;
 	}
 

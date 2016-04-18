@@ -16,8 +16,8 @@ angular.module('dondeEs.answerContract', ['ngRoute', 'ngCookies'])
 			$scope.event = response.eventPOJO;
 		});
 	}
-	
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	
 	$scope.accept = function(event){
 		var dataCreate = {

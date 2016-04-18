@@ -10,7 +10,7 @@ angular.module('dondeEs.eventsPublish', ['ngRoute', 'ngFileUpload', 'ngCookies']
 }])
 
 .controller('eventsPublishCtrl', ['$scope','$http','Upload','$timeout','$cookies',function($scope,$http,Upload,$timeout,$cookies) {
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 
 	$scope.eventsPublish = [];
 	$scope.requestObject = {"eventsPublish": {}};

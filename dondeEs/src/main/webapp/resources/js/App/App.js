@@ -30,11 +30,11 @@ angular.module('dondeEs', [
 
 	// Opciones globales de los popup de notificaciones.
 	toastr.options = {
-            closeButton: true,
-            progressBar: false,
-            showMethod: 'slideDown',
-            timeOut: 4000
-        };
+        closeButton: true,
+        progressBar: false,
+        showMethod: 'slideDown',
+        timeOut: 4000
+    };
 	
 	$routeProvider.otherwise({redirectTo: '/index'});
   

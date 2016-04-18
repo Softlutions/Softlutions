@@ -20,11 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cenfotec.dondeEs.contracts.BaseResponse;
 import com.cenfotec.dondeEs.contracts.EventResponse;
 import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.Place;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
 import com.cenfotec.dondeEs.services.EventServiceInterface;
 import com.cenfotec.dondeEs.services.PlaceServiceInterface;
 import com.cenfotec.dondeEs.services.UserServiceInterface;
@@ -35,6 +37,8 @@ import com.cenfotec.dondeEs.utils.Utils;
 @RequestMapping(value = "rest/protected/event")
 public class EventController {
 
+	@Autowired
+	private EventParticipantServiceInterface eventParticipantServiceInterface;
 	@Autowired
 	private EventServiceInterface eventServiceInterface;
 	@Autowired
@@ -310,7 +314,13 @@ public class EventController {
 			event.setPlace(place);
 
 			int eventId = eventServiceInterface.saveEvent(event);
-
+			
+			EventParticipant promotor = new EventParticipant();
+			promotor.setEvent(event);
+			promotor.setUser(user);
+			promotor.setState((byte) 2);
+			eventParticipantServiceInterface.saveParticipant(promotor);
+			
 			if (eventId != 0) {
 				eventResponse.setCode(200);
 				EventPOJO eventPOJO = new EventPOJO();

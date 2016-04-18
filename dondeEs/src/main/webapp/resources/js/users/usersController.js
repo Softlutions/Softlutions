@@ -84,15 +84,8 @@ angular.module('dondeEs.users', ['ngRoute', 'ngTable']).config(['$routeProvider'
 					}
 				});
 		}else{
-			 setTimeout(function() {					
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
+			setTimeout(function() {
                 toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
-
             }, 1300);
 		}
 	}

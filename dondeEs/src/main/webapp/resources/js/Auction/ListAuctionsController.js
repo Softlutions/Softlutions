@@ -10,7 +10,7 @@ angular
 	.controller('AuctionsCtrl',['$scope', '$http', 'ngTableParams', '$interval', '$filter', '$window', '$cookies',function($scope, $http, ngTableParams, $interval, $filter, $window, $cookies) {
 		$scope.$parent.pageTitle = "Donde es - Subastas de evento";
 		$scope.selectedCatalogId = "";
-		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+		$scope.loggedUser = $scope.$parent.getLoggedUser();
 		$scope.loggedUserServiceCatalogs = [];
 		$scope.auctionService = {};
 		$scope.selectedAuction = {};
@@ -195,7 +195,6 @@ angular
 		};
 		
 		$scope.displayForm = function(){
-			$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 			$http.get('rest/protected/user/getAllService/' + $scope.loggedUser.userId ).success(function(response) {
 				$scope.services = response.listService;
 			});	

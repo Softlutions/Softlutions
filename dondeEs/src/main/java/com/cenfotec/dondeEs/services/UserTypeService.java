@@ -10,10 +10,16 @@ import com.cenfotec.dondeEs.repositories.UserTypeRepository;
 public class UserTypeService implements UserTypeServiceInterface {
 	
 	@Autowired private UserTypeRepository userTypeRepository;
+	
+	@Override
+	public UserType findById(int id) {
+		UserType ut = userTypeRepository.findOne(id);
+		return ut;
+	}
+	
 	@Override
 	public UserType findByName(String name) {
 		UserType ut = userTypeRepository.findByName(name);
 		return ut;
 	}
-
 }
