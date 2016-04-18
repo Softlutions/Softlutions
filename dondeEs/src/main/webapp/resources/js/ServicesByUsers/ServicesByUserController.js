@@ -98,15 +98,8 @@ angular
 				});
 			}else{
 				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos.', 'Error');
-
-		            }, 1300);
+					 toastr.error('Todos los campos son requeridos.', 'Error');
+				 }, 1300);
 			}
 		};
 		

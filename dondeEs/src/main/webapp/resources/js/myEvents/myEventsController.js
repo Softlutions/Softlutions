@@ -443,9 +443,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	 		if (response.code == 200) {
 	 			window.location.href = "/dondeEs/app#/#";
 			} else if (response.errorMessage == "notification cancel event error") {
-		    	toastr.options = {
-	                    timeOut: 7000
-		        };
 		    	toastr.warning('Cancelación del evento', 'Ocurrió un error al notificar a los involucrados sin embargo el evento se canceló con éxito.');
 		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			 		if (response.code == 200) {

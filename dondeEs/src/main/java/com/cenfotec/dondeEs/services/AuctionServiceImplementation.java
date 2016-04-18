@@ -62,7 +62,7 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 			ServiceContact serviceContact = new ServiceContact();
 			serviceContact.setEvent(auctionService.getAuction().getEvent());
 			serviceContact.setService(auctionService.getService());
-			serviceContact.setState((byte) 1);
+			serviceContact.setState((byte) 0);
 			serviceContactRepository.save(serviceContact);
 			
 			sendEmailController.sendEmailContractNotification(contractNotification);

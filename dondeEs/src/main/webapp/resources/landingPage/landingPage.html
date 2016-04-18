@@ -307,6 +307,17 @@
 										ng-options="role as role.name for role in roles track by role.roleId"
 										ng-model="newUser.role"></select>
 								</div>
+								<div class="form-group">
+									<div class="button" ngf-select="attach($file)">
+										<label class="btn btn-default pull-right fa fa-camera" data-toggle="tooltip" title="Adjuntar imagen"></label>
+									</div>
+									<label class="btn btn-default pull-right fa fa-trash"
+										data-toggle="tooltip" title="Quitar imagen adjunta"
+										ng-click="userPreviewFile = null; userFile = null;"
+										ng-show="userFile != null"></label>
+										
+									<img ng-if="userPreviewFile != null" ng-src={{userPreviewFile}} class="center-block" with="150px" height="100px"/><br/>
+								</div>
 								<div>
 									<button
 										class="btn btn-sm btn-primary pull-right btn-sm-normalize-size"
@@ -364,17 +375,15 @@
 										ng-model="user.role"></select>
 								</div>
 								<div class="form-group">
-								
 									<div class="button" ngf-select="attach($file)">
-										<label class="btn btn-default pull-right fa fa-camera"
-											data-toggle="tooltip" title="Adjuntar imagen"></label>
+										<label class="btn btn-default pull-right fa fa-camera" data-toggle="tooltip" title="Adjuntar imagen"></label>
 									</div>
 									<label class="btn btn-default pull-right fa fa-trash"
 										data-toggle="tooltip" title="Quitar imagen adjunta"
-										ng-click="companyPreviewFile = null; companyFile = null;"
-										ng-show="companyFile != null"></label>
+										ng-click="userPreviewFile = null; userFile = null;"
+										ng-show="userFile != null"></label>
 										
-										<img ng-if="companyPreviewFile != null" ng-src={{companyPreviewFile}} class="center-block" with="150px" height="100px"/><br/>
+									<img ng-if="userPreviewFile != null" ng-src={{userPreviewFile}} class="center-block" with="150px" height="100px"/><br/>
 								</div>
 								<div>
 									<button

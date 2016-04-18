@@ -72,6 +72,9 @@
 											<a type="button" href="app#/eventReminder/{{event.eventId}}">Notas</a>
 										</li>
 										<li ng-show="event.state!==0" class="divider"></li>
+										<li ng-show="event.state==3">
+											<a type="button" href="/dondeEs/#/viewEvent?view={{event.eventId}}">Ver evento</a>
+										</li>
 										<li ng-show="event.state!==0 && event.state!==3">
 											<a type="button" href="app#/event?edit={{event.eventId}}">Modificar</a>
 										</li>

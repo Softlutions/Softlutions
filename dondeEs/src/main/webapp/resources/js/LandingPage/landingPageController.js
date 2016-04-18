@@ -101,7 +101,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							window.location.href="#/changePassword";
 						}, 500);
 					}else{
-						if($scope.tempRedirect.event != null){
+						if($scope.tempRedirect.aucNotif != null && $scope.loggedUser.role.roleId == 2){
+							$("#modalLogin").modal("toggle");
+							checkUserAuctionRole();
+						}else if($scope.tempRedirect.event != null){
 							if($scope.tempRedirect.public != null){
 								$("#modalLogin").modal("toggle");
 								setTimeout(function(){ window.location.href = "#/events"; }, 500);
@@ -181,9 +184,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
+							$scope.user.email = $scope.newUser.email;
+							$scope.insertUserImage();
 							$("#createUserForm").modal('hide');
 							$("#createCompanyForm").modal('hide');
 							$scope.newUser={};
+							$scope.user={};
+							$scope.userPreviewFile = null;
+							$scope.userFile = null;
 							$scope.confirmPassword='';
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
@@ -192,16 +200,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					});
 				}
 			}else{
-				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
-
-		            }, 1300);
+				setTimeout(function() {
+	                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+	            }, 1300);
 			}
 		}
 		
@@ -216,37 +217,37 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			  if(file != null){
 				  var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
 					  if(regex.test(file.name.toLowerCase())){
-						  $scope.companyFile = file;
+						  $scope.userFile = file;
 						   
 						  var reader = new FileReader();
 							  reader.onload = function(e){
-							  $scope.companyPreviewFile = e.target.result;
+							  $scope.userPreviewFile = e.target.result;
 							  $scope.$apply();
 						  }
 						   
 						  reader.readAsDataURL(file);
 					 }else{
-					  $scope.companyPreviewFile = null;
-					  $scope.companyFile = null;
+					  $scope.userPreviewFile = null;
+					  $scope.userFile = null;
 					  toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
 				     }
 			  }
 		}
 		
-		$scope.insertCompanyImage = function(){
+		$scope.insertUserImage = function(){
 			Upload.upload({
-			 	url: 'rest/landing/insertCompanyImage',
+			 	url: 'rest/landing/insertUserImage',
 			 	data: {
 			 	"email": $scope.user.email,
-			 	"file": $scope.companyFile
+			 	"file": $scope.userFile
 			 	}
 			 	}).then(function(resp) {
 			 	if(resp.status == 200){
 			 		
 			 	}else{
-//			 		toastr.error('No se pudo publicar el comentario');
+
 			 	}
-			 	}, function(err) {  }, function(prog) {});
+			 }, function(err) {  }, function(prog) {});
 		}
 		
 		$scope.saveCompany = function(user) {
@@ -263,9 +264,11 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
-							$scope.insertCompanyImage();
+							$scope.insertUserImage();
 							$("#createCompanyForm").modal('hide');
 							$scope.user={};
+							$scope.userPreviewFile = null;
+							$scope.userFile = null;
 							$scope.confirmPassword='';
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
@@ -275,15 +278,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				}
 			}else{
 				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
-
-		            }, 1300);
+					 toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+		         }, 1300);
 			}
 		}
 		// END SAVE COMPANY
@@ -373,6 +369,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		    		$scope.tempRedirect.event = $location.search().event;
 		    		$scope.tempRedirect.assist = $location.search().assist;
 		    		$scope.tempRedirect.public = $location.search().public;
+		    		$scope.tempRedirect.aucNotif = $location.search().tempAucNotif;
 		    		break;
 		    	case "events":
 		    		window.location.href = "#/landingPage#events";
@@ -439,15 +436,27 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		
 		// AUCTION INVITATION
 		
-		if($location.search().aucNotif != null && $scope.loggedUser.role.roleId == 2){
-			var auctionId = $location.search().aucNotif;
-			
-			$http.get("rest/protected/auction/getAuctionByEncrypId/"+auctionId).success(function(response){
-				if(response.code == 200){
-					$scope.auctionInvitation = response.auction;
-					$("#modalAuctionContractInvitation").modal("toggle");
-				}
-			});
+		if($location.search().aucNotif != null){
+			if($scope.loggedUser != null){
+				checkUserAuctionRole();
+			}else{
+				window.location.href="#/landingPage?p=login&tempAucNotif="+$location.search().aucNotif;
+			}
+		}
+		
+		function checkUserAuctionRole(){
+			if($scope.loggedUser.role.roleId == 2){
+				var auctionId = $location.search().aucNotif || $location.search().tempAucNotif;
+				
+				$http.get("rest/protected/auction/getAuctionByEncrypId/"+auctionId).success(function(response){
+					if(response.code == 200){
+						$scope.auctionInvitation = response.auction;
+						$("#modalAuctionContractInvitation").modal("toggle");
+					}
+				});
+			}else{
+				window.location.href="#/landingPage";
+			}
 		}
 		
 		$scope.acceptAuctionInvitation = function(){
