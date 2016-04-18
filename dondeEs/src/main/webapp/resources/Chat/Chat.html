@@ -17,7 +17,11 @@
 									<a>{{chat.event.name}}</a>
 								</div>
 							</div>
-
+							<div ng-hide="chats.length > 0">
+								<p class="text-center" style="height: 350px;">
+									<b class="verticalAlign">No todavía no estas en ningún chat</b>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>

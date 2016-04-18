@@ -8,7 +8,7 @@ angular.module('dondeEs.contact', ['ngRoute','ngCookies'])
 	}])
 	.controller('ContactCtrl', ['$scope','$http','$cookies',function($scope,$http,$cookies) {
 		$scope.$parent.pageTitle = "Donde es - Contacto";
-		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+		$scope.loggedUser = $scope.$parent.getLoggedUser();
 		$scope.name = $scope.loggedUser.name;
 		$scope.email = $scope.loggedUser.email;
 		

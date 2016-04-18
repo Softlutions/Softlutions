@@ -8578,6 +8578,11 @@ textarea {
 	width: 50%;
 }
 
+.verticalAlign {
+	position: relative;
+	top: 50%;    
+}
+
 .cancelButtonMargin {
 	margin-right: 10px;
 }

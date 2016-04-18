@@ -6,7 +6,7 @@
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="landingPageModule" class="no-js">
+<html lang="en" class="no-js">
 <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
@@ -27,18 +27,14 @@
 		<link href="resources/css/style.css" rel="stylesheet">
 		<link href="resources/css/custom-style.css" rel="stylesheet">
 		<link href="resources/bower_components/toastr/toastr.css" rel="stylesheet">
-		<link href="resources/css/eventsPublishStyle.css" rel="stylesheet">
-		<link href="resources/css/plugins/slick/slick.css" rel="stylesheet">
-		<link href="resources/css/plugins/slick/slick-theme.css" rel="stylesheet">
-    	<link href="resources/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
-		<link href="resources/bower_components/sweetalert/dist/sweetalert.css" rel="stylesheet">
-		<link href="resources/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 		<link rel="icon" href="resources/img/dondeEsLogo.png">
 	</head>
 
 	<body id="page-top" class="landing-page">
-		<div ng-view></div>
-	
+		<img src="resources/img/dondeEsLogo.png" width="150px" height="150px" class="image-responsive center-block"/>
+		<p class="text-center">Error inesperado en la aplicación</p>
+		<a href="dondeEs/#/landingPage">Volver a inicio</a>
+		
 		<!-- Mainly scripts -->
 		<script src="resources/js/jquery-2.1.1.js"></script>
 		<script src="resources/js/bootstrap.min.js"></script>
@@ -49,8 +45,7 @@
 		<script src="resources/js/inspinia.js"></script>
 		<script src="resources/js/plugins/pace/pace.min.js"></script>
 		<script src="resources/bower_components/toastr/toastr.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/wow/0.1.12/wow.min.js"></script>
-	
+		
 		<!-- JQueryUI -->
 		<script src="resources/bower_components/jquery-ui/jquery-ui.js"></script>
 	
@@ -58,34 +53,9 @@
 		<script	src="resources/bower_components/angular-cookies/angular-cookies.js"></script>
 		<script src="resources/bower_components/angular-route/angular-route.js"></script>
 		
-		<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
-		
-		<script src="resources/bower_components/moment/min/moment.min.js"></script>
-		<script src="resources/bower_components/moment/min/moment-with-locales.js"></script>
-		
-		<script src="resources/bower_components/sweetalert/dist/sweetalert.min.js"></script>
-		
-		<script	src="resources/non_bower_components/angular-file-upload-shim.min.js"></script>
-		<script src="resources/non_bower_components/angular-file-upload.min.js"></script>
-	
-		<script src="resources/bower_components/ng-file-upload/ng-file-upload-shim.js"></script>
-		<script src="resources/bower_components/ng-file-upload/ng-file-upload.js"></script>
-		
-		<script src="resources/non_bower_components/slick.min.js"></script>
-		<script src="resources/non_bower_components/angular-slick.min.js"></script>
-		
 		<script src="resources/bower_components/toastr/toastr.js"></script>
 		
-		<script src="resources/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
-		
-		<script src="resources/js/plugins/ladda/spin.min.js"></script>
-    	<script src="resources/js/plugins/ladda/ladda.min.js"></script>
-    	<script src="resources/js/plugins/ladda/ladda.jquery.min.js"></script>
-		
 		<!-- Controllers -->
-		<script src="resources/js/LandingPage/landingPageController.js"></script>
-		<script src="resources/js/LandingPage/viewEventController.js"></script>
-		<script src="resources/js/LandingPage/publicEventsController.js"></script>
-		<script src="resources/js/LandingPage/changePasswordController.js"></script>
+		
 	</body>
 </html>

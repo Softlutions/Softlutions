@@ -107,9 +107,8 @@ app.controller('eventWizardCtrl', ['$scope','$http','$upload','MarkerCreatorServ
 	
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
-	
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
-	
+
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	
 	$scope.onFileSelect = function($files) {
 	    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");

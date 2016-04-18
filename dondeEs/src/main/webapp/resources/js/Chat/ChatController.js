@@ -12,8 +12,8 @@ angular
 				[
 						'$scope',
 						'$http',
-						'$location','$interval','$timeout','$cookies',
-						function($scope, $http, $location, $interval, $timeout, $cookies) {
+						'$location','$interval','$timeout','$cookies', 'Upload',
+						function($scope, $http, $location, $interval, $timeout, $cookies, Upload) {
 							$scope.$parent.pageTitle = "Donde es - Chats";
 							$("#messageByChat").hide();
 							$scope.objMessage = {};
@@ -25,7 +25,7 @@ angular
 							$scope.isChat= false;
 							$scope.imageGroup = "resources/img/default_group.png"
 							$scope.imageProfile = "resources/img/default-profile.png";
-							$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+							$scope.loggedUser = $scope.$parent.getLoggedUser();
 							
 							$http(
 									{
@@ -37,7 +37,7 @@ angular
 										}
 									}).success(function(response) {
 								$scope.chats = response.chats;
-						
+								console.log($scope.chats);
 							})
 							
 							$scope.$on('$destroy', function() {

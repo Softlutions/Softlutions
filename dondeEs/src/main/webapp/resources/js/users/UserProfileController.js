@@ -8,7 +8,7 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 	}]).controller('UserProfileCtrl', ['$scope', '$http','$routeParams', '$cookies', '$upload',  function($scope, $http, $routeParams, $cookies, $upload) {
 		$scope.DEFAULT_USER_IMAGE = 'resources/img/default-profile.png';
 		$scope.$parent.pageTitle = "Donde es - Perfil de usuario";
-		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+		$scope.loggedUser = $scope.$parent.getLoggedUser();
 		$scope.img = {};
 
 		$http.get("rest/protected/users/getUserById/"+$routeParams.id).success(function(response){
@@ -75,6 +75,7 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 						});
 					}else{
 						$cookies.putObject("loggedUser", JSON.stringify($scope.loggedUser));
+						$scope.$parent.loadLoggedUser();
 						$scope.img = {};
 						$("#modal-formUpdate").modal("toggle");
 						toastr.success("Se ha modificado la información del usuario");

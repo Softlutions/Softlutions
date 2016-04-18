@@ -105,7 +105,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
 	
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	
 	if(!$scope.$parent.permissions.isAdmin){
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
