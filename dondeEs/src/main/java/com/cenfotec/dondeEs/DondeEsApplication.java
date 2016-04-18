@@ -24,8 +24,8 @@ import com.cenfotec.dondeEs.config.WSFilter;
 @EnableJpaRepositories("com.cenfotec.dondeEs.repositories")
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.cenfotec.dondeEs.ejb")
-//@ImportResource(value = { "config/spring-mvc.xml" })
-@ImportResource(value = { "/WEB-INF/classes/config/spring-mvc.xml" })
+@ImportResource(value = { "config/spring-mvc.xml" })
+//@ImportResource(value = { "/WEB-INF/classes/config/spring-mvc.xml" })
 public class DondeEsApplication{
 	
     public static void main(String[] args) {
