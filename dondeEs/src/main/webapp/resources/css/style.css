@@ -8571,8 +8571,11 @@ textarea {
 }
 
 .changePasswordForm{
-	margin-top: 16em !important;
-	border: 1px solid #2f4050 !important;
+	margin-top: 6em !important;
+}
+
+.changePasswordForm > form {
+	width: 50%;
 }
 
 .cancelButtonMargin {

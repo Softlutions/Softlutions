@@ -212,12 +212,10 @@
 										class="form-control">
 								</div>
 								<div>
-									<button
-										class="btn btn-primary pull-right btn-sm-normalize-size"
-										type="submit">
+									<button id="sendLaddaPasswordReset" data-style="slide-left" class="ladda-button btn btn-primary pull-right btn-sm-normalize-size" type="submit">
 										<strong>Cambiar contraseña</strong>
 									</button>
-									<button type="button" class="btn btn-sm btn-danger pull-right"
+									<button type="button" class="btn btn-sm btn-danger pull-right cancelButtonMargin"
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
@@ -291,12 +289,12 @@
 								<div class="form-group">
 									<label>Contraseña</label> <input type="password"
 										ng-model="newUser.password" required
-										placeholder="Mínimo 8 caracteres" class="form-control">
+										placeholder="Mínimo 8 caracteres" class="form-control" maxlength="16">
 								</div>
 								<div class="form-group">
 									<label>Confirmar contraseña</label> <input type="password"
 										ng-model="newUser.confirmPassword" required
-										placeholder="Mínimo 8 caracteres" class="form-control">
+										placeholder="Mínimo 8 caracteres" class="form-control" maxlength="16">
 								</div>
 								<div class="form-group">
 									<label>Teléfono</label> <input type="text"
@@ -316,7 +314,7 @@
 										<strong>Guardar</strong>
 									</button>
 									<button type="button"
-										class="btn btn-sm btn-danger pull-right" ng-click="hideCreateUserForm()">Cancelar</button>
+										class="btn btn-sm btn-danger pull-right cancelButtonMargin" ng-click="hideCreateUserForm()">Cancelar</button>
 								</div>
 							</form>
 						</div>
@@ -346,13 +344,13 @@
 								<div class="form-group">
 									<label>Contraseña</label> <input type="password"
 										ng-model="userCompany.password" ng-maxlength="255" required
-										placeholder="Mínimo 8 caracteres" class="form-control">
+										placeholder="Mínimo 8 caracteres" class="form-control" maxlength="16">
 								</div>
 								<div class="form-group">
 									<label>Confirmar contraseña</label> <input type="password"
 										required ng-model="confirmPassword"
 										placeholder="Confirme su contraseña" ng-maxlength="255"
-										class="form-control">
+										class="form-control" maxlength="16">
 								</div>
 								<div class="form-group">
 									<label>Teléfono</label> <input type="text"
@@ -384,7 +382,7 @@
 										type="submit">
 										<strong>Guardar</strong>
 									</button>
-									<button type="button" class="btn btn-sm btn-danger pull-right"
+									<button type="button" class="btn btn-sm btn-danger pull-right cancelButtonMargin"
 										data-dismiss="modal">Cancelar</button>
 								</div>
 							</form>
@@ -523,7 +521,7 @@
 							<div class="form-group">
 								<input name="password" autocomplete="on" type="password"
 									class="form-control" placeholder="Contraseña"
-									ng-model="user.password" required>
+									ng-model="user.password" required maxlength="16">
 							</div>
 
 							<div class="form-group">

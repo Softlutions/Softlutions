@@ -93,49 +93,45 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					};
 					
 					$cookies.putObject("loggedUser", JSON.stringify(responseUser));
-					/*var rememberMe = $('#chkRememberMe').is(':checked');
-					
-					if(rememberMe){
-						var session = {
-							email: responseUser.email,
-							pass: response.criptPass
-						};
 						
-						var expireDate = new Date();
-						expireDate.setDate(expireDate.getDate() + 7);
-						$cookies.putObject("lastSession", session);
-					}*/
-					
-					if($scope.tempRedirect.event != null){
-						if($scope.tempRedirect.public != null){
-							$("#modalLogin").modal("toggle");
-							setTimeout(function(){ window.location.href = "#/events"; }, 500);
-						}else{
-							var url = "#/viewEvent?view="+$scope.tempRedirect.event;
-							
-							if($scope.tempRedirect.assist != null)
-								url = url+"&assist";
-							
-							$("#modalLogin").modal("toggle");
-							setTimeout(function(){ window.location.href = url; }, 500);
-						}
+					if(response.state == 2){
+						toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+						$('#modalLogin').modal('toggle');
+						setTimeout(function(){
+							window.location.href="#/changePassword";
+						}, 500);
 					}else{
-						if($scope.loggedUser != null && $scope.loggedUser.state == 2){
-							window.location.href = "#/changePassword";
+						if($scope.tempRedirect.event != null){
+							if($scope.tempRedirect.public != null){
+								$("#modalLogin").modal("toggle");
+								setTimeout(function(){ window.location.href = "#/events"; }, 500);
+							}else{
+								var url = "#/viewEvent?view="+$scope.tempRedirect.event;
+								
+								if($scope.tempRedirect.assist != null)
+									url = url+"&assist";
+								
+								$("#modalLogin").modal("toggle");
+								setTimeout(function(){ window.location.href = url; }, 500);
+							}
 						}else{
-							switch (responseUser.role.roleId) {
-							case 1:
-								window.location.href = "/dondeEs/app#/users";
-								break;
-							case 2:
-								window.location.href = "/dondeEs/app#/serviceByUser";
-								break;
-							case 3:
-								window.location.href = "/dondeEs/app#/index";
-								break;
-							case 4:
-								window.location.reload();
-								break;
+							if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+								window.location.href = "#/changePassword";
+							}else{
+								switch (responseUser.role.roleId) {
+								case 1:
+									window.location.href = "/dondeEs/app#/users";
+									break;
+								case 2:
+									window.location.href = "/dondeEs/app#/serviceByUser";
+									break;
+								case 3:
+									window.location.href = "/dondeEs/app#/index";
+									break;
+								case 4:
+									window.location.reload();
+									break;
+								}
 							}
 						}
 					}
@@ -151,6 +147,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		//#region Users
 		$scope.forgotPassword = function() {
 			if($scope.user.email != null){
+				$("#sendLaddaPasswordReset").ladda().ladda("start");
+				
 				$http.post("rest/login/updatePassword", $scope.user)
 				.success(function(response){
 					if(response.code == 200){
@@ -159,9 +157,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					}else{
 						toastr.error('La contraseña no ha sido modficada');
 					}
+					
+					$("#sendLaddaPasswordReset").ladda().ladda("stop");
 				})
 				.error(function(response){
 					$("#errorMsj").css("visibility", "visible");
+					$("#sendLaddaPasswordReset").ladda().ladda("stop");
 				});
 			}else{
 				$("#errorMsj").css("visibility", "visible");

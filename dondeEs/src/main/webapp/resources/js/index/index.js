@@ -7,8 +7,8 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$filter',
-	                          			function($scope, $http, $cookies, $rootScope, $filter) {
+	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$filter', '$interval', 
+	                          			function($scope, $http, $cookies, $rootScope, $filter, $interval) {
 		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
 		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
 		
@@ -45,6 +45,14 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
                 setTimeout(function(){window.location.href = "/dondeEs/#/changePassword";}, 2000);
             }
         });
+		
+		/*$scope.sesionInterval = $interval(function(){
+			
+		}, 10000);
+		
+		$scope.$on("$destroy", function(){
+			$interval.cancel($scope.sesionInterval);
+		});*/
 		
 		$scope.goToProfile = function(){
 			window.location.href = "/dondeEs/app#/userProfile/"+$scope.loggedUser.userId;

@@ -175,7 +175,7 @@ public class SendEmailController {
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-	public void sendMessage(@RequestBody MessageRequest message) {
+	public BaseResponse sendMessage(@RequestBody MessageRequest message) {
 		BaseResponse response = new BaseResponse();
 		
 		try {
@@ -197,6 +197,8 @@ public class SendEmailController {
 			response.setErrorMessage(e.toString());
 			e.printStackTrace();
 		}
+		
+		return response;
 	}
 	
 	/**

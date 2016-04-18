@@ -217,7 +217,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.createAuction = function(){
 			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
 				toastr.error('Debe ingresar todos los datos!');
-			}else{			
+			}else{
+				$("#btnCreateAuction").ladda().ladda("start");
+				
 				var date = new Date($('#datetimepicker').data("DateTimePicker").date());
 				if($scope.globalEventId !=0){
 					var event = {
@@ -246,6 +248,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					$('#modalAuctionEventServices').modal('toggle');
 					$scope.tempAuction = {};
 					toastr.success('Subasta publicada!');
+					$("#btnCreateAuction").ladda().ladda("stop");
+					
 					if($scope.globalEventId!=0){
 						setTimeout(function(){$('#modalAuctionEventServices').modal('hide')}, 10)
 						$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
