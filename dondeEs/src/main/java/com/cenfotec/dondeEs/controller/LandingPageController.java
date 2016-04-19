@@ -640,7 +640,8 @@ public class LandingPageController {
 		
 		return resp;
 	}
-	@RequestMapping(value = "/insertCompanyImage", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "/insertUserImage", method = RequestMethod.POST)
 	public UserResponse insertUserImage(@RequestParam("email") String email, @RequestParam("file") MultipartFile file) {
 		UserResponse us = new UserResponse();
 		User u = userServiceInterface.findByEmail(email);

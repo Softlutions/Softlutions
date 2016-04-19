@@ -16,7 +16,7 @@ angular.module('landingPageModule.viewEvent', ['ngRoute', 'ngFileUpload', 'ngTab
 		$scope.loggedUser = JSON.parse(loginCookie);
 	
 	$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
-	$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
+	$scope.DEFAULT_EVENT_IMAGE = "resources/img/defaultEventImage.png";
 	$scope.commentPreviewFile = null;
 	$scope.eventParticipant = null;
 	$scope.commentFile = null;

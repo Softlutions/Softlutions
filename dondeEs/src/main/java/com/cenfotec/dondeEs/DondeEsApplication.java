@@ -14,6 +14,9 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.cenfotec.dondeEs.config.PassthroughFilter;
+import com.cenfotec.dondeEs.config.WSFilter;
+
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.cenfotec.dondeEs"})
 @EnableAutoConfiguration
@@ -22,10 +25,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.cenfotec.dondeEs.ejb")
 @ImportResource(value = { "config/spring-mvc.xml" })
-public class App{
+//@ImportResource(value = { "/WEB-INF/classes/config/spring-mvc.xml" })
+public class DondeEsApplication{
 	
     public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
+        SpringApplication.run(DondeEsApplication.class, args);
     }
     
 	@Bean	

@@ -3,15 +3,12 @@
 angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 	.config(['$routeProvider', function($routeProvider) {
 	  $routeProvider.when('/index', {
-	    templateUrl: 'resources/index/index.html',
 	    controller: 'IndexCtrl'
 	  });
 	}])
-	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$filter',
-	                          			function($scope, $http, $cookies, $rootScope, $filter) {
+	.controller('IndexCtrl', ['$scope', '$http', '$cookies', '$rootScope', '$filter', '$interval', 
+	                          			function($scope, $http, $cookies, $rootScope, $filter, $interval) {
 		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
-		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
-		
 		$scope.pageTitle = "Donde es";
 		$scope.permissions = {
 			comentarEventos: false,
@@ -30,14 +27,53 @@ angular.module('dondeEs.index', ['ngRoute', 'ngCookies'])
 			isInvitado: false
 		}
 		
-		if($scope.loggedUser == null)
-			window.location.href = "/dondeEs/#/landingPage";
+		$scope.loggedUser = null;
+		
+		$scope.loadLoggedUser = function(){
+			var userCookie = $cookies.getObject("loggedUser");
+			if(userCookie != null)
+				$scope.loggedUser = JSON.parse(userCookie);
+			
+			if($scope.loggedUser == null){
+				$cookies.remove("loggedUser");
+				window.location.href = "/dondeEs/#/landingPage";
+			}
+		}
+		
+		$scope.loadLoggedUser();
+		
+		$scope.getLoggedUser = function(){
+			if($scope.loggedUser == null){
+				$cookies.remove("loggedUser");
+				window.location.href = "/dondeEs/#/landingPage";
+			}
+			
+			return $scope.loggedUser;
+		}
 		
 		$scope.logout = function(){
 			$http.get("rest/login/logout").success(function(response){
 				$cookies.remove("loggedUser");
 				window.location.href = "/dondeEs/#/landingPage";
 			});
+		}
+		angular.element(document).ready(function(){
+            if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+                toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+                setTimeout(function(){window.location.href = "/dondeEs/#/changePassword";}, 2000);
+            }
+        });
+		
+		/*$scope.sesionInterval = $interval(function(){
+			
+		}, 10000);
+		
+		$scope.$on("$destroy", function(){
+			$interval.cancel($scope.sesionInterval);
+		});*/
+		
+		$scope.goToProfile = function(){
+			window.location.href = "/dondeEs/app#/userProfile/"+$scope.loggedUser.userId;
 		}
 		
 		$scope.returnLandingPage = function () {

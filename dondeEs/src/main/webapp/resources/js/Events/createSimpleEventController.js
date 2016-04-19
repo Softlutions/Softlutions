@@ -63,7 +63,7 @@ angular.module('dondeEs.simpleEvent', ['ngRoute', 'google-maps', 'mgo-angular-wi
         createByCurrentLocation: createByCurrentLocation
     };
 }).controller('SimpleEventCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorService', '$location', '$cookies', function($scope, $http, $upload, MarkerCreatorService, $location, $cookies) {
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	$scope.sectionTitle = $location.search().edit == null? "Crear evento":"Modificar evento";
 	$scope.$parent.pageTitle = "Donde es - "+$scope.sectionTitle;
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";

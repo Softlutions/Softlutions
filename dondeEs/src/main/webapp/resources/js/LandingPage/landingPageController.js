@@ -4,7 +4,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		$routeProvider.when('/landingPage', {
 			templateUrl : 'resources/landingPage/landingPage.html',
 			controller : 'LandingPageCtrl'
-		});
+		})
+		.otherwise({
+	        redirectTo: '/landingPage'
+	      });
 	}])
 	.controller('LandingPageCtrl', ['$scope', 'Upload', '$http', '$cookies', '$rootScope', '$location', '$filter', 
 	                                		function($scope, Upload, $http, $cookies, $rootScope, $location, $filter){
@@ -93,49 +96,48 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					};
 					
 					$cookies.putObject("loggedUser", JSON.stringify(responseUser));
-					/*var rememberMe = $('#chkRememberMe').is(':checked');
-					
-					if(rememberMe){
-						var session = {
-							email: responseUser.email,
-							pass: response.criptPass
-						};
 						
-						var expireDate = new Date();
-						expireDate.setDate(expireDate.getDate() + 7);
-						$cookies.putObject("lastSession", session);
-					}*/
-					
-					if($scope.tempRedirect.event != null){
-						if($scope.tempRedirect.public != null){
-							$("#modalLogin").modal("toggle");
-							setTimeout(function(){ window.location.href = "#/events"; }, 500);
-						}else{
-							var url = "#/viewEvent?view="+$scope.tempRedirect.event;
-							
-							if($scope.tempRedirect.assist != null)
-								url = url+"&assist";
-							
-							$("#modalLogin").modal("toggle");
-							setTimeout(function(){ window.location.href = url; }, 500);
-						}
+					if(response.state == 2){
+						toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+						$('#modalLogin').modal('toggle');
+						setTimeout(function(){
+							window.location.href="#/changePassword";
+						}, 500);
 					}else{
-						if($scope.loggedUser != null && $scope.loggedUser.state == 2){
-							window.location.href = "#/changePassword";
+						if($scope.tempRedirect.aucNotif != null && $scope.loggedUser.role.roleId == 2){
+							$("#modalLogin").modal("toggle");
+							checkUserAuctionRole();
+						}else if($scope.tempRedirect.event != null){
+							if($scope.tempRedirect.public != null){
+								$("#modalLogin").modal("toggle");
+								setTimeout(function(){ window.location.href = "#/events"; }, 500);
+							}else{
+								var url = "#/viewEvent?view="+$scope.tempRedirect.event;
+								
+								if($scope.tempRedirect.assist != null)
+									url = url+"&assist";
+								
+								$("#modalLogin").modal("toggle");
+								setTimeout(function(){ window.location.href = url; }, 500);
+							}
 						}else{
-							switch (responseUser.role.roleId) {
-							case 1:
-								window.location.href = "/dondeEs/app#/users";
-								break;
-							case 2:
-								window.location.href = "/dondeEs/app#/serviceByUser";
-								break;
-							case 3:
-								window.location.href = "/dondeEs/app#/index";
-								break;
-							case 4:
-								window.location.reload();
-								break;
+							if($scope.loggedUser != null && $scope.loggedUser.state == 2){
+								window.location.href = "#/changePassword";
+							}else{
+								switch (responseUser.role.roleId) {
+								case 1:
+									window.location.href = "/dondeEs/app#/users";
+									break;
+								case 2:
+									window.location.href = "/dondeEs/app#/serviceByUser";
+									break;
+								case 3:
+									window.location.href = "/dondeEs/app#/index";
+									break;
+								case 4:
+									window.location.reload();
+									break;
+								}
 							}
 						}
 					}
@@ -151,6 +153,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		//#region Users
 		$scope.forgotPassword = function() {
 			if($scope.user.email != null){
+				$("#sendLaddaPasswordReset").ladda().ladda("start");
+				
 				$http.post("rest/login/updatePassword", $scope.user)
 				.success(function(response){
 					if(response.code == 200){
@@ -159,9 +163,12 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					}else{
 						toastr.error('La contraseña no ha sido modficada');
 					}
+					
+					$("#sendLaddaPasswordReset").ladda().ladda("stop");
 				})
 				.error(function(response){
 					$("#errorMsj").css("visibility", "visible");
+					$("#sendLaddaPasswordReset").ladda().ladda("stop");
 				});
 			}else{
 				$("#errorMsj").css("visibility", "visible");
@@ -180,9 +187,14 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
+							$scope.user.email = $scope.newUser.email;
+							$scope.insertUserImage();
 							$("#createUserForm").modal('hide');
 							$("#createCompanyForm").modal('hide');
 							$scope.newUser={};
+							$scope.user={};
+							$scope.userPreviewFile = null;
+							$scope.userFile = null;
 							$scope.confirmPassword='';
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
@@ -191,16 +203,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					});
 				}
 			}else{
-				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
-
-		            }, 1300);
+				setTimeout(function() {
+	                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+	            }, 1300);
 			}
 		}
 		
@@ -215,37 +220,37 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			  if(file != null){
 				  var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
 					  if(regex.test(file.name.toLowerCase())){
-						  $scope.companyFile = file;
+						  $scope.userFile = file;
 						   
 						  var reader = new FileReader();
 							  reader.onload = function(e){
-							  $scope.companyPreviewFile = e.target.result;
+							  $scope.userPreviewFile = e.target.result;
 							  $scope.$apply();
 						  }
 						   
 						  reader.readAsDataURL(file);
 					 }else{
-					  $scope.companyPreviewFile = null;
-					  $scope.companyFile = null;
+					  $scope.userPreviewFile = null;
+					  $scope.userFile = null;
 					  toastr.error('Carga de la imagen', 'El archivo no tiene un formato válido.');
 				     }
 			  }
 		}
 		
-		$scope.insertCompanyImage = function(){
+		$scope.insertUserImage = function(){
 			Upload.upload({
-			 	url: 'rest/landing/insertCompanyImage',
+			 	url: 'rest/landing/insertUserImage',
 			 	data: {
 			 	"email": $scope.user.email,
-			 	"file": $scope.companyFile
+			 	"file": $scope.userFile
 			 	}
 			 	}).then(function(resp) {
 			 	if(resp.status == 200){
 			 		
 			 	}else{
-//			 		toastr.error('No se pudo publicar el comentario');
+
 			 	}
-			 	}, function(err) {  }, function(prog) {});
+			 }, function(err) {  }, function(prog) {});
 		}
 		
 		$scope.saveCompany = function(user) {
@@ -262,9 +267,11 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					$http.post("rest/login/create",userRequest) 
 					.success(function(response) {
 						if (response.code == 200) {
-							$scope.insertCompanyImage();
+							$scope.insertUserImage();
 							$("#createCompanyForm").modal('hide');
 							$scope.user={};
+							$scope.userPreviewFile = null;
+							$scope.userFile = null;
 							$scope.confirmPassword='';
 							toastr.success(response.codeMessage, 'Registro exitoso');
 						} else {
@@ -274,15 +281,8 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				}
 			}else{
 				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
-
-		            }, 1300);
+					 toastr.error('Todos los campos son requeridos. Verifique que no deje ninguno en blanco', 'Error');
+		         }, 1300);
 			}
 		}
 		// END SAVE COMPANY
@@ -372,6 +372,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		    		$scope.tempRedirect.event = $location.search().event;
 		    		$scope.tempRedirect.assist = $location.search().assist;
 		    		$scope.tempRedirect.public = $location.search().public;
+		    		$scope.tempRedirect.aucNotif = $location.search().tempAucNotif;
 		    		break;
 		    	case "events":
 		    		window.location.href = "#/landingPage#events";
@@ -416,6 +417,9 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$http({method: 'POST',url:'rest/contactMessage/sendMessage', data: dataRequest, headers: {'Content-Type': 'application/json'}})
 					.success(function(response) {
 				if (response.code == 200) {
+					$scope.name = "";
+					$scope.email = "";
+					$scope.message = "";
 			    	toastr.success('Contacto', 'El mensaje se envió con éxito.');
 				} else {
 			    	toastr.error('Contacto', 'Ocurrió un error al enviar el mensaje.');
@@ -432,6 +436,89 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				$scope.topEvents = response.eventList;
 			}
 		});
+		
+		// AUCTION INVITATION
+		
+		if($location.search().aucNotif != null){
+			if($scope.loggedUser != null){
+				checkUserAuctionRole();
+			}else{
+				window.location.href="#/landingPage?p=login&tempAucNotif="+$location.search().aucNotif;
+			}
+		}
+		
+		function checkUserAuctionRole(){
+			if($scope.loggedUser.role.roleId == 2){
+				var auctionId = $location.search().aucNotif || $location.search().tempAucNotif;
+				
+				$http.get("rest/protected/auction/getAuctionByEncrypId/"+auctionId).success(function(response){
+					if(response.code == 200){
+						$scope.auctionInvitation = response.auction;
+						$("#modalAuctionContractInvitation").modal("toggle");
+					}
+				});
+			}else{
+				window.location.href="#/landingPage";
+			}
+		}
+		
+		$scope.acceptAuctionInvitation = function(){
+			$("#btnAceptAuctionInvitation").ladda().ladda("start");
+			
+			$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.auctionInvitation.serviceCatalog.serviceCatalogId ).success(function(response) {
+				$scope.services = response.serviceLists;
+				$scope.auctionService = {};
+				$scope.auctionService.service = $scope.services[0];
+				$("#btnAceptAuctionInvitation").ladda().ladda("stop");
+				$("#modalAuctionContractInvitation").modal("toggle");
+				$("#firstAuctionTime").modal("toggle");
+			}).error(function(){
+				$("#btnAceptAuctionInvitation").ladda().ladda("stop");
+				toastr.error("Error inesperado al procesar la solicitud", 'Error');
+			});
+		}
+		
+		$scope.noAcceptAuctionInvitation = function(){
+			$("#modalAuctionContractInvitation").modal("toggle");
+			setTimeout(function(){ window.location.href="#/landingPage"; }, 500);
+		}
+		
+		$scope.validationError = function(){
+			toastr.warning('Algunos campos no cumplen con los requisitos');
+		}
+		
+		$scope.formatPrice = function(model){
+			if(model == null || model.lenght == 0) model = 0;
+			model = model.replace(".00", "");
+			model = model.replace("₡", "");
+			model = model.replace(/,/g, "");
+			var formatPrice = $filter('currency')(model, '₡', 2);
+			$scope.auctionService.price = formatPrice;
+		}
+		
+		$scope.joinAuction = function(auctionService){
+			$("#btnCreateAuctionParticipant").ladda().ladda("start");
+			
+			var price = auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
+			var newAuctionService = {
+					acept : 0,
+					date : new Date(),
+					description : auctionService.description,
+					price : price,
+					auction : $scope.auctionInvitation,
+					service : auctionService.service
+			};
+			
+			$http({method: 'POST',url:'rest/protected/auctionService/createAuctionService', data:newAuctionService, headers: {'Content-Type': 'application/json'}}).success(function(response) {
+				$("#firstAuctionTime").modal("toggle");
+				toastr.success('Te has incorporado a la subasta!');
+				
+				setTimeout(function(){
+					$("#btnCreateAuctionParticipant").ladda().ladda("start");
+					window.location.href="#/landingPage";
+				}, 500);
+			});
+		};
 		
 		//#region ASNWER CONTRACT
 		

@@ -111,15 +111,15 @@ public class SendEmailController {
 	 * @param event evento al cual se crea la subasta
 	 * @version 1.0
 	 */
-	public void sendAuctionInvitationEmail(Auction auction, String to, Event event) {
+	public void sendAuctionInvitationEmail(Auction auction, String to) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(to);
 		
-		String subject = "Invitación a "+auction.getName();
+		String subject = "Invitación a participar en "+auction.getName();
 		mailMessage.setSubject(subject);
 		
-		String msj = APP_DOMAIN+"/dondeEs/app#/auctions/?id="
-				+ AES.base64encode(String.valueOf(event.getEventId()));
+		String msj = APP_DOMAIN+"/dondeEs/#/landingPage?aucNotif="
+				+ AES.base64encode(String.valueOf(auction.getAuctionId()));
 		mailMessage.setText(msj);
 		
 		try{
@@ -175,7 +175,7 @@ public class SendEmailController {
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-	public void sendMessage(@RequestBody MessageRequest message) {
+	public BaseResponse sendMessage(@RequestBody MessageRequest message) {
 		BaseResponse response = new BaseResponse();
 		
 		try {
@@ -197,6 +197,8 @@ public class SendEmailController {
 			response.setErrorMessage(e.toString());
 			e.printStackTrace();
 		}
+		
+		return response;
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package com.cenfotec.dondeEs;
+package com.cenfotec.dondeEs.config;
 
 import javax.servlet.ServletContext;
 
@@ -12,6 +12,7 @@ import com.mangofactory.swagger.models.dto.ApiInfo;
 import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+
 
 @Configuration
 @EnableSwagger
@@ -28,19 +29,19 @@ public class SwaggerConfig implements ServletContextAware{
 	// Don't forget the @Bean annotation
 	public SwaggerSpringMvcPlugin customImplementation() {
 		RelativeSwaggerPathProvider relativeSwaggerPathProvider = new RelativeSwaggerPathProvider(servletContext);
-        relativeSwaggerPathProvider.setApiResourcePrefix("dondeEs");
+        relativeSwaggerPathProvider.setApiResourcePrefix("cenfoteca");
         return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
         .pathProvider(relativeSwaggerPathProvider);
         
 	}
 	private ApiInfo apiInfo() {
-		ApiInfo apiInfo = new ApiInfo("DondeEs API", "API for DondeEs",
-				"DondeEs API terms of service", "DondeEs email",
-				"DondeEs API Licence Type", "DondeEs API License URL");
+		ApiInfo apiInfo = new ApiInfo("Cenfoteca API", "API for Cenfoteca",
+				"Cenfoteca API terms of service", "Cenfoteca email",
+				"Cenfoteca API Licence Type", "Cenfoteca API License URL");
 		return apiInfo;
 	}
 	
-
+	@Override
 	 public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
     }

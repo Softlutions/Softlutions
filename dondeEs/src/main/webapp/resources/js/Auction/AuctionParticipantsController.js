@@ -10,7 +10,7 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 }])
 
 .controller('auctionParticipantsCtrl', ['$scope','$http','$routeParams','ngTableParams','$filter','$interval','$cookies',function($scope,$http,$routeParams,ngTableParams,$filter,$interval,$cookies){
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	$scope.$parent.pageTitle = "Donde es - Participantes de subasta";
 	$scope.selectedAuction = {};
 	$scope.loggedUserServiceCatalogs = [];
@@ -20,7 +20,7 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 	var params = {
 		page: 1,	// PAGINA INICIAL
 		count: 10, 	// CANTIDAD DE ITEMS POR PAGINA
-		sorting: {date: "desc"}
+		sorting: {price: "asc"}
 	};
 	
 	var settings = {
@@ -39,25 +39,25 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 	
 	angular.element(document).ready(function () {
 		$http.get('rest/protected/auction/getAuctionById/'+$routeParams.id).success(function(response) {
-			$scope.selectedAuction = response.auction;	
-		});
-		
-		$http.get('rest/protected/service/getServiceCatalogIdByProvider/'+$scope.loggedUser.userId).success(function(response) {
-			if(response.serviceLists.length != 0){
-				var x;
-				for(x = 0 ; x < response.serviceLists.length ; x++){
-					$scope.loggedUserServiceCatalogs.push(response.serviceLists[x].serviceCatalog.serviceCatalogId);
-				}
-			}
+			$scope.selectedAuction = response.auction;
 			
-			if($scope.selectedAuction.serviceCatalog != null && $scope.loggedUser.role.roleId == 2){
-				if($scope.loggedUserServiceCatalogs.indexOf($scope.selectedAuction.serviceCatalog.serviceCatalogId)>=0)
-					$("#btnParticipate").removeAttr("disabled");
-				else{
-					$("#btnParticipate").attr("disabled","true");
-					toastr.error("El botón participar está deshabilitado porque el usuario no posee ningún servicio del requerido en la subasta");
+			$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/'+$scope.loggedUser.userId+'/'+$scope.selectedAuction.serviceCatalog.serviceCatalogId).success(function(response) {
+				if(response.serviceLists.length != 0){
+					var x;
+					for(x = 0 ; x < response.serviceLists.length ; x++){
+						$scope.loggedUserServiceCatalogs.push(response.serviceLists[x].serviceCatalog.serviceCatalogId);
+					}
+				}else{
+					if($scope.selectedAuction.serviceCatalog != null && $scope.loggedUser.role.roleId == 2){
+						if($scope.loggedUserServiceCatalogs.indexOf($scope.selectedAuction.serviceCatalog.serviceCatalogId)>=0)
+							$("#btnParticipate").removeAttr("disabled");
+						else{
+							$("#btnParticipate").attr("disabled","true");
+							toastr.error("El botón participar está deshabilitado porque el usuario no posee ningún servicio del requerido en la subasta");
+						}
+					}
 				}
-			}
+			});
 		});
 		
 		$scope.refreshInterval = $interval(function(){
@@ -101,7 +101,7 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 	$scope.joinAuction = function(){	
 		var price = $scope.auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
 		var newAuctionService = {
-				acept : 1,
+				acept : 0,
 				date : new Date(),
 				description : $scope.auctionService.description,
 				price : price,

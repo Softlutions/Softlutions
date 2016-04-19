@@ -81,6 +81,13 @@ public class ServiceController {
 		return response;
 	}
 	
+	/**
+	 * ya no se usa en AuctionParticipantsController.js
+	 * @see {@link #getAllServiceByUserAndServiceCatalog(int userId, int serviceCatalogId)}
+	 * @deprecated
+	 * @param userId del usuario
+	 * @return service catalogs by userId
+	 */
 	@RequestMapping(value ="/getServiceCatalogIdByProvider/{userId}", method = RequestMethod.GET)
 	public ServiceResponse getServiceCatalogIdByProvider(@PathVariable("userId") int userId){
 		ServiceResponse response = new ServiceResponse();

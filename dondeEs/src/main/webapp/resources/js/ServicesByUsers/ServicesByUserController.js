@@ -11,7 +11,7 @@ angular
 		$scope.$parent.pageTitle = "Donde es - Mis servicios";
 		$scope.users = [];
 		$scope.services = [];
-		$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+		$scope.loggedUser = $scope.$parent.getLoggedUser();
 		$scope.requestObject = {};
 		$scope.objService={};
 		$scope.creating = true;
@@ -87,7 +87,7 @@ angular
 					name : $scope.objService.name,
 					description: $scope.objService.description,
 					state: $scope.objService.state,
-					user:$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"))
+					user:$scope.loggedUser
 			}		
 			if($scope.objService.name != null && $scope.objService.description != null){
 				$("#modal-form").modal('hide');
@@ -98,15 +98,8 @@ angular
 				});
 			}else{
 				 setTimeout(function() {					
-		                toastr.options = {
-		                    closeButton: true,
-		                    progressBar: true,
-		                    showMethod: 'slideDown',
-		                    timeOut: 4000
-		                };
-		                toastr.error('Todos los campos son requeridos.', 'Error');
-
-		            }, 1300);
+					 toastr.error('Todos los campos son requeridos.', 'Error');
+				 }, 1300);
 			}
 		};
 		
@@ -126,7 +119,7 @@ angular
 					name : $scope.objService.name,
 					description: $scope.objService.description,
 					state: $scope.objService.state,
-					user:$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"))
+					user:$scope.loggedUser
 			}
 			$http.put('rest/protected/service/updateService',dataCreate).success(function(response) {
 				var serviceIndex = $scope.services.map(function (x){return x.serviceId}).indexOf(dataCreate.serviceId);

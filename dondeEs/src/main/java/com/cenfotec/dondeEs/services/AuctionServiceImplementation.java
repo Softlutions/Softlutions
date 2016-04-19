@@ -62,7 +62,7 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 			ServiceContact serviceContact = new ServiceContact();
 			serviceContact.setEvent(auctionService.getAuction().getEvent());
 			serviceContact.setService(auctionService.getService());
-			serviceContact.setState((byte) 1);
+			serviceContact.setState((byte) 0);
 			serviceContactRepository.save(serviceContact);
 			
 			sendEmailController.sendEmailContractNotification(contractNotification);
@@ -72,35 +72,36 @@ public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 	}
 	
 	@Override
-	 	@Transactional
-	 	public List<AuctionServicePOJO> getAllAuctionServicesByAuctionId(int AuctionId) {
-	 		List<AuctionService> auctionServices = auctionServiceRepository.findAllByAuctionAuctionId(AuctionId);	
-	 		List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();
-	 		auctionServices.stream().forEach(e -> {
-	 			AuctionServicePOJO auctionServicePOJO = new AuctionServicePOJO();
-	 			auctionServicePOJO.setAuctionServicesId(e.getAuctionServicesId());
-	 			auctionServicePOJO.setDate(e.getDate());
-	 			auctionServicePOJO.setAcept(e.getAcept());
-	 			auctionServicePOJO.setDescription(e.getDescription());
-	 			auctionServicePOJO.setPrice(e.getPrice());
-	 			auctionServicePOJO.setDate(e.getDate());
-	 			
-	 			ServicePOJO servicePOJO = new ServicePOJO();
-	 			servicePOJO.setServiceId(e.getService().getServiceId());
-	 			servicePOJO.setName(e.getService().getName());
-	 			servicePOJO.setDescription(e.getService().getDescription());
-	 			servicePOJO.setState(e.getService().getState());
-	 			auctionServicePOJO.setService(servicePOJO);
-	 			
-	 			AuctionPOJO auctionPOJO = new AuctionPOJO();
-	 			auctionPOJO.setAuctionId(e.getAuction().getAuctionId());
-	 			auctionPOJO.setState(e.getAuction().getState());
-	 			auctionServicePOJO.setAuction(auctionPOJO);
-	 			
-	 			auctionServicesPOJO.add(auctionServicePOJO);
-	 			
-	 		});
-	 		return auctionServicesPOJO;
-	 	}
+ 	@Transactional
+ 	public List<AuctionServicePOJO> getAllAuctionServicesByAuctionId(int AuctionId) {
+ 		List<AuctionService> auctionServices = auctionServiceRepository.findAllByAuctionAuctionId(AuctionId);	
+ 		List<AuctionServicePOJO> auctionServicesPOJO = new ArrayList<AuctionServicePOJO>();
+ 		
+ 		auctionServices.stream().forEach(e -> {
+ 			AuctionServicePOJO auctionServicePOJO = new AuctionServicePOJO();
+ 			auctionServicePOJO.setAuctionServicesId(e.getAuctionServicesId());
+ 			auctionServicePOJO.setDate(e.getDate());
+ 			auctionServicePOJO.setAcept(e.getAcept());
+ 			auctionServicePOJO.setDescription(e.getDescription());
+ 			auctionServicePOJO.setPrice(e.getPrice());
+ 			auctionServicePOJO.setDate(e.getDate());
+ 			
+ 			ServicePOJO servicePOJO = new ServicePOJO();
+ 			servicePOJO.setServiceId(e.getService().getServiceId());
+ 			servicePOJO.setName(e.getService().getName());
+ 			servicePOJO.setDescription(e.getService().getDescription());
+ 			servicePOJO.setState(e.getService().getState());
+ 			auctionServicePOJO.setService(servicePOJO);
+ 			
+ 			AuctionPOJO auctionPOJO = new AuctionPOJO();
+ 			auctionPOJO.setAuctionId(e.getAuction().getAuctionId());
+ 			auctionPOJO.setState(e.getAuction().getState());
+ 			auctionServicePOJO.setAuction(auctionPOJO);
+ 			
+ 			auctionServicesPOJO.add(auctionServicePOJO);
+ 		});
+ 		
+ 		return auctionServicesPOJO;
+ 	}
 	
 }

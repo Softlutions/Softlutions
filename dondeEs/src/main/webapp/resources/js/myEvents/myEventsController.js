@@ -105,7 +105,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.eventType = 0;
 	$scope.globalEventId = 0;
 	
-	$scope.loggedUser = JSON.parse($cookies.getObject("loggedUser"));
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	
 	if(!$scope.$parent.permissions.isAdmin){
 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
@@ -145,12 +145,13 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 		});
 	}
 	
-	$scope.validateEvent = function(eventDate,eventState,index){
-		if(eventState!=0){
+	$scope.validateEvent = function(eventDate, eventState, index){
+		if(eventState == 1){
 			var date = new Date();
 			var validDate = new Date(eventDate);
-			validDate.setHours(validDate.getHours()-$scope.HOURS_BEFORE_EVENT);
-			if(date<validDate)
+			validDate.setHours(validDate.getHours() - $scope.HOURS_BEFORE_EVENT);
+			
+			if(date < validDate)
 				$("#auctionService"+index).show();
 			else
 				$("#auctionService"+index).hide();
@@ -216,7 +217,9 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.createAuction = function(){
 			if($scope.tempAuction.name == null || $scope.tempAuction.description == null || $scope.tempAuction.selected == null){
 				toastr.error('Debe ingresar todos los datos!');
-			}else{			
+			}else{
+				$("#btnCreateAuction").ladda().ladda("start");
+				
 				var date = new Date($('#datetimepicker').data("DateTimePicker").date());
 				if($scope.globalEventId !=0){
 					var event = {
@@ -245,6 +248,8 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 					$('#modalAuctionEventServices').modal('toggle');
 					$scope.tempAuction = {};
 					toastr.success('Subasta publicada!');
+					$("#btnCreateAuction").ladda().ladda("stop");
+					
 					if($scope.globalEventId!=0){
 						setTimeout(function(){$('#modalAuctionEventServices').modal('hide')}, 10)
 						$http.get('rest/protected/auction/getAllAuctionByEvent/'+$scope.globalEventId).success(function(response) {
@@ -264,10 +269,10 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			}
 		}
 	
-	$scope.prepublishEvent = function(){
-		setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 500);
+	$scope.prepublishEvent = function(selectedEvent){
 		$http.get("rest/protected/chat/saveChatEventId/" + $scope.globalEventId).success(function(response){
 			if (response.code == 200) {
+				setTimeout(function(){$('#modalAuctionsByEvent').modal('hide')}, 500);
 				toastr.success('Nuevo chat administrativo', 'Visita la pagina de chats!');
 				$scope.globalEventId = 0;
 			}
@@ -438,9 +443,6 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	 		if (response.code == 200) {
 	 			window.location.href = "/dondeEs/app#/#";
 			} else if (response.errorMessage == "notification cancel event error") {
-		    	toastr.options = {
-	                    timeOut: 7000
-		        };
 		    	toastr.warning('Cancelación del evento', 'Ocurrió un error al notificar a los involucrados sin embargo el evento se canceló con éxito.');
 		 		$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
 			 		if (response.code == 200) {

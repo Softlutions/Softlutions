@@ -1,6 +1,8 @@
 package com.cenfotec.dondeEs.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -57,7 +59,14 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public List<EventPOJO> getAllEventPublish() {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		eventRepository.findAllEventPublish((byte) 3, (byte) 0).stream().forEach(e -> {
+		
+		Date date = new Date();		
+	    Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR, 3); 
+	    date = calendar.getTime();      
+		
+		eventRepository.findAllEventPublish((byte) 3, (byte) 0, date).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
