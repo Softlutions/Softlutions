@@ -25,12 +25,6 @@ public class ServiceContactController {
 	 * 
 	 * @return response Respuesta del servidor de la petición incluyendo la lista de contratos de servicio.
 	 * @version 1.0k
-	 * 0\
-	 * 
-	 * 87
-	 * '
-	 * \
-	 * ]0
 	 */
 
 	@RequestMapping(value ="/getAllServiceContact/{idEvent}", method = RequestMethod.GET)

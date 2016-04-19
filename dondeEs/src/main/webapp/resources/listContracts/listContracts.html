@@ -18,7 +18,7 @@
 						<tbody ng-repeat="s in $data track by $index">
 							<tr>
 								<td sortable="'name'">{{s.service.name}}</td>
-								<td>{{s.state == 0? "Pendiente":(s.state == 1? "Concretado":"Cancelado")}}</td>
+								<td>{{s.state == 0? "Pendiente":(s.state == 2? "Concretado":"Cancelado")}}</td>
 								<td>{{s.comment}}</td>
 								
 								<td ng-if="s.state != 2">

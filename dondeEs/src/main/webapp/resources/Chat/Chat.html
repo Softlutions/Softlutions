@@ -38,7 +38,7 @@
 							ng-class="(message.user.userId == loggedUser.userId) ? 'chat-message left': 'chat-message right'"
 							ng-repeat="message in messages">
 							<img class="message-avatar"
-								src="{{chat.user.image || imageProfile}}" alt="">
+								ng-src="{{message.user.image || imageProfile}}" alt="">
 
 							<div class="message">
 								<a class="message-author"> {{message.user.name}} </a> <span
@@ -86,30 +86,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

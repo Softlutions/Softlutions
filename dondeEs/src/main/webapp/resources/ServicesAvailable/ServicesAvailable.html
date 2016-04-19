@@ -36,8 +36,9 @@
 							<td>{{service.user.name}} {{service.user.lastName1}}
 								{{service.user.lastName2}}</td>
 							<td>
-								<button class="btn btn-primary btn-xs"
-									ng-click="contactProvider(service)">Contactar</button>
+								<button id="btnService{{service.serviceId}}" data-style="slide-left" class="ladda-button btn btn-primary btn-xs"
+									ng-click="contactProvider(service)" ng-show="!hiredService(service)">Contactar</button>
+								<label ng-hide="!hiredService(service)" class="label">Contratado</label>
 							</td>
 						</tr>
 					</tbody>

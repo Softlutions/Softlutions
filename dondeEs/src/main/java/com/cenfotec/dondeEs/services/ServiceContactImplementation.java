@@ -46,6 +46,8 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 			serviceContactPOJO.setServiceContractId(ta.getServiceContractId());
 			ServicePOJO servicePojo = new ServicePOJO();
 			servicePojo.setName(ta.getService().getName());
+			servicePojo.setState(ta.getService().getState());
+			servicePojo.setServiceId(ta.getService().getServiceId());
 			serviceContactPOJO.setService(servicePojo);
 			listPojo.add(serviceContactPOJO);
 		});
@@ -84,11 +86,10 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 	@Transactional
 	public Boolean contractService(int pservice, int pevent){		
 		com.cenfotec.dondeEs.ejb.Service service = serviceRepository.findOne(pservice);
+		
 		Event event = eventRepository.findOne(pevent);
 		ContractNotification contractNotification = new ContractNotification();
 		ServiceContact serviceContact = contactRepository.findByServiceServiceIdAndEventEventId(pservice, pevent);
-		
-		
 		
 		EventPOJO eventPOJO = new EventPOJO();
 		eventPOJO.setEventId(event.getEventId());
@@ -101,6 +102,7 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		UserPOJO userPOJO = new UserPOJO();
 		userPOJO.setUserId(service.getUser().getUserId());
 		servicePOJO.setUser(userPOJO);
+		
 		Boolean isValid;
 		if(serviceContact == null){
 			isValid = true;
@@ -113,6 +115,7 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		}else{
 			isValid = false;
 		}
+		
 		return isValid;
 	}
 

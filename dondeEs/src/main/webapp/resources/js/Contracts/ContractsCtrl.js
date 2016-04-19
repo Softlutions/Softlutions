@@ -17,29 +17,6 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
 				
-				/*for(var i=0;i<10;i++){
-					var original = $scope.serviceContacts[i%$scope.serviceContacts.length];
-					var temp = {};
-					temp.service = {};
-					
-					temp.serviceContractId = original.serviceContractId;
-					temp.service.name = original.service.name;
-					temp.state = original.state;
-					temp.comment = original.comment;
-					
-					if(temp.serviceContractId % 2 == 0){
-						temp.state = 1;
-					}else{
-						if(Math.random() <= 0.5){
-							temp.state = 0;
-						}else{
-							temp.state = 2;
-						}
-					}
-					
-					$scope.serviceContacts.push(temp);
-				}*/
-				
 				var params = {
 					page: 1,
 					count: 8,
@@ -94,10 +71,10 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 				if(value.state == 0)
 					contractsLeft++;
 					
-				if(value.state == 1)
+				if(value.state == 2)
 					contractsOk++;
 				
-				if(value.state == 2)
+				if(value.state == 1)
 					contractsCanceled++;
 			});
 			

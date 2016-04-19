@@ -20,7 +20,7 @@ angular.module('dondeEs.servicesAuctionEvent', ['ngRoute', 'ngTable'])
 	var params = {
 		page: 1,	
 		count: 10,
-		sorting: {name: "asc"}
+		sorting: {price: "asc"}
 	};
 		
 	var settings = {
@@ -72,7 +72,13 @@ angular.module('dondeEs.servicesAuctionEvent', ['ngRoute', 'ngTable'])
 	
 	$scope.contract = function(auctionService){
 		$scope.pauseInterval = true;
-		$("#btnAucServ"+auctionService.auctionServicesId).ladda().ladda("start");
+		
+		$scope.serviceList.forEach(function(s){
+			if(auctionService.auctionServicesId == s.auctionServicesId)
+				$("#btnAucServ"+auctionService.auctionServicesId).ladda().ladda("start");
+			else
+				$("#btnAucServ"+s.auctionServicesId).addClass("hidden");
+		});
 		
 		$http.get("rest/protected/auctionService/contract/"+auctionService.auctionServicesId).success(function(response){
 			if(response.code == 200){

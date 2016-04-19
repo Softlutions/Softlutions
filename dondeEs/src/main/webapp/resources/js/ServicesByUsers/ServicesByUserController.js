@@ -81,7 +81,7 @@ angular
 	    	$scope.creating = true;
 			$scope.onError = false;
 		    $scope.objService.state = 1
-		 									    
+		    
 			dataCreate={
 					serviceCatalog :$scope.requestObject,
 					name : $scope.objService.name,
@@ -90,11 +90,15 @@ angular
 					user:$scope.loggedUser
 			}		
 			if($scope.objService.name != null && $scope.objService.description != null){
-				$("#modal-form").modal('hide');
 				$http({method: 'POST',url:'rest/protected/service/createService', data:dataCreate, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-					$scope.services.push(dataCreate);
-				    toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
-				    $scope.servicesTable.reload();
+					if(response.code == 200){
+						$("#modal-form").modal('hide');
+						$scope.services.push(dataCreate);
+					    toastr.success('Su servicio se ha registrado en el sistema', 'Registro exitoso');
+					    $scope.servicesTable.reload();
+					}else{
+						toastr.error('Ya hay un servicio con el mismo nombre', 'Servicio repetido');
+					}
 				});
 			}else{
 				 setTimeout(function() {					
@@ -109,18 +113,20 @@ angular
 			$scope.objService.serviceId = service.serviceId;
 			$scope.objService.name = service.name;
 			$scope.objService.description = service.description;
+			$scope.objService.state = service.state;
 			$("#updateSelect").val(service.state);
 		};
 		
 		$scope.updateService = function(event,index){
 			dataCreate={
-					serviceId : $scope.objService.serviceId,
-					serviceCatalog :$scope.requestObject,
-					name : $scope.objService.name,
-					description: $scope.objService.description,
-					state: $scope.objService.state,
-					user:$scope.loggedUser
+				serviceId : $scope.objService.serviceId,
+				serviceCatalog :$scope.requestObject,
+				name : $scope.objService.name,
+				description: $scope.objService.description,
+				state: $scope.objService.state,
+				user:$scope.loggedUser
 			}
+			
 			$http.put('rest/protected/service/updateService',dataCreate).success(function(response) {
 				var serviceIndex = $scope.services.map(function (x){return x.serviceId}).indexOf(dataCreate.serviceId);
 				$scope.services[serviceIndex] = dataCreate;

@@ -65,21 +65,20 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 						$upload.upload({url:'rest/protected/users/uploadUserImage', data:{"userId": $scope.loggedUser.userId}, file: $scope.img.file})
 						.progress(function(evt) {})
 						.success(function(response) {
-							$scope.loggedUser.image = $scope.img.thumbnail;
-							$scope.img = {};
+							$scope.user.image = response.codeMessage;
+							$scope.loggedUser.image = response.codeMessage;
+							$scope.$parent.loggedUser.image = response.codeMessage;
+							$cookies.putObject("loggedUser", JSON.stringify($scope.loggedUser));
 							$("#modal-formUpdate").modal("toggle");
 							toastr.success("Se ha modificado la información del usuario");
-						})
-						.error(function(msj) {
-							$scope.img = {};
 						});
 					}else{
-						$cookies.putObject("loggedUser", JSON.stringify($scope.loggedUser));
-						$scope.$parent.loadLoggedUser();
-						$scope.img = {};
 						$("#modal-formUpdate").modal("toggle");
 						toastr.success("Se ha modificado la información del usuario");
+						$cookies.putObject("loggedUser", JSON.stringify($scope.loggedUser));
 					}
+					
+					$scope.img = {};
 				}else{
 					toastr.error("No se ha modificado la información del usuario");
 				}

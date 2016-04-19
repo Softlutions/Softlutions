@@ -7,7 +7,7 @@
 		<div class="ibox-title">
 			<h5>Subastas del evento {{event.name}}</h5>
 			
-			<div class="pull-right">
+			<div class="pull-right" ng-show="validEventDate">
 				<a class="btn btn-primary btn-xs pull-right" 
 					ng-show="event.state == 1" ng-if="!$parent.permissions.isAdmin"
 					ng-click="catalogsList(); auctionEventServices()" 

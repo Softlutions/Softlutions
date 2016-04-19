@@ -13,18 +13,23 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 			$scope.isCatalog=false;
 			$scope.requestObject={};
 			$scope.currentCatalogId;
+			$scope.hiredServices = [];
+			
 			$scope.init = function() {
-		    	
 		    	$http.get('rest/protected/serviceCatalog/getAllCatalogService')
 				.success(function(response) {
-
 					$scope.serviceCatalogList = response.serviceCatalogList;
 					$scope.requestObject.serviceCatalogId = $scope.serviceCatalogList[0].serviceCatalogId;
 					$scope.requestObject.name = $scope.serviceCatalogList[0].name;
 					$scope.currentCatalogId = $scope.requestObject.serviceCatalogId;
-					
 				});
 		    	
+		    	$http.get('rest/protected/serviceContact/getAllServiceContact/' + $routeParams.id)
+				.success(function(response) {
+					response.listContracts.forEach(function(s){
+						$scope.hiredServices.push(s.service);
+					});
+				});
 		    };
 		    
 		    $scope.init();
@@ -34,7 +39,8 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 				
 		    	$http.get('rest/protected/service/getServiceByCatalog/' + pcurrentCatalogId)
 				.success(function(response) {
-													$scope.services = response.serviceLists;
+					$scope.services = response.serviceLists;
+					
 					// https://github.com/esvit/ng-table/wiki/Configuring-your-table-with-ngTableParams
 					var params = {
 						page: 1,	// PAGINA INICIAL
@@ -61,16 +67,37 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		    }
 		    
 		    $scope.contactProvider= function(pservice){
-		    
+		    	$("#btnService"+pservice.serviceId).ladda().ladda("start");
+		    	
 		    	$http.get("rest/protected/serviceContact/contractService/"+pservice.serviceId+"/"+ $routeParams.id).success(function(response){
 					if(response.code == 200){
 						toastr.success("Servicio "+pservice.name+" contratado!");
 					}else if(response.code == 400){
 						toastr.warning("El servicio ya fue contratado");
 					}
+					
+					if(!$scope.hiredService(pservice))
+						$scope.hiredServices.push(pservice);
+					
+			    	$("#btnService"+pservice.serviceId).ladda().ladda("stop");
 				}).error(function(response){
 					toastr.error("Error", "No se pudo contratar el servicio");
+			    	$("#btnService"+pservice.serviceId).ladda().ladda("stop");
 				});
+		    }
+		    
+		    $scope.hiredService = function(service){
+		    	var found = false;
+		    	var i = 0;
+		    	
+		    	while(i < $scope.hiredServices.length && !found){
+		    		if($scope.hiredServices[i].serviceId == service.serviceId)
+		    			found = true;
+		    		
+		    		i++;
+		    	}
+		    	
+		    	return found;
 		    }
 		    
 		    $scope.getServiceByCatalog = function(selectedCatalog){

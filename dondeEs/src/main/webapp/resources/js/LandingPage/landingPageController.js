@@ -104,7 +104,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							window.location.href="#/changePassword";
 						}, 500);
 					}else{
-						if($scope.tempRedirect.aucNotif != null && $scope.loggedUser.role.roleId == 2){
+						if($scope.tempRedirect.aucNotif != null && $scope.loggedUser != null && $scope.loggedUser.role.roleId == 2){
 							$("#modalLogin").modal("toggle");
 							checkUserAuctionRole();
 						}else if($scope.tempRedirect.event != null){
