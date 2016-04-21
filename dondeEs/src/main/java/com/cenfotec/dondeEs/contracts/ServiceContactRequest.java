@@ -4,6 +4,7 @@ public class ServiceContactRequest {
 
 	String eventId;
 	String serviceId;
+	int loggedUserId;
 	byte state;
 
 	public String getEventId() {
@@ -20,6 +21,14 @@ public class ServiceContactRequest {
 
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
+	}
+
+	public int getLoggedUserId() {
+		return loggedUserId;
+	}
+
+	public void setLoggedUserId(int loggedUserId) {
+		this.loggedUserId = loggedUserId;
 	}
 
 	public byte getState() {

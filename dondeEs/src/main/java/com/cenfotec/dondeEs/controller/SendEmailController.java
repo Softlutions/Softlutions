@@ -57,7 +57,7 @@ public class SendEmailController {
 	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		subject = "Invitacion a un evento";
+		subject = "Invitación a un evento";
 		try {
 
 			// To get the array of addresses
@@ -95,8 +95,12 @@ public class SendEmailController {
 				mailMessage.setTo(email);
 				mailMessage.setText(text);
 				mailMessage.setSubject(subject);
-				mailSender.send(mailMessage);
-
+				
+				new Thread("sendEmailInvitation"){
+					public void run(){
+						mailSender.send(mailMessage);
+					}
+				}.start();
 			}
 
 		} catch (Exception ae) {
@@ -141,7 +145,7 @@ public class SendEmailController {
 		BaseResponse response = new BaseResponse(); 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		
-		subject = "Has sido contratado por un promotor";
+		subject = "Fue seleccionado por un promotor";
 		try {
 			int eventId = contractNotification.getEvent().getEventId();
 			int serviceId = contractNotification.getService().getServiceId();
@@ -220,7 +224,6 @@ public class SendEmailController {
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
-			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

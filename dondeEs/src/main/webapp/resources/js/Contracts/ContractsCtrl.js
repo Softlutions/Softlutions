@@ -71,10 +71,10 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 				if(value.state == 0)
 					contractsLeft++;
 					
-				if(value.state == 2)
+				if(value.state == 1)
 					contractsOk++;
 				
-				if(value.state == 1)
+				if(value.state == 2)
 					contractsCanceled++;
 			});
 			

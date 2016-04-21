@@ -16,7 +16,7 @@ angular.module('landingPageModule.events', ['ngRoute', 'ngTable', 'ngCookies'])
 		$scope.loggedUser = JSON.parse(loginCookie);
 	
 	$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
-	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
+	$scope.DEFAULT_IMG = "resources/img/defaultEventImage.png";
 	$scope.modalUser = {};
 	$scope.eventsPublish = [];
 	$scope.searchByUser;

@@ -98,13 +98,12 @@ public class EventController {
 	@RequestMapping(value = "/publishEvent", method = RequestMethod.PUT)
 	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
 		EventResponse response = new EventResponse();
-
+		
 		try {
 			if (eventRequest.getEventId() != 0) {
 				Event event = eventServiceInterface.getEventById(eventRequest.getEventId());
 				event.setState((byte) 3);
-				event.setPublishDate(new Date());
-
+				
 				int eventId = eventServiceInterface.saveEvent(event);
 
 				if (eventId != 0) {

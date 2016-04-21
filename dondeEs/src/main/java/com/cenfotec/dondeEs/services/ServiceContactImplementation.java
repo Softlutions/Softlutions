@@ -35,6 +35,49 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 	}
 	
 	@Override
+	public List<ServiceContactPOJO> getContractsLeftByPromoter(int promoterId){
+		List<ServiceContact> listServiceContact = contactRepository.findAllByServiceUserUserId(promoterId);
+		List<ServiceContactPOJO> listPojo = new ArrayList<ServiceContactPOJO>();
+		
+		listServiceContact.stream().forEach(ta -> {
+			if(ta.getState() == 0){
+				ServiceContactPOJO serviceContactPOJO = new ServiceContactPOJO();
+				serviceContactPOJO.setServiceContractId(ta.getServiceContractId());
+				serviceContactPOJO.setComment(ta.getComment());
+				serviceContactPOJO.setState(ta.getState());
+				
+				ServicePOJO servicePojo = new ServicePOJO();
+				servicePojo.setServiceId(ta.getService().getServiceId());
+				servicePojo.setName(ta.getService().getName());
+				servicePojo.setState(ta.getService().getState());
+				serviceContactPOJO.setService(servicePojo);
+				
+				EventPOJO eventPOJO = new EventPOJO();
+				eventPOJO.setEventId(ta.getEvent().getEventId());
+				eventPOJO.setName(ta.getEvent().getName());
+				eventPOJO.setState(ta.getEvent().getState());
+				eventPOJO.setDescription(ta.getEvent().getDescription());
+				eventPOJO.setImage(ta.getEvent().getImage());
+				eventPOJO.setPublishDate(ta.getEvent().getPublishDate());
+				serviceContactPOJO.setEvent(eventPOJO);
+				
+				UserPOJO userPOJO = new UserPOJO();
+				userPOJO.setUserId(ta.getEvent().getUser().getUserId());
+				userPOJO.setName(ta.getEvent().getUser().getName());
+				userPOJO.setLastName1(ta.getEvent().getUser().getLastName1());
+				userPOJO.setLastName2(ta.getEvent().getUser().getLastName2());
+				userPOJO.setEmail(ta.getEvent().getUser().getEmail());
+				userPOJO.setImage(ta.getEvent().getUser().getImage());
+				eventPOJO.setUser(userPOJO);
+				
+				listPojo.add(serviceContactPOJO);
+			}
+		});
+		
+		return listPojo;
+	}
+	
+	@Override
 	@Transactional
 	public List<ServiceContactPOJO> getAllServiceContacts(int idEvent){
 		List<ServiceContact> listServiceContact = contactRepository.findServiceContactByEventId(idEvent);
@@ -117,6 +160,21 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 		}
 		
 		return isValid;
+	}
+	
+	@Override
+	@Transactional
+	public Boolean responseContract(int serviceContractId, byte state) {
+		boolean status = false;
+		
+		ServiceContact service = contactRepository.findOne(serviceContractId);
+		
+		if(service != null){
+			service.setState(state);
+			status = true;
+		}
+		
+		return status;
 	}
 
 }

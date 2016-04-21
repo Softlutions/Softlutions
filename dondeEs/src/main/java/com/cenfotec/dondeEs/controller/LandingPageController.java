@@ -35,6 +35,7 @@ import com.cenfotec.dondeEs.logic.AES;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.EventParticipantPOJO;
 import com.cenfotec.dondeEs.pojo.ListSimplePOJO;
+import com.cenfotec.dondeEs.pojo.ServiceContactPOJO;
 import com.cenfotec.dondeEs.services.CommentServiceInterface;
 import com.cenfotec.dondeEs.services.EventImageServiceInterface;
 import com.cenfotec.dondeEs.services.EventParticipantServiceInterface;
@@ -492,11 +493,34 @@ public class LandingPageController {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param promoterId id del promotor a consultar si tiene contratos
+	 * @return lista de contratos pendientes de responder del promotor
+	 * @version 1.0
+	 */
+	@RequestMapping(value = "/getContractsLeftByPromoter", method = RequestMethod.GET)
+	public ServiceContactResponse getContractsLeftByPromoter(@RequestParam("promoterId") int promoterId) {
+		ServiceContactResponse response = new ServiceContactResponse();
+		
+		List<ServiceContactPOJO> serviceContacts = serviceContactInterface.getContractsLeftByPromoter(promoterId);
+		
+		if(serviceContacts.size() > 0){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+			response.setListContracts(serviceContacts);
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("This promoter doesn't have any contract");
+		}
+		
+		return response;
+	}
+	
 	/**
 	 * @Author Alejandro Bermudez Vargas
-	 * @param ServiceContactRequest
-	 *            serviceContactRequest
+	 * @param ServiceContactRequest serviceContactRequest
 	 * @return Retonrna el resultado de dicha respuesta
 	 * @version 1.0
 	 */
@@ -504,28 +528,34 @@ public class LandingPageController {
 	public ServiceContactResponse getServiceContact(@RequestBody ServiceContactRequest serviceContactRequest) {
 		String streventId = AES.base64decode(serviceContactRequest.getEventId());
 		String strserviceId = AES.base64decode(serviceContactRequest.getServiceId());
+		
 		ServiceContactResponse response = new ServiceContactResponse();
 		ServiceContact serviceContact = serviceContactInterface
 				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
-
-		if (serviceContact.getState() == 0) {
-			serviceContact.setState(serviceContactRequest.getState());
-			response.setCode(200);
-			response.setCodeMessage("Tienes una solicitud pendiente");
-		} else if (serviceContact.getState() == 2) {
-			response.setCode(201);
-			response.setCodeMessage("Ya confirmaste!");
-		} else if (serviceContact.getState() == 1) {
-			response.setCode(202);
-			response.setCodeMessage("Ya cancelaste!");
+		
+		if(serviceContactRequest.getLoggedUserId() == serviceContact.getService().getUser().getUserId()){
+			if (serviceContact.getState() == 0) {
+				serviceContact.setState(serviceContactRequest.getState());
+				response.setCode(200);
+				response.setCodeMessage("Tienes una solicitud pendiente");
+			} else if (serviceContact.getState() == 2) {
+				response.setCode(201);
+				response.setCodeMessage("Ya confirmaste!");
+			} else if (serviceContact.getState() == 1) {
+				response.setCode(202);
+				response.setCodeMessage("Ya cancelaste!");
+			}
+		}else{
+			response.setCode(400);
+			response.setCodeMessage("El prestatario no coincide");
 		}
+		
 		return response;
 	}
 
 	/**
 	 * @Author Alejandro Bermudez Vargas
-	 * @param ServiceContactRequest
-	 *            serviceContactRequest
+	 * @param ServiceContactRequest serviceContactRequest
 	 * @return Retonrna el resultado de dicha respuesta
 	 * @version 1.0
 	 */
@@ -614,6 +644,11 @@ public class LandingPageController {
 			
 			eventParticipant.setInvitationDate(new Date());
 			Boolean stateResponse = eventParticipantServiceInterface.saveParticipant(eventParticipant);
+			
+			String text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
+					+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
+					+ "&eventParticipantId="
+					+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
 
 			if(stateResponse){
 				resp.setCode(200);
@@ -623,15 +658,15 @@ public class LandingPageController {
 				resp.setCodeMessage("Something is wrong");
 			}
 			
-			String text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
-					+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
-					+ "&eventParticipantId="
-					+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
-			
 			mailMessage.setTo(email);
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
-			mailSender.send(mailMessage);
+			
+			new Thread("sendParticipantInvitation"){
+				public void run(){
+					mailSender.send(mailMessage);
+				}
+			}.start();
 		}catch(Exception ae){
 			ae.printStackTrace();
 			resp.setCode(500);

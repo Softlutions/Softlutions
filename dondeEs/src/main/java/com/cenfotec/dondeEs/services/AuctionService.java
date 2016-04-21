@@ -230,7 +230,6 @@ public class AuctionService implements AuctionServiceInterface{
 		serviceCatalogPOJO.setName(auction.getServiceCatalog().getName());
 		auctionPOJO.setServiceCatalog(serviceCatalogPOJO);
 		
-		
 		return auctionPOJO;
 	}
 

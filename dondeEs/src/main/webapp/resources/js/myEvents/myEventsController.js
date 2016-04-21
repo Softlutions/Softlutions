@@ -423,7 +423,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			 
 		}
 	}
-		
+	
 	$scope.publishEvent = function(event){  
 		$scope.requestObject = {"eventId":event.eventId};
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {
