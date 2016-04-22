@@ -76,6 +76,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.address = '';
 	$scope.HOURS_BEFORE_EVENT = 12;
 	$scope.eventsWizard = false;
+	$scope.currDate = new Date();
 	
 	$scope.DEFAULT_IMG = "resources/img/imagen-no-disponible.gif";
 	$scope.Date = function(){

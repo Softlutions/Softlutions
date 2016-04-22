@@ -11,6 +11,7 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 		$scope.chartValues = null;
 		$scope.serviceContacts = [];
 		$scope.pauseInterval = false;
+		$scope.event = {};
 		
 		var params = {
 			page: 1,
@@ -36,12 +37,19 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 		var eventId = $routeParams.eventId;
 		
 		if(eventId > 0){
-			$scope.refreshInterval = $interval(function(){
-				if(!$scope.pauseInterval)
-					getContracts();
-			}, 3000);
-			
-			getContracts();
+			$http.get("rest/protected/event/getEventDataById/"+eventId).success(function(response){
+				$scope.event = response.eventPOJO;
+				
+				$scope.refreshInterval = $interval(function(){
+					if(!$scope.pauseInterval)
+						getContracts();
+				}, 3000);
+				
+				getContracts();
+			}).error(function(err){
+				toastr.error("No se encontro el evento");
+				window.location.href="app#/index";
+			});
 		}else{
 			window.location.href="app#/index";
 		}

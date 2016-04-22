@@ -180,17 +180,17 @@ public class AuctionController {
 	public AuctionResponse finishAuction(@RequestBody Auction nauction){
 		AuctionResponse auctionResponse = new AuctionResponse();
 		if(nauction.getAuctionId() != 0){
-		Auction auction = auctionServiceInterface.findById(nauction.getAuctionId());
-		
-		auction.setState((byte)0);
-		
-		Boolean stateAuction = auctionServiceInterface.finishAuction(auction);
-		
-		if(stateAuction){
-			auctionResponse.setCode(200);
-		}else{
-			auctionResponse.setCode(500);
-		}
+			Auction auction = auctionServiceInterface.findById(nauction.getAuctionId());
+			
+			auction.setState((byte)0);
+			
+			Boolean stateAuction = auctionServiceInterface.finishAuction(auction);
+			
+			if(stateAuction){
+				auctionResponse.setCode(200);
+			}else{
+				auctionResponse.setCode(500);
+			}
 		}
 		return auctionResponse;
 	}

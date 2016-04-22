@@ -40,6 +40,7 @@ public class ChatService implements ChatServiceInterface {
 			nchat.setEvent(aux);
 			Chat chat = chatRepository.save(nchat);
 			users.add(aux.getUser());
+			
 			for(User nUser : users){
 				if(nUser.getChats() == null){
 					nUser.setChats(new ArrayList<Chat>());
