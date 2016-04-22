@@ -57,7 +57,7 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 			});
 		}
 		
-		$scope.$on("destroy", function(){
+		$scope.$on("$destroy", function(){
 			$interval.cancel($scope.refreshInterval);
 		});
 		
