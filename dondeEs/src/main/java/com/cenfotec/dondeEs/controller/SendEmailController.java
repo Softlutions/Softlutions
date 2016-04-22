@@ -172,6 +172,51 @@ public class SendEmailController {
 		}
 	}
 	
+	public void cancelContract(Event event, String email){
+		final SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String subject = "Servicio cancelado";
+		String text = "Se le notifica que sus servicios al evento "+event.getName()+" an sido cancelados\n"
+				+ "Cualquier inquietud puede consultarla con el promotor del evento al correo: "+event.getUser().getEmail();
+		
+		mailMessage.setTo(email);
+		mailMessage.setText(text);
+		mailMessage.setSubject(subject);
+		
+		new Thread("sendCancelServiceNotif"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
+	public void publishEventNotification(Event event, String email){
+		final SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String subject = "Evento "+event.getName()+" publicado";
+		String text = "Se le notifica que el evento "+event.getName()+" ya está publicado"
+				+ " y puede verlo al siguiente enlace: \n"
+				+ APP_DOMAIN+"/dondeEs/#/viewEvent?view="+event.getEventId();
+		
+		mailMessage.setTo(email);
+		mailMessage.setText(text);
+		mailMessage.setSubject(subject);
+		
+		new Thread("sendEmailNotifEvent"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
 	/**
 	 * Envia al correo del propietario del software un mensaje de contacto ingresado por un usuario.
 	 * @author Enmanuel García González

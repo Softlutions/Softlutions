@@ -85,18 +85,18 @@ angular.module('dondeEs.servicesAuctionEvent', ['ngRoute', 'ngTable'])
 				auctionService.acept = 1;
 				$scope.auction.state = 0;
 				$interval.cancel($scope.refreshInterval);
-				toastr.success("Servicio "+auctionService.service.name+" contratado!");
+				toastr.success("Prestatario "+auctionService.service.name+" notificado!");
 			}else if(response.code == 400){
 				auctionService.acept = 1;
 				$scope.auction.state = 0;
-				toastr.warning("El servicio ya fue contratado");
+				toastr.warning("El servicio ya fue notificado");
 			}else{
-				toastr.error("No se pudo contratar el servicio");
+				toastr.error("No se pudo notificar al prestatario del servicio");
 			}
 			$("#btnAucServ"+auctionService.auctionServicesId).ladda().ladda("stop");
 			$scope.pauseInterval = false;
 		}).error(function(err){
-			toastr.error("Error", "No se pudo contratar el servicio");
+			toastr.error("Error", "No se pudo notificar al prestatario del servicio");
 			$("#btnAucServ"+auctionService.auctionServicesId).ladda().ladda("stop");
 			$scope.pauseInterval = false;
 		});

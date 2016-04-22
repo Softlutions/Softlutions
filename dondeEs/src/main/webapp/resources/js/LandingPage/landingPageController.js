@@ -556,7 +556,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				nextContract();
 			}else{
 				$http.get("rest/protected/serviceContact/responseContract?contractId="+$scope.contractEvent.serviceContractId+"&state="+state).success(function(response) {
-					if(state == 2)
+					if(state == 1)
 						toastr.success("Contrato aceptado");
 					else
 						toastr.error("Contrato rechazado");

@@ -15,16 +15,16 @@
 								<th>Comentario</th>
 							</tr>
 						</thead>
-						<tbody ng-repeat="s in $data track by $index">
-							<tr>
+						<tbody>
+							<tr ng-repeat="s in $data track by $index">
 								<td sortable="'name'">{{s.service.name}}</td>
 								<td>{{s.state == 0? "Pendiente":(s.state == 1? "Concretado":"Cancelado")}}</td>
 								<td>{{s.comment}}</td>
 								
 								<td ng-if="s.state != 2">
-									<Button ng-if="!$parent.permissions.isAdmin"
+									<Button data-style="slide-left" ng-if="!$parent.permissions.isAdmin"
 										id="btnCancelService-{{s.serviceContractId}}"
-										class="btn btn-danger btn-xs center-block" ng-click="cancel(s)">Cancelar</Button>
+										class="ladda-button btn btn-danger btn-xs center-block" ng-click="cancel(s)">Cancelar</Button>
 								</td>
 							</tr>
 						</tbody>

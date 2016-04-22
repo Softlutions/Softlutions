@@ -75,6 +75,8 @@ angular.module('dondeEs.userProfile', ['ngRoute', 'ngCookies']).config(['$routeP
 					}else{
 						$("#modal-formUpdate").modal("toggle");
 						toastr.success("Se ha modificado la información del usuario");
+						$scope.user.image = null;
+						$scope.loggedUser.image = null;
 						$cookies.putObject("loggedUser", JSON.stringify($scope.loggedUser));
 					}
 					

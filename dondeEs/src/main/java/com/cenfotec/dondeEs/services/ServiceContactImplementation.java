@@ -119,6 +119,7 @@ public class ServiceContactImplementation implements ServiceContactInterface {
 			if(serviceContact != null){
 				serviceContact.setState((byte) 2);
 				contactRepository.save(serviceContact);
+				sendEmailController.cancelContract(serviceContact.getEvent(), serviceContact.getService().getUser().getEmail());
 			}
 		}
 		

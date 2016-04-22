@@ -34,9 +34,10 @@
 							<td>{{user.role.name}}</td>
 							<td>{{user.userType.name}}</td>
 							<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
-							<td> <button data-toggle="modal" class="btn btn-primary btn-xs pull-right"
-							data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user, $index)">Modificar usuario</button>
-							 </td>
+							<td>
+								<button data-toggle="modal" class="btn btn-primary btn-xs pull-right hidden"
+								data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user, $index)">Modificar usuario</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>

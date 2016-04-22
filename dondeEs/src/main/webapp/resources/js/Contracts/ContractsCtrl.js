@@ -6,37 +6,50 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 			controller : 'ContractsCtrl'
 		});
 	}])
-	.controller('ContractsCtrl',['$scope', '$http', '$routeParams', 'ngTableParams', '$filter', function($scope, $http, $routeParams, ngTableParams, $filter) {
+	.controller('ContractsCtrl',['$scope', '$http', '$routeParams', 'ngTableParams', '$filter', '$interval', function($scope, $http, $routeParams, ngTableParams, $filter, $interval) {
 		$scope.$parent.pageTitle = "Donde es - Contratos";
 		$scope.chartValues = null;
 		$scope.serviceContacts = [];
+		$scope.pauseInterval = false;
+		
+		var params = {
+			page: 1,
+			count: 8,
+			sorting: {name: "asc"}
+		};
+		
+		var settings = {
+			total: $scope.serviceContacts.length,	
+			counts: [],	
+			getData: function($defer, params){
+				var fromIndex = (params.page() - 1) * params.count();
+				var toIndex = params.page() * params.count();
+				
+				var subList = $scope.serviceContacts.slice(fromIndex, toIndex);
+				var sortedList = $filter('orderBy')(subList, params.orderBy());
+				$defer.resolve(sortedList);
+			}
+		};
+		
+		$scope.contractsTable = new ngTableParams(params, settings);
 		
 		var eventId = $routeParams.eventId;
 		
-		if(eventId >= 0){
+		if(eventId > 0){
+			$scope.refreshInterval = $interval(function(){
+				if(!$scope.pauseInterval)
+					getContracts();
+			}, 3000);
+			
+			getContracts();
+		}else{
+			window.location.href="app#/index";
+		}
+		
+		function getContracts(){
 			$http.get("rest/protected/serviceContact/getAllServiceContact/"+eventId).success(function(response){
 				$scope.serviceContacts = response.listContracts;
-				
-				var params = {
-					page: 1,
-					count: 8,
-					sorting: {name: "asc"}
-				};
-				
-				var settings = {
-					total: $scope.serviceContacts.length,	
-					counts: [],	
-					getData: function($defer, params){
-						var fromIndex = (params.page() - 1) * params.count();
-						var toIndex = params.page() * params.count();
-						
-						var subList = $scope.serviceContacts.slice(fromIndex, toIndex);
-						var sortedList = $filter('orderBy')(subList, params.orderBy());
-						$defer.resolve(sortedList);
-					}
-				};
-				
-				$scope.contractsTable = new ngTableParams(params, settings);
+				$scope.contractsTable.reload();
 				
 				if($scope.serviceContacts.length > 0){
 					$scope.refreshChart();
@@ -44,19 +57,25 @@ angular.module('dondeEs.ContractModule', ['ngRoute', 'ngTable'])
 			});
 		}
 		
+		$scope.$on("destroy", function(){
+			$interval.cancel($scope.refreshInterval);
+		});
+		
 		$scope.cancel = function(serviceContact){
+			$("#btnCancelService-"+serviceContact.serviceContractId).ladda().ladda("start");
+			$scope.pauseInterval = true;
+			
 			$http.post("rest/protected/serviceContact/cancelServiceContact/"+serviceContact.serviceContractId, serviceContact).success(function(response){
 				if(response.code == 200){
 					serviceContact.state = 2;
-					
-					var btn = $("#btnCancelService-"+serviceContact.serviceContractId);
-					btn.text("Cancelado");
-					btn.removeClass("btn-dangerr");
-					btn.addClass("btn-default");
-					btn.prop("disabled", true);
-					
 					$scope.refreshChart();
+					toastr.success("El contrato fue cancelado, se notificará al prestatario");
+				}else{
+					toastr.error("No se pudo cancelar el contrato");
 				}
+				
+				$("#btnCancelService-"+serviceContact.serviceContractId).ladda().ladda("stop");
+				$scope.pauseInterval = false;
 			});
 		}
 		
