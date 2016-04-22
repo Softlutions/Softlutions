@@ -26,6 +26,7 @@
 						<th>Tipo</th>
 						<th class="col-sm-3">Fecha de finalización</th>
 						<th>Opciones</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -33,23 +34,21 @@
 						<td sortable="'name'">{{auction.name}}</td>
 						<td>{{auction.description}}</td>
 						<td>{{auction.serviceCatalog.name}}</td>
-						<td>{{auction.date | date:'dd-MM-yyyy hh:mma'}}</td>
+						<td>{{auction.date | date:"EEE dd MMM yyyy ' a las ' hh:mma"}}</td>
 						<td>
-							<a class="btn btn-primary btn-sm" href="app#/servicesAuctionEvent/{{eventId}}/{{auction.auctionId}}">
+							<a class="btn btn-primary btn-xs" href="app#/servicesAuctionEvent/{{eventId}}/{{auction.auctionId}}">
 								<i ng-show="{{auction.state == 1 || auction.state == 2}}" data-toggle="tooltip" 
 								title="Hay servicios pendientes de contratar" class="fa fa-warning"></i>
 								Ver servicios
 							</a>
 						</td>
-						<td ng-if="auction.state == 1">
-							<button id="finishAuctionId-{{auction.auctionId}}"
-								class="btn btn-danger btn-sm"
-								ng-click="finishAuction(auction.auctionId)">
+						<td>
+							<button ng-if="auction.state == 1" id="finishAuctionId-{{auction.auctionId}}"
+								class="ladda-button btn btn-danger btn-xs" data-stile="slide-left" 
+								ng-click="finishAuction(auction)">
 								Finalizar subasta
 							</button>
-						</td>
-						<td ng-if="auction.state != 1">
-							<label class="label label-info">Finalizada</label>
+							<label class="label label-muted" ng-if="auction.state != 1">Finalizado</label>
 						</td>
 					</tr>
 				</tbody>
@@ -86,9 +85,9 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-lg-2 control-label">Descripción</label>
+								<label class="col-lg-2 control-label">Comentario</label>
 								<div class="col-lg-10">
-									<textarea rows="5" placeholder="Descripción" ng-maxlength="255"
+									<textarea rows="5" placeholder="Comentario" ng-maxlength="255"
 										class="form-control" ng-model="tempAuction.description" required></textarea>
 								</div>
 							</div>

@@ -2,7 +2,7 @@
 	<a class="btn btn-primary btn-sm pull-left" href="app#/index"><i class="fa fa-reply"></i> Volver</a>
 	<div class="ibox">
 		<div class="ibox-title">
-			<h5>Contratos de este evento</h5>
+			<h5>Contratos de {{event.name}}</h5>
 		</div>
 		<div class="ibox-content">
 			<div class="col-md-8 col-sm-12 pull-left">
@@ -12,14 +12,12 @@
 							<tr>
 								<th>Contrato</th>
 								<th>Estado</th>
-								<th>Comentario</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="s in $data track by $index">
 								<td sortable="'name'">{{s.service.name}}</td>
 								<td>{{s.state == 0? "Pendiente":(s.state == 1? "Concretado":"Cancelado")}}</td>
-								<td>{{s.comment}}</td>
 								
 								<td ng-if="s.state != 2">
 									<Button data-style="slide-left" ng-if="!$parent.permissions.isAdmin"

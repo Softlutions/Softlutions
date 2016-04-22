@@ -69,9 +69,6 @@ public class AuctionService implements AuctionServiceInterface{
 		Date date = new Date();
 		auctions.stream().forEach(e -> {
 			AuctionPOJO auctionPOJO = new AuctionPOJO();
-			if(e.getState()==1 && e.getDate().compareTo(date)!=1){
-				e.setState((byte) 2);			
-			}
 			BeanUtils.copyProperties(e, auctionPOJO);
 			
 			auctionPOJO.setServiceCatalog(new ServiceCatalogPOJO());
@@ -97,10 +94,17 @@ public class AuctionService implements AuctionServiceInterface{
 				
 				auctionPOJO.setAuctionServices(auctionServicesPOJO);
 			} 			
-			auctionsPOJO.add(auctionPOJO); 
+			
+			auctionsPOJO.add(auctionPOJO);
+			
+			if(((e.getState() == 1 || e.getState() == 2) && e.getDate().compareTo(date) != 1) && e.getAuctionServices().size() == 0){
+				e.setState((byte) 0);
+			}else if(e.getState() == 1 && e.getDate().compareTo(date) != 1){
+				e.setState((byte) 2);
+			}
 		});
 		
-		return auctionsPOJO;		
+		return auctionsPOJO;
 	}
 
 	@Override

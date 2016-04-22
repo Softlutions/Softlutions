@@ -13,14 +13,14 @@
 						<li>
 							<a ng-if="!$parent.permissions.isAdmin" href="app#/event">Sin asistente</a>
 						</li>
-						<li>
+						<li class="hidden">
 							<a ng-if="!$parent.permissions.isAdmin" ng-click="showCreateEventForm()">Con asistente</a>
 						</li>
 					</ul>
 				</div>
 					
 				<div class="form-group">
-					<input type="text" ng-model="search.name"
+					<input type="text" ng-model="search"
 						placeholder="Buscar evento" class="form-control">
 				</div>
 			</div>
@@ -38,7 +38,7 @@
 					<tbody>
 						<tr ng-repeat="event in $data | filter:search:strict">
 							<td>{{ event.name }}</td>
-							<td>{{ event.publishDate | date:'EEE dd MMM yyyy hh:mma'}}</td>
+							<td class="{{(event.publishDate < currDate) && (event.state != 0  && event.state != 3)?'text-danger':''}}">{{ event.publishDate | date:"EEE dd MMM yyyy ' a las ' hh:mma"}}</td>
 							<td>{{ event.place.name }}</td>
 							<td>{{ event.state == 0? 'Cancelado':(event.state == 1? 'Creado':(event.state == 2? 'Pre-publicado':'Publicado')) }}</td>
 							<td>
@@ -78,10 +78,10 @@
 										<li ng-show="event.state!==0 && event.state!==3">
 											<a type="button" href="app#/event?edit={{event.eventId}}">Modificar</a>
 										</li>
-										<li ng-show="event.state===1">
+										<li ng-show="event.state===1 && event.publishDate > currDate">
 											<a type="button" ng-click="prepublishEventById(event)" class="text-danger">Prepublicar</a>
 										</li>
-										<li ng-show="event.state===2">
+										<li ng-show="event.state===2 && event.publishDate > currDate">
 											<a type="button" ng-click="selectEvent(event)">Publicar</a>
 										</li>
 										<li ng-show="event.state===3">
