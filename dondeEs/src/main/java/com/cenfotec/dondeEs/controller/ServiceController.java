@@ -35,7 +35,7 @@ public class ServiceController {
 			response.setCodeMessage("Succesfull");
 		}else{
 			response.setCode(500);
-			response.setCodeMessage("Internal error");
+			response.setCodeMessage("The service already exist");
 		}
 		return response;
 	}
@@ -81,6 +81,13 @@ public class ServiceController {
 		return response;
 	}
 	
+	/**
+	 * ya no se usa en AuctionParticipantsController.js
+	 * @see {@link #getAllServiceByUserAndServiceCatalog(int userId, int serviceCatalogId)}
+	 * @deprecated
+	 * @param userId del usuario
+	 * @return service catalogs by userId
+	 */
 	@RequestMapping(value ="/getServiceCatalogIdByProvider/{userId}", method = RequestMethod.GET)
 	public ServiceResponse getServiceCatalogIdByProvider(@PathVariable("userId") int userId){
 		ServiceResponse response = new ServiceResponse();
@@ -108,7 +115,7 @@ public class ServiceController {
 		nservice.setServiceCatalog(service.getServiceCatalog());
 		nservice.setUser(service.getUser());
 		
-		Boolean state = serviceInterface.saveService(nservice);
+		Boolean state = serviceInterface.updateService(nservice);
 		
 		if(state){
 			response.setCode(200);
@@ -121,5 +128,14 @@ public class ServiceController {
 		
 		return response;
 	}
-
+	
+	@RequestMapping(value = "/getServiceByCatalog/{id}", method = RequestMethod.GET)
+	public ServiceResponse getServiceByCatalog(@PathVariable("id") int id){
+		ServiceResponse response = new ServiceResponse();
+		
+		response.setServiceLists(serviceInterface.getServiceByServiceCatalog(id));
+		response.setCode(200);
+		
+		return response;
+	}
 }

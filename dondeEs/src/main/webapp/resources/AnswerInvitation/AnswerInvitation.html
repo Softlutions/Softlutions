@@ -1,8 +1,45 @@
 <div class="Container">
-	<a data-toggle="modal" class="btn btn-primary btn-xs pull-center"
-	data-toggle="modal" data-target="#modal-form" ng-click="geteventById()"
-	>Responder invitacion</a>
-	<div id="modal-form" class="modal fade" aria-hidden="true">
+
+	<div class="widget-head-color-box navy-bg p-lg text-center">
+		<div class="m-b-md">
+			<h2 class="font-bold no-margins">{{event.name}}</h2>
+			<small>{{event.place.name}}</small>
+		</div>
+		<img src="{{event.image}}"
+			class="img-responsive img-rounded center-block" width="175px"
+			height="105px" alt="profile">
+		<div>
+			<span>Correo: {{event.user.email}}</span>
+		</div>
+		<div>
+			<span>Evento: {{(((event.private_)==0)? "Público":"Privado")}}</span>
+		</div>
+	</div>
+	<div class="widget-text-box">
+		<h4 class="media-heading" ng-show="isComment">{{nameProvaider}}</h4>
+		<p ng-show="isComment">Te ha invitado a un evento</p>
+		<div class="form-group" ng-show="isComment">
+			<h4 class="media-heading">Comentarios</h4>
+			<textarea rows="5" style="resize: none" type="text" id="desciption"
+				class="form-control" placeholder="Comentarios" ng-model="comment"></textarea>
+		</div>
+		<div class="form-group" ng-show="isComment === false">
+			<h4 class="media-heading">Tu respuesta ha sido enviada</h4>
+			<p>{{answer}}</p>
+		</div>
+		<div class="text-right" ng-show="isComment">
+			<a class="btn btn-sm btn-danger" id="noAttend"
+				ng-click="createParticipant(0)"><i class="fa fa-thumbs-down"></i>
+				No asistir </a>
+			<button id="attend" ng-click="createParticipant(2)"
+				class="btn btn-sm btn-primary">
+				<i class="fa fa-thumbs-up"></i> Asistir
+			</button>
+		</div>
+	</div>
+
+
+	<!--<div id="modal-form" class="modal fade" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-body">
@@ -75,5 +112,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>

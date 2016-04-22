@@ -11,7 +11,9 @@ import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 
 public interface EventServiceInterface {
+	
 	List<EventPOJO> getAllEventByUser(int pidUsuario);
+	
 	Event getEventById(int idEvent);
 	
 	/***
@@ -21,7 +23,16 @@ public interface EventServiceInterface {
 	 * @version 1.0
 	 */
 	int saveEvent(Event e);
+	
 	EventPOJO eventById(int idEvent);
+	
+	/**
+	 * Notifica la publicacion del evento tanto a los participantes como a sus contribuyentes
+	 * @author Ernesto Mendez A.
+	 * @param event evento a notificar
+	 * @version 1.0
+	 */
+	void publishEventNotification(Event event);
 	
 	/***
 	 * Obtiene todos los eventos publicados.
@@ -44,4 +55,11 @@ public interface EventServiceInterface {
 	 * @return retorna true si la operacion fue exitosa, false si no
 	 */
 	boolean editEvent(Event e, MultipartFile imgFile, ServletContext servletContext);
+	
+	/**
+	 * @author Ernesto Mendez A.
+	 * @param top cantidad de items que retorna la lista
+	 * @return Lista de eventos con mas participantes
+	 */
+	List<EventPOJO> getTopEventsByParticipants(int top);
 }

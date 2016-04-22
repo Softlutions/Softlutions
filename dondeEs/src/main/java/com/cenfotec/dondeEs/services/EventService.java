@@ -1,23 +1,31 @@
 package com.cenfotec.dondeEs.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.Place;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 import com.cenfotec.dondeEs.repositories.EventRepository;
+import com.cenfotec.dondeEs.repositories.ServiceContactRepository;
 import com.cenfotec.dondeEs.utils.Utils;
 
 @Service
@@ -26,7 +34,13 @@ public class EventService implements EventServiceInterface {
 	private EventRepository eventRepository;
 	@Autowired
 	private PlaceServiceInterface placeServiceInterface;
-
+	@Autowired
+	private SendEmailController sendEmailController;
+	@Autowired
+	private EventParticipantRepository eventParticipantRepository;
+	@Autowired
+	private ServiceContactRepository serviceContactRepository;
+	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -56,7 +70,14 @@ public class EventService implements EventServiceInterface {
 	@Override
 	public List<EventPOJO> getAllEventPublish() {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
-		eventRepository.findAllByState((byte) 3).stream().forEach(e -> {
+		
+		Date date = new Date();		
+	    Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR, 3); 
+	    date = calendar.getTime();      
+		
+		eventRepository.findAllEventPublish((byte) 3, (byte) 0, date).stream().forEach(e -> {
 			EventPOJO eventPOJO = new EventPOJO();
 			PlacePOJO placePOJO = new PlacePOJO();
 			UserPOJO userPOJO = new UserPOJO();
@@ -92,6 +113,42 @@ public class EventService implements EventServiceInterface {
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
 		return event.getEventId();
+	}
+	
+	@Override
+	public void publishEventNotification(Event event){
+		if(event.getState() == 3){
+			List<EventParticipant> participants = eventParticipantRepository.findEventParticipantByEventId(event.getEventId());
+			List<ServiceContact> contracts = serviceContactRepository.findServiceContactByEventId(event.getEventId());
+			List<String> sendedEmails = new ArrayList<>();
+			
+			contracts.stream().forEach(c -> {
+				if(c.getState() == 2){
+					String email = c.getService().getUser().getEmail();
+					
+					if(!sendedEmails.contains(email)){
+						sendEmailController.publishEventNotification(event, email);
+						sendedEmails.add(email);
+					}
+				}
+			});
+			
+			participants.stream().forEach(p -> {
+				if(p.getState() == 2){
+					String email;
+					
+					if(p.getUser() != null)
+						email = p.getUser().getEmail();
+					else
+						email = p.getOfflineUser().getEmail();
+					
+					if(!sendedEmails.contains(email)){
+						sendEmailController.publishEventNotification(event, email);
+						sendedEmails.add(email);
+					}
+				}
+			});
+		}
 	}
 
 	@Override
@@ -129,46 +186,53 @@ public class EventService implements EventServiceInterface {
 
 	@Override
 	public EventPOJO eventById(int idEvent) {
-
-		// Event
 		Event event = eventRepository.findOne(idEvent);
-		EventPOJO eventPOJO = new EventPOJO();
-		eventPOJO.setEventId(event.getEventId());
-		eventPOJO.setDescription(event.getDescription());
-		eventPOJO.setImage(event.getImage());
-		eventPOJO.setLargeDescription(event.getLargeDescription());
-		eventPOJO.setName(event.getName());
-		eventPOJO.setPrivate_(event.getPrivate_());
-		eventPOJO.setPublishDate(event.getPublishDate());
-		eventPOJO.setRegisterDate(event.getRegisterDate());
-		eventPOJO.setState(event.getState());
-
-		if (event.getPlace() != null) {
-			Place place = event.getPlace();
-			PlacePOJO placePOJO = new PlacePOJO();
-			placePOJO.setPlaceId(place.getPlaceId());
-			placePOJO.setLatitude(place.getLatitude());
-			placePOJO.setLongitude(place.getLongitude());
-			placePOJO.setName(place.getName());
-			eventPOJO.setPlace(placePOJO);
+		EventPOJO eventPOJO = null;
+		
+		if(event != null){
+			eventPOJO = new EventPOJO();
+			eventPOJO.setEventId(event.getEventId());
+			eventPOJO.setDescription(event.getDescription());
+			eventPOJO.setImage(event.getImage());
+			eventPOJO.setLargeDescription(event.getLargeDescription());
+			eventPOJO.setName(event.getName());
+			eventPOJO.setPrivate_(event.getPrivate_());
+			eventPOJO.setPublishDate(event.getPublishDate());
+			eventPOJO.setRegisterDate(event.getRegisterDate());
+			eventPOJO.setState(event.getState());
+			
+			if(event.getPlace() != null){
+				Place place = event.getPlace();
+				PlacePOJO placePOJO = new PlacePOJO();
+				placePOJO.setPlaceId(place.getPlaceId());
+				placePOJO.setLatitude(place.getLatitude());
+				placePOJO.setLongitude(place.getLongitude());
+				placePOJO.setName(place.getName());
+				eventPOJO.setPlace(placePOJO);
+			}
+			
+			if(event.getUser() != null){
+				User user = event.getUser();
+				UserPOJO userPOJO = new UserPOJO();
+				userPOJO.setUserId(user.getUserId());
+				userPOJO.setEmail(user.getEmail());
+				userPOJO.setImage(user.getImage());
+				userPOJO.setLastName1(user.getLastName1());
+				userPOJO.setLastName2(user.getLastName2());
+				userPOJO.setName(user.getName());
+				userPOJO.setPassword(user.getPassword());
+				userPOJO.setPhone(user.getPhone());
+				
+				if(user.getState() == 1)
+					userPOJO.setState(true);
+				
+				if(user.getState() == 0)
+					userPOJO.setState(false);
+				
+				eventPOJO.setUser(userPOJO);
+			}
 		}
-		if (event.getUser() != null) {
-			User user = event.getUser();
-			UserPOJO userPOJO = new UserPOJO();
-			userPOJO.setUserId(user.getUserId());
-			userPOJO.setEmail(user.getEmail());
-			userPOJO.setImage(user.getImage());
-			userPOJO.setLastName1(user.getLastName1());
-			userPOJO.setLastName2(user.getLastName2());
-			userPOJO.setName(user.getName());
-			userPOJO.setPassword(user.getPassword());
-			userPOJO.setPhone(user.getPhone());
-			if (user.getState() == 1)
-				userPOJO.setState(true);
-			if (user.getState() == 0)
-				userPOJO.setState(false);
-			eventPOJO.setUser(userPOJO);
-		}
+		
 		return eventPOJO;
 	}
 
@@ -214,6 +278,32 @@ public class EventService implements EventServiceInterface {
 			}
 		});
 		return listEventPOJO;
+	}
+	
+	@Override
+	public List<EventPOJO> getTopEventsByParticipants(int top) {
+		List<Event> events = eventRepository.getTopEventsByParticipants(new PageRequest(0, top));
+		List<EventPOJO> eventsPOJO = new ArrayList<>();
+		
+		events.stream().forEach(e -> {
+			EventPOJO event = new EventPOJO();
+			event.setEventId(e.getEventId());
+			event.setImage(e.getImage());
+			event.setName(e.getName());
+			event.setState(e.getState());
+			event.setPrivate_(e.getPrivate_());
+			event.setPublishDate(e.getPublishDate());
+			event.setDescription(e.getDescription());
+			
+			PlacePOJO place = new PlacePOJO();
+			place.setPlaceId(e.getPlace().getPlaceId());
+			place.setName(e.getPlace().getName());
+			event.setPlace(place);
+			
+			eventsPOJO.add(event);
+		});
+		
+		return eventsPOJO;
 	}
 
 }

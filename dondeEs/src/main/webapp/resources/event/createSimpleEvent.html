@@ -1,0 +1,94 @@
+<div class="container">
+	<div class="col-xs-11">
+		<a class="btn btn-primary btn-sm-normalize-size pull-left" href="app#/index"><i class="fa fa-reply"></i> Volver</a>
+		<br/>	
+		<br/>
+		<div class="row">
+			<h1>{{sectionTitle}}</h1>
+		</div>		
+		<br/>
+		<form class="form-horizontal" name="formCreateEvent" ng-submit="formCreateEvent.$valid? ((eventInEdition == null)? createEvent():saveEventChanges()):validationError()">
+			<div class="form-group">
+				<label class="col-lg-2">Nombre</label>
+				<div class="col-lg-10">
+					<input ng-model="tempEvent.name" type="text" class="form-control" maxlength="50" ng-maxlength="50" required/>
+				</div>
+			</div>
+			
+			<div class=form-group>
+				<label class="col-lg-2">Fecha del evento</label>
+				<div class="col-lg-10">
+					<input type='text' class="form-control" data-toggle="tooltip" title="{{HOURS_BEFORE_EVENT}} horas de anticipación" ng-model="tempEvent.date" id='eventDatePicker'/>
+					<small>Para crear subastas es necesario un rango de 12 horas</small>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2">Descripción</label>
+				<div class="col-lg-10">
+					<input ng-model="tempEvent.desc" type="text" class="form-control" maxlength="150" ng-maxlength="150" required/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2">Descripción larga</label>
+				<div class="col-lg-10">
+					<textarea ng-model="tempEvent.largeDesc" placeholder="(opcional)" class="form-control" rows="5" maxlength="255" ng-maxlength="255"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-lg-2">Tipo de evento</label>
+				<div class="col-lg-10">
+					<div class="radio-inline">
+						<label> <input type="radio" ng-model="tempEvent.type" ng-value="0" checked> Público </label>
+					</div>
+					<div class="radio-inline">
+						<label> <input type="radio" ng-model="tempEvent.type" ng-value="1"> Privado </label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2">Lugar del evento</label>
+				<div class="col-lg-10">
+					<input ng-model="tempEvent.placeName" placeholder="ej: Parque central" type="text" class="form-control" maxlength="60" ng-maxlength="60" required>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-lg-12">
+					<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" control="map.control">
+						<markers models="map.markers" coords="'self'" options="'options'" isLabel='true'> </markers> 
+					</google-map>
+					<a class="btn btn-primary col-xs-12" ng-click="addCurrentLocation()">Ir a mi localización</a>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-lg-12">
+					<label class="control-label">Buscar lugar</label> 
+					<input class="form-control col-xs-12" type="text" placeholder="San José, Costa Rica" ng-model="tempEvent.address" /> 
+					<a class="btn btn-primary col-xs-12" ng-click="addAddress()">Ir a esta dirección</a> 
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-lg-12">
+					<label class='control-label'>Imagen principal</label> 
+					<img ng-src="{{tempEvent.file}}" class="img-responsive img-rounded center-block" width="175px" height="125px"/>
+					<label class="fa fa-camera btn btn-primary" data-toggle="tooltip" title="Adjuntar foto principal">
+						<input id="uploadImageEvent" style="display: none;" type="file" name="inputfile" ngf-pattern="'image/*" ngf-max-size="6MB" ng-file-select="onFileSelect($files)">
+					</label>
+					<label ng-click="tempEvent.file = DEFAULT_IMG" ng-show="tempEvent.file != DEFAULT_IMG" class="fa fa-trash btn btn-danger col-lg-4" data-toggle="tooltip" title="Quitar imagen"></label>
+					<p>Formatos válidos: .jpg .png .gif | 6mb max.</p>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<button id="btnEventFormSubmit" type="submit" class="ladda-button btn btn-primary pull-right" data-style="slide-left">Crear</button>
+				<a class="btn btn-danger pull-right cancelButtonMargin" href="app#/index">Cancelar</a>
+			</div>
+		</form>
+	</div>
+</div>

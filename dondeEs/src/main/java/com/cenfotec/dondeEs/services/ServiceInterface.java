@@ -7,6 +7,7 @@ import com.cenfotec.dondeEs.pojo.ServicePOJO;
 public interface ServiceInterface {
 	
 	Boolean saveService(Service service);
+	Boolean updateService(Service service);
 	List<ServicePOJO> getAll();
 	ServicePOJO getService(int idEvent);
 	ServicePOJO getServiceById(int idService);
@@ -21,4 +22,6 @@ public interface ServiceInterface {
 	List<ServicePOJO> getByCatalog(int catalogId);
 	List<ServicePOJO> getAllServiceByUserAndServiceCatalog(int userId, int serviceCatalogId);
 	List<ServicePOJO> getServiceCatalogIdByProvider(int userId);
+	
+	List<ServicePOJO> getServiceByServiceCatalog(int id);
 }

@@ -20,6 +20,8 @@ public class MessagePOJO {
 	private ChatPOJO chat;
 
 	private UserPOJO user;
+	
+	private String image;
 
 	public MessagePOJO() {
 	}
@@ -63,5 +65,15 @@ public class MessagePOJO {
 	public void setUser(UserPOJO user) {
 		this.user = user;
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	
 
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dondeEs.answerContract', [ 'ngRoute' ])
+angular.module('dondeEs.answerContract', ['ngRoute', 'ngCookies'])
 .config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/answerContract', {
 		templateUrl : 'resources/AnswerContract/AnswerContract.html',
@@ -8,16 +8,29 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 	});
 } ])
 
-.controller('answerContractCtrl', [ '$scope', '$http','$location', function($scope, $http, $location) {
+.controller('answerContractCtrl', [ '$scope', '$http','$location', '$cookies', function($scope, $http, $location, $cookies) {
+	$scope.$parent.pageTitle = "Donde es";
+	
 	$scope.getEventById = function(){
 		$http.get('rest/protected/event/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 			$scope.event = response.eventPOJO;
 		});
 	}
-	
-	$scope.loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+
+	$scope.loggedUser = $scope.$parent.getLoggedUser();
 	
 	$scope.accept = function(event){
+		var dataCreate = {
+				eventId : $location.search().eventId,
+				serviceId : $location.search().serviceId,
+				state : 2
+		};
+		$http({method: 'POST',url:'rest/protected/serviceContact/answerContract', data:dataCreate}).success(function(response) {
+
+		});
+	}
+	
+	$scope.noAccept = function(event){
 		var dataCreate = {
 				eventId : $location.search().eventId,
 				serviceId : $location.search().serviceId,
@@ -27,4 +40,6 @@ angular.module('dondeEs.answerContract', [ 'ngRoute' ])
 
 		});
 	}
+	
+	
 } ]);

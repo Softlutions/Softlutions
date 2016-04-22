@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.cenfotec.dondeEs.contracts.NoteResponse;
 import com.cenfotec.dondeEs.ejb.Note;
 import com.cenfotec.dondeEs.services.NoteServiceInterface;
@@ -68,5 +67,14 @@ public class NoteController {
 			response.setCode(500);
 			
 		} finally { return response; }	
+	}
+	
+	@RequestMapping(value ="/deleteNote", method = RequestMethod.DELETE)
+	public NoteResponse deleteNote(@RequestBody Note note){				
+		NoteResponse response = new NoteResponse();
+		noteServiceInterface.delete(note);	
+			response.setCode(200);
+			response.setCodeMessage("La nota ha sido borrada!");	
+		return response;		
 	}
 }

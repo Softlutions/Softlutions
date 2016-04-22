@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="pull-left">
-			<a class="btn btn-primary pull-right" href="app#/index">Volver</a>
+			<a class="btn btn-primary btn-sm pull-left" href="app#/index"><i class="fa fa-reply"></i> Volver</a>
 		</div>
 	</div>
 	<div class="col-xs-12">
@@ -12,10 +12,10 @@
 				</div>
 				<div class="pull-right">
 					<div class="btn-group">
-						<button type="button" class="btn btn-primary btn-filter" ng-click="showEventReminderBy('Concluido')">Concluido</button>
-						<button type="button" class="btn btn-warning btn-filter" ng-click="showEventReminderBy('Pendiente')">Pendiente</button>
-						<button type="button" class="btn btn-danger btn-filter" ng-click="showEventReminderBy('SinComenzar')">Sin comenzar</button>
-						<button type="button" class="btn btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
+						<button type="button" class="btn btn-sm btn-primary btn-filter" ng-click="showEventReminderBy('2')">Concluido</button>
+						<button type="button" class="btn btn-sm btn-warning btn-filter" ng-click="showEventReminderBy('1')">Pendiente</button>
+						<button type="button" class="btn btn-sm btn-danger btn-filter" ng-click="showEventReminderBy('0')">Sin comenzar</button>
+						<button type="button" class="btn btn-sm btn-default btn-filter" ng-click="showEventReminderBy('all')">Todos</button>
 					</div>
 				</div>
 				
@@ -23,7 +23,7 @@
 					<div class="col-xs-12">
 						<div class="chat-message-form">
 							<div class="input-group">
-								<input type="text" ng-model="objNote.content"
+								<input type="text" ng-model="objNote.content" maxlength="250" 
 										placeholder="Contenido de la nueva nota"  class="form-control"><span class="input-group-btn" required>
 									<button type="button" class="btn btn-primary" ng-click="createNote(event)">+</button>
 								</span>
@@ -45,15 +45,15 @@
 											<div class="media">
 												<div class="media-body">
 													<div class="media-body">
+														<span class="glyphicon glyphicon-trash pull-right editEventReminder" aria-hidden="true" 
+															ng-click="deleteEventReminder(note)"></span>
 														<span class="glyphicon glyphicon-pencil pull-right editEventReminder" aria-hidden="true" 
-																	ng-click="uploadEventReminderData(note.noteId, note.content, note.state)"
-																	data-toggle="modal" data-target="#modal-form"
-																	></span>
+															ng-click="uploadEventReminderData(note.noteId, note.content, note.state)"
+															data-toggle="modal" data-target="#modal-form"></span>
 														<span class="media-meta pull-right">{{note.date | date:'dd-MM-yyyy'}}</span>
-														<h4 class="title pull-right">
-															<span ng-if="note.state == 'SinComenzar'" class="{{note.state}}">(Sin comenzar)</span>
-															<span ng-if="note.state != 'SinComenzar'" class="{{note.state}}">({{note.state}})</span>					
-														</h4>										
+														<p class="media-meta pull-right">
+															<span ng-class="{SinComenzar : (note.state == 0), Pendiente : (note.state == 1), Concluido  : (note.state==2)}">{{ (note.state == 0) ? "Sin comenzar " : (note.state == 1) ? "Pendiente " : "Concluido " }}</span>
+														</p>									
 														<p class="summary">{{note.content}}</p>
 													</div>
 												</div>
@@ -90,7 +90,7 @@
 								
 									<div class="form-group">
 										<label class="font-noraml"><strong>Contenido</strong></label> <input
-											type="text" class="form-control" ng-model="objEventReminderEdit.content" required/>
+											type="text" class="form-control" ng-model="objEventReminderEdit.content" maxlength="250" required/>
 									</div>
 
 									<div class="form-group">

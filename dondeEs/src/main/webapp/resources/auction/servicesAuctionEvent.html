@@ -1,0 +1,53 @@
+<div class="col-sm-12">	
+	<a class="btn btn-primary btn-sm pull-left" href="app#/auctionsEvent/{{eventId}}">
+		<i class="fa fa-reply"></i> Volver</a>
+	
+	<div class="ibox float-e-margins">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>Oferta de servicios {{auction.name}}</h5>
+			</div>
+			<div class="ibox-content">
+				<div ng-hide="serviceList.length">
+					<p>No hay servicios para esta subasta</p>
+				</div>
+				<table class="table table-hover table-responsive" ng-show="serviceList.length" ng-table="servicesTable">
+					<thead>
+						<tr>
+							<th>Comentario</th>
+							<th>Precio</th>
+							<th>Fecha de publicación</th>
+							<th>Servicio</th>
+							<th>Descripción del servicio</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>   
+						<tr ng-repeat="auctionService in $data">
+							<td>{{auctionService.description}}</td>
+							<td sortable="'price'">{{auctionService.price | currency:"₡":0}}</td>
+							<td>{{auctionService.date | date:'dd-MM-yyyy'}}</td>
+							<td>{{auctionService.service.name}}</td>
+							<td>{{auctionService.service.description}}</td>
+							<td ng-show="(auction.state == 1 || auction.state == 2) && auctionService.service.state == 1" class="text text-info">
+								<button ng-if="!$parent.permissions.isAdmin" ng-click="contract(auctionService)" data-style="slide-left" 
+								class="ladda-button btn btn-primary btn-xs" id="btnAucServ{{auctionService.auctionServicesId}}">
+									Contratar
+								</button>
+							</td>
+							<td ng-show="auction.state == 0 && auctionService.acept == 1">
+								<label class="label label-info">Selecionado</label>
+							</td>
+							<td ng-show="auction.state == 0 && auctionService.acept == 2">
+								<label class="label label-primary">Contratado</label>
+							</td>
+							<td ng-hide="auctionService.service.state == 1">
+								<label class="label label-muted">Deshabilitado</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

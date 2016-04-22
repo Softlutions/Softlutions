@@ -1,4 +1,3 @@
-<div class="container">
 	<div class="text-center"></div>
 	<div class="ibox float-e-margins col-lg-11">
 		<div class="ibox-title">
@@ -7,30 +6,45 @@
 				data-toggle="modal" data-target="#modal-form">Registrar usuario</a>
 		</div>
 		<div class="ibox-content">
-			<table class="table table-hover table-responsive" ng-table="usersTable">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Usuario</th>
-						<th>Email</th>
-						<th>Teléfono</th>
-						<th>Rol</th>
-						<th>Tipo</th>
-						<th>Estado</th>
-					</tr>
-				</thead>
-				<tbody ng-init="check = false">
-					<tr ng-repeat="user in $data">
-						<td>{{$index+1}}</td>
-						<td sortable="'name'">{{user.name}} {{user.lastName1}} {{user.lastName2}}</td>
-						<td>{{user.email}}</td>
-						<td>{{user.phone}}</td>
-						<td>{{user.role.name}}</td>
-						<td>{{user.userType.name}}</td>
-						<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="row">
+				<form>
+					<div class="form-group">
+						<input type="search" placeholder="Buscar..." class="form-control" ng-model="criteria" ng-change="search(criteria)"/>
+					</div>
+				</form>
+			</div>
+			
+			<div class="row">
+				<table ng-show="$data.length > 0" class="table table-hover table-responsive" ng-table="usersTable">
+					<thead>
+						<tr>
+							<th>Usuario</th>
+							<th>Email</th>
+							<th>Teléfono</th>
+							<th>Rol</th>
+							<th>Tipo</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody ng-init="check = false">
+						<tr ng-repeat="user in $data">
+							<td sortable="'name'">{{user.name}} {{user.lastName1}} {{user.lastName2}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.phone}}</td>
+							<td>{{user.role.name}}</td>
+							<td>{{user.userType.name}}</td>
+							<td class="text-center"><input ng-click="userState(user.userId, check)" ng-model="check" type="checkbox" ng-checked="user.state == 1"/></td>
+							<td>
+								<button data-toggle="modal" class="btn btn-primary btn-xs pull-right hidden"
+								data-toggle="modal" data-target="#modal-formUpdate" ng-click="loadInfo(user, $index)">Modificar usuario</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-hide="!emptyTable">
+					<p>No hay resultados con este criterio de búsqueda</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="modal-form" class="modal fade" aria-hidden="true">
@@ -91,6 +105,116 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<!-- <div id="modal-formUpdate" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">Modificar datos</h3>
+				</div>
+				<form role="form">
+					<div class="form-group">
+						<label>Nombre</label> <input type="text" ng-model="users.name"
+							placeholder="Ingresar nombre" required class="form-control">
+					</div>
+					<div class="form-group" ng-show="isCompany">
+						<label>Primer apellido</label> <input type="text"
+							ng-model="users.lastName1" placeholder="Ingresar primer apellido"
+							required class="form-control">
+					</div>
+					<div class="form-group" ng-show="isCompany">
+						<label>Segundo apellido</label> <input type="text"
+							ng-model="users.lastName2"
+							placeholder="Ingresar segundo apellido" required
+							class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Email</label> <input type="email" ng-model="users.email"
+							required placeholder="Ingresar email" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Teléfono</label> <input type="text" ng-model="users.phone"
+							required placeholder="Ingresar teléfono" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Seleccione un rol</label> <select class="form-control m-b"
+							id="selectRol" required
+							ng-options="role as role.name for role in roles track by role.roleId"
+							ng-model="requestObject.roleId"></select>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="form-group">
+					<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+						type="submit" ng-click="updateUser($event)">
+						<strong>Guardar</strong>
+					</button>
+				</div>
+				<div class="form-group">
+					<button type="button"
+						class="btn btn-sm btn-danger pull-right m-t-n-xs"
+						data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>  -->
+	
+	<div id="modal-formUpdate" class="modal fade" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h3 class="modal-title">Modificar perfil</h3>
+			</div>
+			<form role="form" ng-init="service" name="formUpdateUser"
+				ng-submit="formUpdateUser.$valid? updateUser($event):validationError()">
+
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Nombre</label> <input type="text" ng-model="users.name"
+							placeholder="Ingresar nombre" required class="form-control">
+					</div>
+					<div class="form-group" ng-show="isCompany">
+						<label>Primer apellido</label> <input type="text"
+							ng-model="users.lastName1" placeholder="Ingresar primer apellido"
+							required class="form-control">
+					</div>
+					<div class="form-group" ng-show="isCompany">
+						<label>Segundo apellido</label> <input type="text"
+							ng-model="users.lastName2"
+							placeholder="Ingresar segundo apellido" required
+							class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Email</label> <input type="email" ng-model="users.email"
+							required placeholder="Ingresar email" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Teléfono</label> <input type="text" ng-model="users.phone"
+							required placeholder="Ingresar teléfono" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Seleccione un rol</label> <select class="form-control m-b"
+							id="selectRol" required name="roleName" id="roleName"
+							ng-options="role as role.name for role in roles track by role.roleId"
+							ng-model="requestObject"></select>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<button type="button" class="btn btn-sm btn-danger"
+							data-dismiss="modal">Cancelar</button>
+						<button class="btn btn-sm btn-primary pull-right" type="submit">
+							<strong>Guardar</strong>
+						</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

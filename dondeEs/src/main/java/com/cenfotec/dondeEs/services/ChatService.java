@@ -35,16 +35,21 @@ public class ChatService implements ChatServiceInterface {
 	public Boolean saveChat(Chat nchat) {
 		Event aux = eventRepository.findOne(nchat.getEvent().getEventId());
 		List<User> users = chatRepository.getUsersByEvent(nchat.getEvent().getEventId());
-		nchat.setEvent(aux);
-		Chat chat = chatRepository.save(nchat);
-		users.add(aux.getUser());
-		for(User nUser : users){
-			if(nUser.getChats() == null){
-				nUser.setChats(new ArrayList<Chat>());
+		
+		if(users.size() > 0){
+			nchat.setEvent(aux);
+			Chat chat = chatRepository.save(nchat);
+			users.add(aux.getUser());
+			
+			for(User nUser : users){
+				if(nUser.getChats() == null){
+					nUser.setChats(new ArrayList<Chat>());
+				}
+				nUser.getChats().add(chat);
+				userRepository.save(nUser); 
 			}
-			nUser.getChats().add(chat);
-			userRepository.save(nUser); 
 		}
+		
 		return (nchat == null) ? false : true;
 	}
 

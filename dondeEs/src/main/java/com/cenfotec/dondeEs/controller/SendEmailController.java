@@ -57,7 +57,7 @@ public class SendEmailController {
 	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		subject = "Invitacion a un evento";
+		subject = "Invitación a un evento";
 		try {
 
 			// To get the array of addresses
@@ -87,7 +87,7 @@ public class SendEmailController {
 					response.setCodeMessage("Something is wrong");
 				}
 
-				text = "http://localhost:8080/dondeEs/app#/answerInvitation?eventId="
+				text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
 						+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
 						+ "&eventParticipantId="
 						+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
@@ -95,8 +95,12 @@ public class SendEmailController {
 				mailMessage.setTo(email);
 				mailMessage.setText(text);
 				mailMessage.setSubject(subject);
-				mailSender.send(mailMessage);
-
+				
+				new Thread("sendEmailInvitation"){
+					public void run(){
+						mailSender.send(mailMessage);
+					}
+				}.start();
 			}
 
 		} catch (Exception ae) {
@@ -111,15 +115,15 @@ public class SendEmailController {
 	 * @param event evento al cual se crea la subasta
 	 * @version 1.0
 	 */
-	public void sendAuctionInvitationEmail(Auction auction, String to, Event event) {
+	public void sendAuctionInvitationEmail(Auction auction, String to) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(to);
 		
-		String subject = "Invitación a "+auction.getName();
+		String subject = "Invitación a participar en "+auction.getName();
 		mailMessage.setSubject(subject);
 		
-		String msj = APP_DOMAIN+"/dondeEs/app#/auctions/?id="
-				+ AES.base64encode(String.valueOf(event.getEventId()));
+		String msj = APP_DOMAIN+"/dondeEs/#/landingPage?aucNotif="
+				+ AES.base64encode(String.valueOf(auction.getAuctionId()));
 		mailMessage.setText(msj);
 		
 		try{
@@ -141,7 +145,7 @@ public class SendEmailController {
 		BaseResponse response = new BaseResponse(); 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		
-		subject = "Has sido contratado por un promotor";
+		subject = "Fue seleccionado por un promotor";
 		try {
 			int eventId = contractNotification.getEvent().getEventId();
 			int serviceId = contractNotification.getService().getServiceId();
@@ -151,7 +155,7 @@ public class SendEmailController {
 			
 			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
 					.getEmail();
-			text = "http://localhost:8080/dondeEs/app#/answerContract/?eventId="
+			text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
 					+ AES.base64encode(String.valueOf(eventId)) + "&serviceId="
 					+ AES.base64encode(String.valueOf(serviceId));
 
@@ -168,6 +172,51 @@ public class SendEmailController {
 		}
 	}
 	
+	public void cancelContract(Event event, String email){
+		final SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String subject = "Servicio cancelado";
+		String text = "Se le notifica que sus servicios al evento "+event.getName()+" an sido cancelados\n"
+				+ "Cualquier inquietud puede consultarla con el promotor del evento al correo: "+event.getUser().getEmail();
+		
+		mailMessage.setTo(email);
+		mailMessage.setText(text);
+		mailMessage.setSubject(subject);
+		
+		new Thread("sendCancelServiceNotif"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
+	public void publishEventNotification(Event event, String email){
+		final SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String subject = "Evento "+event.getName()+" publicado";
+		String text = "Se le notifica que el evento "+event.getName()+" ya está publicado"
+				+ " y puede verlo al siguiente enlace: \n"
+				+ APP_DOMAIN+"/dondeEs/#/viewEvent?view="+event.getEventId();
+		
+		mailMessage.setTo(email);
+		mailMessage.setText(text);
+		mailMessage.setSubject(subject);
+		
+		new Thread("sendEmailNotifEvent"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
 	/**
 	 * Envia al correo del propietario del software un mensaje de contacto ingresado por un usuario.
 	 * @author Enmanuel García González
@@ -175,7 +224,7 @@ public class SendEmailController {
 	 * @version 1.0
 	 */
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-	public void sendMessage(@RequestBody MessageRequest message) {
+	public BaseResponse sendMessage(@RequestBody MessageRequest message) {
 		BaseResponse response = new BaseResponse();
 		
 		try {
@@ -197,6 +246,8 @@ public class SendEmailController {
 			response.setErrorMessage(e.toString());
 			e.printStackTrace();
 		}
+		
+		return response;
 	}
 	
 	/**
@@ -218,7 +269,6 @@ public class SendEmailController {
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
-			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

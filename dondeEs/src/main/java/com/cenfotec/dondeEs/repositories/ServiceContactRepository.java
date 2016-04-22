@@ -13,7 +13,9 @@ public interface ServiceContactRepository extends CrudRepository<ServiceContact,
 
 	@Query("SELECT sc FROM ServiceContact sc JOIN sc.event e WHERE e.eventId = ?1")
 	List<ServiceContact> findServiceContactByEventId(int eventId);
-
+	
+	List<ServiceContact> findAllByServiceUserUserId(int promoterId);
+	
 	/**
 	 * 
 	 * @param eventId id del evento
@@ -22,4 +24,5 @@ public interface ServiceContactRepository extends CrudRepository<ServiceContact,
 	 */
 	ServiceContact getByServiceServiceIdAndEventEventId(int eventId, int serviceId);
 	ServiceContact getByServiceServiceIdAndEventAuctionsAuctionServicesAuctionServicesId(int eventId, int serviceId);
+	ServiceContact findByServiceServiceIdAndEventEventId(int serviceId, int eventId);
 }

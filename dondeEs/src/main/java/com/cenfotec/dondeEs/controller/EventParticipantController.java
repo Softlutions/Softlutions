@@ -89,6 +89,12 @@ public class EventParticipantController {
 		return response;
 	}
 
+	/**
+	 * @autor Ernesto Mendez A.
+	 * @param userId id del usuario logueado
+	 * @param eventId evento en el que participa
+	 * @return respuesta del servidor
+	 */
 	@RequestMapping(value = "/getEventParticipantByUserAndEvent/{userId}/{eventId}", method = RequestMethod.GET)
 	public EventParticipantResponse getEventParticipantByUserAndEvent(@PathVariable("userId") int userId, @PathVariable("eventId") int eventId) {
 		EventParticipantResponse response = new EventParticipantResponse();

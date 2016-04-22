@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.ServiceContactRequest;
@@ -21,9 +22,10 @@ public class ServiceContactController {
 	
 	/**
 	 * @Author Juan Carlos Sánchez G.
-	 * @param idEvent Id del evento del que se consultarán los contratos de servicio
+	 * @param idEvent Id del evento del que se consultarán los contratos de servicio014 
+	 * 
 	 * @return response Respuesta del servidor de la petición incluyendo la lista de contratos de servicio.
-	 * @version 1.0
+	 * @version 1.0k
 	 */
 
 	@RequestMapping(value ="/getAllServiceContact/{idEvent}", method = RequestMethod.GET)
@@ -53,24 +55,57 @@ public class ServiceContactController {
 		}
 		return response;
 	}
+	
+	/**
+	 * @Author Alejandro Bermudez Vargas
+	 * @param ServiceContactRequest serviceContactRequest
+	 * @return Retonrna el resultado de dicha  respuesta
+	 * @version 1.0
+	 */
 	@RequestMapping(value = "/answerContract", method = RequestMethod.POST)
 	public ServiceContactResponse answerContract(@RequestBody ServiceContactRequest serviceContactRequest) {
 		String streventId = AES.base64decode(serviceContactRequest.getEventId());
 		String strserviceId = AES.base64decode(serviceContactRequest.getServiceId());
 		ServiceContactResponse response = new ServiceContactResponse();
 		ServiceContact serviceContact = serviceContactInterface
-				.getByServiceServiceIdAndEventEventId(Integer.parseInt(streventId), Integer.parseInt(strserviceId));
+				.getByServiceServiceIdAndEventEventId(Integer.parseInt(strserviceId), Integer.parseInt(streventId));
 		if (serviceContact.getState() == 0) {
 			serviceContact.setState(serviceContactRequest.getState());
 			response.setCode(200);
 			response.setCodeMessage("Asistiras!");
 		} else {
-			response.setCode(500);
+			response.setCode(201);
 			response.setCodeMessage("Ya confirmaste");
 		}
 		serviceContactInterface.saveServiceContact(serviceContact);
 		return response;
 	}
+	
+	/**
+	 * @author Ernesto Mende A.
+	 * @param contractId id del contrato a response
+	 * @param state respuesta del contrato
+	 * @return si la operacion fue exitosa
+	 * @version 2.0
+	 * @see {@link #answerContract(ServiceContactRequest)} Version antigua de esta implementacion
+	 */
+	@RequestMapping(value = "/responseContract", method = RequestMethod.GET)
+	public ServiceContactResponse responseContract(@RequestParam("contractId") int contractId, @RequestParam("state") byte state) {
+		ServiceContactResponse response = new ServiceContactResponse();
+		boolean result = serviceContactInterface.responseContract(contractId, state);
+		
+		if(result){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Service not found!");
+		}
+		
+		return response;
+	}
+	
+	
 	@RequestMapping(value ="/cancelServiceContact/{contractID}", method = RequestMethod.POST)
 	public ServiceContactResponse cancelServiceContact(@PathVariable("contractID") int contractID, @RequestBody ServiceContact serviceContact){
 		ServiceContactResponse response = new ServiceContactResponse();
@@ -84,6 +119,22 @@ public class ServiceContactController {
 			response.setCodeMessage("Internal error");
 		}
 		
+		return response;
+	}
+	
+	@RequestMapping(value = "/contractService/{idService}/{idEvent}", method = RequestMethod.GET)
+	public ServiceContactResponse contractService(@PathVariable("idService") int service,
+			@PathVariable("idEvent") int event) {
+		ServiceContactResponse response = new ServiceContactResponse();
+
+		if (serviceContactInterface.contractService(service, event)) {
+			response.setCode(200);
+			response.setCodeMessage("Successful");
+		} else {
+			response.setCode(400);
+			response.setCodeMessage("You already was invited");
+		}
+
 		return response;
 	}
 }

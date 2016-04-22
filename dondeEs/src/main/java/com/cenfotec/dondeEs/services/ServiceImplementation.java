@@ -20,10 +20,32 @@ public class ServiceImplementation implements ServiceInterface {
 
 	@Override
 	public Boolean saveService(Service pservice) {
-		Service nservice = serviceRepository.save(pservice);
-		return (nservice == null) ? false : true;
+		int i = 0;
+		boolean isNameInvalid = false;
+		
+		List<Service> services = serviceRepository.findAllByUserUserId(pservice.getUser().getUserId());
+		
+		while(i < services.size() && !isNameInvalid){
+			if(pservice.getName().toLowerCase().equals(services.get(i).getName().toLowerCase())){
+				isNameInvalid = true;
+			}
+			
+			i++;
+		}
+		
+		if(!isNameInvalid){
+			serviceRepository.save(pservice);
+		}
+		
+		return !isNameInvalid;
 	}
-	 
+	
+	@Override
+	public Boolean updateService(Service pservice) {
+		Service nservice = serviceRepository.save(pservice);
+		return (nservice != null);
+	}
+	
 	@Override
 	public List<ServicePOJO> getAll() {
 		List<com.cenfotec.dondeEs.ejb.Service> listService = serviceRepository.findAll();
@@ -116,13 +138,15 @@ public class ServiceImplementation implements ServiceInterface {
 		List<Service> serviceList = serviceRepository.findAllByUserUserIdAndServiceCatalogServiceCatalogId(userId,serviceCatalogId);
 		List<ServicePOJO> servicePOJOList = new ArrayList<ServicePOJO>();
 		serviceList.stream().forEach(s -> {
-			ServicePOJO servicePOJO = new ServicePOJO();
-			servicePOJO.setServiceId(s.getServiceId());
-			servicePOJO.setName(s.getName());
-			servicePOJO.setDescription(s.getDescription());
-			servicePOJO.setState(s.getState());
-			
-			servicePOJOList.add(servicePOJO);
+			if(s.getState() == 1){
+				ServicePOJO servicePOJO = new ServicePOJO();
+				servicePOJO.setServiceId(s.getServiceId());
+				servicePOJO.setName(s.getName());
+				servicePOJO.setDescription(s.getDescription());
+				servicePOJO.setState(s.getState());
+				
+				servicePOJOList.add(servicePOJO);
+			}
 		});
 		return servicePOJOList;
 	}
@@ -140,5 +164,40 @@ public class ServiceImplementation implements ServiceInterface {
 		});
 		return servicePOJOList;
 	}
+	
+	@Override
+	public List<ServicePOJO> getServiceByServiceCatalog(int id) {
+		List<Service> serviceList = serviceRepository.findAllByServiceCatalogServiceCatalogIdAndState(id, (byte)1);
+		List<ServicePOJO> listPojo = new ArrayList<ServicePOJO>();
+		serviceList.stream().forEach(ta -> {
+			ServicePOJO servicePOJO = new ServicePOJO();
+			BeanUtils.copyProperties(ta, servicePOJO);
+			
+			if(ta.getUser() != null){
+				UserPOJO userPOJO = new UserPOJO();
+				BeanUtils.copyProperties(ta.getUser(), userPOJO);
+				userPOJO.setChats(null);
+				userPOJO.setPasswordHistories(null);
+				userPOJO.setUsers2(null);
+				userPOJO.setUsers1(null);
+				userPOJO.setEventParticipants(null);
+				userPOJO.setMessages(null);
+				userPOJO.setTermConditions(null);
+				
+				servicePOJO.setUser(userPOJO);
+			}
 
+			if (ta.getServiceCatalog() != null) {
+				ServiceCatalogPOJO catalogPOJO = new ServiceCatalogPOJO();
+				BeanUtils.copyProperties(ta.getServiceCatalog(), catalogPOJO);
+				
+				catalogPOJO.setAuctions(null);
+				servicePOJO.setServiceCatalog(catalogPOJO);
+			}
+			servicePOJO.setServiceContacts(null);
+
+			listPojo.add(servicePOJO);
+		});
+		return listPojo;
+	}
 }
