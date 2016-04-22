@@ -20,10 +20,24 @@ angular.module('dondeEs.auctionsEvent', ['ngRoute', 'ngTable'])
 	$scope.tempAuction = {};
 	$scope.event = {};
 	$scope.eventId = $routeParams.id;
+	$scope.validEventDate = false;
+	$scope.HOURS_BEFORE_EVENT = 12;
+	
+	Date.prototype.addHours = function(h){
+	    this.setHours(this.getHours() + h);
+	    return this;
+	}
 	
 	$http.get('rest/landing/getWhateverEventById/'+$routeParams.id).success(function(response) {
 		if (response.code == 200) {
 			$scope.event = response.eventPOJO;
+			
+			var date = new Date();
+			var validDate = new Date($scope.event.publishDate);
+			validDate.setHours(validDate.getHours() - $scope.HOURS_BEFORE_EVENT);
+			
+			if(date < validDate)
+				$scope.validEventDate = true;
 		} else {
 	    	toastr.error('Subastas del evento', 'Ocurrió un error al buscar la información del evento.');
 		}

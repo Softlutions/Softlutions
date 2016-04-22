@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cenfotec.dondeEs.contracts.ServiceContactRequest;
@@ -25,12 +26,6 @@ public class ServiceContactController {
 	 * 
 	 * @return response Respuesta del servidor de la petición incluyendo la lista de contratos de servicio.
 	 * @version 1.0k
-	 * 0\
-	 * 
-	 * 87
-	 * '
-	 * \
-	 * ]0
 	 */
 
 	@RequestMapping(value ="/getAllServiceContact/{idEvent}", method = RequestMethod.GET)
@@ -83,6 +78,30 @@ public class ServiceContactController {
 			response.setCodeMessage("Ya confirmaste");
 		}
 		serviceContactInterface.saveServiceContact(serviceContact);
+		return response;
+	}
+	
+	/**
+	 * @author Ernesto Mende A.
+	 * @param contractId id del contrato a response
+	 * @param state respuesta del contrato
+	 * @return si la operacion fue exitosa
+	 * @version 2.0
+	 * @see {@link #answerContract(ServiceContactRequest)} Version antigua de esta implementacion
+	 */
+	@RequestMapping(value = "/responseContract", method = RequestMethod.GET)
+	public ServiceContactResponse responseContract(@RequestParam("contractId") int contractId, @RequestParam("state") byte state) {
+		ServiceContactResponse response = new ServiceContactResponse();
+		boolean result = serviceContactInterface.responseContract(contractId, state);
+		
+		if(result){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Service not found!");
+		}
+		
 		return response;
 	}
 	

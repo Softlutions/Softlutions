@@ -69,7 +69,7 @@
 						<li><a ng-click="returnLandingPage()"><i class="glyphicon glyphicon-glass"></i> 
 							<span class="nav-label">Eventos publicados</span></a>
 						</li>
-						<li><a href="app#/reports"><i class="glyphicon glyphicon-list-alt"></i> 
+						<li class="hidden"><a href="app#/reports"><i class="glyphicon glyphicon-list-alt"></i> 
 							<span class="nav-label">Reportes</span></a>
 						</li>	
 						<li><a href="app#/contact"><i class="fa fa-envelope-o"></i> 

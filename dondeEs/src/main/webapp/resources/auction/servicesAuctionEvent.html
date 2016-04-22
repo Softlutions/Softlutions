@@ -25,7 +25,7 @@
 					<tbody>   
 						<tr ng-repeat="auctionService in $data">
 							<td>{{auctionService.description}}</td>
-							<td sortable="'price'">₡{{auctionService.price}}</td>
+							<td sortable="'price'">{{auctionService.price | currency:"₡":0}}</td>
 							<td>{{auctionService.date | date:'dd-MM-yyyy'}}</td>
 							<td>{{auctionService.service.name}}</td>
 							<td>{{auctionService.service.description}}</td>
@@ -35,11 +35,14 @@
 									Contratar
 								</button>
 							</td>
-							<td ng-show="auction.state == 0 && auctionService.acept == 1" class="text text-info">
-								<label class="label">Ganador</label>
+							<td ng-show="auction.state == 0 && auctionService.acept == 1">
+								<label class="label label-info">Selecionado</label>
 							</td>
-							<td ng-hide="auctionService.service.state == 1" class="text text-info">
-								<label class="label">Deshabilitado</label>
+							<td ng-show="auction.state == 0 && auctionService.acept == 2">
+								<label class="label label-primary">Contratado</label>
+							</td>
+							<td ng-hide="auctionService.service.state == 1">
+								<label class="label label-muted">Deshabilitado</label>
 							</td>
 						</tr>
 					</tbody>

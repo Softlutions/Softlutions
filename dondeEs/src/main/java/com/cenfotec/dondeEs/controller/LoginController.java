@@ -79,7 +79,7 @@ public class LoginController {
 		UserResponse us = new UserResponse();
 		if (userServiceInterface.updatePassword(lr)) {
 			us.setCode(200);
-			us.setCodeMessage("Password cambiado exitosamente");
+			us.setCodeMessage("Contraseña cambiada exitosamente");
 		}
 		return us;
 	}

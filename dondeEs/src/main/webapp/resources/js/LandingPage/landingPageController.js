@@ -17,7 +17,7 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$scope.loggedUser = JSON.parse(loginCookie);
 		
 		$scope.DEFAULT_USER_IMAGE = "resources/img/default-profile.png";
-		$scope.DEFAULT_EVENT_IMAGE = "resources/img/imagen-no-disponible.gif";
+		$scope.DEFAULT_EVENT_IMAGE = "resources/img/defaultEventImage.png";
 		
 		if ($cookies.getObject("goToEventsPublish") == null) {
 			$cookies.putObject("goToEventsPublish", false);
@@ -68,17 +68,39 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			$http.get("rest/login/logout").success(function(response){
 				$cookies.remove("loggedUser");
 				$scope.loggedUser = null;
-				/*var sessionCookie = $cookies.getObject("lastSession");
-				if(sessionCookie != null){
-					sessionCookie["sessionClosed"] = true;
-					$cookies.putObject("lastSession", sessionCookie);
-				}
-				
-				$scope.loggedUser = null;
-				sessionStorage.setItem("loggedUser", null);
-				window.location.href = "#/landingPage";*/
+	    		window.location.href = "#/landingPage";
+				window.location.reload();
 			});
 		}
+		
+		// REDIRECT DATA ON LOAD
+		angular.element(document).ready(function(){
+		    switch($location.search().p){
+		    	case "login":
+		    		$("#modalLogin").modal("toggle");
+		    		$scope.tempRedirect.event = $location.search().event;
+		    		$scope.tempRedirect.assist = $location.search().assist;
+		    		$scope.tempRedirect.public = $location.search().public;
+		    		$scope.tempRedirect.aucNotif = $location.search().tempAucNotif;
+		    		
+		    		$scope.tempRedirect.contract = $location.search().contract;
+		    		$scope.tempRedirect.eventId = $location.search().eventId;
+		    		$scope.tempRedirect.serviceId = $location.search().serviceId;
+		    		break;
+		    	case "events":
+		    		window.location.href = "#/landingPage#events";
+		    		break;
+		    	case "testimonials":
+		    		window.location.href = "#/landingPage#testimonials";
+		    		break;
+		    	case "contact":
+		    		window.location.href = "#/landingPage#contact";
+		    		break;
+		    	case "singin":
+		    		$("#selectTypeUser").modal("toggle");
+		    		break;
+		    }
+		});
 		
 		function login(){
 			$http.post("rest/login/checkuser/", $scope.loginRequest)
@@ -96,51 +118,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 					};
 					
 					$cookies.putObject("loggedUser", JSON.stringify(responseUser));
-						
-					if(response.state == 2){
-						toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
-						$('#modalLogin').modal('toggle');
-						setTimeout(function(){
-							window.location.href="#/changePassword";
-						}, 500);
-					}else{
-						if($scope.tempRedirect.aucNotif != null && $scope.loggedUser.role.roleId == 2){
-							$("#modalLogin").modal("toggle");
-							checkUserAuctionRole();
-						}else if($scope.tempRedirect.event != null){
-							if($scope.tempRedirect.public != null){
-								$("#modalLogin").modal("toggle");
-								setTimeout(function(){ window.location.href = "#/events"; }, 500);
-							}else{
-								var url = "#/viewEvent?view="+$scope.tempRedirect.event;
-								
-								if($scope.tempRedirect.assist != null)
-									url = url+"&assist";
-								
-								$("#modalLogin").modal("toggle");
-								setTimeout(function(){ window.location.href = url; }, 500);
-							}
-						}else{
-							if($scope.loggedUser != null && $scope.loggedUser.state == 2){
-								window.location.href = "#/changePassword";
-							}else{
-								switch (responseUser.role.roleId) {
-								case 1:
-									window.location.href = "/dondeEs/app#/users";
-									break;
-								case 2:
-									window.location.href = "/dondeEs/app#/serviceByUser";
-									break;
-								case 3:
-									window.location.href = "/dondeEs/app#/index";
-									break;
-								case 4:
-									window.location.reload();
-									break;
-								}
-							}
-						}
-					}
+					$scope.loggedUser = responseUser;
+					
+					$("#modalLogin").modal("toggle");
+					setTimeout(function(){ onLogin(); }, 500);
 				}else{
 					$("#errorMsj").css("visibility", "visible");
 				}
@@ -148,6 +129,64 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 			.error(function(response){
 				$("#errorMsj").css("visibility", "visible");
 			});
+		}
+		
+		function onLogin(){
+			// Si es prestatario y tiene solicitudes de contrato pendientes
+			if($scope.tempRedirect.aucNotif == null && $scope.loggedUser.role.roleId == 2){
+				$scope.checkContracts();
+			}/*
+			if($scope.loggedUser.role.roleId == 2 && $scope.tempRedirect.contract != null && $scope.tempRedirect.eventId != null &&  $scope.tempRedirect.serviceId != null){
+				$scope.contract();
+			}*/else{
+				// Si el usuario cambiola contraseña
+				if($scope.loggedUser.state == 2){
+					toastr.warning('Debes cambiar tu contraseña', 'Advertencia');
+					
+					setTimeout(function(){
+						window.location.href="#/changePassword";
+					}, 500);
+				}else{
+					// Si es prestatario y tiene pendiente una solicitud a subasta
+					if($scope.tempRedirect.aucNotif != null && $scope.loggedUser.role.roleId == 2){
+						checkUserAuctionRole();
+					}else{
+						// Si estaba en eventos publicados e inicio sesion (redirige a eventos publicados)
+						if($scope.tempRedirect.public != null){
+							setTimeout(function(){ window.location.href = "#/events"; }, 500);
+							
+							// Si estaba en un evento e inicia sesion (redirige al evento previo)
+						}else if($scope.tempRedirect.event != null){
+							var url = "#/viewEvent?view="+$scope.tempRedirect.event;
+							
+							if($scope.tempRedirect.assist != null)
+								url = url+"&assist";
+							
+							setTimeout(function(){ window.location.href = url; }, 500);
+						}else{
+							// Si es un inicio de sesion normal
+							goToMainPage();
+						}
+					}
+				}
+			}
+		}
+		
+		function goToMainPage(){
+			switch ($scope.loggedUser.role.roleId) {
+			case 1:
+				window.location.href = "/dondeEs/app#/users";
+				break;
+			case 2:
+				window.location.href = "/dondeEs/app#/serviceByUser";
+				break;
+			case 3:
+				window.location.href = "/dondeEs/app#/index";
+				break;
+			case 4:
+				window.location.reload();
+				break;
+			}
 		}
 		
 		//#region Users
@@ -294,9 +333,10 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 
 		// get roles
 		$http.get('rest/login/getAll').success(
-				function(response) {
-					$scope.roles = response.listRole;
-				});
+			function(response) {
+				$scope.roles = response.listRole;
+			});
+		
 		//#endregion Users
 		$scope.showSubModal1=function(){
 			setTimeout(function(){$('#selectTypeUser').modal('hide')}, 5);
@@ -363,31 +403,6 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		    })();
 		    
 		    new WOW().init();
-		    
-		    // Redirect logic
-		    
-		    switch($location.search().p){
-		    	case "login":
-		    		$("#modalLogin").modal("toggle");
-		    		$scope.tempRedirect.event = $location.search().event;
-		    		$scope.tempRedirect.assist = $location.search().assist;
-		    		$scope.tempRedirect.public = $location.search().public;
-		    		$scope.tempRedirect.aucNotif = $location.search().tempAucNotif;
-		    		break;
-		    	case "events":
-		    		window.location.href = "#/landingPage#events";
-		    		break;
-		    	case "testimonials":
-		    		window.location.href = "#/landingPage#testimonials";
-		    		break;
-		    	case "contact":
-		    		window.location.href = "#/landingPage#contact";
-		    		break;
-		    	case "singin":
-		    		$("#selectTypeUser").modal("toggle");
-		    		break;
-		    }
-		    
 		});
 		
 		// Modals show and hideS
@@ -454,7 +469,19 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				$http.get("rest/protected/auction/getAuctionByEncrypId/"+auctionId).success(function(response){
 					if(response.code == 200){
 						$scope.auctionInvitation = response.auction;
-						$("#modalAuctionContractInvitation").modal("toggle");
+						
+						$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.auctionInvitation.serviceCatalog.serviceCatalogId ).success(function(response) {
+							$scope.services = response.serviceLists;
+							$scope.auctionService = {};
+							$scope.auctionService.service = $scope.services[0];
+							
+							if($scope.services.length == 0)
+								goToMainPage();
+							else
+								$("#modalAuctionContractInvitation").modal("show");
+						}).error(function(){
+							goToMainPage();
+						});
 					}
 				});
 			}else{
@@ -463,24 +490,13 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 		}
 		
 		$scope.acceptAuctionInvitation = function(){
-			$("#btnAceptAuctionInvitation").ladda().ladda("start");
-			
-			$http.get('rest/protected/service/getAllServiceByUserAndServiceCatalog/' + $scope.loggedUser.userId + '/'+ $scope.auctionInvitation.serviceCatalog.serviceCatalogId ).success(function(response) {
-				$scope.services = response.serviceLists;
-				$scope.auctionService = {};
-				$scope.auctionService.service = $scope.services[0];
-				$("#btnAceptAuctionInvitation").ladda().ladda("stop");
-				$("#modalAuctionContractInvitation").modal("toggle");
-				$("#firstAuctionTime").modal("toggle");
-			}).error(function(){
-				$("#btnAceptAuctionInvitation").ladda().ladda("stop");
-				toastr.error("Error inesperado al procesar la solicitud", 'Error');
-			});
+			$("#modalAuctionContractInvitation").modal("toggle");
+			$("#firstAuctionTime").modal("toggle");
 		}
 		
 		$scope.noAcceptAuctionInvitation = function(){
 			$("#modalAuctionContractInvitation").modal("toggle");
-			setTimeout(function(){ window.location.href="#/landingPage"; }, 500);
+			setTimeout(function(){ goToMainPage(); }, 500);
 		}
 		
 		$scope.validationError = function(){
@@ -514,21 +530,78 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 				toastr.success('Te has incorporado a la subasta!');
 				
 				setTimeout(function(){
-					$("#btnCreateAuctionParticipant").ladda().ladda("start");
-					window.location.href="#/landingPage";
+					goToMainPage();
 				}, 500);
 			});
 		};
 		
-		//#region ASNWER CONTRACT
+		// region ASNWER CONTRACT
 		
-		if($location.search().eventId != null && $location.search().serviceId){
+		$scope.checkContracts = function(){
+			$http.get("rest/landing/getContractsLeftByPromoter?promoterId="+$scope.loggedUser.userId).success(function(response){
+				if(response.code == 200){
+					toastr.success("Tiene contratos pendientes");
+					$scope.listContracts = response.listContracts;
+					$scope.contractEvent = $scope.listContracts[0];
+					$('#modalAsnwerContract').modal('show');
+				}else if(response.code == 404){
+					goToMainPage();
+				}
+			});
+		}
+		
+		$scope.answerContract = function(state){
+			if(state == -1){
+				toastr.warning("Contrato aplazado");
+				nextContract();
+			}else{
+				$http.get("rest/protected/serviceContact/responseContract?contractId="+$scope.contractEvent.serviceContractId+"&state="+state).success(function(response) {
+					if(state == 1)
+						toastr.success("Contrato aceptado");
+					else
+						toastr.error("Contrato rechazado");
+					
+					nextContract();
+				});
+			}
+		}
+		
+		function nextContract(){
+			$scope.listContracts.splice($scope.listContracts.indexOf($scope.contractEvent), 1);
+			
+			$('#modalAsnwerContract').modal('hide');
+			
+			setTimeout(function(){
+				if($scope.listContracts.length > 0){
+					$scope.contractEvent = $scope.listContracts[0];
+					$scope.$apply();
+					$('#modalAsnwerContract').modal('show');
+				}else{
+					goToMainPage();
+				}
+			}, 500);
+		}
+		
+		if($location.search().eventId != null && $location.search().serviceId != null){
+			if($scope.loggedUser != null && $scope.loggedUser.role.roleId == 2){
+				$scope.checkContracts();
+				//$scope.contract();
+			}else if($scope.loggedUser == null && $location.search().contract == null){
+				window.location.href = "#/landingPage?p=login&contract&eventId="+$location.search().eventId+"&serviceId="+$location.search().serviceId;
+			}
+		}
+
+		// DEPRECATED
+		/*$scope.contract = function(){
 			var dataCreate = {
-					eventId : $location.search().eventId,
-					serviceId : $location.search().serviceId
+				eventId : $location.search().eventId,
+				serviceId : $location.search().serviceId,
+				loggedUserId : $scope.loggedUser.userId
 			};
+			
 			$http({method: 'POST',url:'rest/landing/getServiceContact', data:dataCreate}).success(function(response) {
-				if(response.code != 201 && response.code != 202){
+				if(response.code != 400){
+					if(response.code != 201 && response.code != 202){
 						$http.get('rest/landing/getEventByEncryptId/'+ $location.search().eventId).success(function(response) {
 							$scope.event = response.eventPOJO;
 						});
@@ -538,37 +611,28 @@ angular.module('landingPageModule', ['ngRoute', 'ngCookies', 'landingPageModule.
 							toastr.success(response.codeMessage);
 							setTimeout(function(){$('#modalAsnwerContract').modal('show')}, 1000);
 						}
+					}else{
+						toastr.error(response.codeMessage, 'Error');
+						window.location.href = "#/landingPage";
+					}
 				}else{
-					toastr.error(response.codeMessage, 'Error');
-					window.location.href = "#/landingPage";
+					goToMainPage();
 				}
 			});
 			
-			$scope.accept = function(event){
+			$scope.answer = function(state){
 				var dataCreate = {
 						eventId : $location.search().eventId,
 						serviceId : $location.search().serviceId,
-						state : 2
+						state : state
 				};
 				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
 					toastr.success(response.codeMessage);
 					$('#modalAsnwerContract').modal('hide');
+					setTimeout(function(){ window.location.href = "#/landingPage"; }, 500);
 				});
 			}
-			
-			$scope.noAccept = function(event){
-				var dataCreate = {
-						eventId : $location.search().eventId,
-						serviceId : $location.search().serviceId,
-						state : 1
-				};
-				$http({method: 'POST',url:'rest/landing/answerContract', data:dataCreate}).success(function(response) {
-					toastr.success(response.codeMessage);
-					$('#modalAsnwerContract').modal('hide');
-				});
-			}
-		}
-		//#endregion ASNWER CONTRACT
+		}*/
 		
 		// START ANSWER INVITATION
 		

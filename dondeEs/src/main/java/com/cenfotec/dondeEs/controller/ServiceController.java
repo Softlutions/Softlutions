@@ -35,7 +35,7 @@ public class ServiceController {
 			response.setCodeMessage("Succesfull");
 		}else{
 			response.setCode(500);
-			response.setCodeMessage("Internal error");
+			response.setCodeMessage("The service already exist");
 		}
 		return response;
 	}
@@ -115,7 +115,7 @@ public class ServiceController {
 		nservice.setServiceCatalog(service.getServiceCatalog());
 		nservice.setUser(service.getUser());
 		
-		Boolean state = serviceInterface.saveService(nservice);
+		Boolean state = serviceInterface.updateService(nservice);
 		
 		if(state){
 			response.setCode(200);

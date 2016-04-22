@@ -37,7 +37,6 @@ angular
 										}
 									}).success(function(response) {
 								$scope.chats = response.chats;
-								console.log($scope.chats);
 							})
 							
 							$scope.$on('$destroy', function() {

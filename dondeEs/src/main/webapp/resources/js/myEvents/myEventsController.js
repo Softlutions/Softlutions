@@ -287,7 +287,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 	$scope.prepublishEventById = function(event){
 		swal({
 			  title: "¿Está seguro?",
-			  text: "Una vez prepublicado el evento, se crea un chat con los servicios contratados y no se pueden agregar más participantes. ",
+			  text: "Una vez prepublicado el evento, se crea un chat con los servicios contratados y no se pueden agregar más participantes. Sí no hay servicios contratados, no se creará el chat.",
 			  type: "warning",
 			  showCancelButton: true,
 			  confirmButtonColor: "#DD6B55",
@@ -423,7 +423,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			 
 		}
 	}
-		
+	
 	$scope.publishEvent = function(event){  
 		$scope.requestObject = {"eventId":event.eventId};
 		$http.put('rest/protected/event/publishEvent',$scope.requestObject).success(function(response) {

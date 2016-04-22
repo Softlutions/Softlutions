@@ -26,7 +26,7 @@
 				
 				<div class="nav2 navbar-right col-lg-3">
 					<div ng-show="loggedUser == null">
-						<button class="btn btn-primary btn-sm-normalize-size page-scroll" data-toggle="modal" data-target="#modalLogin" ng-click="logout()">Iniciar sesión</button>
+						<a class="btn btn-primary btn-sm-normalize-size page-scroll" href="#/landingPage?p=login&public">Iniciar sesión</a>
 					</div>
 					
 					<div ng-hide="loggedUser == null">
@@ -142,13 +142,8 @@
 							<li>
 								<time datetime="event.publishDate" data-toggle="collapse" data-target="#demo{{$index}}">
 									<span class="day">{{event.day}}</span> <span class="month">{{event.month}}</span> {{event.time | date : 'hh:mma'}}
-								</time> 
-								<img ng-if="event.image == null || event.image == ''"
-								alt="Image not found" src="resources/img/imagen-no-disponible.gif"
-								data-toggle="collapse" data-target="#demo{{$index}}"/> 
-								
-								<img ng-if="event.image != null && event.image != ''"
-								alt="Image not found" src="{{event.image}}"
+								</time>
+								<img alt="Image not found" ng-src="{{event.image || DEFAULT_IMG}}"
 								data-toggle="collapse" data-target="#demo{{$index}}"/>
 								
 								<div class="info">
@@ -164,7 +159,7 @@
 								</div>
 								<div class="social" data-toggle="collapse" data-target="#demo{{$index}}">
 									<ul>
-										<li ng-click="viewEvent(event)"><span>ver más</span></li>
+										<li ng-click="viewEvent(event)"><span>Ver más</span></li>
 									</ul>
 								</div>
 							</li>

@@ -14,13 +14,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cenfotec.dondeEs.controller.SendEmailController;
 import com.cenfotec.dondeEs.ejb.Event;
+import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.Place;
+import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 import com.cenfotec.dondeEs.repositories.EventRepository;
+import com.cenfotec.dondeEs.repositories.ServiceContactRepository;
 import com.cenfotec.dondeEs.utils.Utils;
 
 @Service
@@ -29,7 +34,13 @@ public class EventService implements EventServiceInterface {
 	private EventRepository eventRepository;
 	@Autowired
 	private PlaceServiceInterface placeServiceInterface;
-
+	@Autowired
+	private SendEmailController sendEmailController;
+	@Autowired
+	private EventParticipantRepository eventParticipantRepository;
+	@Autowired
+	private ServiceContactRepository serviceContactRepository;
+	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {
 		List<EventPOJO> eventsPOJO = new ArrayList<>();
@@ -102,6 +113,42 @@ public class EventService implements EventServiceInterface {
 	public int saveEvent(Event _event) {
 		Event event = eventRepository.save(_event);
 		return event.getEventId();
+	}
+	
+	@Override
+	public void publishEventNotification(Event event){
+		if(event.getState() == 3){
+			List<EventParticipant> participants = eventParticipantRepository.findEventParticipantByEventId(event.getEventId());
+			List<ServiceContact> contracts = serviceContactRepository.findServiceContactByEventId(event.getEventId());
+			List<String> sendedEmails = new ArrayList<>();
+			
+			contracts.stream().forEach(c -> {
+				if(c.getState() == 2){
+					String email = c.getService().getUser().getEmail();
+					
+					if(!sendedEmails.contains(email)){
+						sendEmailController.publishEventNotification(event, email);
+						sendedEmails.add(email);
+					}
+				}
+			});
+			
+			participants.stream().forEach(p -> {
+				if(p.getState() == 2){
+					String email;
+					
+					if(p.getUser() != null)
+						email = p.getUser().getEmail();
+					else
+						email = p.getOfflineUser().getEmail();
+					
+					if(!sendedEmails.contains(email)){
+						sendEmailController.publishEventNotification(event, email);
+						sendedEmails.add(email);
+					}
+				}
+			});
+		}
 	}
 
 	@Override

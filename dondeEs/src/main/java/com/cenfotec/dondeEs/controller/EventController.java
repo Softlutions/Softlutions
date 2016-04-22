@@ -69,7 +69,6 @@ public class EventController {
 	@RequestMapping(value = "/getAllEventPublish", method = RequestMethod.GET)
 	public EventResponse getAll() {
 		EventResponse response = new EventResponse();
-		;
 
 		try {
 			response.setCode(200);
@@ -98,18 +97,18 @@ public class EventController {
 	@RequestMapping(value = "/publishEvent", method = RequestMethod.PUT)
 	public EventResponse publishEvent(@RequestBody EventPOJO eventRequest) {
 		EventResponse response = new EventResponse();
-
+		
 		try {
 			if (eventRequest.getEventId() != 0) {
 				Event event = eventServiceInterface.getEventById(eventRequest.getEventId());
 				event.setState((byte) 3);
-				event.setPublishDate(new Date());
-
+				
 				int eventId = eventServiceInterface.saveEvent(event);
-
+				
 				if (eventId != 0) {
 					response.setCode(200);
 					response.setErrorMessage("success");
+					eventServiceInterface.publishEventNotification(event);
 				} else {
 					response.setCode(500);
 					response.setErrorMessage("publish event error");

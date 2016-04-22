@@ -5,7 +5,7 @@
 			<h5>Contratos de este evento</h5>
 		</div>
 		<div class="ibox-content">
-			<div class="col-md-8 pull-left">
+			<div class="col-md-8 col-sm-12 pull-left">
 				<div ng-show="serviceContacts.length > 0">
 					<table class="table table-hover table-responsive" ng-table="contractsTable">
 						<thead>
@@ -15,16 +15,16 @@
 								<th>Comentario</th>
 							</tr>
 						</thead>
-						<tbody ng-repeat="s in $data track by $index">
-							<tr>
+						<tbody>
+							<tr ng-repeat="s in $data track by $index">
 								<td sortable="'name'">{{s.service.name}}</td>
 								<td>{{s.state == 0? "Pendiente":(s.state == 1? "Concretado":"Cancelado")}}</td>
 								<td>{{s.comment}}</td>
 								
 								<td ng-if="s.state != 2">
-									<Button ng-if="!$parent.permissions.isAdmin"
+									<Button data-style="slide-left" ng-if="!$parent.permissions.isAdmin"
 										id="btnCancelService-{{s.serviceContractId}}"
-										class="btn btn-danger btn-xs center-block" ng-click="cancel(s)">Cancelar</Button>
+										class="ladda-button btn btn-danger btn-xs center-block" ng-click="cancel(s)">Cancelar</Button>
 								</td>
 							</tr>
 						</tbody>
@@ -35,10 +35,12 @@
 					<p class="text">No hay contratos</p>
 				</div>
 			</div>
-			
-			<div class="col-md-4 pull-right">
-				<div id="contracts-state-chart" class="hidden-xs"></div>
+			<div class="row">
+			<div class="col-md-4 col-sm-12 pull-right">
+				<div id="contracts-state-chart" class=""></div>
 			</div>
+			</div>
+			
 		</div>
 	</div>
 </div>

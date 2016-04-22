@@ -124,7 +124,7 @@ public class UsersController {
 			String image = Utils.writeToFile(file, servletContext);
 			user.setImage(image);
 			us.setCode(200);
-			us.setCodeMessage("User update succesfully");
+			us.setCodeMessage(image);
 		}else{
 			us.setCode(500);
 			us.setCodeMessage("Internal error");

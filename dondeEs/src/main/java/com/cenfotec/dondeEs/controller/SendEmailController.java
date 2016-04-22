@@ -57,7 +57,7 @@ public class SendEmailController {
 	public void sendEmailInvitation(@RequestBody ListSimplePOJO to, @QueryParam("eventId") int eventId) {
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		subject = "Invitacion a un evento";
+		subject = "Invitación a un evento";
 		try {
 
 			// To get the array of addresses
@@ -95,8 +95,12 @@ public class SendEmailController {
 				mailMessage.setTo(email);
 				mailMessage.setText(text);
 				mailMessage.setSubject(subject);
-				mailSender.send(mailMessage);
-
+				
+				new Thread("sendEmailInvitation"){
+					public void run(){
+						mailSender.send(mailMessage);
+					}
+				}.start();
 			}
 
 		} catch (Exception ae) {
@@ -141,7 +145,7 @@ public class SendEmailController {
 		BaseResponse response = new BaseResponse(); 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		
-		subject = "Has sido contratado por un promotor";
+		subject = "Fue seleccionado por un promotor";
 		try {
 			int eventId = contractNotification.getEvent().getEventId();
 			int serviceId = contractNotification.getService().getServiceId();
@@ -166,6 +170,51 @@ public class SendEmailController {
 			response.setErrorMessage(e.toString());
 			e.printStackTrace();
 		}
+	}
+	
+	public void cancelContract(Event event, String email){
+		final SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String subject = "Servicio cancelado";
+		String text = "Se le notifica que sus servicios al evento "+event.getName()+" an sido cancelados\n"
+				+ "Cualquier inquietud puede consultarla con el promotor del evento al correo: "+event.getUser().getEmail();
+		
+		mailMessage.setTo(email);
+		mailMessage.setText(text);
+		mailMessage.setSubject(subject);
+		
+		new Thread("sendCancelServiceNotif"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
+	public void publishEventNotification(Event event, String email){
+		final SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String subject = "Evento "+event.getName()+" publicado";
+		String text = "Se le notifica que el evento "+event.getName()+" ya está publicado"
+				+ " y puede verlo al siguiente enlace: \n"
+				+ APP_DOMAIN+"/dondeEs/#/viewEvent?view="+event.getEventId();
+		
+		mailMessage.setTo(email);
+		mailMessage.setText(text);
+		mailMessage.setSubject(subject);
+		
+		new Thread("sendEmailNotifEvent"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}.start();
 	}
 	
 	/**
@@ -220,7 +269,6 @@ public class SendEmailController {
 			mailMessage.setText(text);
 			mailMessage.setSubject(subject);
 			mailSender.send(mailMessage);
-			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
