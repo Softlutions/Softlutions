@@ -65,7 +65,7 @@
 											<a type="button" ng-click="geteventById(event.eventId)" data-toggle="modal"
 											data-target="#modal-formSendInvitation">Invitar participantes</a>
 										</li>
-										<li>
+										<li ng-show="event.state===1">
 											<a type="button" href="app#/ServicesAvailable/{{event.eventId}}">Servicios disponibles</a>
 										</li>
 										<li>

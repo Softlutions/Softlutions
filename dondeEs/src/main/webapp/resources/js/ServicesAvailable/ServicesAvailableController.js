@@ -11,17 +11,33 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 				function($scope, $http, ngTableParams, $filter, $routeParams) {
 			$scope.$parent.pageTitle = "Donde es - Servicios disponibles";
 			$scope.isCatalog=false;
-			$scope.requestObject={};
 			$scope.currentCatalogId;
 			$scope.hiredServices = [];
 			
 			$scope.init = function() {
+				$http.get('rest/protected/event/getEventDataById/' + $routeParams.id)
+				.success(function(response) {
+					if(response.code == 200){
+						$scope.event = response.eventPOJO;
+						
+						if($scope.event.state != 1){
+							toastr.error("No se pueden contratar servicios para este evento");
+							window.location.href="app#/index";
+						}
+					}else{
+						toastr.error("Evento no encontrado");
+						window.location.href="app#/index";
+					}
+				}).error(function(err){
+					toastr.error("Evento no encontrado");
+					window.location.href="app#/index";
+				});
+				
 		    	$http.get('rest/protected/serviceCatalog/getAllCatalogService')
 				.success(function(response) {
 					$scope.serviceCatalogList = response.serviceCatalogList;
-					$scope.requestObject.serviceCatalogId = $scope.serviceCatalogList[0].serviceCatalogId;
-					$scope.requestObject.name = $scope.serviceCatalogList[0].name;
-					$scope.currentCatalogId = $scope.requestObject.serviceCatalogId;
+					$scope.currentCatalogId = $scope.serviceCatalogList[0].serviceCatalogId;
+					$scope.getServiceByCatalog($scope.currentCatalogId);
 				});
 		    	
 		    	$http.get('rest/protected/serviceContact/getAllServiceContact/' + $routeParams.id)
@@ -101,13 +117,11 @@ angular.module('dondeEs.servicesAvailable', [ 'ngRoute', 'ngTable' ]).config(
 		    }
 		    
 		    $scope.getServiceByCatalog = function(selectedCatalog){
-		    	$scope.currentCatalogId;
 		    	if(selectedCatalog == 0){
-		    		$scope.currentCatalogId = "";
+		    		$scope.currentCatalogId = 0;
 		    	}else{
 		    		$scope.currentCatalogId = selectedCatalog;
 		    		$scope.getServicesByCatalog($scope.currentCatalogId);
-		    		
 		    	}
 		    }
 		

@@ -8,16 +8,15 @@
 		</div>
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-				<h4>Servicios disponibles</h4>
-				<label class="font-normal"><strong>Categoría</strong></label> <select
-					class="form-control m-b" name="serviceCatalog" id="serviceCatalog"
-					ng-change="getServiceByCatalog(selectedCatalog)"
-					ng-model="selectedCatalog"
+				<h4>Servicios disponibles para {{event.name}}</h4>
+				<label class="font-normal"><strong>Categoría</strong></label>
+				<select class="form-control m-b" name="serviceCatalog" id="serviceCatalog"
+					ng-change="getServiceByCatalog(currentCatalogId)"
+					ng-model="currentCatalogId"
 					ng-options="ta.serviceCatalogId as ta.name for ta in serviceCatalogList">
 				</select>
 				<div class="form-group" ng-show="isCatalog">
-					<input type="text" ng-model="search.name"
-						placeholder="Buscar servicio" class="form-control">
+					<input type="text" ng-model="search" placeholder="Buscar servicio" class="form-control">
 				</div>
 			</div>
 			<div class="ibox-content ">
@@ -29,8 +28,8 @@
 							<th>Proveedor</th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="service in $data | filter:search:strict">
-						<tr>
+					<tbody>
+						<tr ng-repeat="service in $data | filter:search:strict">
 							<td sortable="'name'">{{service.name}}</td>
 							<td>{{service.description}}</td>
 							<td>{{service.user.name}} {{service.user.lastName1}}
