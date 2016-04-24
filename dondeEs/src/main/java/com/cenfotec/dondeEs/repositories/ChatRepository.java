@@ -8,9 +8,14 @@ import com.cenfotec.dondeEs.ejb.Chat;
 import com.cenfotec.dondeEs.ejb.User;
 
 public interface ChatRepository extends CrudRepository<Chat, Integer> {
+	
 	List<Chat> findAll();
 	
-	@Query("SELECT u FROM Event e join e.serviceContacts sc join sc.service s join s.user u where e.state = 1 and e.eventId = ?1")
+	@Query("SELECT u FROM Event e "
+			+ "JOIN e.serviceContacts sc "
+			+ "JOIN sc.service s "
+			+ "JOIN s.user u "
+			+ "WHERE u.state = 1 AND sc.state = 1 AND e.eventId = ?1")
 	List<User> getUsersByEvent(int id);
 	
 	List<Chat> findByUsersUserId(int id);

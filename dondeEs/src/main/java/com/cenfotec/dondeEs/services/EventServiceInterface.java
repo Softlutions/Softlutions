@@ -27,6 +27,15 @@ public interface EventServiceInterface {
 	EventPOJO eventById(int idEvent);
 	
 	/**
+	 * Prepublica el evento, cierra las subastas pendientes, crea el chat y cancela los contratos pendientes
+	 * @Autor Ernesto Mendez A.
+	 * @param eventId id del evento a validar prepublicacion
+	 * @return si la operacion fue exitosa
+	 * @Version 1.0
+	 */
+	boolean prepublishEvent(int eventId);
+	
+	/**
 	 * Notifica la publicacion del evento tanto a los participantes como a sus contribuyentes
 	 * @author Ernesto Mendez A.
 	 * @param event evento a notificar

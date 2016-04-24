@@ -29,7 +29,6 @@ public class ChatService implements ChatServiceInterface {
 	@Autowired
 	private EventRepository eventRepository;
 	
-	
 	@Override
 	@Transactional
 	public Boolean saveChat(Chat nchat) {

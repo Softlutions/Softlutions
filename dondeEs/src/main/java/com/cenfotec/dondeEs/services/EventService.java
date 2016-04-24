@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cenfotec.dondeEs.controller.SendEmailController;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.Event;
 import com.cenfotec.dondeEs.ejb.EventParticipant;
 import com.cenfotec.dondeEs.ejb.Place;
@@ -23,6 +24,7 @@ import com.cenfotec.dondeEs.ejb.User;
 import com.cenfotec.dondeEs.pojo.EventPOJO;
 import com.cenfotec.dondeEs.pojo.PlacePOJO;
 import com.cenfotec.dondeEs.pojo.UserPOJO;
+import com.cenfotec.dondeEs.repositories.AuctionRepository;
 import com.cenfotec.dondeEs.repositories.EventParticipantRepository;
 import com.cenfotec.dondeEs.repositories.EventRepository;
 import com.cenfotec.dondeEs.repositories.ServiceContactRepository;
@@ -40,6 +42,38 @@ public class EventService implements EventServiceInterface {
 	private EventParticipantRepository eventParticipantRepository;
 	@Autowired
 	private ServiceContactRepository serviceContactRepository;
+	@Autowired
+	private ChatServiceInterface chatServiceInterface;
+	@Autowired
+	private AuctionRepository auctionRepository;
+	
+	@Override
+	@Transactional
+	public boolean prepublishEvent(int eventId) {
+		Event event = eventRepository.findOne(eventId);
+		boolean isPrepublished = false;
+		
+		if(event != null){
+			event.setState((byte) 2);
+			chatServiceInterface.saveChatByEvent(event.getEventId());
+			
+			List<Auction> auctions = auctionRepository.findAllByEventEventId(event.getEventId());
+			auctions.stream().forEach(a -> {
+				if(a.getState() != 0)
+					a.setState((byte) 0);
+			});
+			
+			List<ServiceContact> services = serviceContactRepository.findServiceContactByEventId(event.getEventId());
+			services.stream().forEach(s -> {
+				if(s.getState() == 0)
+					s.setState((byte) 2);
+			});
+			
+			isPrepublished = true;
+		}
+		
+		return isPrepublished;
+	}
 	
 	@Override
 	public List<EventPOJO> getAllEventByUser(int pidUsuario) {

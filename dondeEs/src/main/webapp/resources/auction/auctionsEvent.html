@@ -37,7 +37,7 @@
 						<td>{{auction.date | date:"EEE dd MMM yyyy ' a las ' hh:mma"}}</td>
 						<td>
 							<a class="btn btn-primary btn-xs" href="app#/servicesAuctionEvent/{{eventId}}/{{auction.auctionId}}">
-								<i ng-show="{{auction.state == 1 || auction.state == 2}}" data-toggle="tooltip" 
+								<i ng-show="{{(auction.state == 1 || auction.state == 2) && auction.auctionServices.length > 0}}" data-toggle="tooltip" 
 								title="Hay servicios pendientes de contratar" class="fa fa-warning"></i>
 								Ver servicios
 							</a>

@@ -298,7 +298,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 			  closeOnCancel: false
 			},function(isConfirm){
 				if(isConfirm){
-					$http.get("rest/protected/chat/saveChatEventId/" + event.eventId).success(function(response){
+					$http.get("rest/protected/event/prepublishEvent?event=" + event.eventId).success(function(response){
 						if (response.code == 200) {
 							
 							$http.get('rest/protected/event/getAllEventByUser/'+$scope.loggedUser.userId).success(function(response) {
@@ -307,10 +307,7 @@ app.controller('MyEventsCtrl', ['$scope', '$http', '$upload', 'MarkerCreatorServ
 									$scope.events = response.eventList;
 									window.location.href = "/dondeEs/app#/#";
 									swal("La prepublicación se hizo con éxito.");
-								} else {
-									
 								}
-								
 							});
 						} else {
 							toastr.error('Publicación del evento', 'Ocurrió un error al publicar el evento.');

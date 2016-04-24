@@ -56,7 +56,29 @@ public class EventController {
 		response.setEventList(eventServiceInterface.getAllEventByUser(id));
 		return response;
 	}
-
+	
+	/**
+	 * Prepublica el evento, cierra las subastas pendientes, crea el chat y cancela los contratos pendientes
+	 * @Autor Ernesto Mendez A.
+	 * @param eventId id del evento a validar prepublicacion
+	 * @return si la operacion fue exitosa
+	 * @Version 1.0
+	 */
+	@RequestMapping(value = "/prepublishEvent", method = RequestMethod.GET)
+	public EventResponse prepublishEvent(@RequestParam("event") int eventId) {
+		EventResponse response = new EventResponse();
+		
+		if(eventServiceInterface.prepublishEvent(eventId)){
+			response.setCode(200);
+			response.setCodeMessage("Success");
+		}else{
+			response.setCode(404);
+			response.setCodeMessage("Event not found");
+		}
+		
+		return response;
+	}
+	
 	/***
 	 * Obtiene todos los eventos que han sido publicados.
 	 * 

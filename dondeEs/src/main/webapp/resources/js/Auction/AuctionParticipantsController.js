@@ -61,6 +61,10 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 		});
 		
 		$scope.refreshInterval = $interval(function(){
+			$http.get('rest/protected/auction/getAuctionById/'+$routeParams.id).success(function(response) {
+				$scope.selectedAuction = response.auction;
+			});
+			
 			$http.get('rest/protected/auctionService/getAllAuctionServicesByAuctionId/'+$routeParams.id).success(function(response) {
 				$scope.auctionServices = response.auctionServiceList;
 				$scope.auctionServicesTable.reload();
@@ -99,6 +103,8 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 	}
 	
 	$scope.joinAuction = function(){	
+		$("#btnJoinAuction").ladda().ladda("start");
+		
 		var price = $scope.auctionService.price.replace(".00", "").replace("₡", "").replace(/,/g, "");	
 		var newAuctionService = {
 				acept : 0,
@@ -109,11 +115,17 @@ angular.module('dondeEs.auctionParticipants', ['ngRoute', 'ngTable', 'ngCookies'
 				service : $scope.auctionService.service
 		}
 		$http({method: 'POST',url:'rest/protected/auctionService/createAuctionService', data:newAuctionService, headers: {'Content-Type': 'application/json'}}).success(function(response) {
-			$scope.auctionServices.push(newAuctionService);
-			$scope.auctionServicesTable.reload();
-			$("#registerModal1").modal("toggle");
-			$scope.auctionService = {};
-			toastr.success('Se ha incorporado a la subasta!')
+			if(response.code == 200){
+				$scope.auctionServices.push(newAuctionService);
+				$scope.auctionServicesTable.reload();
+				$scope.auctionService = {};
+				toastr.success('Se ha incorporado a la subasta!');
+			}else{
+				toastr.error('No se pudo guardar la apuesta', 'Subasta cerrada');
+			}
+			
+			$("#btnJoinAuction").ladda().ladda("stop");
+			$("#registerModal1").modal("hide");
 		});		
 	};	
 	

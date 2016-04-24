@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cenfotec.dondeEs.repositories.AuctionRepository;
 import com.cenfotec.dondeEs.repositories.AuctionServiceRepository;
 import com.cenfotec.dondeEs.repositories.ServiceContactRepository;
 import com.cenfotec.dondeEs.contracts.ContractNotification;
 import com.cenfotec.dondeEs.controller.SendEmailController;
+import com.cenfotec.dondeEs.ejb.Auction;
 import com.cenfotec.dondeEs.ejb.AuctionService;
 import com.cenfotec.dondeEs.ejb.ServiceContact;
 import com.cenfotec.dondeEs.pojo.AuctionPOJO;
@@ -22,13 +24,20 @@ import com.cenfotec.dondeEs.pojo.UserPOJO;
 @Service
 public class AuctionServiceImplementation implements AuctionServiceImpInterface{
 
+	@Autowired private AuctionRepository auctionRepository;
 	@Autowired private AuctionServiceRepository auctionServiceRepository;
 	@Autowired private SendEmailController sendEmailController;
 	@Autowired private ServiceContactRepository serviceContactRepository;
 
 	@Override
+	@Transactional
 	public Boolean saveAuctionService(AuctionService service) {
-		AuctionService auctionService =  auctionServiceRepository.save(service);
+		Auction auction = auctionRepository.findOne(service.getAuction().getAuctionId());
+		AuctionService auctionService = null;
+		
+		if(auction != null && auction.getState() == 1)
+			auctionService =  auctionServiceRepository.save(service);
+		
 	 	return (auctionService == null) ? false : true;	
 	}
 	

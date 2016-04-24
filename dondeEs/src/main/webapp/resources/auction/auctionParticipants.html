@@ -4,8 +4,9 @@
 		<a class="btn btn-primary btn-sm pull-left" href="app#/auctions"><i class="fa fa-reply"></i> Volver</a>
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-			<button type="button" class="btn btn-primary btn-xs pull-right" id="btnParticipate" ng-click="loadServices()"
-					ng-if="$parent.permissions.isPrestatario" data-toggle="modal" data-target="#registerModal1">Participar</button>
+				<button type="button" class="btn btn-primary btn-xs pull-right" id="btnParticipate" ng-click="loadServices()"
+					ng-if="$parent.permissions.isPrestatario" ng-hide="selectedAuction.state != 1" data-toggle="modal" data-target="#registerModal1">Participar</button>
+				<label class="label pull-right" ng-show="selectedAuction.state != 1">Finalizada</label>
 				<h4>Participantes de la subasta</h4>
 			</div>
 			<div class="ibox-content" ng-show="auctionServices.length" >
@@ -70,7 +71,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
-						<button type="submit" class="btn btn-sm btn-primary"><b>{{$parent.permissions.isPrestatario ? 'Participar' : 'No'}}</b></button>
+						<button type="submit" data-style="slide-left" id="btnJoinAuction" class="ladda-button btn btn-sm btn-primary"><b>Participar</b></button>
 					</div>
 				</form>
 			</div>

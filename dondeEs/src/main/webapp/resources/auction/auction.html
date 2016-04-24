@@ -14,7 +14,8 @@
 					<thead>
 						<tr>
 							<th class="col-lg-3">Nombre</th>
-							<th class="col-lg-6">Descripción</th>
+							<th ng-show="selectedCatalog == null" class="col-lg-2">Categoría</th>
+							<th class="col-lg-5">Descripción</th>
 							<th class="col-lg-2">Fecha de finalización</th>
 							<th></th>
 						</tr>
@@ -22,6 +23,7 @@
 					<tbody ng-repeat="auction in tempAuctionList = ($data | filter : (!!selectedCatalog.serviceCatalogId || undefined) && {serviceCatalog : {serviceCatalogId: selectedCatalog.serviceCatalogId}} : true)">
 						<tr>
 							<td>{{auction.name}}</td>
+							<td ng-show="selectedCatalog == null">{{auction.serviceCatalog.name}}</td>
 							<td>{{auction.description}}</td>
 							<td>{{auction.date | date:"dd/MM/yyyy ' | ' h:mma"}}</td>
 							<td>
