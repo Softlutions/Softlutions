@@ -1,6 +1,9 @@
 package com.cenfotec.dondeEs.controller;
 
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.util.Date;
+import java.util.Enumeration;
 
 import javax.ws.rs.QueryParam;
 
@@ -33,7 +36,7 @@ import com.cenfotec.dondeEs.services.UserServiceInterface;
 @RequestMapping(value = "rest/protected/sendEmail")
 public class SendEmailController {
 
-	public static final String APP_DOMAIN = "http://localhost:8080";
+	public static final String APP_DOMAIN = getAppDomain();
 	private static String subject;
 	private static String text;
 	@Autowired
@@ -47,6 +50,25 @@ public class SendEmailController {
 	@Autowired
 	private ServiceContactInterface serviceContactService;
 
+	public static final String getAppDomain(){
+		String domain = "http://localhost:8080";
+		
+		try{
+			Enumeration<NetworkInterface> b = NetworkInterface.getNetworkInterfaces();
+            while(b.hasMoreElements()){
+                for(InterfaceAddress f:b.nextElement().getInterfaceAddresses()){
+                	if(f.getAddress().isSiteLocalAddress())
+                		domain = f.getAddress().getHostAddress()+":8080";
+                } 
+            }
+		}catch(Exception e){
+			domain = "http://localhost:8080";
+			e.printStackTrace();
+		}
+		
+		return domain;
+	}
+	
 	/**
 	 * @author Antoni Ramirez Montano
 	 * @param to parametro con el que se recibe la lista de correos
@@ -87,7 +109,7 @@ public class SendEmailController {
 					response.setCodeMessage("Something is wrong");
 				}
 
-				text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
+				text = APP_DOMAIN + "/dondeEs/#/landingPage/?eventId="
 						+ AES.base64encode(String.valueOf(eventId)) + "&email=" + AES.base64encode(email)
 						+ "&eventParticipantId="
 						+ AES.base64encode(String.valueOf(eventParticipant.getEventParticipantId()));
@@ -122,15 +144,19 @@ public class SendEmailController {
 		String subject = "Invitación a participar en "+auction.getName();
 		mailMessage.setSubject(subject);
 		
-		String msj = APP_DOMAIN+"/dondeEs/#/landingPage?aucNotif="
+		String msj = APP_DOMAIN + "/dondeEs/#/landingPage?aucNotif="
 				+ AES.base64encode(String.valueOf(auction.getAuctionId()));
 		mailMessage.setText(msj);
 		
-		try{
-			mailSender.send(mailMessage);
-		}catch(Exception ae){
-			ae.printStackTrace();
-		}
+		new Thread("sendAuctionInvitationEmail"){
+			public void run(){
+				try{
+					mailSender.send(mailMessage);
+				}catch(Exception ae){
+					ae.printStackTrace();
+				}
+			}
+		}.start();
 	}
 
 	 /**
@@ -155,7 +181,7 @@ public class SendEmailController {
 			
 			String email = serviceInterface.getServiceById(serviceContact.getService().getServiceId()).getUser()
 					.getEmail();
-			text = "http://localhost:8080/dondeEs/#/landingPage/?eventId="
+			text = APP_DOMAIN + "/dondeEs/#/landingPage/?eventId="
 					+ AES.base64encode(String.valueOf(eventId)) + "&serviceId="
 					+ AES.base64encode(String.valueOf(serviceId));
 

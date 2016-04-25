@@ -42,8 +42,8 @@
 <div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
     <div class="carousel-inner" role="listbox" style="height: 470px;">
         <div ng-if="images.length > 0" ng-repeat="img in carouselImages" class="item {{$index == 0? 'active':''}}">
-            <div class="container">
-                <div class="carousel-caption">
+            <div class="container-fluid removePadding">
+                <div class="carouselCaptionMarginLeft carousel-caption">
                     <h1>{{event.name}}</h1>
                     <h3>{{event.place.name}}</h3>
                     <h3>{{event.publishDate | date: "EEE dd MMMM yyyy 'a las' hh:mma"}}</h3>
@@ -53,7 +53,7 @@
                         <button class="btn btn-primary" ng-show="eventParticipant == null || eventParticipant.state == 0" ng-click="assist()">PARTICIPAR</button>
                     </p>
                 </div>
-            	<img src="{{img.image}}" alt="{{img.name}}" width="100%" height="470px"/>
+            	<img ng-src="{{img.image}}" alt="{{img.name}}" width="100%" height="470px"/>
             </div>
 	    </div>
 	    

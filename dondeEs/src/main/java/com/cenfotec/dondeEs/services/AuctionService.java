@@ -35,21 +35,16 @@ public class AuctionService implements AuctionServiceInterface{
 		List<com.cenfotec.dondeEs.ejb.Service> services = serviceRepository.getByCatalogId(auction.getServiceCatalog().getServiceCatalogId());
 		
 		if(saveAuction != null){
-			new Thread("sendAuctionInvitationEmail"){
-				public void run(){
-					List<String> userInvited = new ArrayList<>();
-					
-					services.forEach(s -> {
-						String email = s.getUser().getEmail();
-						
-						if(s.getState() == 1 && !userInvited.contains(email)){
-							sendEmailController.sendAuctionInvitationEmail(saveAuction, email);
-							userInvited.add(email);
-						}
-							
-					});
-				}
-			}.start();
+			List<String> userInvited = new ArrayList<>();
+			
+			services.forEach(s -> {
+				String email = s.getUser().getEmail();
+				
+				if(s.getState() == 1 && !userInvited.contains(email)){
+					sendEmailController.sendAuctionInvitationEmail(saveAuction, email);
+					userInvited.add(email);
+				}	
+			});
 		}
 		
 	 	return (saveAuction != null);

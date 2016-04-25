@@ -8583,6 +8583,14 @@ textarea {
 	top: 50%;    
 }
 
+.carouselCaptionMarginLeft{
+	margin-left: 9em !important;
+}
+
+.removePadding{
+	padding: 0px !important;
+}
+
 .cancelButtonMargin {
 	margin-right: 10px;
 }
